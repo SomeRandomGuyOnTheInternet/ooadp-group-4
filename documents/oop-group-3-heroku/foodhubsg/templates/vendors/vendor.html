@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %} Vendors {% endblock %}
+
+{% block content %}
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;">
+            <div class="row row-pb-md">
+                <div class="col-md-6">
+                    <div class="blog-entry">
+                        <img src="{{ current_vendor.get_image_location() }}" class="img-responsive" alt="{{ name }} Image">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="desc">
+                        <p class="meta">
+                            <h1 class="font_color"><b>{{ name }}</b></h1>
+                            <span class="food_location"><b>{{ location }}</b></span><br>
+                            <span class=food_rating">Healthiness rating:
+                                {% if rating == 1 %}
+                                    <span class='fa fa-star checked'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span>
+                                {% elif rating == 2 %}
+                                    <span class='fa fa-star checked'></span><span class='fa fa-star checked'></span><span class='fa fa-star'></span><span class='fa fa-star'></span>
+                                {% elif rating == 3 %}
+                                    <span class='fa fa-star checked'></span><span class='fa fa-star checked'></span><span class='fa fa-star checked'></span><span class='fa fa-star'></span>
+                                {% elif rating == 4 %}
+                                    <span class='fa fa-star checked'></span><span class='fa fa-star checked'></span><span class='fa fa-star checked'></span><span class='fa fa-star checked'></span>
+                                {% endif %}
+                            </span>
+                            <hr>
+                            {{ description }}
+                        </p>
+                    </div>
+                </div>
+            </div><br>
+
+            <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
+                <div class="col-md">
+                    <div class="blog-entry"><h3 class="font_color"><b>Menu</b></h3></div><hr>
+                </div>
+            </div>
+            <div class="row row-pb-md">
+                {% for food in vendor_food_list %}
+                    <article class="food-journal">
+                        <header>
+                            <div id="vendor-food">
+                                <h4 class="font_color" style="margin-bottom: 0; display: inline"><b>{{ food.get_name() }}</b></h4><br>
+                                <p style="display: inline">(code: {{ food.get_code() }})</p><br>
+                                <p>{{ food.get_calories() }} calories <br></p>
+                            </div>
+                        </header>
+                    </article>
+                {% if not loop.last %}
+                {% endif %}
+                {% endfor %}
+            </div>
+
+
+                    
+{#                    <div class="col-md-4">#}
+{#			<div class="blog-entry">				#}
+{#			<img src="../static/images/food-image-1.png">#}
+{#				<div class="desc">#}
+{#			        <p><strong>Mee Goreng/Fried Rice Combo</strong><img src="../static/images/thumbs-down-icon.png" > #}
+{#				<br>Code: <strong> {{ food.get_code }} </strong>#}
+{#				<br>Calories: <strong>{{ food.get_calories }} kcal (not recommended) </strong> </p>#}
+{#				</div>			#}
+{#		         </div>#}
+{#		     </div>#}
+{#					#}
+{#					#}
+{#		   <div class="col-md-4">#}
+{#			<div class="blog-entry">	#}
+{#			<img src="../static/images/food-image-2.png"> #}
+{#				<div class="desc">#}
+{#				<p><strong>Mee Siam</strong> <img src="../static/images/thumbs-up-icon.png">#}
+{#				<br>Code: <strong> {{ food.get_code }}  </strong>#}
+{#				<br>Calories: <strong> {{ food.get_calories }} kcal (recommended)</strong></p>#}
+{#				</div>#}
+{#                             #}
+{#			</div>#}
+{#		   </div>#}
+{#					#}
+{#		   <div class="col-md-4">#}
+{#			<div class="blog-entry">#}
+{#			<img src="../static/images/food-image-3.png">#}
+{#				<div class="desc">#}
+{#				<p><strong>Nasi Briyani</strong><img src="../static/images/thumbs-down-icon.png">#}
+{#				<br>Code: <strong> {{ food.get_code }}  </strong>#}
+{#				<br>Calories: <strong> {{ food.get_calories }} kcal (not recommended) </strong></p>#}
+{#				</div>#}
+{#							#}
+{#			</div>#}
+{#		    </div>#}
+					                                
+                                                    
+                </div>
+                                                    
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
