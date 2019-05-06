@@ -1,65 +1,26 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const router = express.Router();
+const Shops = require('../models/Shops');
 const User = require('../models/Users');
 
 
-router.get('/register', (req, res) => {
-    res.render('/register', {
-        name,
-        user: req.session.user,
-    });
-});
-
-router.post('/register', (req, res) => {
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = req.body.password;
-    const password2 = req.body.password2;
-    var error;
-
-    User.findOne({ where: { email }
-        }).then(function(user) {
-            if (user) { error = 'This email has already been registered.'; };
-            if (password.length < 4) { error = 'Password must contain at least 4 characters'; };
-            if (password !== password2) { error = 'Passwords do not match'; };
-
-            if (typeof error === 'undefined') {
-                bcrypt.genSalt(10, function(err, salt) {
-                    bcrypt.hash(password, salt, function (err, hash) {
-                        User.create({ name, email, password: hash,
-                        }).then(function() {
-                            res.locals.success = "You've been logged in!";
-                            res.redirect('./login');
-                        })
-                    });
-                });
-            } else {
-                res.locals.error = error;
-                res.render('/register', {
-                    name,
-                    email,
-                    user: req.session.user
-                });
-            };
-        });
-});
-
-router.get('/login', (req, res) => {
-    const title = 'Login';
-    res.render('/login', {
-        title: title,
+router.get('/', (req, res) => {
+    sequelize.query("SELECT * FROM Shops").then(ShopsRows => {
+        console.log(ShopsRows)
+    })
+    res.render('index', {
         user: req.session.user
-    }) // renders views/index.login
+    }) // renders views/index.handlebars
 });
 
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/video/listVideos', // Route to /video/listVideos URL 
-        failureRedirect: './login', // Route to /login URL
-        failureFlash: true
-    })(req, res, next);
+router.get('/foodJournal', (req, res) => {
+    sequelize.query("SELECT * FROM Shops").then(ShopsRows => {
+        console.log(ShopsRows)
+    })
+    res.render('index', {
+        user: req.session.user
+    }) // renders views/index.handlebars
 });
 
 // router.post('/login', (req, res) => {

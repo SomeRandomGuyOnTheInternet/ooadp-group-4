@@ -1,20 +1,10 @@
 const express = require('express');
 const passport = require('passport');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 const sequelize = require('../config/DBConfig');
 const User = require('../models/Users');
 
-
-router.get('/', (req, res) => {
-	const title = 'Video Jotter';
-	sequelize.query("SELECT * FROM Shops").then(ShopsRows => {
-		console.log(ShopsRows)
-	})
-	res.render('index', {
-		title: title,
-		user: req.session.user
-	}) // renders views/index.handlebars
-});
 
 router.get('/register', (req, res) => {
 	res.render('register')
@@ -26,26 +16,25 @@ router.post('/register', (req, res) => {
 	const height = req.body.height;
 	const email = req.body.email;
 	const password = req.body.password;
-	const isAdmin, isVendor, isBanned = false;
+	const isAdmin = isBanned = isVendor = false;
 	var error;
 
 	User.findOne({
 		where: { email }
 	}).then(function (user) {
 		if (user) { error = 'This email has already been registered.'; };
-		if (password.length < 4) { error = 'Password must contain at least 4 characters'; };
-		if (password !== password2) { error = 'Passwords do not match'; };
+		if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
+		if (height > 3 || weight < 0.5) { error = 'Please enter a valid height value'; };
+		if (weight > 200 || weight < 20) { error = 'Please enter a valid weight value'; };
 
 		if (typeof error === 'undefined') {
 			bcrypt.genSalt(10, function (err, salt) {
 				bcrypt.hash(password, salt, function (err, hash) {
 					User.create({
-						name, email, password: hash,
+						name, email, password: hash, weight, height, isAdmin, isBanned, isVendor
 					}).then(function () {
-						res.locals.success = "You've been logged in!";
-						res.redirect('./login', { 
-							user: req.session.user 
-						});
+						res.locals.success = "Your email has been successfully registered!";
+						res.redirect('./login');
 					})
 				});
 			});
@@ -69,7 +58,7 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res, next) => {
 	passport.authenticate('local', {
-		successRedirect: '/video/listVideos', // Route to /video/listVideos URL 
+		successRedirect: './', // Route to /video/listVideos URL 
 		failureRedirect: './login', // Route to /login URL
 		failureFlash: true
 	})(req, res, next);
@@ -91,7 +80,7 @@ router.get('/about', (req, res) => {
 // Logout User
 router.get('/logout', (req, res) => {
 	req.logout();
-	res.redirect('/');
+	res.redirect('/login');
 });
 
 module.exports = router;
