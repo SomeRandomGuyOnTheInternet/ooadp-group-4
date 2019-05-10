@@ -4,8 +4,8 @@ const User = require('../models/Users');
 
 
 function localStrategy(passport) {
-    passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-        User.findOne({ where: { email: email }
+    passport.use(new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, (req, email, password, done) => {
+        User.findOne({ where: { email: email.toLowerCase() }
             }).then(user => {
                 if (!user) {
                     return done(null, false, { message: 'Please enter a valid email address' });
@@ -13,6 +13,11 @@ function localStrategy(passport) {
                 bcrypt.compare(password, user.password, (err, isMatch) => {
                         if (err) throw err;
                         if (isMatch) {
+                            var location = req.body.location;
+                            User.update(
+                                { location },
+                                { where: { email: email.toLowerCase() } },
+                            );
                             return done(null, user);
                         } else {
                             return done(null, false, { message: 'Please enter the correct password' })

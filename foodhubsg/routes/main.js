@@ -2,11 +2,12 @@ const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
-const sequelize = require('../config/DBConfig');
+const loggedOut = require('../helpers/loggedOut');
+const loggedIn = require('../helpers/loggedIn');
 const User = require('../models/Users');
 
 
-router.get('/register', (req, res) => {
+router.get('/register', loggedOut, (req, res) => {
 	res.render('register')
 });
 
@@ -14,7 +15,7 @@ router.post('/register', (req, res) => {
 	const name = req.body.name;
 	const weight = req.body.weight;
 	const height = req.body.height;
-	const email = req.body.email;
+	const email = req.body.email.toLowerCase();
 	const password = req.body.password;
 	const isAdmin = isBanned = isVendor = false;
 	var error;
@@ -41,27 +42,35 @@ router.post('/register', (req, res) => {
 		} else {
 			res.locals.error = error;
 			res.render('register', {
-				name,
-				email,
-				user: req.session.user 
+				user: req.user
 			});
 		};
 	});
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', loggedOut, (req, res) => {
 	console.log(req.session.user)
 	res.render('login', {
-		user: req.session.user
+		user: req.user
 	})
 });
 
 router.post('/login', (req, res, next) => {
 	passport.authenticate('local', {
-		successRedirect: './', // Route to /video/listVideos URL 
-		failureRedirect: './login', // Route to /login URL
+		successRedirect: 'user/',
+		failureRedirect: './login',
 		failureFlash: true
 	})(req, res, next);
+});
+
+router.get('/', loggedIn, (req, res) => {
+	if (req.user.isAdmin == true) {
+		res.redirect('/admin/')
+	} else if (req.user.isVendor == true) {
+		res.redirect('/vendor/')
+	} else {
+		res.redirect('/user/')
+	}
 });
 
 router.get('/about', (req, res) => {
@@ -73,7 +82,7 @@ router.get('/about', (req, res) => {
 	res.render('about', {
 		title: title,
 		developer: developer,
-		user: req.session.user
+		user: req.user
 	});
 });
 

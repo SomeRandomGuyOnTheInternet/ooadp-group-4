@@ -21,6 +21,9 @@ const Shops = db.define('shops', {
     imageLocation: {
         type: Sequelize.STRING
     },
+    isDeleted: {
+        type: Sequelize.BOOLEAN
+    },
 });
 
 

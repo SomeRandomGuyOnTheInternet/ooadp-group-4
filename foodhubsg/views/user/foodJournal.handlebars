@@ -1,0 +1,233 @@
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+                    <header id="summary-header">
+                        <h1 class="font_color"><b>Add Food Code</b></h1>
+                        <hr>
+                    </header>
+
+                    <form method="post">
+                        <div class="input-group">
+                            <input name="code" id="code" class="form-control" value=""
+                                placeholder="Food Code (eg: a00001)" required="">
+                            <span class="input-group-btn">
+                                <input type="submit" name="action" value="Save Food" class="btn btn-primary"
+                                    style="background-color: #4CAF50; height: 54px; margin-left: 0.5em;">
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+
+                    <form method="post">
+                        <header id="summary-header">
+                            <div class="input-group">
+                                <h1 class="font_color"><b>Food History</b></h1>
+                                <input type="date" name="search-date" id="search-date" class="form-control"
+                                    style="margin-left: 25em;" min="2005-01-01" max="2030-12-31" required="">
+                                <span class="input-group-btn">
+                                    <input type="submit" name="action" value="Search Date" class="btn btn-primary"
+                                        style="background-color: #4CAF50; height: 54px; margin-left: 0.5em;">
+                                </span>
+                            </div>
+                            <hr>
+                        </header>
+                    </form>
+
+
+                    <div id="accordion">
+
+                        <div class="date-meal">
+
+                            <h2> <b>28 January (Monday)</b> </h2>
+
+                            <div class="row" style="padding-bottom: 1em;">
+
+                                <div class="col-3 meal-type">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Breakfast</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>08:06 AM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>Chicken Rice</b></h4>
+                                                <p style="margin-bottom: 0">(code: b00001)</p>
+                                                <p>
+                                                    673 calories <br>
+                                                    <a class="action" href="/edit_food/24"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                                
+                                
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>12:06 AM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>Karage Ramen</b></h4>
+                                                <p style="margin-bottom: 0">(code: c00005)</p>
+                                                <p>
+                                                    570 calories <br>
+                                                    <a class="action" href="/edit_food/28"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                                </div>
+
+                                <div class="col-3 meal-type">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Lunch</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>01:06 PM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>McSpicy</b></h4>
+                                                <p style="margin-bottom: 0">(code: a00001)</p>
+                                                <p>
+                                                    752 calories <br>
+                                                    <a class="action" href="/edit_food/25"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                                </div>
+
+                                <div class="col-3 meal-type">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Dinner</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>07:06 PM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>Pineapple Rice</b></h4>
+                                                <p style="margin-bottom: 0">(code: b00003)</p>
+                                                <p>
+                                                    840 calories <br>
+                                                    <a class="action" href="/edit_food/26"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                                </div>
+
+                                <div class="col-3">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Snacks</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                        </header>
+                                    </article>
+                                </div>
+
+                            </div>
+
+                            <h5>Total calories consumed: <b> 2835 kcal </b> </h5>
+
+                        </div>
+
+                        <hr>
+
+                        <div class="date-meal">
+                        
+                            <h2> <b>27 January (Saturday)</b> </h2>
+                        
+                            <div class="row" style="padding-bottom: 1em;">
+                        
+                                <div class="col-3 meal-type">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Breakfast</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>08:06 AM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>Chicken Rice</b></h4>
+                                                <p style="margin-bottom: 0">(code: b00001)</p>
+                                                <p>
+                                                    673 calories <br>
+                                                    <a class="action" href="/edit_food/24"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                        
+                        
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>12:06 AM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>Karage Ramen</b></h4>
+                                                <p style="margin-bottom: 0">(code: c00005)</p>
+                                                <p>
+                                                    570 calories <br>
+                                                    <a class="action" href="/edit_food/28"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                                </div>
+                        
+                                <div class="col-3 meal-type">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Lunch</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>01:06 PM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>McSpicy</b></h4>
+                                                <p style="margin-bottom: 0">(code: a00001)</p>
+                                                <p>
+                                                    752 calories <br>
+                                                    <a class="action" href="/edit_food/25"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                                </div>
+                        
+                                <div class="col-3 meal-type">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Dinner</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <div id="time-created"> <i>07:06 PM</i> </div>
+                                                <h4 style="margin-bottom: 0; display: inline"><b>Pineapple Rice</b></h4>
+                                                <p style="margin-bottom: 0">(code: b00003)</p>
+                                                <p>
+                                                    840 calories <br>
+                                                    <a class="action" href="/edit_food/26"><i>Edit</i></a>
+                                                </p>
+                                            </div>
+                                        </header>
+                                    </article>
+                                </div>
+                        
+                                <div class="col-3">
+                                    <h5 style="margin-bottom: 0; display: inline"><b>Snacks</b></h5>
+                                    <article class="food-journal">
+                                        <header>
+                                            <div class="food-subsection">
+                                                <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                        </header>
+                                    </article>
+                                </div>
+                        
+                            </div>
+                        
+                            <h5>Total calories consumed: <b> 2835 kcal </b> </h5>
+                        
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>

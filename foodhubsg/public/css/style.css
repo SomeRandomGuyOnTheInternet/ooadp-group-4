@@ -1569,4 +1569,6 @@ input[type="text"] {
   color: white;
 }
 
-
+.meal-type {
+  border-right: thin solid #e6e6e6;
+}

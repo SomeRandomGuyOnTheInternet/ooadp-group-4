@@ -9,9 +9,6 @@ const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session'); // Library to use MySQL to store session objects
 const passport = require('passport');
 const db = require('./config/db');
-const createInstance = require('./config/DBInstance');
-const shops = require('./models/Shops')
-const foodItems = require('./models/FoodItems')
 
 const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
@@ -67,7 +64,7 @@ app.use('/video', videoRoute);
 
 const foodhubsg = require('./config/DBConnection');
 foodhubsg.setUpDB(false);
-createInstance(shops, foodItems);
+
 
 const port = 5000;
 app.listen(port, () => { console.log(`Server started on port ${port}`); });

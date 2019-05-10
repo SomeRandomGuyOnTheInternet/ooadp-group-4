@@ -1,0 +1,149 @@
+<div id="colorlib-container">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="box1">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+
+                        <header>
+                            <h1 class="font_color"><b>User Settings</b></h1>
+                            <h5>(vignesh@mail.com)</h5>
+                            <hr>
+                        </header>
+
+                        <form method="post">
+
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label>Height in meters</label>
+                                    <input name="height" id="height" type="number" step="0.01" class="form-control"
+                                        value="" placeholder="1.78 m">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Weight in kilograms</label>
+                                    <input name="weight" id="weight" type="number" step="0.01" class="form-control"
+                                        value="" placeholder="75 kg">
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label>Email</label>
+                                    <input name="email" id="email" type="email" class="form-control" value="" placeholder="bala12rupesh@gmail.com">
+                                </div>
+
+                                <div class="col-md-12 new-password">
+                                    <label>Password</label>
+                                    <input name="password" id="password" type="password" class="form-control delprefix"
+                                        placeholder="(unchanged)">
+                                </div>
+                            </div>
+
+                            <div class="hide-tax" style="display:none;">
+                                <div class="row form-group">
+                                    <div class="col-md-12 old-password">
+                                        <label>Confirm Current Password</label>
+                                        <input name="old-password" id="old-password" type="password"
+                                            class="form-control delprefix" placeholder="Enter your current password">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <input type="submit" name="action" value="Update Settings" class="btn btn-primary"
+                                style="background-color: #4CAF50;">
+                            <input type="submit" name="action" value="Delete Account" onclick="remove_confirm()"
+                                class="btn btn-primary" id="remove-account" style="background-color: #d9534f;">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="box1">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+
+                        <header id="summary-header">
+                            <h1 class="font_color"><b>Summary of your stats</b></h1>
+
+                            <h5>(based on the previous 6 days with entries in food journal)</h5>
+
+                            <hr>
+                        </header>
+                        <h4><b>Body Mass Index Summary</b></h4>
+                        <h5>Balavignesh, you have a BMI of 27.95, which is above the healthy range of 22 to 24. You are
+                            recommended to lose 14 kg to reach a body mass of 64 kg, which will get you back to the
+                            healthy BMI range.</h5>
+
+                        <h4><b>Food History Summary</b></h4>
+
+                        <h5>You consumed an average of 2500 kcal daily over the 6 days you've entered food into your
+                            food journal, which is within the daily recommended amount, so keep following your current
+                            diet.</h5>
+
+                        <h5></h5>
+
+                        <h4><b>Breakdown on meal-by-meal basis</b></h4>
+                        <table class="table">
+                            <thead class="thead-green">
+                                <tr>
+                                    <th scope="col">Meal Type</th>
+                                    <th scope="col">Ideal Calorie Intake</th>
+                                    <th scope="col">Average Calorie Intake</th>
+                                    <th scope="col">Est. Calories To Lose/Gain</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Breakfast (5am-10am)</th>
+                                    <td>400 - 600 kcal</td>
+                                    <td>974.83 kcal</td>
+                                    <td>
+
+                                        -474.83 kcal
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Lunch (11am-2pm)</th>
+                                    <td>300 - 500 kcal</td>
+                                    <td>580.17 kcal</td>
+                                    <td>
+
+                                        -180.17 kcal
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Dinner (5pm-10pm)</th>
+                                    <td>400 - 600 kcal</td>
+                                    <td>755.5 kcal</td>
+                                    <td>
+
+                                        -255.5 kcal
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Out-of-schedule snacks</th>
+                                    <td>&lt;300 kcal</td>
+                                    <td>190.0 kcal</td>
+                                    <td>
+
+                                        Your snack intake is within limit
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

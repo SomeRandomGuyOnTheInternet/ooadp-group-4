@@ -42,6 +42,10 @@
 										placeholder="Password" required>
 								</div>
 
+								<div class="row form-group" style="display: none;">
+									<input name="location" id="location" class="form-control">
+								</div>
+
 								<div class="flash-div">
 								{{#if error}}
 									<div class="row form-group">
@@ -77,17 +81,52 @@
 	</div>
 </div>
 
+{{!-- below are common locations to simulate geolocation and check the city names --}}
 
-{{!-- const express = require('express');
-const router = express.Router();
-router.get('/', (req, res) => {
-const title = 'Video Jotter';
-res.render('index', { // renders views/index.handlebars
-title
-})
-});
-router.get('/about', (req, res) => {
-const author = 'Your name';
-res.render('about', { // renders views/about.handlebars, passing
-author as variable
-author: autho --}}
+{{!-- Nanyang Poly = latlng = new google.maps.LatLng(1.380096, 103.848895);
+Sengkang = latlng = new google.maps.LatLng(1.393593, 103.887720);
+Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213); --}}
+
+<script>
+	const locationInput = document.querySelector("#location");
+	var currentCity = null;
+
+	function success(position) {
+		{{!-- latlng = new google.maps.LatLng(1.380096, 103.848895); --}}
+		latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		new google.maps.Geocoder().geocode({ 'latLng': latlng }, function (results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				if (results[1]) {
+					var c, lc, component;
+					for (var r = 0, rl = results.length; r < rl; r += 1) {
+						var result = results[r];
+
+						if (!currentCity && result.types[0] === 'neighborhood') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+
+								if (component.types[0] === 'neighborhood') {
+									currentCity = component.long_name;
+									locationInput.setAttribute("value", currentCity);
+									break;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				error();
+			}
+		});
+	}
+
+	function error() {
+		locationInput.setAttribute("value", currentCity);
+	}
+
+	if (!navigator.geolocation) {
+		error();
+	} else {
+		navigator.geolocation.getCurrentPosition(success, error);
+	}
+</script>

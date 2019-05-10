@@ -18,6 +18,9 @@ const Users = db.define('users', {
     weight: {
         type: Sequelize.FLOAT
     },
+    location: {
+        type: Sequelize.STRING
+    },
     isAdmin: {
         type: Sequelize.BOOLEAN
     },
