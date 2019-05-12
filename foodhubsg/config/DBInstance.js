@@ -7,7 +7,8 @@ function createInstance(Shops, FoodItems, Users) {
             rating: 4.3, 
             description: 'Sandwiches & salads made to order, right in front of you, down to your specifications, with the use of a variety of ingredients', 
             imageLocation: '/images/misaka-sengkang-image.jpeg', 
-            isDeleted: false, 
+            isDeleted: false,
+            isRecommended: true,
         },
         {
             name: 'The Bistro',
@@ -17,6 +18,7 @@ function createInstance(Shops, FoodItems, Users) {
             description: 'Sandwiches & salads made to order, right in front of you, down to your specifications, with the use of a variety of ingredients',
             imageLocation: '/images/thebistro-sengkang-image.jpeg',
             isDeleted: false,
+            isRecommended: false,
         },
         {
             name: 'Grains',
@@ -26,6 +28,7 @@ function createInstance(Shops, FoodItems, Users) {
             description: 'Ensuring that better food, prepared from whole, unprocessed ingredients is accessible to everyone.',
             imageLocation: '/images/grains-amk-image.jpg',
             isDeleted: false,
+            isRecommended: true,
         },
         {
             name: 'Lean Bento',
@@ -35,6 +38,7 @@ function createInstance(Shops, FoodItems, Users) {
             description: 'The blatantly correct choice.',
             imageLocation: '/images/leanbento-amk-image.jpeg',
             isDeleted: false,
+            isRecommended: true,
         },
         {
             name: 'The Lawn',
@@ -44,6 +48,7 @@ function createInstance(Shops, FoodItems, Users) {
             description: 'Ensuring that better food, prepared from whole, unprocessed ingredients is accessible to everyone.',
             imageLocation: '/images/thelawn-amk-image.jpeg',
             isDeleted: false,
+            isRecommended: false,
         },
         {
             name: 'The Warm Drum',
@@ -53,17 +58,18 @@ function createInstance(Shops, FoodItems, Users) {
             description: 'Fresh meat cuts are available.',
             imageLocation: '/images/warmdrum-amk-image.jpeg',
             isDeleted: false,
+            isRecommended: false,
         },
         { name: 'Fried Rice Stall', address: '456 Fuckbum ASU', location: 'Punggol', rating: 2.67, description: 'idkman pt.2', imageLocation: '/images/leanbento-amk-image.jpeg', isDeleted: false, },
     ]);
 
     FoodItems.bulkCreate([
-        { name: 'Aglio Olio', calories: 571, shopId: 1 },
-        { name: 'Cesear Salad', calories: 346, shopId: 1 },
-        { name: 'Cream of Mushroom Soup', calories: 827, shopId: 1 },
-        { name: 'Carbonara', calories: 436, shopId: 1 },
-        { name: 'Mushroom Pasta', calories: 682, shopId: 1 },
-        { name: 'Teriyaki Bento', calories: 682, shopId: 2 },
+        { name: 'Aglio Olio', calories: 571, shopId: 1, isRecommended: false, },
+        { name: 'Cesear Salad', calories: 346, shopId: 1, isRecommended: true, },
+        { name: 'Cream of Mushroom Soup', calories: 827, shopId: 1, isRecommended: false, },
+        { name: 'Carbonara', calories: 436, shopId: 1, isRecommended: true, },
+        { name: 'Mushroom Pasta', calories: 682, shopId: 1, isRecommended: false, },
+        { name: 'Teriyaki Bento', calories: 682, shopId: 2, isRecommended: false, },
     ]);
 
 };

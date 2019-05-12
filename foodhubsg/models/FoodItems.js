@@ -8,7 +8,10 @@ const FoodItems = db.define('foodItems', {
     },
     calories: {
         type: Sequelize.STRING
-    }
+    },
+    isRecommended: {
+        type: Sequelize.BOOLEAN
+    },
 });
 
 module.exports = FoodItems;

@@ -16,7 +16,7 @@ const setUpDB = (drop) => {
             Defines the relationship where a user has many videos.
             In this case the primary key from user will be a foreign key in video.
             */
-            users.hasMany(foodItems, { through: 'foodHistory' });
+            users.belongsToMany(foodItems, { through: 'foodHistory' });
             foodItems.belongsToMany(users, { through: 'foodHistory' });
             shops.hasMany(foodItems);
             mySQLDB.sync({ // Creates table if none exists

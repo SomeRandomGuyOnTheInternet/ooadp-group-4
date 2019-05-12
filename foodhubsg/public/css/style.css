@@ -1473,6 +1473,7 @@ input[type="text"] {
 }
 
 .img-responsive {
+  overflow: hidden;
   max-height: 300px;
 }
 
@@ -1571,4 +1572,12 @@ input[type="text"] {
 
 .meal-type {
   border-right: thin solid #e6e6e6;
+}
+
+.recommended-false {
+  color: #d9534f;
+}
+
+.recommended-true {
+  color: #3d8b3d;
 }

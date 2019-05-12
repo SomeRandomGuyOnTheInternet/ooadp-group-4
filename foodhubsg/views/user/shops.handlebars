@@ -1,0 +1,86 @@
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="col-md-12">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+                        <h1 class="font_color"><b class="center_subtitle">Vendors near you</b></h1>
+                        <hr>
+                    </div>
+
+                    {{#if user.location}}
+                    <div class="col-md-12">
+                        <h4 id="current_location">Current Location: <b class="center_subtitle">{{user.location}}</b></h4>
+                    </div>
+                    
+                    {{#each shops}}
+                    <div class="col-md-6 recommended-shops">
+                        <div class="blog-entry">
+                            <div class="blog-img">
+                                <a class="action" href="/user/shops/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+                            </div>
+                            <div class="desc">
+                                <p class="meta">
+                                    <b class="vendors"><b>{{this.name}}</b></b><br>
+                                    <span class="food_location"><b>{{ this.address }}</b></span><br>
+                                    <span class="food_rating">Rating: <b class="recommended-{{ this.isRecommended }}">{{ this.rating }}</b></span><br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="col-md-12">
+                        <h3 id="current_location"><b class="center_subtitle">There are no recommended shops near you</b></h4>
+                    </div>
+                    {{/each}}
+                    
+                    {{else}}
+                    <div class="col-md-12">
+                        <h4 id="current_location">We could not detect your current location</b></h4>
+                    </div>
+                    {{/if}}
+
+
+                    {{!-- {% for vendor in user_vendors %}
+                    <div class="col-md-6 vendor-rating-{{ vendor.get_rating() }}">
+                        <div class="blog-entry" id="vendors">
+                            <div class="blog-img">
+                                <a class="action" href="{{ url_for('vendors.vendor', code = vendor.get_code()) }}"><img
+                                        src="{{ vendor.get_image_location() }}" class="img-responsive"
+                                        alt="html5 bootstrap template"></a>
+                            </div>
+                            <div class="desc">
+                                <p class="meta">
+                                    <b class="vendors"><b>{{ vendor.get_name() }}</b></b><br>
+                                    <span class="food_location"><b>{{ vendor.get_location() }}</b></span><br>
+                                    <span class=food_rating">Healthiness rating:
+                                        {% if vendor.get_rating() == 1 %}
+                                        <span class='fa fa-star checked'></span><span class='fa fa-star'></span><span
+                                            class='fa fa-star'></span><span class='fa fa-star'></span>
+                                        {% elif vendor.get_rating() == 2 %}
+                                        <span class='fa fa-star checked'></span><span
+                                            class='fa fa-star checked'></span><span class='fa fa-star'></span><span
+                                            class='fa fa-star'></span>
+                                        {% elif vendor.get_rating() == 3 %}
+                                        <span class='fa fa-star checked'></span><span
+                                            class='fa fa-star checked'></span><span
+                                            class='fa fa-star checked'></span><span class='fa fa-star'></span>
+                                        {% elif vendor.get_rating() == 4 %}
+                                        <span class='fa fa-star checked'></span><span
+                                            class='fa fa-star checked'></span><span
+                                            class='fa fa-star checked'></span><span class='fa fa-star checked'></span>
+
+                                        {% endif %}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% endif %} --}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

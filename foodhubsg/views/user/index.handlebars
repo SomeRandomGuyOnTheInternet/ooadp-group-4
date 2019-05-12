@@ -11,7 +11,7 @@
 							<h4>You consumed an average of 2500 kcal daily over the 6 days you've entered food into your food journal, which is within
 							the daily recommended amount, so keep following your current diet. </h4>
 						</div>
-						<u><a href="user/foodJournal">Click here to see your food intake in more
+						<u><a href="/user/foodJournal/">Click here to see your food intake in more
 								detail </a></u>
 					</div>
 				</div>
@@ -34,13 +34,13 @@
 					<div class="col-md-6 recommended-shops">
 						<div class="blog-entry">
 							<div class="blog-img">
-								<a class="action" href="#"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+								<a class="action" href="/user/shops/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
 							</div>
 							<div class="desc">
 								<p class="meta">
 									<b class="vendors"><b>{{this.name}}</b></b><br>
 									<span class="food_location"><b>{{ this.address }}</b></span><br>
-									<span class="food_rating">Rating: <b style="color:forestgreen">{{ this.rating }}</b></span><br>
+									<span class="food_rating">Rating: <b class="recommended-{{ this.isRecommended }}">{{ this.rating }}</b></span><br>
 								</p>
 							</div>
 						</div>

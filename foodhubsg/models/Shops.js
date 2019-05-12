@@ -24,6 +24,9 @@ const Shops = db.define('shops', {
     isDeleted: {
         type: Sequelize.BOOLEAN
     },
+    isRecommended: {
+        type: Sequelize.BOOLEAN
+    },
 });
 
 
