@@ -22,3 +22,16 @@ router.get('/', loggedIn, (req, res) => {
         })
     })
 });
+
+router.get('/faq', loggedIn, (req, res) => {
+    res.render('user/faq'), {
+        user: req.user
+    }
+
+});
+
+router.get('/shops', loggedIn, (req, res) => { 
+    res.render('user/shops'), {
+        user: req.user
+    }
+})
