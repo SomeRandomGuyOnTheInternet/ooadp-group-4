@@ -59,8 +59,9 @@ const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);
 
 app.use('/', mainRoute);
+app.use('/admin', adminRoute);
 app.use('/user', userRoute);
-// app.use('/admin', adminRoute);
+
 
 const foodhubsg = require('./config/DBConnection');
 foodhubsg.setUpDB(false);

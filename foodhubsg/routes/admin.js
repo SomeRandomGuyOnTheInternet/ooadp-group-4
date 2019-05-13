@@ -35,3 +35,5 @@ router.get('/shops', loggedIn, (req, res) => {
         user: req.user
     }
 })
+
+module.exports = router; 
