@@ -4,20 +4,16 @@
             <div class="col-md-12">
                 <div class="row row-pb-md">
                     <div class="col-md-12">
-                        <h1 class="font_color"><b class="center_subtitle">Vendors near you</b></h1>
+                        <h1 class="font_color" style="display:inline-block;"><b>All Available Shops</b></h1>
+                        <a href="/admin/addShop"><button type="button" class="btn btn-success" style="float:right;">Add New Shop</button></a>
                         <hr>
-                    </div>
-
-                    {{#if user.location}}
-                    <div class="col-md-12">
-                        <h4 id="current_location">Current Location: <b class="center_subtitle">{{user.location}}</b></h4>
                     </div>
                     
                     {{#each shops}}
                     <div class="col-md-6 recommended-shops">
                         <div class="blog-entry">
                             <div class="blog-img">
-                                <a class="action" href="/user/shops/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+                                <a class="action" href="/admin/editShop/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
                             </div>
                             <div class="desc">
                                 <p class="meta">
@@ -28,18 +24,8 @@
                             </div>
                         </div>
                     </div>
-                    {{else}}
-                    <div class="col-md-12">
-                        <h3 id="current_location"><b class="center_subtitle">There are no recommended shops near you</b></h4>
-                    </div>
                     {{/each}}
-                    
-                    {{else}}
-                    <div class="col-md-12">
-                        <h4 id="current_location">We could not detect your current location</b></h4>
-                    </div>
-                    {{/if}}
-                    
+
                 </div>
             </div>
         </div>

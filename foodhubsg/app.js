@@ -60,7 +60,7 @@ authenticate.localStrategy(passport);
 
 app.use('/', mainRoute);
 app.use('/user', userRoute);
-// app.use('/admin', adminRoute);
+app.use('/admin', adminRoute);
 
 const foodhubsg = require('./config/DBConnection');
 foodhubsg.setUpDB(false);

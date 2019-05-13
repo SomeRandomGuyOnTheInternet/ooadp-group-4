@@ -1,37 +1,56 @@
 const express = require('express');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 const router = express.Router();
-const sequelize = require('../config/DBConfig');
 const loggedIn = require('../helpers/loggedIn');
 const Shops = require('../models/Shops');
+const foodItems = require('../models/FoodItems');
 
 
-router.get('/', loggedIn, (req, res) => {
-    Shops.findAll({
-        where: {
-            location: req.user.location,
-            rating: {
-                [Op.gte]: 4.0
-            },
-        }
-    }).then(function (shops) {
-        res.render('user/index', {
+router.get('/vendors', loggedIn, (req, res) => {
+    res.render('admin/vendors', {
+        user: req.user,
+    })
+});
+
+router.get('/shops', loggedIn, (req, res) => {
+    Shops.findAll()
+    .then(function (shops) {
+        res.render('admin/shops', {
             user: req.user,
             shops: shops,
         })
     })
-});
+})
+
+router.get('/editShop/:id', loggedIn, (req, res) => {
+    var id = req.params.id;
+    Promise.all([
+        Shops.findOne({
+            where: { id }
+        }),
+        foodItems.findAll({
+            shopId: { id }
+        })
+    ])
+        .then((data) => {
+            res.render('admin/editShop', {
+                shop: data[0],
+                foodItems: data[1],
+                user: req.user,
+            });
+        });
+})
+
+router.get('/addShop', loggedIn, (req, res) => {
+    res.render('admin/addShop', {
+        user: req.user,
+    })
+})
 
 router.get('/faq', loggedIn, (req, res) => {
-    res.render('user/faq'), {
+    res.render('admin/faq'), {
         user: req.user
     }
 
 });
 
-router.get('/shops', loggedIn, (req, res) => { 
-    res.render('user/shops'), {
-        user: req.user
-    }
-})
+module.exports = router;

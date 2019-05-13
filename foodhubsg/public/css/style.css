@@ -1494,7 +1494,7 @@ input[type="text"] {
 }
 
 .form-control {
-  border-width: 0.2px;
+  border-radius: 0;
   border-color: #999999;
   box-shadow: 0 5px 20px -5px rgba(0,0,0,0.1);
 }
@@ -1580,4 +1580,8 @@ input[type="text"] {
 
 .recommended-true {
   color: #3d8b3d;
+}
+
+select {
+  border: 50px; 
 }

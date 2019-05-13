@@ -65,7 +65,7 @@ router.post('/login', (req, res, next) => {
 
 router.get('/', loggedIn, (req, res) => {
 	if (req.user.isAdmin === true) {
-		res.redirect('/admin/')
+		res.redirect('/admin/vendors')
 	} else if (req.user.isVendor === true) {
 		res.redirect('/vendor/')
 	} else {
