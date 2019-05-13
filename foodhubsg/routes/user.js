@@ -1,14 +1,12 @@
 const express = require('express');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 const router = express.Router();
-const sequelize = require('../config/DBConfig');
 const loggedIn = require('../helpers/loggedIn');
 const foodItems = require('../models/FoodItems');
 const Shops = require('../models/Shops');
 
 
 router.get('/', loggedIn, (req, res) => {
+    console.log(req.user)
     Shops.findAll({ 
         where: { 
             location: req.user.location,

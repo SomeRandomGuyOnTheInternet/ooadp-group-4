@@ -57,18 +57,19 @@ router.get('/login', loggedOut, (req, res) => {
 
 router.post('/login', (req, res, next) => {
 	passport.authenticate('local', {
-		successRedirect: 'user/',
+		successRedirect: './',
 		failureRedirect: './login',
 		failureFlash: true
 	})(req, res, next);
 });
 
 router.get('/', loggedIn, (req, res) => {
-	if (req.user.isAdmin == true) {
+	if (req.user.isAdmin === true) {
 		res.redirect('/admin/')
-	} else if (req.user.isVendor == true) {
+	} else if (req.user.isVendor === true) {
 		res.redirect('/vendor/')
 	} else {
+		console.log(req.user)
 		res.redirect('/user/')
 	}
 });
