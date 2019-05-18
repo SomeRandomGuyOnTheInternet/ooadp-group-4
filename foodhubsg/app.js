@@ -13,6 +13,7 @@ const db = require('./config/db');
 const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
 const adminRoute = require('./routes/admin');
+const vendorRoute = require('./routes/vendor'); 
 const app = express();
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -61,6 +62,7 @@ authenticate.localStrategy(passport);
 app.use('/', mainRoute);
 app.use('/user', userRoute);
 app.use('/admin', adminRoute);
+app.use('/vendor', vendorRoute);
 
 const foodhubsg = require('./config/DBConnection');
 foodhubsg.setUpDB(false);
