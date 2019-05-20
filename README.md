@@ -15,3 +15,5 @@ Or on Windows cmd::
     > nodemon
 
 Open http://127.0.0.1:5000 in a browser.
+
+To install node modules on windows, simply put a -g before the install command. That should solve all your problems.
