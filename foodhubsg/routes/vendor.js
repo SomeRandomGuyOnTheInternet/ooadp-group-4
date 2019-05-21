@@ -5,7 +5,7 @@ const foodItems = require('../models/FoodItems');
 const Shops = require('../models/Shops');
 
 router.get('/showShops', loggedIn, (req, res) => {
-    res.render('vendor/vendor_index', {
+    res.render('vendors/vendor_index', {
         user: req.user,
     })
 });
