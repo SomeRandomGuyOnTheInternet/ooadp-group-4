@@ -16,8 +16,10 @@ router.get('/addShops', loggedIn, (req, res)=> {
     })
 })
 
-router.get('/addMenuItems', loggedIn, (req, res)=> { 
-    
+router.get('/addMenu', loggedIn, (req, res)=> { 
+    res.render('vendors/add_fooditems', {
+        user: req.user, 
+    })
 })
 
 module.exports = router;
