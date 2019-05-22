@@ -16,4 +16,8 @@ router.get('/addShops', loggedIn, (req, res)=> {
     })
 })
 
+router.get('/addMenuItems', loggedIn, (req, res)=> { 
+    
+})
+
 module.exports = router;
