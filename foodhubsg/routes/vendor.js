@@ -10,4 +10,10 @@ router.get('/showShops', loggedIn, (req, res) => {
     })
 });
 
+router.get('/addShops', loggedIn, (req, res)=> { 
+    res.render('/vendors/vendor_add_shops', { 
+        user: req.user, 
+    })
+})
+
 module.exports = router;
