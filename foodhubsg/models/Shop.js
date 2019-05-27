@@ -27,6 +27,9 @@ const Shop = db.define('Shop', {
     isRecommended: {
         type: Sequelize.BOOLEAN
     },
+    vendor: { 
+        type: Sequelize.STRING, 
+    }, 
 });
 
 

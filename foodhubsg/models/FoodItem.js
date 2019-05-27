@@ -12,6 +12,10 @@ const FoodItem = db.define('FoodItem', {
     isRecommended: {
         type: Sequelize.BOOLEAN
     },
+
+    images: { 
+        type: Sequelize.STRING, 
+    }
 });
 
 module.exports = FoodItem;

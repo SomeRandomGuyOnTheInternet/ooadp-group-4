@@ -10,15 +10,15 @@ router.get('/showShops', loggedIn, (req, res) => {
     })
 });
 
-router.get('/addShops', loggedIn, (req, res)=> { 
-    res.render('vendors/add_newshops', { 
-        user: req.user, 
+router.get('/addShops', loggedIn, (req, res)=> {
+    res.render('vendors/add_newshops', {
+        user: req.user,
     })
 })
 
-router.get('/addMenu', loggedIn, (req, res)=> { 
+router.get('/addMenu', loggedIn, (req, res)=> {
     res.render('vendors/add_fooditems', {
-        user: req.user, 
+        user: req.user,
     })
 })
 
