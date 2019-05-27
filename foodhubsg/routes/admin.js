@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
 const Shop = require('../models/Shop');
-const Food = require('../models/Food');
+const FoodItem = require('../models/FoodItem');
 
 
 router.get('/vendors', loggedIn, (req, res) => {

@@ -3,7 +3,7 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
-const Food = require('../models/Food');
+const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 

@@ -1,4 +1,4 @@
-function createInstance(Shop, Food, Users) {
+function createInstance(Shop, Food, User) {
     Shop.bulkCreate([
         { 
             name: 'Misaka', 

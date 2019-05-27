@@ -1,7 +1,7 @@
 const mySQLDB = require('./DBConfig');
 const createInstance = require('./DBInstance');
 const User = require('../models/User');
-const Food = require('../models/Food');
+const FoodItem = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 
@@ -14,14 +14,14 @@ const setUpDB = (drop) => {
         })
         .then(() => {
             User.hasMany(FoodLog);
-            Food.hasMany(FoodLog);
-            Shop.hasMany(Food, {});
+            FoodItem.hasMany(FoodLog);
+            Shop.hasMany(FoodItem, {});
 
             mySQLDB.sync({ // Creates table if none exists
                 force: drop
             }).then(() => {
                 console.log('Create tables if none exists');
-                if (drop == true) { createInstance(Shop, Food); }
+                if (drop == true) { createInstance(Shop, FoodItem); }
             }).catch(err => console.log(err))
         })
         .catch(err => console.log('Error: ' + err));
