@@ -67,7 +67,7 @@ router.get('/', loggedIn, (req, res) => {
 	if (req.user.isAdmin === true) {
 		res.redirect('/admin/vendors')
 	} else if (req.user.isVendor === true) {
-		res.redirect('/vendor/')
+		res.redirect('/vendor/showShops')
 	} else {
 		console.log(req.user)
 		res.redirect('/user/')
