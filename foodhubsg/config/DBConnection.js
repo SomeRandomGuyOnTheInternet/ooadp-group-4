@@ -1,8 +1,9 @@
 const mySQLDB = require('./DBConfig');
 const createInstance = require('./DBInstance');
-const users = require('../models/Users');
-const foodItems = require('../models/FoodItems');
-const shops = require('../models/Shops');
+const User = require('../models/User');
+const Food = require('../models/Food');
+const FoodLog = require('../models/FoodLog');
+const Shop = require('../models/Shop');
 
 
 // If drop is true, all existing tables are dropped and recreated
@@ -12,18 +13,15 @@ const setUpDB = (drop) => {
             console.log('FoodHubSG database is now connected!');
         })
         .then(() => {
-            /*
-            Defines the relationship where a user has many videos.
-            In this case the primary key from user will be a foreign key in video.
-            */
-            users.belongsToMany(foodItems, { through: 'foodHistory' });
-            foodItems.belongsToMany(users, { through: 'foodHistory' });
-            shops.hasMany(foodItems);
+            User.hasMany(FoodLog);
+            Food.hasMany(FoodLog);
+            Shop.hasMany(Food, {});
+
             mySQLDB.sync({ // Creates table if none exists
                 force: drop
             }).then(() => {
                 console.log('Create tables if none exists');
-                if (drop == true) { createInstance(shops, foodItems); }
+                if (drop == true) { createInstance(Shop, Food); }
             }).catch(err => console.log(err))
         })
         .catch(err => console.log('Error: ' + err));

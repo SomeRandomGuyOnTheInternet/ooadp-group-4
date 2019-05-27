@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../config/DBConfig');
 
 
-const Shops = db.define('shops', {
+const Shop = db.define('Shop', {
     name: {
         type: Sequelize.STRING
     },
@@ -30,4 +30,4 @@ const Shops = db.define('shops', {
 });
 
 
-module.exports = Shops;
+module.exports = Shop;

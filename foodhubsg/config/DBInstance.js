@@ -1,5 +1,5 @@
-function createInstance(Shops, FoodItems, Users) {
-    Shops.bulkCreate([
+function createInstance(Shop, Food, Users) {
+    Shop.bulkCreate([
         { 
             name: 'Misaka', 
             address: '1 Sengkang Square #01-225, Sengkang - 545078', 
@@ -63,7 +63,7 @@ function createInstance(Shops, FoodItems, Users) {
         { name: 'Fried Rice Stall', address: '456 Fuckbum ASU', location: 'Punggol', rating: 2.67, description: 'idkman pt.2', imageLocation: '/images/leanbento-amk-image.jpeg', isDeleted: false, },
     ]);
 
-    FoodItems.bulkCreate([
+    Food.bulkCreate([
         { name: 'Aglio Olio', calories: 571, shopId: 1, isRecommended: false, },
         { name: 'Cesear Salad', calories: 346, shopId: 1, isRecommended: true, },
         { name: 'Cream of Mushroom Soup', calories: 827, shopId: 1, isRecommended: false, },

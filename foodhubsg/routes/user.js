@@ -1,13 +1,16 @@
 const express = require('express');
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
-const foodItems = require('../models/FoodItems');
-const Shops = require('../models/Shops');
+const Food = require('../models/Food');
+const FoodLog = require('../models/FoodLog');
+const Shop = require('../models/Shop');
 
 
 router.get('/', loggedIn, (req, res) => {
     console.log(req.user)
-    Shops.findAll({ 
+    Shop.findAll({ 
         where: { 
             location: req.user.location,
             isRecommended: true,
@@ -21,7 +24,7 @@ router.get('/', loggedIn, (req, res) => {
 });
 
 router.get('/shops', loggedIn, (req, res) => {
-    Shops.findAll({
+    Shop.findAll({
         where: {
             location: req.user.location,
         }
@@ -36,10 +39,10 @@ router.get('/shops', loggedIn, (req, res) => {
 router.get('/shops/:id', loggedIn, (req, res) => {
     var id = req.params.id;
     Promise.all([
-        Shops.findOne({
+        Shop.findOne({
             where: { id }
         }), 
-        foodItems.findAll({
+        Food.findAll({
             shopId: { id }
         })
     ])
@@ -55,6 +58,38 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 router.get('/foodJournal', loggedIn, (req, res) => {
     res.render('user/foodJournal', {
         user: req.user,
+    })
+});
+
+router.post('/addFood', loggedIn, (req, res) => {
+var selectedFoodId = req.body.userFoodCode;
+Food.findOne({
+    where: {
+        id: req.body.userFoodCode,
+    }
+})
+.then((foodItem) => {
+    if (foodItem !== null) {
+        FoodLog.create({
+            UserId: req.user.id,
+            FoodId: selectedFoodId,
+        });
+        res.locals.success = "You have successfully added a new food item!";
+        res.render('user/foodJournal', {
+            user: req.user,
+        });
+    } else {
+        var error = "This code does not exist!";
+        console.log(error);
+        res.locals.error = error;
+        res.render('user/foodJournal', {
+            user: req.user,
+        });
+    }
+})
+.catch((err) => {
+    res.locals.error = err;
+    res.redirect('/logout');
     })
 });
 

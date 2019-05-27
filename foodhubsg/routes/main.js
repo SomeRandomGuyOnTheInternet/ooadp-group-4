@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const router = express.Router();
 const loggedOut = require('../helpers/loggedOut');
 const loggedIn = require('../helpers/loggedIn');
-const User = require('../models/Users');
+const User = require('../models/User');
 
 
 router.get('/register', loggedOut, (req, res) => {
@@ -23,7 +23,7 @@ router.post('/register', (req, res) => {
 	User.findOne({
 		where: { email }
 	}).then(function (user) {
-		if (user) { error = 'This email has already been registered.'; };
+		if (user) { error = 'This email has already been registered'; };
 		if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
 		if (height > 3 || weight < 0.5) { error = 'Please enter a valid height value'; };
 		if (weight > 200 || weight < 20) { error = 'Please enter a valid weight value'; };

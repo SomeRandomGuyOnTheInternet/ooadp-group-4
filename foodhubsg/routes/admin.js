@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
-const Shops = require('../models/Shops');
-const foodItems = require('../models/FoodItems');
+const Shop = require('../models/Shop');
+const Food = require('../models/Food');
 
 
 router.get('/vendors', loggedIn, (req, res) => {
@@ -12,7 +12,7 @@ router.get('/vendors', loggedIn, (req, res) => {
 });
 
 router.get('/shops', loggedIn, (req, res) => {
-    Shops.findAll()
+    Shop.findAll()
     .then(function (shops) {
         res.render('admin/shops', {
             user: req.user,
@@ -24,10 +24,10 @@ router.get('/shops', loggedIn, (req, res) => {
 router.get('/editShop/:id', loggedIn, (req, res) => {
     var id = req.params.id;
     Promise.all([
-        Shops.findOne({
+        Shop.findOne({
             where: { id }
         }),
-        foodItems.findAll({
+        Food.findAll({
             shopId: { id }
         })
     ])
