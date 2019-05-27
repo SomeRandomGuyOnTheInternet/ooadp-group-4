@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
-const foodItems = require('../models/FoodItems');
-const Shops = require('../models/Shops');
+const Food = require('../models/Food');
+const Shops = require('../models/Shop');
 
 router.get('/showShops', loggedIn, (req, res) => {
     res.render('vendors/vendor_index', {
