@@ -21,17 +21,28 @@ router.post('/addShops', loggedIn, (req, res) => {
     const name = req.body.name;
     const user = req.user.id;
     const address = req.body.address;
-    const vendor = req.body.vendor.value.toString();
-    const description = req.body.description; 
-    console.log(description); 
+    const vendor = req.body.vendor.values.toString();
+    const description = req.body.description;
+    console.log(description);
     const isReconmended = 1;
     const deleted = 0;
     const rating = 4.0;
     const img = "/images/rand.jpeg";
-    Shop.create({ name, address, vendor, rating, description, img, deleted, isReconmended, user })
-    res.locals.success = "Shop has been successfully added!"; 
+    Shop.create({
+        name: name,
+        address: address,
+        location: vendor,
+        rating: rating,
+        description: description,
+        imageLocation: img,
+        isDeleted: 0,
+        isRecommended: 1,
+        vendorId: req.user.id
+    })
+    res.locals.success = "Shop has been successfully added!";
     res.render('vendors/vendor_index', {
-    user: req.user})
+        user: req.user
+    })
 });
 
 router.get('/addMenu', loggedIn, (req, res) => {
