@@ -1,5 +1,5 @@
-function createInstance(Shop, Food, User) {
-    Shop.bulkCreate([
+function createInstance(Shops, FoodItems, Users, Vendors) {
+    Shops.bulkCreate([
         { 
             name: 'Misaka', 
             address: '1 Sengkang Square #01-225, Sengkang - 545078', 
@@ -8,7 +8,7 @@ function createInstance(Shop, Food, User) {
             description: 'Sandwiches & salads made to order, right in front of you, down to your specifications, with the use of a variety of ingredients', 
             imageLocation: '/images/misaka-sengkang-image.jpeg', 
             isDeleted: false,
-            isRecommended: true,
+            isRecommended: true, 
         },
         {
             name: 'The Bistro',
@@ -18,7 +18,7 @@ function createInstance(Shop, Food, User) {
             description: 'Sandwiches & salads made to order, right in front of you, down to your specifications, with the use of a variety of ingredients',
             imageLocation: '/images/thebistro-sengkang-image.jpeg',
             isDeleted: false,
-            isRecommended: false,
+            isRecommended: false, 
         },
         {
             name: 'Grains',
@@ -63,15 +63,26 @@ function createInstance(Shop, Food, User) {
         { name: 'Fried Rice Stall', address: '456 Fuckbum ASU', location: 'Punggol', rating: 2.67, description: 'idkman pt.2', imageLocation: '/images/leanbento-amk-image.jpeg', isDeleted: false, },
     ]);
 
-    Food.bulkCreate([
-        { name: 'Aglio Olio', calories: 571, shopId: 1, isRecommended: false, },
-        { name: 'Cesear Salad', calories: 346, shopId: 1, isRecommended: true, },
-        { name: 'Cream of Mushroom Soup', calories: 827, shopId: 1, isRecommended: false, },
-        { name: 'Carbonara', calories: 436, shopId: 1, isRecommended: true, },
-        { name: 'Mushroom Pasta', calories: 682, shopId: 1, isRecommended: false, },
-        { name: 'Teriyaki Bento', calories: 682, shopId: 2, isRecommended: false, },
+    FoodItems.bulkCreate([
+        { name: 'Aglio Olio', calories: 571, ShopId: 1, isRecommended: false, },
+        { name: 'Cesear Salad', calories: 346, ShopId: 1, isRecommended: true, },
+        { name: 'Cream of Mushroom Soup', calories: 827, ShopId: 1, isRecommended: false, },
+        { name: 'Carbonara', calories: 436, ShopId: 1, isRecommended: true, },
+        { name: 'Mushroom Pasta', calories: 682, ShopId: 1, isRecommended: false, },
+        { name: 'Teriyaki Bento', calories: 682, ShopId: 2, isRecommended: false, },
     ]);
 
-};
+    // Users.bulkCreate([
+    //     { name: 'User', email: "user@mail.com", height: 1.78, weight: 74, location: null, isAdmin: false, isVendor: false, isBanned: false },
+    //     { name: 'Admin', email: "admin@foodhubsg.com", height: null, weight: null, location: null, isAdmin: true, isVendor: false, isBanned: false },
+    //     { name: 'ABR Holdings', email: "admin@abrholdings.com", height: null, weight: null, location: null, isAdmin: false, isVendor: true, isBanned: false },
+    // ]);
+
+}
+
+//     Vendors.bulkCreate([
+//         { UserId: 3, },
+//     ]);
+// };
 
 module.exports = createInstance;

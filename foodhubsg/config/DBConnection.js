@@ -22,7 +22,7 @@ const setUpDB = (drop) => {
                 force: drop
             }).then(() => {
                 console.log('Create tables if none exists');
-                if (drop == true) { createInstance(Shop, FoodItem); }
+                if (drop == true) { createInstance(Shop, FoodItem, User, Vendor); }
             }).catch(err => console.log(err))
         })
         .catch(err => console.log('Error: ' + err));

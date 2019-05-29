@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
 const Shop = require('../models/Shop');
-const FoodItem = require('../models/FoodItem');
-
+const FoodItem = require('../models/FoodItem')
+const Vendor = require('../models/Vendor');
+const bcrypt = require('bcryptjs');
+const User = require("../models/User"); 
 
 router.get('/vendors', loggedIn, (req, res) => {
     res.render('admin/vendors', {
@@ -45,6 +47,54 @@ router.get('/addShop', loggedIn, (req, res) => {
         user: req.user,
     })
 })
+
+router.post('/vendors', loggedIn, (req, res) => {
+    const name = req.body.name;
+	const email = req.body.email.toLowerCase();
+	const password = req.body.password;
+    const isAdmin = isBanned = false;
+    const isVendor = true; 
+	var error;
+
+	User.findOne({
+		where: { email }
+	}).then(function (user) {
+		if (user) { error = 'This email has already been registered'; };
+		if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
+
+		if (typeof error === 'undefined') {
+			bcrypt.genSalt(10, function (err, salt) {
+				bcrypt.hash(password, salt, function (err, hash) {
+                    User.create({
+						name, email, password: hash, isVendor: true,
+                    }).then(() => {
+                        User.findOne({
+                            
+                            where: { email }
+                        }).then((user) => {
+                            console.log(user)
+                            Vendor.create({
+                                UserId: user.id,
+                            }).then(() => {  
+                                res.locals.error = error;
+                                res.render('admin/vendors', {
+                                    user: req.user
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+		} else {
+			res.locals.error = error;
+			res.render('admin/vendors', {
+				user: req.user
+			});
+		};
+    });
+    
+}); 
+
 
 router.get('/faq', loggedIn, (req, res) => {
     res.render('admin/faq'), {

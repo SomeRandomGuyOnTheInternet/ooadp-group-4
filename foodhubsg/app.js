@@ -65,7 +65,7 @@ app.use('/admin', adminRoute);
 app.use('/vendor', vendorRoute);
 
 const foodhubsg = require('./config/DBConnection');
-foodhubsg.setUpDB(false);
+foodhubsg.setUpDB(false) ;
 
 
 const port = 5000;
