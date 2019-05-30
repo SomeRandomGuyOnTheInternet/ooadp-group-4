@@ -21,9 +21,8 @@ router.post('/addShops', loggedIn, (req, res) => {
     const name = req.body.name;
     const user = req.user.id;
     const address = req.body.address;
-    const vendor = req.body.vendor.values.toString();
+    const vendor = req.body.location.toString();
     const description = req.body.description;
-    console.log(description);
     const isReconmended = 1;
     const deleted = 0;
     const rating = 4.0;
