@@ -6,9 +6,18 @@ const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
 
 router.get('/showShops', loggedIn, (req, res) => {
-    res.render('vendors/vendor_index', {
+    const user = req.user; 
+    Shop.findAll({ 
+        where: { 
+            VendorId: user.id, 
+        }
+    }).then((shops) => { 
+         res.render('vendors/vendor_index', {
         user: req.user,
+        shops: shops
     })
+    })
+   
 });
 
 router.get('/addShops', loggedIn, (req, res) => {

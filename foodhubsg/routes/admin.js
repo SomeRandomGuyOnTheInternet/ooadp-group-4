@@ -29,7 +29,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
         Shop.findOne({
             where: { id }
         }),
-        Food.findAll({
+        FoodItem.findAll({
             shopId: { id }
         })
     ])
