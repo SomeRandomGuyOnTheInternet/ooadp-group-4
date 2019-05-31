@@ -19,12 +19,10 @@ router.get('/addShops', loggedIn, (req, res) => {
 
 router.post('/addShops', loggedIn, (req, res) => {
     const name = req.body.name;
-    const user = req.user.id;
+    const user = req.user;
     const address = req.body.address;
     const vendor = req.body.location.toString();
     const description = req.body.description;
-    const isReconmended = 1;
-    const deleted = 0;
     const rating = 4.0;
     const img = "/images/rand.jpeg";
     Shop.create({
@@ -36,7 +34,7 @@ router.post('/addShops', loggedIn, (req, res) => {
         imageLocation: img,
         isDeleted: 0,
         isRecommended: 1,
-        VendorId: req.user.id
+        VendorId: user.id
     })
     res.locals.success = "Shop has been successfully added!";
     res.render('vendors/vendor_index', {
