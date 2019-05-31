@@ -6,9 +6,18 @@ const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
 
 router.get('/showShops', loggedIn, (req, res) => {
-    res.render('vendors/vendor_index', {
+    const user = req.user;
+    Shop.findAll({
+        where: {
+            VendorId: user.id,
+        }
+    }).then((shops) => {
+         res.render('vendors/vendor_index', {
         user: req.user,
+        shops: shops
     })
+    })
+
 });
 
 router.get('/addShops', loggedIn, (req, res) => {
@@ -23,8 +32,6 @@ router.post('/addShops', loggedIn, (req, res) => {
     const address = req.body.address;
     const vendor = req.body.location.toString();
     const description = req.body.description;
-    const isReconmended = 1;
-    const deleted = 0;
     const rating = 4.0;
     const img = "/images/rand.jpeg";
     Shop.create({

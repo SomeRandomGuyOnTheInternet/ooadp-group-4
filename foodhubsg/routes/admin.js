@@ -29,7 +29,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
         Shop.findOne({
             where: { id }
         }),
-        Food.findAll({
+        FoodItem.findAll({
             shopId: { id }
         })
     ])
@@ -68,17 +68,13 @@ router.post('/vendors', loggedIn, (req, res) => {
                     User.create({
 						name, email, password: hash, isVendor: true,
                     }).then(() => {
-                        User.findOne({
-                            where: { email }
-                        }).then((user) => {
-                            Vendor.create({
-                                id: user.id,
-                                UserId: user.id,
-                            }).then(() => {  
-                                res.locals.error = error;
-                                res.render('admin/vendors', {
-                                    user: req.user
-                                });
+                        Vendor.create({
+                            id: user.id,
+                            UserId: user.id,
+                        }).then(() => {  
+                            res.locals.error = error;
+                            res.render('admin/vendors', {
+                                user: req.user
                             });
                         });
                     });
