@@ -36,7 +36,7 @@ router.post('/addShops', loggedIn, (req, res) => {
         imageLocation: img,
         isDeleted: 0,
         isRecommended: 1,
-        vendorId: req.user.id
+        VendorId: req.user.id
     })
     res.locals.success = "Shop has been successfully added!";
     res.render('vendors/vendor_index', {

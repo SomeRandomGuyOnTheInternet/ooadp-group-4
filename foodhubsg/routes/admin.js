@@ -69,12 +69,10 @@ router.post('/vendors', loggedIn, (req, res) => {
 						name, email, password: hash, isVendor: true,
                     }).then(() => {
                         User.findOne({
-                            
                             where: { email }
                         }).then((user) => {
-                            console.log(user)
                             Vendor.create({
-                                UserId: user.id,
+                                id: user.id,
                             }).then(() => {  
                                 res.locals.error = error;
                                 res.render('admin/vendors', {
