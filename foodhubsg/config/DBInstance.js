@@ -72,17 +72,45 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
         { name: 'Teriyaki Bento', calories: 682, ShopId: 2, isRecommended: false, },
     ]);
 
-    // Users.bulkCreate([
-    //     { name: 'User', email: "user@mail.com", height: 1.78, weight: 74, location: null, isAdmin: false, isVendor: false, isBanned: false },
-    //     { name: 'Admin', email: "admin@foodhubsg.com", height: null, weight: null, location: null, isAdmin: true, isVendor: false, isBanned: false },
-    //     { name: 'ABR Holdings', email: "admin@abrholdings.com", height: null, weight: null, location: null, isAdmin: false, isVendor: true, isBanned: false },
+    Users.bulkCreate([
+        { 
+            name: 'User', 
+            email: "user@mail.com", 
+            password: '$2a$10$JgDMXgbEoiJdzIn8pk11Zusq2E0p8aq3ccCoqyv9dgInOK3xGGYJ6',
+            height: 1.78, 
+            weight: 74, 
+            location: null, 
+            isAdmin: false, 
+            isVendor: false, 
+            isBanned: false 
+        },
+        { 
+            name: 'Admin', 
+            email: "admin@foodhubsg.com", 
+            password: '$2a$10$wQZ8DoV.HcnEBsks4mrIZO5bauhynH.puDtMCbH1axpDV71htRQM2', 
+            height: null, 
+            weight: null, 
+            location: null, 
+            isAdmin: true, 
+            isVendor: false, 
+            isBanned: false 
+        },
+        { 
+            name: 'ABR Holdings', 
+            email: "admin@abrholdings.com", 
+            password: '$2a$10$1ZxU3n6AqWrAlOeuFkxLYOsUpnMTcu4BAlu4AANCFSoyJJLi7kBo2', 
+            height: null, 
+            weight: null, 
+            location: null, 
+            isAdmin: false, 
+            isVendor: true, 
+            isBanned: false 
+        },
+    ]);
+
+    // Vendors.bulkCreate([
+    //     { UserId: 3, id: 3, },
     // ]);
-
-}
-
-//     Vendors.bulkCreate([
-//         { UserId: 3, },
-//     ]);
-// };
+};
 
 module.exports = createInstance;

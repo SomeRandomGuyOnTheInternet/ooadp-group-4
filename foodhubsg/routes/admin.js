@@ -73,6 +73,7 @@ router.post('/vendors', loggedIn, (req, res) => {
                         }).then((user) => {
                             Vendor.create({
                                 id: user.id,
+                                UserId: user.id,
                             }).then(() => {  
                                 res.locals.error = error;
                                 res.render('admin/vendors', {
