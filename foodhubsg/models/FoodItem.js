@@ -12,8 +12,7 @@ const FoodItem = db.define('FoodItem', {
     isRecommended: {
         type: Sequelize.BOOLEAN
     },
-
-    images: { 
+    imageLocation: { 
         type: Sequelize.STRING, 
     }
 });

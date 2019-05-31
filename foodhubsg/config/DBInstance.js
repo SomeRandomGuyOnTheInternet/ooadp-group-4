@@ -66,12 +66,13 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
     FoodItems.bulkCreate([
         { name: 'Aglio Olio', calories: 571, ShopId: 1, isRecommended: false, },
         { name: 'Cesear Salad', calories: 346, ShopId: 1, isRecommended: true, },
-        { name: 'Cream of Mushroom Soup', calories: 827, ShopId: 1, isRecommended: false, },
+        { name: 'Cream of Mushroom Soup', ShopId: 1, calories: 827, isRecommended: false, },
         { name: 'Carbonara', calories: 436, ShopId: 1, isRecommended: true, },
         { name: 'Mushroom Pasta', calories: 682, ShopId: 1, isRecommended: false, },
         { name: 'Teriyaki Bento', calories: 682, ShopId: 2, isRecommended: false, },
     ]);
 
+    // The password for the following accounts is just 'password'
     Users.bulkCreate([
         { 
             name: 'User', 
@@ -95,17 +96,17 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             isVendor: false, 
             isBanned: false 
         },
-        { 
-            name: 'ABR Holdings', 
-            email: "admin@abrholdings.com", 
-            password: '$2a$10$1ZxU3n6AqWrAlOeuFkxLYOsUpnMTcu4BAlu4AANCFSoyJJLi7kBo2', 
-            height: null, 
-            weight: null, 
-            location: null, 
-            isAdmin: false, 
-            isVendor: true, 
-            isBanned: false 
-        },
+        // { 
+        //     name: 'ABR Holdings', 
+        //     email: "admin@abrholdings.com", 
+        //     password: '$2a$10$1ZxU3n6AqWrAlOeuFkxLYOsUpnMTcu4BAlu4AANCFSoyJJLi7kBo2', 
+        //     height: null, 
+        //     weight: null, 
+        //     location: null, 
+        //     isAdmin: false, 
+        //     isVendor: true, 
+        //     isBanned: false 
+        // },
     ]);
 
     // Vendors.bulkCreate([

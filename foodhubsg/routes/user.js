@@ -62,35 +62,50 @@ router.get('/foodJournal', loggedIn, (req, res) => {
 });
 
 router.post('/addFood', loggedIn, (req, res) => {
-var selectedFoodId = req.body.userFoodCode;
-Food.findOne({
-    where: {
-        id: req.body.userFoodCode,
-    }
-})
-.then((foodItem) => {
-    if (foodItem !== null) {
-        FoodLog.create({
-            UserId: req.user.id,
-            FoodId: selectedFoodId,
-        });
-        res.locals.success = "You have successfully added a new food item!";
-        res.render('user/foodJournal', {
-            user: req.user,
-        });
-    } else {
-        var error = "This code does not exist!";
-        console.log(error);
-        res.locals.error = error;
-        res.render('user/foodJournal', {
-            user: req.user,
-        });
-    }
-})
-.catch((err) => {
-    res.locals.error = err;
-    res.redirect('/logout');
+    var selectedFoodId = req.body.userFoodCode;
+    var today = new Date();
+    var mealType;
+    Food.findOne({
+        where: {
+            id: req.body.userFoodCode,
+        }
     })
+    .then((foodItem) => {
+        if (foodItem !== null) {
+            if (6 >= today.getHours() >= 9){
+                mealType = "Breakfast";
+            } else if (11 >= today.getHours() >= 14) {
+                mealType = "Lunch";
+            } else if (18 >= today.getHours() >= 21) {
+                mealType = "Dinner";
+            } else {
+                mealType = "Snacks";
+            };
+
+            FoodLog.create({
+                UserId: req.user.id,
+                FoodId: selectedFoodId,
+                mealType: mealType,
+            })
+            .then(() => {
+                res.locals.success = "You have successfully added a new food item!";
+                res.render('user/foodJournal', {
+                    user: req.user,
+                });
+            });    
+        } else {
+            var error = "This code does not exist!";
+            console.log(error);
+            res.locals.error = error;
+            res.render('user/foodJournal', {
+                user: req.user,
+            });
+        }
+    })
+    .catch((err) => {
+        res.locals.error = err;
+        res.redirect('/logout');
+        })
 });
 
 router.get('/settings', loggedIn, (req, res) => {
