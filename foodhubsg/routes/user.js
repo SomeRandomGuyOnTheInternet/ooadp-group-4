@@ -5,6 +5,9 @@ const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
+const getBmiStatement = require('../helpers/getBmiStatement');
+const getFoodIntakeStatement = require('../helpers/getFoodIntakeStatement');
+const getAverageDailyCalories = require('../helpers/getAverageDailyCalories');
 const groupFoodItems = require('../helpers/groupFoodItems');
 
 const Food = require('../models/FoodItem');
@@ -13,15 +16,33 @@ const Shop = require('../models/Shop');
 
 
 router.get('/', loggedIn, (req, res) => {
-    Shop.findAll({ 
-        where: { 
-            location: req.user.location,
-            isRecommended: true,
-        }
-    }).then(function (shops) {
+    Promise.all([
+        Shop.findAll({
+            where: {
+                location: req.user.location,
+                isRecommended: true,
+            }
+        }),
+        Food.findAll({
+            include: [{
+                model: FoodLog,
+                where: { UserId: req.user.id },
+                required: true,
+            }],
+            order: [
+                [FoodLog, 'createdAt', 'ASC'],
+            ],
+            raw: true
+        })
+    ])
+    .then(function (data) {
+        foodItems = groupFoodItems(data[1]);
+
         res.render('user/index', {
             user: req.user,
-            shops: shops,
+            shops: data[0],
+            foodItems,
+            numOfDays: Object.keys(foodItems).length,
         })
     })
 });
@@ -31,7 +52,8 @@ router.get('/shops', loggedIn, (req, res) => {
         where: {
             location: req.user.location,
         }
-    }).then(function (shops) {
+    }).
+    then(function (shops) {
         res.render('user/shops', {
             user: req.user,
             shops: shops,
@@ -110,19 +132,32 @@ router.get('/editFood/:id', loggedIn, (req, res) => {
 });
 
 router.get('/settings', loggedIn, (req, res) => {
-    res.render('user/settings', {
-        user: req.user,
+    Food.findAll({
+        include: [{
+            model: FoodLog,
+            where: { UserId: req.user.id },
+            required: true,
+        }],
+        order: [
+            [FoodLog, 'createdAt', 'DESC'],
+        ],
+        raw: true
     })
+    .then((FoodItems) => {
+        groupedFoodItems = groupFoodItems(FoodItems);
+        dailyAverageCalories = getAverageDailyCalories(groupedFoodItems);
+        foodIntakeStatement = 
+
+        res.render('user/settings', {
+            user: req.user,
+            datesWithFood: groupedFoodItems,
+            bmiStatement: getBmiStatement(req.user.weight, req.user.height, req.user.name),
+        })
+    });
 });
 
 router.get('/faq', loggedIn, (req, res) => {
     res.render('user/faq', {
-        user: req.user,
-    })
-});
-
-router.get('/exampleMap', loggedIn, (req, res) => {
-    res.render('user/exampleMap', {
         user: req.user,
     })
 });
@@ -189,7 +224,7 @@ router.post('/addFood', loggedIn, (req, res) => {
         res.redirect('/logout');
     })
 });
-
+// firebase, nodemon npm
 router.post('/editFood/:id', loggedIn, (req, res) => {
     var logId = req.params.id, foodIdToUpdateTo = req.body.codeToChange;
 

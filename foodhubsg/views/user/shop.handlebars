@@ -54,9 +54,14 @@
                 <header>
                     <div id="vendor-food">
                         <h4 class="font_color" style="margin-bottom: 0; display: inline">
-                            <b>{{ this.name }}</b></h4><br>
+                            <b>{{ this.name }}</b>
+                        </h4>
+                        {{#if this.isRecommended}}
+                            <i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i>
+                        {{/if}}
+                        <br>
                         <p style="display: inline">(code: {{ this.id }})</p><br>
-                        <p class="recommended-{{ this.isRecommended }}">{{ this.calories }} calories <br></p>
+                        <p>{{ this.calories }} calories <br></p>
                     </div>
                 </header>
             </article>
