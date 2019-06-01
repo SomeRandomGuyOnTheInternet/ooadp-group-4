@@ -80,7 +80,7 @@ router.get('/addMenu', loggedIn, (req, res) => {
     }).then((shops) => {
          res.render('vendors/add_fooditems', {
         user: req.user,
-        shop: shops
+        shop: shops, 
     })
     })
 })

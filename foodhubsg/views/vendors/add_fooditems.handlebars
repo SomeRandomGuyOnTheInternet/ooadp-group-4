@@ -23,8 +23,10 @@
                                         placeholder="Name">
                                     <label>Shop Location</label>
                                     <select name="shop" id="shop" type="shop" class="form-control">
-                                        {{#each shop}}
-                                        <option value={{shop.name}}>Chinatown</option>
+                                    {{#each shop}}
+                                    
+                                        <option value={{this.name}}> {{this.name}} </option>
+                                    {{/each}}
                                     </select>
                                     <hr>
                                 </p>
