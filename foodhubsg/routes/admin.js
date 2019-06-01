@@ -66,8 +66,8 @@ router.post('/vendors', loggedIn, (req, res) => {
 			bcrypt.genSalt(10, function (err, salt) {
 				bcrypt.hash(password, salt, function (err, hash) {
                     User.create({
-						name, email, password: hash, isVendor: true,
-                    }).then(() => {
+						name, email, password: hash, isVendor: true, isAdmin: false, isBanned: false,
+                    }).then((user) => {
                         Vendor.create({
                             id: user.id,
                             UserId: user.id,
