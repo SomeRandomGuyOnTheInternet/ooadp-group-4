@@ -76,6 +76,5 @@ app.use('/vendor', vendorRoute);
 const foodhubsg = require('./config/DBConnection');
 foodhubsg.setUpDB(false);
 
-
 const port = 5000;
 app.listen(port, () => { console.log(`Server started on port ${port}`); });

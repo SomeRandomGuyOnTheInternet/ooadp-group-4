@@ -5,17 +5,18 @@
                 <div class="row row-pb-md">
                     <form method="post" action="" id="shop-form">
                         <div class="col-md-12">
-                            <h1 class="font_color"><b>Add Shop</b></h1>
+                            <h1 class="font_color"><b>Edit Shop</b></h1>
+                            <span>Owned by <i>Vendor - <u><a href="#">vendor@mail.com</a></u></i></span>
                             <hr>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="blog-entry">
                                 <img src="{{shop.imageLocation}}" class="img-responsive" alt="{{ shop.name }} Image">
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="desc">
                                 <p class="meta">
                                     <label>Shop Name</label>
@@ -25,7 +26,7 @@
                                     <input name="address" id="address" type="text" class="form-control"
                                         value="{{ shop.address }}" placeholder="Address">
                                     <label>Shop Location</label>
-                                    <select name="vendor" id="vendor" type="text" class="form-control">
+                                    <select name="address" id="address" type="text" class="form-control">
                                         <option value="Chinatown">Chinatown</option>
                                         <option value="Tampines">Tampines</option>
                                         <option value="Ang Mo Kio">Ang Mo Kio</option>
@@ -39,24 +40,15 @@
 
                         <div class="col-md-12">
                             <label for="description">Description</label>
-                            <textarea id="description" name="description" form="shop-form" class="form-control" rows="4"
-                                cols="50">{{ shop.description }}</textarea><br>
+                            <textarea id="description" name="description" form="description-form" class="form-control"
+                                rows="4" cols="50">{{ shop.description }}</textarea><br>
                         </div>
 
                         <div class="col-md-12">
-                            <label>Vendor</label>
-                            <select name="address" id="address" type="text" class="form-control">
-                                <option value="admin@koufu.com">Koufu Group</option>
-                                <option value="	admin@abrhldings.com">ABR Holdings</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-12">
-                            <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
-                                style="background-color: #4CAF50;">
-                                Add Shop
-                            </button>
-
+                            <button type="submit" name="action" value="Update Shop Details" class="btn btn-primary"
+                                style="background-color: #4CAF50;">Update</button>
+                            <button type="submit" name="action" value="Delete Shop" class="btn btn-primary"
+                                id="remove-shop" style="background-color: #d9534f;">Delete </button>
                         </div>
 
                     </form>
@@ -74,6 +66,20 @@
                     <h1 class="font_color"><b>Edit Menu</b></h1>
                     <hr>
                 </div>
+
+                {{#each foodItems}}
+                <article class="food-journal">
+                    <header>
+                        <div id="vendor-food">
+                            <h4 class="font_color" style="margin-bottom: 0; display: inline">
+                                <b>{{ this.name }}</b></h4><br>
+                            <i class="fas fa-edit" style="float:right;"></i>
+                            <p style="display: inline">(code: {{ this.id }})</p><br>
+                            <p class="recommended-{{ this.isRecommended }}">{{ this.calories }} calories <br></p>
+                        </div>
+                    </header>
+                </article>
+                {{/each}}
 
                 <article class="food-journal">
                     <header>

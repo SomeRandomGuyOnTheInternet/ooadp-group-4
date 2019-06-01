@@ -51,6 +51,25 @@ router.post('/addShops', loggedIn, (req, res) => {
     })
 });
 
+router.get('/editShop/:id', loggedIn, (req, res) => {
+    var id = req.params.id;
+    Promise.all([
+        Shop.findOne({
+            where: { id }
+        }),
+        FoodItem.findAll({
+            shopId: { id }
+        })
+    ])
+        .then((data) => {
+            res.render('vendors/editShop', {
+                shop: data[0],
+                foodItems: data[1],
+                user: req.user,
+            });
+        });
+})
+
 router.get('/addMenu', loggedIn, (req, res) => {
     res.render('vendors/add_fooditems', {
         user: req.user,
