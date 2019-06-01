@@ -11,7 +11,7 @@
 
                         <div class="col-md-6">
                             <div class="blog-entry">
-                                <img src="/images/no-image.jpg" class="img-responsive" alt="Image">
+                                <img src="/images/nice-waffle.jpg" class="img-responsive" alt="Image">
                             </div>
                         </div>
 
@@ -23,30 +23,23 @@
                                         placeholder="Name">
                                     <label>Shop Location</label>
                                     <select name="shop" id="shop" type="shop" class="form-control">
-                                    {{#each shop}}
-                                    
+                                        {{#each shop}}
                                         <option value={{this.name}}> {{this.name}} </option>
-                                    {{/each}}
+                                        {{/each}}
                                     </select>
+                                    <label>Calories</label>
+                                    <input name="calories" id="calories" type="text" class="form-control" value=""
+                                        placeholder="Calories">
+
                                     <hr>
                                 </p>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <label for="description">Description</label>
                             <textarea id="description" name="description" form="food-form" class="form-control" rows="4"
                                 cols="50"></textarea><br>
                         </div>
-
-                        <div class="col-md-12">
-                            <div class="col-md-12">
-                                <label>Vendor</label>
-                                <input name="vendor" id="vendor" type="text" class="form-control" value="{{user.name}}"
-                                    placeholder="vendor" readonly>
-                            </div>
-                        </div>
-
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Add Shop</button>
