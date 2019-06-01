@@ -2,7 +2,6 @@ const moment = require('moment');
 
 module.exports = {
     formatDate: function (date, targetFormat) {
-        console.log(date);
         return moment(date).format(targetFormat);
     },
 

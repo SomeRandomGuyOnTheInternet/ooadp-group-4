@@ -1286,7 +1286,9 @@ input[type="text"] {
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;
-  padding: 8px 20px; }
+  padding: 8px 20px; 
+  height: 54px;
+}
   .btn.btn-md {
     padding: 8px 20px !important; }
   .btn.btn-lg {
@@ -1297,17 +1299,17 @@ input[type="text"] {
     outline: none !important; }
 
 .btn-primary {
-  background: #F6490D;
+  background: #4CAF50;
   color: #fff; }
   .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
-    background: #f75b26 !important;
-    border-color: #f75b26 !important; }
+    background: #4CAF50 !important;
+    border-color: #4CAF50 !important; }
   .btn-primary.btn-outline {
     background: transparent;
-    color: #F6490D;
-    border: 2px solid #F6490D; }
+    color: #4CAF50;
+    border: 2px solid #4CAF50; }
     .btn-primary.btn-outline:hover, .btn-primary.btn-outline:focus, .btn-primary.btn-outline:active {
-      background: #F6490D;
+      background: #4CAF50;
       color: #fff; }
 
 .btn-success {

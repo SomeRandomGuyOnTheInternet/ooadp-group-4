@@ -1,6 +1,5 @@
 const express = require('express');
-const passport = require('passport');
-const bcrypt = require('bcryptjs');
+const moment = require('moment'); 
 const router = express.Router();
 
 const loggedIn = require('../helpers/loggedIn');
@@ -60,12 +59,6 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 });
 
 router.get('/foodJournal', loggedIn, (req, res) => {
-    console.log(getCurrentDate())
-    var breakfastList = [],
-        lunchList = [],
-        dinnerList = [],
-        snacksList = [];
-
     Food.findAll({
         include: [{
             model: FoodLog,
@@ -78,16 +71,46 @@ router.get('/foodJournal', loggedIn, (req, res) => {
         raw: true
     })
     .then((FoodItems) => {
-        orderedFoodItems = groupFoodItems(FoodItems);
-        console.log(orderedFoodItems)
         res.render('user/foodJournal', {
             user: req.user,
             datesWithFood: groupFoodItems(FoodItems),
-            breakfastList,
-            lunchList,
-            dinnerList,
-            snacksList,
+            searchDate: false,
         })
+    });
+});
+
+router.post('/foodJournal', loggedIn, (req, res) => {
+    var searchDate = req.body.searchDate;
+    Food.findAll({
+        include: [{
+            model: FoodLog,
+            where: { 
+                UserId: req.user.id,
+                createdAtDate: searchDate,
+            },
+            required: true,
+        }],
+        order: [
+            [FoodLog, 'createdAt', 'DESC'],
+        ],
+        raw: true
+    })
+    .then((FoodItems) => {
+        if (!FoodItems) {
+            res.locals.error = "There's no food found for that date";
+            res.render('user/foodJournal', {
+                user: req.user,
+                datesWithFood: groupFoodItems(FoodItems),
+                searchDate: searchDate,
+            })
+        } else {
+            res.render('user/foodJournal', {
+                user: req.user,
+                datesWithFood: groupFoodItems(FoodItems),
+                searchDate: searchDate,
+            })
+        }
+        console.log(FoodItems)
     });
 });
 
