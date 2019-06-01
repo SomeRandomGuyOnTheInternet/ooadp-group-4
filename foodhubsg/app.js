@@ -9,6 +9,8 @@ const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session'); // Library to use MySQL to store session objects
 const passport = require('passport');
 const db = require('./config/db');
+const { formatDate } = require('./helpers/hbs');
+const { checkMealType } = require('./helpers/hbs');
 
 const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
@@ -16,7 +18,14 @@ const adminRoute = require('./routes/admin');
 const vendorRoute = require('./routes/vendor'); 
 const app = express();
 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.engine('handlebars', exphbs({ 
+	defaultLayout: 'main' ,
+	helpers: {
+		formatDate: formatDate,
+		checkMealType: checkMealType,
+	},
+}));
+
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -65,7 +74,7 @@ app.use('/admin', adminRoute);
 app.use('/vendor', vendorRoute);
 
 const foodhubsg = require('./config/DBConnection');
-foodhubsg.setUpDB(true) ;
+foodhubsg.setUpDB(false);
 
 
 const port = 5000;

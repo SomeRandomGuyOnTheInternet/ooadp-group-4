@@ -62,7 +62,7 @@
 
 								<div class="row form-group">
 									<div class="form-group" id="login-button">
-										<input type="submit" value="Log In" class="btn btn-primary" id="submit-button"
+										<input type="submit" value="Log In" class="btn btn-primary" id="submit-button" data-toggle="tooltip" data-placement="left" title="Please wait while we determine your location"
 											style="width:135px; background-color: #4CAF50; border: lightgreen; border-radius: 0;" disabled>
 									</div>
 								</div>
@@ -109,6 +109,7 @@ Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213)
 								if (component.types[0] === 'neighborhood') {
 									currentCity = component.long_name;
 									locationInput.setAttribute("value", currentCity);
+									submitButton.setAttribute("title", "");
 									submitButton.disabled = false;
 									break;
 								}
@@ -124,7 +125,9 @@ Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213)
 
 	function error() {
 		locationInput.setAttribute("value", currentCity);
+		submitButton.setAttribute("title", "");
 		submitButton.disabled = false;
+		alert("We could not determine your location.")
 	}
 
 	if (!navigator.geolocation) {

@@ -2,14 +2,18 @@ const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
+
 const loggedIn = require('../helpers/loggedIn');
+const getMealType = require('../helpers/getMealType');
+const getCurrentDate = require('../helpers/getCurrentDate');
+const groupFoodItems = require('../helpers/groupFoodItems');
+
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 
 
 router.get('/', loggedIn, (req, res) => {
-    console.log(req.user)
     Shop.findAll({ 
         where: { 
             location: req.user.location,
@@ -56,50 +60,59 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 });
 
 router.get('/foodJournal', loggedIn, (req, res) => {
-    res.render('user/foodJournal', {
-        user: req.user,
+    console.log(getCurrentDate())
+    var breakfastList = [],
+        lunchList = [],
+        dinnerList = [],
+        snacksList = [];
+
+    Food.findAll({
+        include: [{
+            model: FoodLog,
+            where: { UserId: req.user.id },
+            required: true,
+        }],
+        order: [
+            [FoodLog, 'createdAt', 'DESC'],
+        ],
+        raw: true
     })
+    .then((FoodItems) => {
+        orderedFoodItems = groupFoodItems(FoodItems);
+        console.log(orderedFoodItems)
+        res.render('user/foodJournal', {
+            user: req.user,
+            datesWithFood: groupFoodItems(FoodItems),
+            breakfastList,
+            lunchList,
+            dinnerList,
+            snacksList,
+        })
+    });
 });
 
 router.post('/addFood', loggedIn, (req, res) => {
+    var user = req.user;
     var selectedFoodId = req.body.userFoodCode;
-    var today = new Date();
-    var mealType;
+
     Food.findOne({
-        where: {
-            id: req.body.userFoodCode,
-        }
+        where: { id: req.body.userFoodCode, }
     })
     .then((foodItem) => {
         if (foodItem !== null) {
-            if (6 >= today.getHours() >= 9){
-                mealType = "Breakfast";
-            } else if (11 >= today.getHours() >= 14) {
-                mealType = "Lunch";
-            } else if (18 >= today.getHours() >= 21) {
-                mealType = "Dinner";
-            } else {
-                mealType = "Snacks";
-            };
-
             FoodLog.create({
-                UserId: req.user.id,
+                UserId: user.id,
                 FoodId: selectedFoodId,
-                mealType: mealType,
+                mealType: getMealType(),
+                createdAtDate: getCurrentDate(),
             })
             .then(() => {
-                res.locals.success = "You have successfully added a new food item!";
-                res.render('user/foodJournal', {
-                    user: req.user,
-                });
+                res.redirect('/user/foodJournal');
             });    
         } else {
             var error = "This code does not exist!";
-            console.log(error);
             res.locals.error = error;
-            res.render('user/foodJournal', {
-                user: req.user,
-            });
+            res.redirect('/user/foodJournal');
         }
     })
     .catch((err) => {

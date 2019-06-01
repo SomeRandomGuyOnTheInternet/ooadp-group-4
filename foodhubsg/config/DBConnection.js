@@ -14,7 +14,8 @@ const setUpDB = (drop) => {
         })
         .then(() => {
             User.hasMany(FoodLog);
-            FoodItem.hasMany(FoodLog);
+            FoodItem.hasMany(FoodLog, { foreignKey: 'FoodId' });
+            FoodLog.belongsTo(FoodItem, { foreignKey: 'FoodId' });
             Shop.hasMany(FoodItem, {});
             User.hasOne(Vendor); 
             Vendor.hasMany(Shop); 

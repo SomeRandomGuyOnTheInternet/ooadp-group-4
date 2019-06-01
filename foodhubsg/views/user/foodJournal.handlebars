@@ -44,7 +44,117 @@
 
                     <div id="accordion">
 
-                        <div class="date-meal">
+                        {{#if datesWithFood}}
+                        {{#each datesWithFood}}
+                        
+                            <div class="date-meal"> 
+                                <h2> <b>{{formatDate @key 'MMMM Do YYYY'}}</b> </h2>
+                                <div class="row" style="padding-bottom: 1em;">
+
+                                    <div class="col-3 meal-type">
+                                        <h5 style="margin-bottom: 0; display: inline"><b>Breakfast</b></h5>
+                                        <article class="food-journal">
+                                            <header>
+                                                <div class="food-subsection">
+                                                {{#if this.Breakfast}}
+                                                {{#each this.Breakfast}}
+                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                    <p>
+                                                        {{calories}} calories
+                                                        <br>
+                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
+                                                    </p>
+                                                {{/each}}
+                                                {{else}}
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                {{/if}}
+                                                </div>
+                                            </header>
+                                        </article>
+                                    </div>
+
+                                    <div class="col-3 meal-type">
+                                        <h5 style="margin-bottom: 0; display: inline"><b>Lunch</b></h5>
+                                        <article class="food-journal">
+                                            <header>
+                                                <div class="food-subsection">
+                                                    {{#if this.Lunch}}
+                                                    {{#each this.Lunch}}
+                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                    <p>
+                                                        {{calories}} calories
+                                                        <br>
+                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
+                                                    </p>
+                                                    {{/each}}
+                                                    {{else}}
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                    {{/if}}
+                                                </div>
+                                            </header>
+                                        </article>
+                                    </div>
+
+                                    <div class="col-3 meal-type">
+                                        <h5 style="margin-bottom: 0; display: inline"><b>Dinner</b></h5>
+                                        <article class="food-journal">
+                                            <header>
+                                                <div class="food-subsection">
+                                                    {{#if this.Dinner}}
+                                                    {{#each this.Dinner}}
+                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                    <p>
+                                                        {{calories}} calories
+                                                        <br>
+                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
+                                                    </p>
+                                                    {{/each}}
+                                                    {{else}}
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                    {{/if}}
+                                                </div>
+                                            </header>
+                                        </article>
+                                    </div>
+
+                                    <div class="col-3 meal-type">
+                                        <h5 style="margin-bottom: 0; display: inline"><b>Snacks</b></h5>
+                                        <article class="food-journal">
+                                            <header>
+                                                <div class="food-subsection">
+                                                    {{#if this.Snacks}}
+                                                    {{#each this.Snacks}}
+                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                    <p>
+                                                        {{calories}} calories
+                                                        <br>
+                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
+                                                    </p>
+                                                    {{/each}}
+                                                    {{else}}
+                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                    {{/if}}
+                                                </div>
+                                            </header>
+                                        </article>
+                                    </div>
+
+                                </div>
+
+                        {{/each}}
+                        {{else}}
+                        <h4 id="current_location">You have not added any food yet!</b></h4>
+                        {{/if}}
+
+                        {{!-- <div class="date-meal">
 
                             <h2> <b>28 January (Monday)</b> </h2>
 
@@ -220,7 +330,7 @@
                         
                             <h5>Total calories consumed: <b> 2835 kcal </b> </h5>
                         
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>
