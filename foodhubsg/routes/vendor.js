@@ -71,8 +71,17 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 })
 
 router.get('/addMenu', loggedIn, (req, res) => {
-    res.render('vendors/add_fooditems', {
+
+    const user = req.user;
+    Shop.findAll({
+        where: {
+            VendorId: user.id,
+        }
+    }).then((shops) => {
+         res.render('vendors/add_fooditems', {
         user: req.user,
+        shop: shops
+    })
     })
 })
 
