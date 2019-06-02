@@ -795,8 +795,6 @@ blockquote {
       .side .instagram-entry .instagram:hover:after, .side .instagram-entry .instagram:hover:before, .side .instagram-entry .instagram:focus:after, .side .instagram-entry .instagram:focus:before {
         opacity: 1; }
 
-#colorlib-container {
-  /* Owl Override Style */ }
   #colorlib-container .owl-carousel .owl-controls,
   #colorlib-container .owl-carousel-posts .owl-controls {
     margin-top: 0; }
@@ -1130,7 +1128,6 @@ input[type="text"] {
           position: absolute;
           right: 0px;
           font-family: 'icomoon';
-          speak: none;
           font-style: normal;
           font-weight: normal;
           font-variant: normal;
@@ -1586,4 +1583,9 @@ input[type="text"] {
 
 select {
   border: 50px; 
+}
+
+#map {
+    height: 400px;
+    margin-bottom: 4em;
 }

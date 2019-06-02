@@ -1,3 +1,4 @@
+{{> _msg }}
 <div id="colorlib-container">
     <div class="container">
         <div class="box1">
@@ -25,35 +26,69 @@
                 </div><br>
             </div><br>
 
-                <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
-                    <div class="col-md">
-                        <div class="blog-entry">
-                            <h3 class="font_color"><b>Menu</b></h3>
-                        </div>
-                        <hr>
+            <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
+                <div class="col-md">
+                    <div class="blog-entry">
+                        <h3 class="font_color"><b>Map</b></h3>
                     </div>
-                </div>
-                <div class="row row-pb-md">
-
-                {{#each foodItems}}
-                <article class="food-journal">
-                    <header>
-                        <div id="vendor-food">
-                            <h4 class="font_color" style="margin-bottom: 0; display: inline">
-                                <b>{{ this.name }}</b></h4><br>
-                            <p style="display: inline">(code: {{ this.id }})</p><br>
-                            <p class="recommended-{{ this.isRecommended }}">{{ this.calories }} calories <br></p>
-                        </div>
-                    </header>
-                </article>
-                {{/each}}
-
+                    <hr>
+                    <div id="map"></div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            <span>Owned by <i>Vendor - <u><a href="#">vendor@mail.com</a></u></i></span>
-            <hr>
+
+            
+            
+
+            <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
+                <div class="col-md">
+                    <div class="blog-entry">
+                        <h3 class="font_color"><b>Menu</b></h3>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="row row-pb-md">
+
+            {{#each foodItems}}
+            <article class="food-journal">
+                <header>
+                    <div id="vendor-food">
+                        <h4 class="font_color" style="margin-bottom: 0; display: inline">
+                            <b>{{ this.name }}</b></h4><br>
+                        <p style="display: inline">(code: {{ this.id }})</p><br>
+                        <p class="recommended-{{ this.isRecommended }}">{{ this.calories }} calories <br></p>
+                    </div>
+                </header>
+            </article>
+            {{/each}}
+
+            </div>
         </div>
     </div>
+
+    <div class="col-md-12">
+        <span>Owned by <i>Vendor - <u><a href="#">vendor@mail.com</a></u></i></span>
+        <hr>
+    </div>
+
 </div>
+
+<script>
+     var shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
+     var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+
+    function initMap() {
+        var shopLocation = { lat: shopLatitude, lng: shopLongitude };
+        var userLocation = { lat: userLatitude, lng: userLongitude };
+        var map = new google.maps.Map( document.getElementById('map'), { zoom: 16, center: shopLocation } );
+
+        var shopMarker = new google.maps.Marker({ position: shopLocation, map: map });
+        var userMarker = new google.maps.Marker({ 
+                            position: userLocation, 
+                            map: map, 
+                            icon: '/images/user-marker.png', 
+                        });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg&callback=initMap" async defer></script>

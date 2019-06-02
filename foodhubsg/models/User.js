@@ -21,6 +21,12 @@ const User = db.define('User', {
     location: {
         type: Sequelize.STRING
     },
+    latitude: {
+        type: Sequelize.DECIMAL(10, 7)
+    },
+    longitude: {
+        type: Sequelize.DECIMAL(10, 7)
+    },
     isAdmin: {
         type: Sequelize.BOOLEAN
     },

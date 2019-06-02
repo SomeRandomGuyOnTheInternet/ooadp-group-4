@@ -1,0 +1,28 @@
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+                    <header id="summary-header">
+                        <h1 class="font_color"><b>Example Map</b></h1>
+                        <hr>
+                    </header>
+                    <div id="map" style="height:100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var map;
+    function initMap() {
+        console.log("Maps is loading!")
+        map = new google.maps.Map(document.querySelector('#map'), {
+            center: { lat: -34.397, lng: 150.644 },
+            zoom: 8
+        });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg&callback=initMap" async defer></script>

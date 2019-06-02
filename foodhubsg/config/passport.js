@@ -13,9 +13,10 @@ function localStrategy(passport) {
                 bcrypt.compare(password, user.password, (err, isMatch) => {
                         if (err) throw err;
                         if (isMatch) {
-                            var location = req.body.location;
+                            var location = req.body.location; 
+                            var latitude = req.body.latitude, longitude = req.body.longitude;
                             User.update(
-                                { location },
+                                { location, latitude, longitude },
                                 { where: { email: email.toLowerCase() } },
                             );
                             return done(null, user);

@@ -1,3 +1,5 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg" type="text/javascript"></script>
+
 <style>
 	body {
 		background-image: url("images/green-background.png");
@@ -46,6 +48,14 @@
 									<input name="location" id="location" class="form-control">
 								</div>
 
+								<div class="row form-group" style="display: none;">
+									<input name="latitude" id="latitude" class="form-control">
+								</div>
+
+								<div class="row form-group" style="display: none;">
+									<input name="longitude" id="longitude" class="form-control">
+								</div>
+
 								<div class="flash-div">
 								{{#if error}}
 									<div class="row form-group">
@@ -89,11 +99,15 @@ Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213)
 
 <script>
 	const locationInput = document.querySelector("#location");
+	const latitudeInput = document.querySelector("#latitude");
+	const longitudeInput = document.querySelector("#longitude");
 	const submitButton = document.querySelector("#submit-button")
 	var currentCity = null;
 
 	function success(position) {
-		{{!-- latlng = new google.maps.LatLng(1.380096, 103.848895); --}}
+		latitudeInput.setAttribute("value", position.coords.latitude);
+		longitudeInput.setAttribute("value", position.coords.longitude);
+
 		latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		new google.maps.Geocoder().geocode({ 'latLng': latlng }, function (results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
