@@ -12,10 +12,10 @@ router.get('/showShops', loggedIn, (req, res) => {
             VendorId: user.id,
         }
     }).then((shops) => {
-         res.render('vendors/vendor_index', {
-        user: req.user,
-        shops: shops
-    })
+        res.render('vendors/vendor_index', {
+            user: req.user,
+            shops: shops
+        })
     })
 
 });
@@ -71,10 +71,50 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 })
 
 router.get('/addMenu', loggedIn, (req, res) => {
-    res.render('vendors/add_fooditems', {
-        user: req.user,
+    const user = req.user;
+    Shop.findAll({
+        where: {
+            VendorId: user.id,
+        }
+    }).then((shops) => {
+        res.render('vendors/add_fooditems', {
+            user: req.user,
+            shop: shops
+        })
     })
-})
+});
+
+
+router.post('/addMenu', loggedIn, (req, res) => {
+    const name = req.body.name;
+    const shop = req.body.shop.toString();
+    const calories = req.body.calories;
+    const description = req.body.description;
+    const user = req.user;
+    const img = "/images/nice-waffle.jpg"
+    Shop.findAll({
+        where: {
+            name: shop,
+            VendorId: user.id,
+        }
+    }).then((shop) => {
+        console.log(shop.id); 
+        FoodItem.create({
+            name: name,
+            calories: calories,
+            isRecommended: true,
+            description: description,
+            imageLocation: img,
+            ShopId: vendorShop, 
+        })
+            res.locals.success = "Food has been successfully added!";
+            res.render('vendors/vendor_index', {
+                user: req.user
+            })
+        })
+
+
+    })
 
 router.post('/upload', loggedIn, (req, res) => {
     // Creates user id directory for upload if not exist
@@ -84,10 +124,10 @@ router.post('/upload', loggedIn, (req, res) => {
 
     upload(req, res, (err) => {
         if (err) {
-            res.json({ file: '/img/no-image.jpg', err: err });
+            res.json({ file: '/images/no-image.jpg', err: err });
         } else {
             if (req.file === undefined) {
-                res.json({ file: '/img/no-image.jpg', err: err });
+                res.json({ file: '/images/no-image.jpg', err: err });
             } else {
                 res.json({ file: `/uploads/${Shop.imageLocation}/${req.file.filename}` });
             }
