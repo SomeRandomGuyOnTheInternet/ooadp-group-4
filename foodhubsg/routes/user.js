@@ -1,5 +1,4 @@
 const express = require('express');
-const moment = require('moment'); 
 const router = express.Router();
 
 const loggedIn = require('../helpers/loggedIn');
@@ -99,7 +98,7 @@ router.get('/foodJournal', loggedIn, (req, res) => {
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
-            datesWithFood: groupFoodItems(FoodItems),
+            datesWithFood: groupFoodItems(FoodItems, true),
             searchDate: false,
         })
     });
@@ -213,7 +212,7 @@ router.post('/foodJournal', loggedIn, (req, res) => {
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
-            datesWithFood: groupFoodItems(FoodItems),
+            datesWithFood: groupFoodItems(FoodItems, true),
             searchDate: searchDate,
         })
     })
@@ -257,7 +256,7 @@ router.post('/addFood', loggedIn, (req, res) => {
         res.redirect('/logout');
     })
 });
-// firebase, nodemon npm
+
 router.post('/editFood/:id', loggedIn, (req, res) => {
     var logId = req.params.id, foodIdToUpdateTo = req.body.codeToChange;
 
