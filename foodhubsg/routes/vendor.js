@@ -133,6 +133,35 @@ router.get('/:id/editMenu', loggedIn, (req, res) => {
     })
 });
 
+router.get('/showMenu', loggedIn, (req, res) => {
+    const user = req.user;
+    Vendor.findOne({
+        where: {
+            UserId: user.id,
+        }
+    }).then((vendor) => {
+        Shop.findOne({
+            where: {
+                VendorId: vendor.id,
+            }
+        }).then((shop) => {
+            FoodItem.findAll({ 
+                where: { 
+                    ShopId: shop.id, 
+                }
+            }).then((food) => { 
+                res.render('vendors/seeMenu', {
+                user: req.user,
+                food: food,
+
+            })
+            })
+            
+        })
+
+    })
+});
+
 
 
 router.post('/upload', loggedIn, (req, res) => {
