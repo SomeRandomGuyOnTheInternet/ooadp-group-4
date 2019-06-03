@@ -70,11 +70,12 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
         });
 })
 
-router.get('/addMenu', loggedIn, (req, res) => {
+router.get('/:id/addMenu', loggedIn, (req, res) => {
+    const shopId = req.params.id;
     const user = req.user;
-    Shop.findAll({
+    Shop.findOne({
         where: {
-            VendorId: user.id,
+            id: shopId,
         }
     }).then((shops) => {
         res.render('vendors/add_fooditems', {
@@ -85,36 +86,83 @@ router.get('/addMenu', loggedIn, (req, res) => {
 });
 
 
-router.post('/addMenu', loggedIn, (req, res) => {
+router.post('/:id/addMenu', loggedIn, (req, res) => {
+    const shopId = req.params.id;
     const name = req.body.name;
     const shop = req.body.shop.toString();
     const calories = req.body.calories;
     const description = req.body.description;
     const user = req.user;
-    const img = "/images/nice-waffle.jpg"
-    Shop.findAll({
+    console.log(req.body.shop);
+const img = "/images/nice-waffle.jpg"
+    FoodItem.create({
+        name: name,
+        calories: calories,
+        isRecommended: true,
+        description: description,
+        imageLocation: img,
+        ShopId: shopId,
+    })
+    res.locals.success = "Food has been successfully added!";
+    res.render('vendors/vendor_index', {
+        user: req.user
+    })
+})
+
+router.get('/:id/editMenu', loggedIn, (req, res) => {
+    const shopId = req.params.id;
+    const user = req.user;
+    FoodItem.findOne({
         where: {
-            name: shop,
-            VendorId: user.id,
+            id: shopId,
         }
-    }).then((shop) => {
-        console.log(shop.id); 
-        FoodItem.create({
-            name: name,
-            calories: calories,
-            isRecommended: true,
-            description: description,
-            imageLocation: img,
-            ShopId: vendorShop, 
-        })
-            res.locals.success = "Food has been successfully added!";
-            res.render('vendors/vendor_index', {
-                user: req.user
+    }).then((food) => {
+        Shop.findOne({
+            where: {
+                id: shopId,
+            }
+        }).then((shop) => {
+            res.render('vendors/edit_fooditems', {
+                user: req.user,
+                food: food,
+                shop: shop,
+
             })
         })
 
+    })
+});
+
+router.get('/showMenu', loggedIn, (req, res) => {
+    const user = req.user;
+    Vendor.findOne({
+        where: {
+            UserId: user.id,
+        }
+    }).then((vendor) => {
+        Shop.findOne({
+            where: {
+                VendorId: vendor.id,
+            }
+        }).then((shop) => {
+            FoodItem.findAll({ 
+                where: { 
+                    ShopId: shop.id, 
+                }
+            }).then((food) => { 
+                res.render('vendors/seeMenu', {
+                user: req.user,
+                food: food,
+
+            })
+            })
+            
+        })
 
     })
+});
+
+
 
 router.post('/upload', loggedIn, (req, res) => {
     // Creates user id directory for upload if not exist

@@ -1,0 +1,32 @@
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="col-md-12">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+                        <h1 class="font_color" style="display:inline-block;"><b>All Menu Added</b></h1>
+                        <a href="/vendor/addShops"><button type="button" class="btn btn-success" style="float:right;">Add New Shop</button></a>
+                        <hr>
+                    </div>
+                    
+                    {{#each food}}
+                    <div class="col-md-6 recommended-shops">
+                        <div class="blog-entry">
+                            <div class="blog-img">
+                                <a class="action" href="/vendor/{{this.id}}/editMenu"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+                            </div>
+                            <div class="desc">
+                                <p class="meta">
+                                    <b class="vendors"><b>{{this.name}}</b></b><br>
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
