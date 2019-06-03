@@ -13,6 +13,7 @@ const groupFoodItems = require('../helpers/groupFoodItems');
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
+const User = require('../models/User');
 
 
 router.get('/', loggedIn, (req, res) => {
@@ -157,7 +158,7 @@ router.get('/settings', loggedIn, (req, res) => {
     });
 });
 
-router.post('/settings/:id', (req, res) => {
+router.post('/settings', loggedIn, (req, res) => {
 	const name = req.body.name;
 	const email = req.body.email.toLowerCase();
 	const password = req.body.password;
@@ -170,17 +171,20 @@ router.post('/settings/:id', (req, res) => {
 	User.update({
 		
 		 weight: req.body.weight,
-		 height: req.body.height
+         height: req.body.height
+         
 	
 	},{
-		where: { id: req.params.id }
+		where: { id: req.user.id }
 	}).then(function (user) {
 		
 		res.redirect('/user/settings'); 
 		}).catch(err => console.log(err));
 
 	
-	});
+    });
+    
+
 
 
 router.get('/faq', loggedIn, (req, res) => {
