@@ -157,7 +157,7 @@ router.get('/settings', loggedIn, (req, res) => {
     });
 });
 
-router.post('/settings/:id', (req, res) => {
+router.post('/settings/:id', loggedIn, (req, res) => {
 	const name = req.body.name;
 	const email = req.body.email.toLowerCase();
 	const password = req.body.password;
