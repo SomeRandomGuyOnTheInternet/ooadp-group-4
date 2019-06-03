@@ -82,8 +82,6 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 });
 
 router.get('/foodJournal', loggedIn, (req, res) => {
-    // var error = "This code does not exist!";
-    // res.locals.error = error;
     Food.findAll({
         include: [{
             model: FoodLog,
@@ -128,7 +126,7 @@ router.get('/editFood/:id', loggedIn, (req, res) => {
         })
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/user/editFood/' + logId);
     })
 });
@@ -167,25 +165,17 @@ router.post('/settings', loggedIn, (req, res) => {
 	
 	var error;
 
-	User.update({
-		
+	User.update({		
 		 weight: req.body.weight,
          height: req.body.height
-         
-	
 	},{
 		where: { id: req.user.id }
-	}).then(function (user) {
-		
+	}).then(function (user) {		
 		res.redirect('/user/settings'); 
-		}).catch(err => console.log(err));
-
-	
+        })
+        .catch(err => console.log(err));
     });
     
-
-
-
 router.get('/faq', loggedIn, (req, res) => {
     res.render('user/faq', {
         user: req.user,
@@ -217,7 +207,7 @@ router.post('/foodJournal', loggedIn, (req, res) => {
         })
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/user/foodJournal');
     })
 });
@@ -241,18 +231,16 @@ router.post('/addFood', loggedIn, (req, res) => {
                 res.redirect('/user/foodJournal');
             })
             .catch((err) => {
-                res.locals.error = err;
+                req.flash('error', err);
                 res.redirect('/user/foodJournal');
             })
         } else {
-            console.log("test")
-            var error = "This code does not exist!";
-            res.locals.error = error;
+            req.flash('error', "This code does not exist!");
             res.redirect('/user/foodJournal');
         }
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/logout');
     })
 });
@@ -260,7 +248,7 @@ router.post('/addFood', loggedIn, (req, res) => {
 router.post('/editFood/:id', loggedIn, (req, res) => {
     var logId = req.params.id, foodIdToUpdateTo = req.body.codeToChange;
 
-    Food.findOne( { FoodId: foodIdToUpdateTo } )
+    Food.findOne({ where: { id: foodIdToUpdateTo }, })
     .then((foodItem) => {
         if (foodItem) {
             FoodLog.update(
@@ -272,20 +260,22 @@ router.post('/editFood/:id', loggedIn, (req, res) => {
                 },
             )
             .then(() => {
-                res.locals.success = "You have successfully edited that food item!";
+                req.flash('success', "You've successfully edited that food item!");
                 res.redirect('/user/foodJournal');
             })
             .catch((err) => {
-                res.locals.error = err;
+                console.log(err);
+                req.flash('error', err);
                 res.redirect('/user/editFood/' + logId);
             })
         } else {
-            res.locals.error = "That code does not exist!";
+            req.flash('error', "That code does not exist!");
             res.redirect('/user/editFood/' + logId);
         }
     })
     .catch((err) => {
-        res.locals.error = err;
+        console.log(err)
+        req.flash('error', err);
         res.redirect('/user/editFood/' + logId);
     })
 });
@@ -295,11 +285,11 @@ router.post('/deleteFood/:id', loggedIn, (req, res) => {
 
     FoodLog.destroy({ where: { id: logId } })
     .then(() => {
-        res.locals.success = "You have successfully deleted that food item from your history!";
+        req.flash('success', "You've successfully deleted that food item from your logs!");
         res.redirect('/user/foodJournal');
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/user/editFood/' + logId);
     })
 });

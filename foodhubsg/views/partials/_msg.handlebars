@@ -1,21 +1,29 @@
 {{#if success}}
-    <div class="flash-div">
-    <div class="row form-group">
-        <div class="col-md-12">
-            <div class="flash success">
-                <div class="container">{{success}}</div>
+    <div class="flash-div z-index:9999">
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="flash success">
+                    <div class="container">
+                        <i class="fas fa-check"></i> 
+                        {{success}}
+                        <i class="fas fa-times" style="float:right"></i>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 {{/if}}
 
 {{#if error}}
-    <div class="flash-div">
+    <div class="flash-div z-index:9999">
         <div class="row form-group">
             <div class="col-md-12">
                 <div class="flash error">
-                    <div class="container">{{error}}</div>
+                    <div class="container">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        {{error}}
+                        <i class="fas fa-times" style="float:right"></i>
+                    </div>
                 </div>
             </div>
         </div>

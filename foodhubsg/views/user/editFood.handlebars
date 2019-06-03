@@ -12,7 +12,7 @@
                             <hr>
                         </header>
                         <div class="input-group">
-                            <input name="codeToChange" id="codeToChange" class="form-control" value="" placeholder="Previous Entry: {{ name }} (code: {{ id }})">
+                            <input name="codeToChange" id="codeToChange" class="form-control" type="number" value="" placeholder="Previous Entry: {{ name }} (code: {{ id }})">
                             <div class="input-group-btn">
                                 <input type="submit" id="edit-button" class="btn btn-success" href="/user/editFood/{{'FoodLogs.id'}}" value="Update Entry" name="editAction" style="margin-left: 0.5em;" disabled>
                                 <input type="submit" id="delete-button" class="btn btn-danger" href="/user/deleteFood/{{'FoodLogs.id'}}" value="Delete Food Entry" name="removeAction" onclick="remove_confirm()">

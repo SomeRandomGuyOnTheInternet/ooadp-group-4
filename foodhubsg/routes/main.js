@@ -40,7 +40,7 @@ router.post('/register', (req, res) => {
 				});
 			});
 		} else {
-			res.locals.error = error;
+			req.flash('error', error);
 			res.render('register', {
 				user: req.user
 			});
@@ -69,7 +69,6 @@ router.get('/', loggedIn, (req, res) => {
 	} else if (req.user.isVendor === true) {
 		res.redirect('/vendor/showShops')
 	} else {
-		console.log(req.user)
 		res.redirect('/user/')
 	}
 });

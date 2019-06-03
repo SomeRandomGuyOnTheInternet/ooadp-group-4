@@ -47,7 +47,7 @@ router.post('/addShops', loggedIn, (req, res) => {
         isRecommended: 1,
         VendorId: user.id,
     })
-    res.locals.success = "Shop has been successfully added!";
+    req.flash('success', "This shop has been successfully added");
     res.render('vendors/vendor_index', {
         user: req.user
     })

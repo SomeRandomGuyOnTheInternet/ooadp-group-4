@@ -40,6 +40,21 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 
+	<script>
+		$(document).ready(function () {
+
+			$("#nav-name").each(function () {
+				if ($(this).text().length > 8) {
+					$(this).text($(this).text().substr(0, 8) + "...");
+				}
+			});
+		});
+
+		$(".fa-times").click(function () {
+			$(".flash-div").slideUp();
+		});
+	</script>
+
 	<link rel="icon" href="/images/healthhub-logo.png">
 
 	<title>FoodHub.SG</title>
