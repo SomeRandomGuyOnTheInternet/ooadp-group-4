@@ -1,0 +1,46 @@
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;">
+                <div class="row row-pb-md">
+                    <form action="" method="post" id="food-form">
+                        <div class="col-md-12">
+                            <h1 class="font_color"><b>Edit Food Item</b></h1>
+                            <hr>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="blog-entry">
+                                <img src="/images/nice-waffle.jpg" class="img-responsive" alt="Image">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="desc">
+                                <p class="meta">
+                                    <label>Name of Food</label>
+                                    <input name="name" id="name" type="text" class="form-control" value="{{food.name}}"
+                                        placeholder="Name">
+                                    <label>Calories</label>
+                                    <input name="calories" id="calories" type="text" class="form-control" value="{{food.calories}}"
+                                        placeholder="Calories">
+
+                                    <hr>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="shop">Shop</label>
+                            <input name="shop" id="shop" type="text" class="form-control" value="{{shop.name}}"
+                                placeholder="vendor" readonly>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
+                                style="background-color: #4CAF50;">Edit Food</button>
+                    </form>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
