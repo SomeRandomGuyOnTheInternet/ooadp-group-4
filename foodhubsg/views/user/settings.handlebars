@@ -1,3 +1,4 @@
+{{> _msg }}
 <div id="colorlib-container">
     <div class="container">
         <div class="col-md-12">
@@ -7,7 +8,7 @@
 
                         <header>
                             <h1 class="font_color"><b>User Settings</b></h1>
-                            <h5>(bala12rupesh@gmail.com)</h5>
+                            <h5>({{user.email}})</h5>
                             <hr>
                         </header>
 
@@ -17,18 +18,18 @@
                                 <div class="col-md-6">
                                     <label>Height in meters</label>
                                     <input name="height" id="height" type="number" step="0.01" class="form-control"
-                                        value="" placeholder="1.78 m">
+                                        value="" placeholder="{{user.height}} m">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label>Weight in kilograms</label>
                                     <input name="weight" id="weight" type="number" step="0.01" class="form-control"
-                                        value="" placeholder="75 kg">
+                                        value="" placeholder="{{user.weight}} kg">
                                 </div>
 
                                 <div class="col-md-12">
                                     <label>Email</label>
-                                    <input name="email" id="email" type="email" class="form-control" value="" placeholder="bala12rupesh@gmail.com">
+                                    <input name="email" id="email" type="email" class="form-control" value="" placeholder="{{user.email}}">
                                 </div>
 
                                 <div class="col-md-12 new-password">
@@ -73,9 +74,7 @@
                             <hr>
                         </header>
                         <h4><b>Body Mass Index Summary</b></h4>
-                        <h5>Balavignesh, you have a BMI of 27.95, which is above the healthy range of 22 to 24. You are
-                            recommended to lose 14 kg to reach a body mass of 64 kg, which will get you back to the
-                            healthy BMI range.</h5>
+                        <h5>{{bmiStatement}}</h5>
 
                         <h4><b>Food History Summary</b></h4>
 

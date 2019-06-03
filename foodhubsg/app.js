@@ -11,6 +11,8 @@ const passport = require('passport');
 const db = require('./config/db');
 const { formatDate } = require('./helpers/hbs');
 const { checkMealType } = require('./helpers/hbs');
+const { json } = require('./helpers/hbs');
+const { ifCond } = require('./helpers/hbs');
 
 const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
@@ -23,6 +25,8 @@ app.engine('handlebars', exphbs({
 	helpers: {
 		formatDate: formatDate,
 		checkMealType: checkMealType,
+		json: json,
+		ifCond: ifCond,
 	},
 }));
 

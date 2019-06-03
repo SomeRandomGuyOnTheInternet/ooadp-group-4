@@ -1,3 +1,4 @@
+{{> _msg }}
 <div id="colorlib-container">
     <div class="container">
         <div class="box1">
@@ -57,18 +58,18 @@
                                             <header>
                                                 <div class="food-subsection">
                                                 {{#if this.Breakfast}}
-                                                {{#each this.Breakfast}}
-                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
-                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
-                                                    <p>
-                                                        {{calories}} calories
-                                                        <br>
-                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
-                                                    </p>
-                                                {{/each}}
+                                                    {{#each this.Breakfast}}
+                                                        <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                        <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                        <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                        <p>
+                                                            {{calories}} calories
+                                                            <br>
+                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                        </p>
+                                                    {{/each}}
                                                 {{else}}
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                    <h5 style="margin-bottom: 0; display: inline"><b>No breakfast consumed</b></h5>
                                                 {{/if}}
                                                 </div>
                                             </header>
@@ -81,18 +82,18 @@
                                             <header>
                                                 <div class="food-subsection">
                                                     {{#if this.Lunch}}
-                                                    {{#each this.Lunch}}
-                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
-                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
-                                                    <p>
-                                                        {{calories}} calories
-                                                        <br>
-                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
-                                                    </p>
-                                                    {{/each}}
+                                                        {{#each this.Lunch}}
+                                                        <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                        <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                        <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                        <p>
+                                                            {{calories}} calories
+                                                            <br>
+                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                        </p>
+                                                        {{/each}}
                                                     {{else}}
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                    <h5 style="margin-bottom: 0; display: inline"><b>No lunch consumed</b></h5>
                                                     {{/if}}
                                                 </div>
                                             </header>
@@ -105,18 +106,18 @@
                                             <header>
                                                 <div class="food-subsection">
                                                     {{#if this.Dinner}}
-                                                    {{#each this.Dinner}}
-                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
-                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
-                                                    <p>
-                                                        {{calories}} calories
-                                                        <br>
-                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
-                                                    </p>
-                                                    {{/each}}
+                                                        {{#each this.Dinner}}
+                                                        <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                        <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                        <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                        <p>
+                                                            {{calories}} calories
+                                                            <br>
+                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                        </p>
+                                                        {{/each}}
                                                     {{else}}
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                    <h5 style="margin-bottom: 0; display: inline"><b>No dinner consumed</b></h5>
                                                     {{/if}}
                                                 </div>
                                             </header>
@@ -129,33 +130,34 @@
                                             <header>
                                                 <div class="food-subsection">
                                                     {{#if this.Snacks}}
-                                                    {{#each this.Snacks}}
-                                                    <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
-                                                    <p style="margin-bottom: 0">(code: {{id}})</p>
-                                                    <p>
-                                                        {{calories}} calories
-                                                        <br>
-                                                        <a class="action" href="/edit_food/{{'FoodLogs.id'}}"><i>Edit</i></a>
-                                                    </p>
-                                                    {{/each}}
+                                                        {{#each this.Snacks}}
+                                                        <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                        <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                        <p style="margin-bottom: 0">(code: {{id}})</p>
+                                                        <p>
+                                                            {{calories}} calories
+                                                            <br>
+                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                        </p>
+                                                        {{/each}}
                                                     {{else}}
-                                                    <h4 style="margin-bottom: 0; display: inline"><b>No meal consumed</b></h4>
+                                                    <h5 style="margin-bottom: 0; display: inline"><b>No snacks consumed</b></h5>
                                                     {{/if}}
                                                 </div>
                                             </header>
                                         </article>
                                     </div>
+
                                 </div>
                                 <h5 style="padding-top: 20px;">Total calories consumed: <b> {{this.dailyCalories}} </b> kcal </h5>
                                 <hr>
 
                         {{else}}
-                        {{#if searchDate}}
-                        <h4 id="current_location">There was no food found on that date!</b></h4>
-                        {{else}}
-                        <h4 id="current_location">You have not added any food yet!</b></h4>
-                        {{/if}}
+                            {{#if searchDate}}
+                                <h4 id="current_location">There was no food found on that date!</b></h4>
+                            {{else}}
+                                <h4 id="current_location">You have not added any food yet!</b></h4>
+                            {{/if}}
                         {{/each}}
 
                     </div>
@@ -163,9 +165,6 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
 
 <script>

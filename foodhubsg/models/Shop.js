@@ -9,6 +9,12 @@ const Shop = db.define('Shop', {
     address: {
         type: Sequelize.STRING
     },
+    latitude: {
+        type: Sequelize.DECIMAL(10, 7)
+    },
+    longitude: {
+        type: Sequelize.DECIMAL(10, 7)
+    },
     location: {
         type: Sequelize.STRING
     },

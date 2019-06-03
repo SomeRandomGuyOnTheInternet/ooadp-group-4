@@ -1,22 +1,58 @@
 {{> _msg }}
 <div id="colorlib-container">
 	<div class="container">
-		<div class="box1">
-			<div class="row row-pb-md">
-				<div class="col-md-12">
-					<div class="blog-entry">
-						<div class="blog-img">
-							<h3 class="font_color"><b class="center_subtitle">Summary of your food history</b></h3>
-							<hr>
-							<h4>You consumed an average of 2500 kcal daily over the 6 days you've entered food into your food journal, which is within
-							the daily recommended amount, so keep following your current diet. </h4>
+		{{#ifCond numOfDays '>=' 4}}
+			<div class="row">
+				<div class="col-md-6">
+					<div class="box1">
+						<div class="row row-pb-md">
+							<div class="col-md-12">
+								<div class="blog-entry">
+									<div class="blog-img">
+										<h3 class="font_color"><b class="center_subtitle">Summary of your food history</b></h3>
+										<hr>
+										<h4>You consumed an average of 2500 kcal daily over the 6 days you've entered food into your food journal, which is within
+										the daily recommended amount, so keep following your current diet. </h4>
+									</div>
+									<u><a href="/user/foodJournal/">Click here to see your food intake in more
+											detail </a></u>
+								</div>
+							</div>
 						</div>
-						<u><a href="/user/foodJournal/">Click here to see your food intake in more
-								detail </a></u>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="box1">
+						<div class="row row-pb-md">
+							<div class="col-md-12">
+								<div class="blog-entry">
+									<div class="blog-img">
+										<h3 class="font_color"><b class="center_subtitle">Graph of Food History</b></h3>
+										<hr>
+										<canvas id="foodHistoryChart" width="400" height="170"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		{{else}}
+			<div class="box1">
+				<div class="row row-pb-md">
+					<div class="col-md-12">
+						<div class="blog-entry">
+							<div class="blog-img">
+								<h3 class="font_color"><b class="center_subtitle">Summary of your food history</b></h3>
+								<hr>
+								<h4>You have not added enough food to generate a summary. Keep adding more food!</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/ifCond}}
 
 		<div class="box1">
 			<div class="row row-pb-md">
@@ -62,3 +98,45 @@
 
 	</div>
 </div>
+
+<script>
+	var foodHistoryChart = document.getElementById('foodHistoryChart');
+	var foodItems = {{{ json foodItems }}};
+	var labels = [], data = [];
+
+	for (var [key] of Object.entries(foodItems)) {
+		labels.push(key);
+		data.push(parseInt(foodItems[key].dailyCalories));
+	}
+
+	var foodHistoryChart = new Chart(foodHistoryChart, {
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: [{
+				data: data,
+				backgroundColor: [
+					'rgba(255, 99, 132, 0)',
+				],
+				borderColor: [
+					'rgba(76, 187, 23, 0.9)',
+				],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		},
+		color: function (context) {
+			var index = context.dataIndex;
+			var value = context.dataset.data[index];
+			return value < 2500 ? 'rgba(76, 187, 23, 0.9)' : 'rgba(217, 83, 79, 0.9)'
+		}
+	});
+</script>
