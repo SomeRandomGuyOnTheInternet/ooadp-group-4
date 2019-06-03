@@ -47,11 +47,12 @@
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Update Shop Details" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Update</button>
-                            <button type="submit" name="action" value="Delete Shop" class="btn btn-primary"
-                                id="remove-shop" style="background-color: #d9534f;">Delete </button>
+
                         </div>
 
                     </form>
+                    <a href="vendor/deleteShop/{{shop.id}}"><button type="submit" name="action" value="Delete Shop"
+                        class="btn btn-primary" id="remove-shop" style="background-color: #d9534f;">Delete </button></a>
                 </div>
                 <br>
             </div>
@@ -81,15 +82,16 @@
                 </article>
                 {{/each}}
 
-               <article class="food-journal">
-                <header>
-                    <div id="vendor-food">
-                        <a href ="/vendor/{{shop.id}}/addMenu"><i href="/vendor/{{shop.id}}/addMenu" class="fas fa-plus-square" style="font-size: 3em;"></i></a>
-                        <br>
-                        <p style="display: inline">Add New Food Item</p><br>
-                    </div>
-                </header>
-            </article>
+                <article class="food-journal">
+                    <header>
+                        <div id="vendor-food">
+                            <a href="/vendor/{{shop.id}}/addMenu"><i href="/vendor/{{shop.id}}/addMenu"
+                                    class="fas fa-plus-square" style="font-size: 3em;"></i></a>
+                            <br>
+                            <p style="display: inline">Add New Food Item</p><br>
+                        </div>
+                    </header>
+                </article>
 
             </div>
         </div>

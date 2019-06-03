@@ -4,7 +4,7 @@ const loggedIn = require('../helpers/loggedIn');
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
-const fs = require('fs'); 
+const fs = require('fs');
 const upload = require('../helpers/ImageUpload');
 
 router.get('/showShops', loggedIn, (req, res) => {
@@ -32,7 +32,7 @@ router.post('/addShops', loggedIn, (req, res) => {
     const name = req.body.name;
     const user = req.user;
     const address = req.body.address;
-    const vendor = req.body.location.toString();
+    const vendor = "Chinatown"
     const description = req.body.description;
     const rating = 4.0;
     const img = "/images/rand.jpeg";
@@ -200,6 +200,31 @@ router.get('/showMenu', loggedIn, (req, res) => {
     })
 });
 
+router.get('/deleteShop/:id', loggedIn, (req, res) => {
+    const user = req.user; 
+    Shop.findOne({
+        where: {
+            id: req.params.id,
+        }
+    }).then((shop) => {
+        if (user.id == shop.VendorId){ 
+            Shop.destroy({ 
+                where: { 
+                    id: req.params.id, 
+                }
+            })
+        }
+    })
+    res.render('vendors/vendor_index', {
+        user: req.user
+    })
+})
+
+router.get('/deleteMenu/:id', loggedIn, (req, res) => {
+    res.render('vendor/seeMenu', {
+        user: req.user
+    })
+})
 
 
 router.post('/upload', loggedIn, (req, res) => {
@@ -207,7 +232,7 @@ router.post('/upload', loggedIn, (req, res) => {
     if (!fs.existsSync('./public/uploads/' + req.user.id)) {
         fs.mkdirSync('./public/uploads/' + req.user.id);
     }
-    
+
     upload(req, res, (err) => {
         if (err) {
             res.json({ file: '/images/no-image.jpg', err: err });
