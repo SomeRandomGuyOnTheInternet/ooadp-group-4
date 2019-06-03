@@ -93,6 +93,8 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             height: 1.78, 
             weight: 74, 
             location: null, 
+            latitude: null, 
+            longitude: null,
             isAdmin: false, 
             isVendor: false, 
             isBanned: false 
@@ -104,6 +106,8 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             height: null, 
             weight: null, 
             location: null, 
+            latitude: null,
+            longitude: null,
             isAdmin: true, 
             isVendor: false, 
             isBanned: false 

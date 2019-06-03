@@ -4,7 +4,7 @@
 		{{#ifCond numOfDays '>=' 4}}
 			<div class="row">
 				<div class="col-md-6">
-					<div class="box1">
+					<div class="box1" style="min-height: 432px;">
 						<div class="row row-pb-md">
 							<div class="col-md-12">
 								<div class="blog-entry">
@@ -30,7 +30,7 @@
 									<div class="blog-img">
 										<h3 class="font_color"><b class="center_subtitle">Graph of Food History</b></h3>
 										<hr>
-										<canvas id="foodHistoryChart" width="400" height="170"></canvas>
+										<canvas id="foodHistoryChart" width="400" height="255"></canvas>
 									</div>
 								</div>
 							</div>
@@ -115,28 +115,127 @@
 			labels: labels,
 			datasets: [{
 				data: data,
+				label: 'Calories (kcal)',
 				backgroundColor: [
 					'rgba(255, 99, 132, 0)',
 				],
 				borderColor: [
 					'rgba(76, 187, 23, 0.9)',
 				],
-				borderWidth: 1
+				borderWidth: 1,
 			}]
 		},
 		options: {
+			responsive: true,
+			title: {
+				display: false,
+			},
 			scales: {
 				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Calories (kcal)'
+					},
 					ticks: {
 						beginAtZero: true
 					}
-				}]
-			}
+				}],
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Dates'
+					}
+				}],
+			},
 		},
-		color: function (context) {
-			var index = context.dataIndex;
-			var value = context.dataset.data[index];
-			return value < 2500 ? 'rgba(76, 187, 23, 0.9)' : 'rgba(217, 83, 79, 0.9)'
-		}
 	});
+
+	{{!-- var foodHistoryChart = document.getElementById('foodHistoryChart');
+	var foodItems = {{{ json foodItems }}};
+	var labels = [], data = [];
+
+	for (var [key] of Object.entries(foodItems)) {
+		labels.push(key);
+		data.push(parseInt(foodItems[key].dailyCalories));
+	}
+	
+	var config = {
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: [{
+				data: data,
+				label: 'Calories (kcal)',
+				backgroundColor: [
+					'rgba(255, 99, 132, 0)',
+				],
+				borderColor: [
+					'rgba(76, 187, 23, 0.9)',
+				],
+				borderWidth: 1,
+			}]
+		},
+		options: {
+			responsive: true,
+			title: {
+				display: false,
+			},
+			scales: {
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Calories (kcal)'
+					}
+				}],
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Dates'
+					}
+				}],
+			},
+			horizontalLine: [{
+				y: 2000,
+				style: "rgba(255, 0, 0, .4)",
+				text: "Ideal Calorie Intake"
+			}],
+		},
+	};
+
+	if (chartInstance.options.horizontalLine) {
+		for (index = 0; index < chartInstance.options.horizontalLine.length; index++) {
+			line = chartInstance.options.horizontalLine[index];
+
+			if (!line.style) {
+				style = "rgba(169,169,169, .6)";
+			} else {
+				style = line.style;
+			}
+
+			if (line.y) {
+				yValue = yScale.getPixelForValue(line.y);
+			} else {
+				yValue = 0;
+			}
+
+			foodHistoryChart.lineWidth = 3;
+
+			if (yValue) {
+				foodHistoryChart.beginPath();
+				foodHistoryChart.moveTo(0, yValue);
+				foodHistoryChart.lineTo(canvas.width, yValue);
+				foodHistoryChart.strokeStyle = style;
+				foodHistoryChart.stroke();
+			}
+
+			if (line.text) {
+				foodHistoryChart.fillStyle = style;
+				foodHistoryChart.fillText(line.text, 0, yValue + foodHistoryChart.lineWidth);
+			}
+		}
+	};
+                
+	Chart.pluginService.register(horizonalLinePlugin);
+
+	var myChart = new Chart(foodHistoryChart); --}}
 </script>

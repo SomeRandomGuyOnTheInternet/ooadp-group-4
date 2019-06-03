@@ -23,10 +23,12 @@ const setUpDB = (drop) => {
             User.hasMany(Question); 
             mySQLDB.sync({ // Creates table if none exists
                 force: drop
-            }).then(() => {
+            })
+            .then(() => {
                 console.log('Create tables if none exists');
                 if (drop == true) { createInstance(Shop, FoodItem, User, Vendor); }
-            }).catch(err => console.log(err))
+            })
+            .catch(err => console.log(err))
         })
         .catch(err => console.log('Error: ' + err));
 };

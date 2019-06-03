@@ -82,6 +82,8 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 });
 
 router.get('/foodJournal', loggedIn, (req, res) => {
+    // var error = "This code does not exist!";
+    // res.locals.error = error;
     Food.findAll({
         include: [{
             model: FoodLog,
@@ -146,7 +148,6 @@ router.get('/settings', loggedIn, (req, res) => {
     .then((FoodItems) => {
         groupedFoodItems = groupFoodItems(FoodItems);
         dailyAverageCalories = getAverageDailyCalories(groupedFoodItems);
-        foodIntakeStatement = 
 
         res.render('user/settings', {
             user: req.user,
@@ -199,6 +200,7 @@ router.post('/addFood', loggedIn, (req, res) => {
         where: { id: req.body.userFoodCode, }
     })
     .then((foodItem) => {
+        console.log(foodItem);
         if (foodItem) {
             FoodLog.create({
                 UserId: user.id,
@@ -214,6 +216,7 @@ router.post('/addFood', loggedIn, (req, res) => {
                 res.redirect('/user/foodJournal');
             })
         } else {
+            console.log("test")
             var error = "This code does not exist!";
             res.locals.error = error;
             res.redirect('/user/foodJournal');
