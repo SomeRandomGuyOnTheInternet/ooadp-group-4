@@ -21,12 +21,6 @@
                                     <label>Name of Food</label>
                                     <input name="name" id="name" type="text" class="form-control" value=""
                                         placeholder="Name">
-                                    <label>Shop Location</label>
-                                    <select name="shop" id="shop" type="shop" class="form-control">
-                                        {{#each shop}}
-                                        <option value={{this.name}}> {{this.name}} </option>
-                                        {{/each}}
-                                    </select>
                                     <label>Calories</label>
                                     <input name="calories" id="calories" type="text" class="form-control" value=""
                                         placeholder="Calories">
@@ -36,9 +30,9 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <label for="description">Description</label>
-                            <textarea id="description" name="description" form="food-form" class="form-control" rows="4"
-                                cols="50"></textarea><br>
+                            <label for="shop">Shop</label>
+                            <input name="shop" id="shop" type="text" class="form-control" value="{{shop.name}}"
+                                placeholder="vendor" readonly>
                         </div>
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
