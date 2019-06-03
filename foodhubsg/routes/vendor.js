@@ -4,6 +4,8 @@ const loggedIn = require('../helpers/loggedIn');
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
+const fs = require('fs'); 
+const upload = require('../helpers/ImageUpload');
 
 router.get('/showShops', loggedIn, (req, res) => {
     const user = req.user;
@@ -70,6 +72,40 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
         });
 })
 
+router.post('/editShop/:id', loggedIn, (req, res) => {
+    const name = req.body.name;
+    const user = req.user;
+    const address = req.body.shopAdd;
+    const latitude = 1.282699;
+    const longitude = 103.843908;
+    const description = req.body.description;
+    const rating = 4.0;
+    const img = "/images/rand.jpeg";
+    Shop.findOne({
+        where: {
+            VendorId: user.id,
+        }
+    }).then((Shop) => {
+        console.log(address);
+        Shop.update({
+            name: name,
+            address: address,
+            rating: rating,
+            description: description,
+            imageLocation: img,
+            isDeleted: 0,
+            isRecommended: 1,
+            latitude: latitude,
+            longitude: longitude,
+        })
+        res.locals.success = "Shop has been successfully added!";
+        res.render('vendors/vendor_index', {
+            user: req.user
+        })
+    })
+
+})
+
 router.get('/:id/addMenu', loggedIn, (req, res) => {
     const shopId = req.params.id;
     const user = req.user;
@@ -94,7 +130,7 @@ router.post('/:id/addMenu', loggedIn, (req, res) => {
     const description = req.body.description;
     const user = req.user;
     console.log(req.body.shop);
-const img = "/images/nice-waffle.jpg"
+    const img = "/images/nice-waffle.jpg"
     FoodItem.create({
         name: name,
         calories: calories,
@@ -145,18 +181,20 @@ router.get('/showMenu', loggedIn, (req, res) => {
                 VendorId: vendor.id,
             }
         }).then((shop) => {
-            FoodItem.findAll({ 
-                where: { 
-                    ShopId: shop.id, 
+            FoodItem.findAll({
+                where: {
+                    ShopId: shop.id,
                 }
-            }).then((food) => { 
+            }).then((food) => {
+                console.log(shop.name);
                 res.render('vendors/seeMenu', {
-                user: req.user,
-                food: food,
+                    user: req.user,
+                    food: food,
+                    shop: shop,
 
+                })
             })
-            })
-            
+
         })
 
     })
@@ -166,10 +204,10 @@ router.get('/showMenu', loggedIn, (req, res) => {
 
 router.post('/upload', loggedIn, (req, res) => {
     // Creates user id directory for upload if not exist
-    if (!fs.existsSync('./public/uploads/' + Shop.imageLocation)) {
-        fs.mkdirSync('./public/uploads/' + Shop.imageLocation);
+    if (!fs.existsSync('./public/uploads/' + req.user.id)) {
+        fs.mkdirSync('./public/uploads/' + req.user.id);
     }
-
+    
     upload(req, res, (err) => {
         if (err) {
             res.json({ file: '/images/no-image.jpg', err: err });

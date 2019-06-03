@@ -3,13 +3,13 @@ const db = require('../config/DBConfig');
 
 
 const Question = db.define('Question', {
-    questions: {
+    question: {
         type: Sequelize.STRING
     },
-    answers: {
+    answer: {
         type: Sequelize.STRING
     },
-    suggestions: {
+    suggestion: {
         type: Sequelize.STRING, 
     },
 
