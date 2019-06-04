@@ -178,13 +178,40 @@ router.post('/settings', loggedIn, (req, res) => {
     });
     
 router.get('/faq', loggedIn, (req, res) => {
-    res.render('user/faq', {
-        user: req.user,
+    Question.findAll({
+        order: [
+            ['createdAt', 'ASC'],
+        ],
+        raw: true
+    })
+    .then((questions) => { 
+        console.log(questions)
+        res.render('user/faq', {
+            user: req.user,
+			questions: questions
+    
     })
 });
+});
 		
+router.post('/faq', (req, res) => {
+	const isAdmin = isBanned = isVendor = false;
+    const isAnswered = false;
+    let question = req.body.question;
+	var error;
 
-
+	Question.create({
+		
+		UserId: req.user.id,
+		question: question,
+			
+		}).then((questions) => {
+              
+			req.flash('success', 'You have successfully created a question!');
+            res.redirect('/user/faq');            
+           //spam check
+        })
+    });
 
 router.post('/foodJournal', loggedIn, (req, res) => {
     var searchDate = req.body.searchDate;
