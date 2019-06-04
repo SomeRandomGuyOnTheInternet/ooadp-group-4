@@ -48,9 +48,7 @@ router.post('/addShops', loggedIn, (req, res) => {
         VendorId: user.id,
     })
     req.flash('success', "This shop has been successfully added");
-    res.render('vendors/vendor_index', {
-        user: req.user
-    })
+    res.redirect('/vendor/showShops');
 });
 
 router.get('/editShop/:id', loggedIn, (req, res) => {
@@ -98,10 +96,8 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
             latitude: latitude,
             longitude: longitude,
         })
-        res.locals.success = "Shop has been successfully added!";
-        res.render('vendors/vendor_index', {
-            user: req.user
-        })
+        req.flash('success', 'Shop has been succcessfully added');
+        res.redirect('/vendor/showShops'); 
     })
 
 })
@@ -139,7 +135,7 @@ router.post('/:id/addMenu', loggedIn, (req, res) => {
         imageLocation: img,
         ShopId: shopId,
     })
-    res.locals.success = "Food has been successfully added!";
+    req.flash('success', 'Food has been succcessfully added');
     res.render('vendors/vendor_index', {
         user: req.user
     })
@@ -215,9 +211,8 @@ router.get('/deleteShop/:id', loggedIn, (req, res) => {
             })
         }
     })
-    res.render('vendors/vendor_index', {
-        user: req.user
-    })
+    req.flash('success', 'Shop has been succcessfully deleted');
+    res.redirect('/vendor/showShops');
 })
 
 router.get('/deleteMenu/:id', loggedIn, (req, res) => {
