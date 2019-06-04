@@ -13,6 +13,7 @@ const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const User = require('../models/User');
+const Question = require('../models/Question');
 
 
 router.get('/', loggedIn, (req, res) => {
@@ -181,6 +182,9 @@ router.get('/faq', loggedIn, (req, res) => {
         user: req.user,
     })
 });
+		
+
+
 
 router.post('/foodJournal', loggedIn, (req, res) => {
     var searchDate = req.body.searchDate;
