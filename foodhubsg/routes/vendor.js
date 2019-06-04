@@ -103,12 +103,11 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
 
 })
 
-router.get('/:id/addMenu', loggedIn, (req, res) => {
-    const shopId = req.params.id;
+router.get('/addMenu', loggedIn, (req, res) => {
     const user = req.user;
-    Shop.findOne({
+    Shop.findAll({
         where: {
-            id: shopId,
+            VendorId: user.id,
         }
     }).then((shops) => {
         res.render('vendors/add_fooditems', {
@@ -119,7 +118,7 @@ router.get('/:id/addMenu', loggedIn, (req, res) => {
 });
 
 
-router.post('/:id/addMenu', loggedIn, (req, res) => {
+router.post('/addMenu', loggedIn, (req, res) => {
     const shopId = req.params.id;
     const name = req.body.name;
     const shop = req.body.shop.toString();
@@ -199,27 +198,30 @@ router.get('/showMenu', loggedIn, (req, res) => {
 });
 
 router.get('/deleteShop/:id', loggedIn, (req, res) => {
-    const user = req.user;
     Shop.findOne({
         where: {
             id: req.params.id,
         }
-    }).then((shop) => {
-        if (user.id == shop.VendorId){ 
-            Shop.destroy({ 
-                where: { 
-                    id: req.params.id, 
-                }
-            })
-        }
+    }).then((Shop) => 
+    { 
+        Shop.update({ 
+            isDeleted: true,
+        }), 
+        res.redirect('/vendor/deleteMenu/:id')
     })
     req.flash('success', 'Shop has been succcessfully deleted');
     res.redirect('/vendor/showShops');
 })
 
 router.get('/deleteMenu/:id', loggedIn, (req, res) => {
-    res.render('vendor/seeMenu', {
-        user: req.user
+    FoodItem.findAll({ 
+        where: {
+            id: req.params.id,
+        }
+    }).then(FoodItem => {
+        FoodItem.update({ 
+            isDeleted: true,
+        })
     })
 })
 
