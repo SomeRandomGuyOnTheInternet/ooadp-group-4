@@ -12,6 +12,7 @@ router.get('/showShops', loggedIn, (req, res) => {
     Shop.findAll({
         where: {
             VendorId: user.id,
+            isDeleted: false,
         }
     }).then((shops) => {
         res.render('vendors/vendor_index', {
@@ -97,7 +98,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
             longitude: longitude,
         })
         req.flash('success', 'Shop has been succcessfully added');
-        res.redirect('/vendor/showShops'); 
+        res.redirect('/vendor/showShops');
     })
 
 })
@@ -131,6 +132,7 @@ router.post('/:id/addMenu', loggedIn, (req, res) => {
         name: name,
         calories: calories,
         isRecommended: true,
+        isDeleted: false,
         description: description,
         imageLocation: img,
         ShopId: shopId,
@@ -173,18 +175,20 @@ router.get('/showMenu', loggedIn, (req, res) => {
         Shop.findOne({
             where: {
                 VendorId: vendor.id,
+                isDeleted: false,
             }
         }).then((shop) => {
             FoodItem.findAll({
                 where: {
                     ShopId: shop.id,
+                    isDeleted: false,
                 }
             }).then((food) => {
                 console.log(shop.name);
                 res.render('vendors/seeMenu', {
                     user: req.user,
                     food: food,
-                    shop: shop,
+                    shops: shop,
 
                 })
             })
@@ -195,7 +199,7 @@ router.get('/showMenu', loggedIn, (req, res) => {
 });
 
 router.get('/deleteShop/:id', loggedIn, (req, res) => {
-    const user = req.user; 
+    const user = req.user;
     Shop.findOne({
         where: {
             id: req.params.id,

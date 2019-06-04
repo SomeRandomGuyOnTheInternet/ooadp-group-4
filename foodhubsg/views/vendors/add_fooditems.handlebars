@@ -9,9 +9,9 @@
                             <hr>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="blog-entry">
-                                 <input type="file" id="shopImage" name="shopImage" accept="image/png,
+                                <input type="file" id="shopImage" name="shopImage" accept="image/png,
  					image/jpeg,image/jpg,image/gif">
 
 
@@ -34,9 +34,12 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <label for="shop">Shop</label>
-                            <input name="shop" id="shop" type="text" class="form-control" value="{{shop.name}}"
-                                placeholder="vendor" readonly>
+                            {{#each shop}}
+                            <label for="shop">{{this.name}}</label>
+                            <input name="shop" id="shop" type="checkbox" class="form-control" value="{{this.id}}"
+                                placeholder="vendor" readonly> 
+
+                            {{/each}}
                         </div>
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
