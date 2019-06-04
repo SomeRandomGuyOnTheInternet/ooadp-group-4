@@ -49,10 +49,13 @@
                                 style="background-color: #4CAF50;">Update</button>
 
                         </div>
-                        <button type="submit" name="action" onclick="vendor/deleteShop/{{shop.id}}" value="Delete Shop"
-                            class="btn btn-primary" id="remove-shop" style="background-color: #d9534f;">Delete </button>
-                    </form>
 
+                    </form>
+                    <button type="submit" name="action"  value="Delete Shop"
+                        class="btn btn-primary" id="remove-shop" style="background-color: #d9534f;"
+                        >
+                        <a href="/vendor/deleteShop/{{shop.id}}" style="color: #ffff;">Delete </a>
+                        </button>
                 </div>
                 <br>
             </div>
@@ -63,7 +66,7 @@
         <div class="box1">
             <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;"></div>
             <div class="row row-pb-md">
-                <div class="col-md-12">
+               t <div class="col-md-12">
                     <h1 class="font_color"><b>Edit Menu</b></h1>
                     <hr>
                 </div>
