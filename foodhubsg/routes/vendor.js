@@ -5,7 +5,7 @@ const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
 const fs = require('fs');
-const upload = require('../helpers/ImageUpload');
+const upload = require('../helpers/imageUpload');
 
 router.get('/showShops', loggedIn, (req, res) => {
     const user = req.user;

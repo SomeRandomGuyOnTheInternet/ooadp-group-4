@@ -11,7 +11,7 @@ $('#shopImage').on('change', function () {
         processData: false,
         'success': (data) => {
             $('#shopImg').attr('src', data.file);
-            $('#ImageURL').attr('value', data.file);// sets posterURL hidden field
+            $('#imageLocation').attr('value', data.file);// sets posterURL hidden field
             if (data.err) {
                 $('#posterErr').show();
                 $('#posterErr').text(data.err.message);
