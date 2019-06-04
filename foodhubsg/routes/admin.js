@@ -1,11 +1,14 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
+
 const loggedIn = require('../helpers/loggedIn');
+
 const Shop = require('../models/Shop');
 const FoodItem = require('../models/FoodItem')
 const Vendor = require('../models/Vendor');
-const bcrypt = require('bcryptjs');
 const User = require("../models/User"); 
+
 
 router.get('/vendors', loggedIn, (req, res) => {
     res.render('admin/vendors', {
@@ -97,5 +100,6 @@ router.get('/faq', loggedIn, (req, res) => {
     }
 
 });
+
 
 module.exports = router;

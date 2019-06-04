@@ -2,8 +2,10 @@ const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
+
 const loggedOut = require('../helpers/loggedOut');
 const loggedIn = require('../helpers/loggedIn');
+
 const User = require('../models/User');
 
 
@@ -22,7 +24,8 @@ router.post('/register', (req, res) => {
 
 	User.findOne({
 		where: { email }
-	}).then(function (user) {
+	})
+	.then(function (user) {
 		if (user) { error = 'This email has already been registered'; };
 		if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
 		if (height > 3 || weight < 0.5) { error = 'Please enter a valid height value'; };
@@ -34,7 +37,7 @@ router.post('/register', (req, res) => {
 					User.create({
 						name, email, password: hash, weight, height, isAdmin, isBanned, isVendor
 					}).then(function () {
-						res.locals.success = "Your email has been successfully registered!";
+						req.flash('success', "Your email has been successfully registered!");
 						res.redirect('./login');
 					})
 				});
@@ -49,7 +52,6 @@ router.post('/register', (req, res) => {
 });
 
 router.get('/login', loggedOut, (req, res) => {
-	console.log(req.session.user)
 	res.render('login', {
 		user: req.user
 	})
@@ -73,23 +75,11 @@ router.get('/', loggedIn, (req, res) => {
 	}
 });
 
-router.get('/about', (req, res) => {
-	const title = 'About';
-	const developer = 'your mom ha gottem';
-
-	res.locals.success = "This works! Yaaaaaay";
-
-	res.render('about', {
-		title: title,
-		developer: developer,
-		user: req.user
-	});
-});
-
 // Logout User
 router.get('/logout', (req, res) => {
 	req.logout();
 	res.redirect('/login');
 });
+
 
 module.exports = router;

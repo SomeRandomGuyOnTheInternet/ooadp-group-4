@@ -1,11 +1,14 @@
 const express = require('express');
+const fs = require('fs');
 const router = express.Router();
+
 const loggedIn = require('../helpers/loggedIn');
+const upload = require('../helpers/ImageUpload');
+
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
-const fs = require('fs');
-const upload = require('../helpers/ImageUpload');
+
 
 router.get('/showShops', loggedIn, (req, res) => {
     const user = req.user;
@@ -23,7 +26,13 @@ router.get('/showShops', loggedIn, (req, res) => {
 });
 
 router.get('/addShops', loggedIn, (req, res) => {
-    res.render('vendors/add_newshops', {
+    res.render('vendors/addShop', {
+        user: req.user,
+    })
+});
+
+router.get('/exampleMap', loggedIn, (req, res) => {
+    res.render('vendors/exampleMap', {
         user: req.user,
     })
 });
@@ -32,16 +41,19 @@ router.post('/addShops', loggedIn, (req, res) => {
     const name = req.body.name;
     const user = req.user;
     const address = req.body.address;
-    const vendor = "Chinatown"
+    const location = req.body.location;
+    const latitude = Number(req.body.latitude);
+    const longitude = Number(req.body.longitude);
     const description = req.body.description;
-    const rating = 4.0;
     const img = "/images/rand.jpeg";
     Shop.create({
-        name: name,
-        address: address,
-        location: vendor,
-        rating: rating,
-        description: description,
+        name,
+        address,
+        location,
+        rating: 0,
+        latitude,
+        longitude,
+        description,
         imageLocation: img,
         isDeleted: 0,
         isRecommended: 1,
@@ -79,7 +91,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
     const latitude = 1.282699;
     const longitude = 103.843908;
     const description = req.body.description;
-    const rating = 4.0;
+    const rating = 0;
     const img = "/images/rand.jpeg";
     Shop.findOne({
         where: {

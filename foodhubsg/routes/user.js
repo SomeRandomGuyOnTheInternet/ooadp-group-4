@@ -285,7 +285,7 @@ router.post('/deleteFood/:id', loggedIn, (req, res) => {
 
     FoodLog.destroy({ where: { id: logId } })
     .then(() => {
-        req.flash('success', "You've successfully deleted that food item from your logs!");
+        req.flash('success', "You've successfully deleted that food item from your log!");
         res.redirect('/user/foodJournal');
     })
     .catch((err) => {
@@ -293,5 +293,6 @@ router.post('/deleteFood/:id', loggedIn, (req, res) => {
         res.redirect('/user/editFood/' + logId);
     })
 });
+
 
 module.exports = router;

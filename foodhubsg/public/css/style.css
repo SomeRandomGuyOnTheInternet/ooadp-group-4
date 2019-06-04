@@ -1595,3 +1595,7 @@ select {
   cursor: pointer;
   
 }
+
+.invisible {
+  display: none;
+}

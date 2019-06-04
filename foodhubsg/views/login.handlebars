@@ -62,7 +62,11 @@
 										<div class="col-md-12 row-flash">
 											<div class="col-md-12" style="padding: 0;">
 												<div class="flash error">
-													<div>{{error}}</div>
+													<div>
+														<i class="fas fa-exclamation-triangle"></i>
+														&nbsp {{error}}
+														<span class="pull-right"><i class="fas fa-times" onclick="hideMessage()"></i></span>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -72,8 +76,8 @@
 
 								<div class="row form-group">
 									<div class="form-group" id="login-button">
-										<input type="submit" value="Log In" class="btn btn-primary" id="submit-button" data-toggle="tooltip" data-placement="left" title="Please wait while we determine your location"
-											style="width:135px; background-color: #4CAF50; border: lightgreen; border-radius: 0;" disabled>
+										<input type="submit" value="Log In" class="btn btn-success" id="submit-button" data-toggle="tooltip" data-placement="left" title="Please wait while we determine your location"
+											style="width:135px;" disabled>
 									</div>
 								</div>
 
