@@ -1,5 +1,4 @@
 const express = require('express');
-const moment = require('moment'); 
 const router = express.Router();
 
 const loggedIn = require('../helpers/loggedIn');
@@ -84,8 +83,6 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 });
 
 router.get('/foodJournal', loggedIn, (req, res) => {
-    // var error = "This code does not exist!";
-    // res.locals.error = error;
     Food.findAll({
         include: [{
             model: FoodLog,
@@ -100,7 +97,7 @@ router.get('/foodJournal', loggedIn, (req, res) => {
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
-            datesWithFood: groupFoodItems(FoodItems),
+            datesWithFood: groupFoodItems(FoodItems, true),
             searchDate: false,
         })
     });
@@ -130,7 +127,7 @@ router.get('/editFood/:id', loggedIn, (req, res) => {
         })
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/user/editFood/' + logId);
     })
 });
@@ -169,57 +166,21 @@ router.post('/settings', loggedIn, (req, res) => {
 	
 	var error;
 
-	User.update({
-		
+	User.update({		
 		 weight: req.body.weight,
          height: req.body.height
-         
-	
 	},{
 		where: { id: req.user.id }
-	}).then(function (user) {
-		
+	}).then(function (user) {		
 		res.redirect('/user/settings'); 
-		}).catch(err => console.log(err));
-
-	
+        })
+        .catch(err => console.log(err));
     });
-    
     
 router.get('/faq', loggedIn, (req, res) => {
-    Question.findAll({
-        order: [
-            ['createdAt', 'ASC'],
-        ],
-        raw: true
+    res.render('user/faq', {
+        user: req.user,
     })
-    .then((questions) => { 
-	    console.log(questions)
-        res.render('user/faq', {
-            user: req.user,
-			questions: questions
-        })
-    });
-});
-
-
-router.post('/faq', (req, res) => {
-	const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
-    let question = req.body.question;
-	var error;
-
-	Question.create({
-		
-		UserId: req.user.id,
-		question: question,
-			
-		}).then((questions) => {
-              
-			req.flash('success', 'You have successfully created a question!');
-            res.redirect('/user/faq');            
-           //spam check
-		})		    
 });
 		
 
@@ -245,12 +206,12 @@ router.post('/foodJournal', loggedIn, (req, res) => {
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
-            datesWithFood: groupFoodItems(FoodItems),
+            datesWithFood: groupFoodItems(FoodItems, true),
             searchDate: searchDate,
         })
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/user/foodJournal');
     })
 });
@@ -274,26 +235,24 @@ router.post('/addFood', loggedIn, (req, res) => {
                 res.redirect('/user/foodJournal');
             })
             .catch((err) => {
-                res.locals.error = err;
+                req.flash('error', err);
                 res.redirect('/user/foodJournal');
             })
         } else {
-            console.log("test")
-            var error = "This code does not exist!";
-            res.locals.error = error;
+            req.flash('error', "This code does not exist!");
             res.redirect('/user/foodJournal');
         }
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/logout');
     })
 });
-// firebase, nodemon npm
+
 router.post('/editFood/:id', loggedIn, (req, res) => {
     var logId = req.params.id, foodIdToUpdateTo = req.body.codeToChange;
 
-    Food.findOne( { FoodId: foodIdToUpdateTo } )
+    Food.findOne({ where: { id: foodIdToUpdateTo }, })
     .then((foodItem) => {
         if (foodItem) {
             FoodLog.update(
@@ -305,20 +264,22 @@ router.post('/editFood/:id', loggedIn, (req, res) => {
                 },
             )
             .then(() => {
-                res.locals.success = "You have successfully edited that food item!";
+                req.flash('success', "You've successfully edited that food item!");
                 res.redirect('/user/foodJournal');
             })
             .catch((err) => {
-                res.locals.error = err;
+                console.log(err);
+                req.flash('error', err);
                 res.redirect('/user/editFood/' + logId);
             })
         } else {
-            res.locals.error = "That code does not exist!";
+            req.flash('error', "That code does not exist!");
             res.redirect('/user/editFood/' + logId);
         }
     })
     .catch((err) => {
-        res.locals.error = err;
+        console.log(err)
+        req.flash('error', err);
         res.redirect('/user/editFood/' + logId);
     })
 });
@@ -328,11 +289,11 @@ router.post('/deleteFood/:id', loggedIn, (req, res) => {
 
     FoodLog.destroy({ where: { id: logId } })
     .then(() => {
-        res.locals.success = "You have successfully deleted that food item from your history!";
+        req.flash('success', "You've successfully deleted that food item from your logs!");
         res.redirect('/user/foodJournal');
     })
     .catch((err) => {
-        res.locals.error = err;
+        req.flash('error', err);
         res.redirect('/user/editFood/' + logId);
     })
 });

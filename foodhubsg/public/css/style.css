@@ -1589,3 +1589,9 @@ select {
     height: 400px;
     margin-bottom: 4em;
 }
+
+.fa-times:hover {
+  color: gainsboro;
+  cursor: pointer;
+  
+}

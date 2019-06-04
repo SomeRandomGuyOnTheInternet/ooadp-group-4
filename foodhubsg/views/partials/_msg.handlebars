@@ -1,12 +1,16 @@
 {{#if success}}
     <div class="flash-div">
-    <div class="row form-group">
-        <div class="col-md-12">
-            <div class="flash success">
-                <div class="container">{{success}}</div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="flash success">
+                    <div class="container">
+                        <i class="fas fa-check"></i> 
+                        {{success}}
+                        <span class="pull-right"><i class="fas fa-times" onclick="hideMessage()"></i></span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 {{/if}}
 
@@ -15,7 +19,11 @@
         <div class="row form-group">
             <div class="col-md-12">
                 <div class="flash error">
-                    <div class="container">{{error}}</div>
+                    <div class="container">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        {{error}}
+                        <span class="pull-right"><i class="fas fa-times" onclick="hideMessage()"></i></span>
+                    </div>
                 </div>
             </div>
         </div>

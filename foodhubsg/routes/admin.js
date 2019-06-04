@@ -72,7 +72,7 @@ router.post('/vendors', loggedIn, (req, res) => {
                             id: user.id,
                             UserId: user.id,
                         }).then(() => {  
-                            res.locals.error = error;
+                            req.flash('error', error);
                             res.render('admin/vendors', {
                                 user: req.user
                             });
@@ -81,7 +81,7 @@ router.post('/vendors', loggedIn, (req, res) => {
                 });
             });
 		} else {
-			res.locals.error = error;
+            req.flash('error', error);
 			res.render('admin/vendors', {
 				user: req.user
 			});

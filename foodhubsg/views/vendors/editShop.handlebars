@@ -12,6 +12,10 @@
 
                         <div class="col-md-12">
                             <div class="blog-entry">
+                                <input type="file" id="shopImage" name="shopImage" accept="image/png,
+ 					image/jpeg,image/jpg,image/gif">
+
+
                                 <img src="{{shop.imageLocation}}" class="img-responsive" alt="{{ shop.name }} Image">
                             </div>
                         </div>
@@ -25,14 +29,14 @@
                                     <label>Shop Address</label>
                                     <input name="address" id="address" type="text" class="form-control"
                                         value="{{ shop.address }}" placeholder="Address">
-                                    <label>Shop Location</label>
-                                    <select name="address" id="address" type="text" class="form-control">
+                                    {{!-- <label>Shop Location</label> --}}
+                                    {{!-- <select name="address" id="address" type="text" class="form-control">
                                         <option value="Chinatown">Chinatown</option>
                                         <option value="Tampines">Tampines</option>
                                         <option value="Ang Mo Kio">Ang Mo Kio</option>
                                         <option value="Sengkang">Sengkang</option>
                                         <option value="...">More to come!</option>
-                                    </select>
+                                    </select> --}}
                                     <hr>
                                 </p>
                             </div>
@@ -47,11 +51,14 @@
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Update Shop Details" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Update</button>
-                            <button type="submit" name="action" value="Delete Shop" class="btn btn-primary"
-                                id="remove-shop" style="background-color: #d9534f;">Delete </button>
+
                         </div>
 
                     </form>
+                    <button type="submit" name="action" value="Delete Shop" class="btn btn-primary" id="remove-shop"
+                        style="background-color: #d9534f;">
+                        <a href="/vendor/deleteShop/{{shop.id}}" style="color: #ffff;">Delete </a>
+                    </button>
                 </div>
                 <br>
             </div>
@@ -62,7 +69,7 @@
         <div class="box1">
             <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;"></div>
             <div class="row row-pb-md">
-                <div class="col-md-12">
+                t <div class="col-md-12">
                     <h1 class="font_color"><b>Edit Menu</b></h1>
                     <hr>
                 </div>
@@ -81,15 +88,16 @@
                 </article>
                 {{/each}}
 
-               <article class="food-journal">
-                <header>
-                    <div id="vendor-food">
-                        <a href ="/vendor/{{shop.id}}/addMenu"><i href="/vendor/{{shop.id}}/addMenu" class="fas fa-plus-square" style="font-size: 3em;"></i></a>
-                        <br>
-                        <p style="display: inline">Add New Food Item</p><br>
-                    </div>
-                </header>
-            </article>
+                <article class="food-journal">
+                    <header>
+                        <div id="vendor-food">
+                            <a href="/vendor/{{shop.id}}/addMenu"><i href="/vendor/{{shop.id}}/addMenu"
+                                    class="fas fa-plus-square" style="font-size: 3em;"></i></a>
+                            <br>
+                            <p style="display: inline">Add New Food Item</p><br>
+                        </div>
+                    </header>
+                </article>
 
             </div>
         </div>
