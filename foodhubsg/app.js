@@ -6,7 +6,6 @@ const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
-const FlashMessenger = require('flash-messenger');
 const MySQLStore = require('express-mysql-session'); // Library to use MySQL to store session objects
 const passport = require('passport');
 const db = require('./config/db');
@@ -56,7 +55,7 @@ app.use(session({
 }));
 
 app.use(flash());
-app.use(FlashMessenger.middleware); 
+
 var sessionFlash = function (req, res, next) {
 	res.locals.currentUser = req.user;
 	res.locals.error = req.flash('error');
