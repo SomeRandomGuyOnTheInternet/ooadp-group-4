@@ -136,9 +136,7 @@ router.post('/:id/addMenu', loggedIn, (req, res) => {
         ShopId: shopId,
     })
     req.flash('success', 'Food has been succcessfully added');
-    res.render('vendors/vendor_index', {
-        user: req.user
-    })
+    res.redirect('/vendor/showShops')
 })
 
 router.get('/:id/editMenu', loggedIn, (req, res) => {
