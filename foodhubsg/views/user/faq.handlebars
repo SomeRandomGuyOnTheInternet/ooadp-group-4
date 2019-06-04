@@ -36,6 +36,12 @@
                         <input type="submit" value="Suggest An Answer" name="#" class="btn btn-primary">
                     </form>
 
+                    <hr>
+
+                    {{#each question}}
+                    <h3><b class="font_color">{{question}}</b></h3>
+                    {{/each}}
+                   
                     <br>
                     <hr>
 
@@ -46,6 +52,7 @@
                         <input type="submit" id="submit-query" value="Submit A Question"
                             name="#" class="btn btn-primary">
                     </form>
+
                 </div>
             </div>
         </div>

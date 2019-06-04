@@ -9,13 +9,15 @@
                             <hr>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="blog-entry">
+                                <input type="file" id="shopImage" name="shopImage" accept="image/png,
+ 					image/jpeg,image/jpg,image/gif">
                                 <img src="/images/nice-waffle.jpg" class="img-responsive" alt="Image">
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="desc">
                                 <p class="meta">
                                     <label>Name of Food</label>
@@ -29,11 +31,15 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <label for="shop">Shop</label>
-                            <input name="shop" id="shop" type="text" class="form-control" value="{{shop.name}}"
-                                placeholder="vendor" readonly>
-                        </div>
+                        
+                            {{#each shop}}
+                            <div class="col-md-6">
+                            <label>{{this.name}}</label> <div></div>
+                            <input name="shop" id="shop" type="checkbox" class="form-control" value="{{this.id}}">  
+                            </div>
+
+                            {{/each}}
+                       
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Add Shop</button>

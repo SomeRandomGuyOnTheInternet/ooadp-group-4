@@ -9,6 +9,9 @@ const FoodItem = db.define('FoodItem', {
     calories: {
         type: Sequelize.STRING
     },
+    isDeleted: { 
+        type: Sequelize.BOOLEAN
+    }, 
     isRecommended: {
         type: Sequelize.BOOLEAN
     },

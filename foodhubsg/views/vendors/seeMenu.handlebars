@@ -5,8 +5,8 @@
                 <div class="row row-pb-md">
                     <div class="col-md-12">
                         <h1 class="font_color" style="display:inline-block;"><b>All Menu Added</b></h1>
-                        <a href="/vendor/addShops"><button type="button" class="btn btn-success" style="float:right;">Add New Shop</button></a>
-                        <hr>
+                        {{!-- <a href="/vendor/addMenu"><button type="button" class="btn btn-success" style="float:right;">Add New Menu</button></a>
+                        <hr> --}}
                     </div>
                     
                     {{#each food}}
@@ -18,7 +18,7 @@
                             <div class="desc">
                                 <p class="meta">
                                     <b class="vendors"><b>{{this.name}}</b></b><br>
-                                    <b class="vendors">{{shop.name}}</b><br>
+                                    <b class="vendors">{{this.shops.name}}</b><br>
                                 </p>
                             </div>
                         </div>
