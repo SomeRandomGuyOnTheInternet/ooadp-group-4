@@ -20,7 +20,7 @@ const setUpDB = (drop) => {
             Shop.hasMany(FoodItem, {});
             User.hasOne(Vendor); 
             Vendor.hasMany(Shop); 
-            User.hasMany(Question); 
+            User.hasMany(Question, { foreignKey: 'UserId' }); 
             mySQLDB.sync({ // Creates table if none exists
                 force: drop
             })
