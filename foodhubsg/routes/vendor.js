@@ -250,7 +250,7 @@ router.post('/upload', loggedIn, (req, res) => {
             if (req.file === undefined) {
                 res.json({ file: '/images/no-image.jpg', err: err });
             } else {
-                res.json({ file: `/uploads/${Shop.imageLocation}/${req.file.filename}` });
+                res.json({ file: `/uploads/${req.user.id}/${req.file.filename}` });
             }
         }
     });
