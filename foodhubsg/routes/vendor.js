@@ -85,9 +85,9 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 router.post('/editShop/:id', loggedIn, (req, res) => {
     const name = req.body.name;
     const user = req.user;
-    const address = req.body.shopAdd;
-    const latitude = 1.282699;
-    const longitude = 103.843908;
+    const address = req.body.address;
+    const latitude = Number(req.body.latitude);
+    const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const rating = 0;
     const img = req.body.imageURL;
@@ -96,12 +96,10 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
             VendorId: user.id,
         }
     }).then((Shop) => {
-        console.log(address);
         Shop.update({
             name: name,
             address: address,
             rating: rating,
-            imageLocation: img, 
             description: description,
             imageLocation: img,
             isDeleted: 0,
@@ -120,6 +118,7 @@ router.get('/addMenu', loggedIn, (req, res) => {
     Shop.findAll({
         where: {
             VendorId: user.id,
+            isDeleted: false, 
         }
     }).then((shops) => {
         res.render('vendors/add_fooditems', {

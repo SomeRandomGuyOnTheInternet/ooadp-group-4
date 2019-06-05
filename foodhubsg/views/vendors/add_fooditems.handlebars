@@ -13,7 +13,8 @@
                             <div class="blog-entry">
                                 <input type="file" id="venUpload" name="venUpload" accept="image/png,
  					image/jpeg,image/jpg,image/gif">
-                                <img src="/images/nice-waffle.jpg" id="venImage" name="venImage" class="img-responsive" alt="Image">
+                                <img src="/images/nice-waffle.jpg" id="venImage" name="venImage" class="img-responsive"
+                                    alt="Image">
                                 <input id="imageURL" type="hidden" name="imageURL">
                             </div>
                         </div>
@@ -28,19 +29,21 @@
                                     <input name="calories" id="calories" type="text" class="form-control" value=""
                                         placeholder="Calories">
 
+                                    {{#each shop}}
+                                    
+                                        <label for="shop">{{this.name}}</label>
+                                        <input name="shop" id="shop" type="checkbox" class="form-control"
+                                            value="{{this.id}}">
+
+                                    {{/each}}
+
                                     <hr>
                                 </p>
                             </div>
                         </div>
-                        
-                            {{#each shop}}
-                            <div class="col-md-6">
-                            <label>{{this.name}}</label> <div></div>
-                            <input name="shop" id="shop" type="checkbox" class="form-control" value="{{this.id}}">  
-                            </div>
 
-                            {{/each}}
-                       
+
+
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Add Shop</button>

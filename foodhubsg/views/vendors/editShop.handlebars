@@ -16,7 +16,8 @@
  					image/jpeg,image/jpg,image/gif">
 
 
-                                <img src="{{shop.imageLocation}}" class="img-responsive" id = "venImage" alt="{{ shop.name }} Image">
+                                <img src="{{shop.imageLocation}}" class="img-responsive" id="venImage"
+                                    alt="{{ shop.name }} Image">
                                 <input id="imageURL" type="hidden" name="imageURL">
                             </div>
                         </div>
@@ -49,6 +50,21 @@
                                 rows="4" cols="50">{{ shop.description }}</textarea><br>
                         </div>
 
+                        <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
+                            <div class="col-md">
+                                <div class="blog-entry">
+                                    <h3 class="font_color"><b>Map</b></h3>
+                                </div>
+                                <hr>
+                                <div id="map"></div>
+                            </div>
+                        </div>
+
+                        <input name="location" id="location" type="text" class="form-control invisible" value="">
+                        <input name="latitude" id="latitude" type="text" class="form-control invisible" value="">
+                        <input name="longitude" id="longitude" type="text" class="form-control invisible" value="">
+
+
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Update Shop Details" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Update</button>
@@ -56,10 +72,11 @@
                         </div>
 
                     </form>
-                    <button type="submit" name="action" value="Delete Shop" class="btn btn-primary" id="remove-shop"
-                        style="background-color: #d9534f;">
-                        <a href="/vendor/deleteShop/{{shop.id}}" style="color: #ffff;">Delete </a>
-                    </button>
+                    <a href="/vendor/deleteShop/{{shop.id}}" style="color: #ffff;"><button type="submit" name="action"
+                            value="Delete Shop" class="btn btn-primary" id="remove-shop"
+                            style="background-color: #d9534f;">
+                            Delete </a></button>
+
                 </div>
                 <br>
             </div>
@@ -92,8 +109,8 @@
                 <article class="food-journal">
                     <header>
                         <div id="vendor-food">
-                            <a href="/vendor/addMenu"><i href="/vendor/addMenu"
-                                    class="fas fa-plus-square" style="font-size: 3em;"></i></a>
+                            <a href="/vendor/addMenu"><i href="/vendor/addMenu" class="fas fa-plus-square"
+                                    style="font-size: 3em;"></i></a>
                             <br>
                             <p style="display: inline">Add New Food Item</p><br>
                         </div>
@@ -105,3 +122,87 @@
     </div>
 </div>
 </div>
+
+<script>
+    var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+
+    function initMap() {
+        var userLocation = { lat: userLatitude, lng: userLongitude };
+
+        var map = new google.maps.Map(document.getElementById('map'), { zoom: 14 });
+        var marker = new google.maps.Marker(
+            {
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                position: userLocation,
+            }
+        );
+
+        var bounds = fitToMarker(marker);
+        map.fitBounds(bounds);
+
+        google.maps.event.addListener(marker, 'dragend', function () {
+            geocodePosition(marker.getPosition());
+        });
+
+        function geocodePosition(pos) {
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode(
+                {
+                    latLng: pos
+                },
+                function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        $("#address").val(results[0].formatted_address);
+                        $("#location").val(getCity(results));
+                        $("#latitude").val(pos.lat());
+                        $("#longitude").val(pos.lng());
+                    }
+                    else {
+                        $("#mapErrorMsg").val('Cannot determine address at this location.' + status);
+                    }
+                }
+            );
+        }
+    }
+
+    function fitToMarker(marker) {
+        var bounds = new google.maps.LatLngBounds();
+
+        var latlng = marker.getPosition();
+        bounds.extend(latlng);
+
+        if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+            var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
+            var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
+            bounds.extend(extendPoint1);
+            bounds.extend(extendPoint2);
+        }
+
+        return bounds;
+    }
+
+    function getCity(results) {
+        if (results[1]) {
+            var c, lc, component;
+            for (var r = 0, rl = results.length; r < rl; r += 1) {
+                var result = results[r];
+
+                if (result.types[0] === 'neighborhood') {
+                    for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                        component = result.address_components[c];
+
+                        if (component.types[0] === 'neighborhood') {
+                            console.log(component.long_name)
+                            return component.long_name;
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg&callback=initMap" async
+    defer></script>
