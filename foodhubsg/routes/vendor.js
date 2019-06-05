@@ -101,6 +101,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
             name: name,
             address: address,
             rating: rating,
+            imageLocation: img, 
             description: description,
             imageLocation: img,
             isDeleted: 0,
