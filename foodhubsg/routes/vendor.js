@@ -3,7 +3,7 @@ const fs = require('fs');
 const router = express.Router();
 
 const loggedIn = require('../helpers/loggedIn');
-const upload = require('../helpers/ImageUpload');
+const upload = require('../helpers/imageUpload');
 
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
@@ -45,7 +45,7 @@ router.post('/addShops', loggedIn, (req, res) => {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
-    const img = "/images/rand.jpeg";
+    const img = req.body.imageURL; 
     Shop.create({
         name,
         address,
@@ -90,7 +90,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
     const longitude = 103.843908;
     const description = req.body.description;
     const rating = 0;
-    const img = "/images/rand.jpeg";
+    const img = req.body.imageURL;
     Shop.findOne({
         where: {
             VendorId: user.id,
@@ -137,7 +137,7 @@ router.post('/addMenu', loggedIn, (req, res) => {
     const description = req.body.description;
     const user = req.user;
     console.log(req.body.shop);
-    const img = "/images/nice-waffle.jpg"
+    const img = req.body.imageURL; 
     FoodItem.create({
         name: name,
         calories: calories,
@@ -246,6 +246,7 @@ router.post('/upload', loggedIn, (req, res) => {
     upload(req, res, (err) => {
         if (err) {
             res.json({ file: '/images/no-image.jpg', err: err });
+            console.log(err); 
         } else {
             if (req.file === undefined) {
                 res.json({ file: '/images/no-image.jpg', err: err });

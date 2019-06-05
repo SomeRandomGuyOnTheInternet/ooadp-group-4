@@ -1,6 +1,6 @@
 
-$('#venImage').on('change', function () {
-    let image = $("#venImage")[0].files[0];
+$('#venUpload').on('change', function () {
+    let image = $("#venUpload")[0].files[0];
     let formdata = new FormData();
     formdata.append('venImage', image);
     $.ajax({
@@ -11,7 +11,7 @@ $('#venImage').on('change', function () {
         processData: false,
         'success': (data) => {
             $('#venImage').attr('src', data.file);
-            $('#imageLocation').attr('value', data.file);// sets posterURL hidden field
+            $('#imageURL').attr('value', data.file);// sets posterURL hidden field
             if (data.err) {
                 $('#posterErr').show();
                 $('#posterErr').text(data.err.message);
