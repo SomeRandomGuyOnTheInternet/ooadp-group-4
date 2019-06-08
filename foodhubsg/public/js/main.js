@@ -1,10 +1,3 @@
-let shops = []; 
-
-function getShops() { 
-    let Shops = document.getElementById('shop').checked; 
-    shops.push(Shops); 
-    console.log(shops); 
-}
 
 
 $('#venUpload').on('change', function () {

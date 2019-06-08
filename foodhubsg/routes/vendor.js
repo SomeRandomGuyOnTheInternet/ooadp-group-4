@@ -131,9 +131,9 @@ router.get('/addMenu', loggedIn, (req, res) => {
 
 
 router.post('/addMenu', loggedIn, (req, res) => {
-    const shopId = req.params.id;
     const name = req.body.name;
     const shop = req.body.shop.toString();
+    console.log(shop); 
     const calories = req.body.calories;
     const description = req.body.description;
     const user = req.user;
@@ -145,13 +145,13 @@ router.post('/addMenu', loggedIn, (req, res) => {
         isDeleted: false,
         description: description,
         imageLocation: img,
-        ShopId: shopId,
+        ShopId: 16,
     })
     req.flash('success', 'Food has been succcessfully added');
     res.redirect('/vendor/showShops')
 })
 
-router.get('/:id/editMenu', loggedIn, (req, res) => {
+router.get('/editMenu', loggedIn, (req, res) => {
     const shopId = req.params.id;
     const user = req.user;
     FoodItem.findOne({
