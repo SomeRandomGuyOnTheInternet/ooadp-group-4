@@ -69,20 +69,15 @@
                         <header id="summary-header">
                             <h1 class="font_color"><b>Summary of your stats</b></h1>
 
-                            <h5>(based on the previous 6 days with entries in food journal)</h5>
+                            <h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
 
                             <hr>
                         </header>
                         <h4><b>Body Mass Index Summary</b></h4>
                         <h5>{{bmiStatement}}</h5>
 
-                        <h4><b>Food History Summary</b></h4>
-
-                        <h5>You consumed an average of 2500 kcal daily over the 6 days you've entered food into your
-                            food journal, which is within the daily recommended amount, so keep following your current
-                            diet.</h5>
-
-                        <h5></h5>
+                        <h4><b>Graph of Calorie Intake</b></h4>
+                        <canvas id="foodHistoryChart" width="400" height="150"></canvas>
 
                         <h4><b>Breakdown on meal-by-meal basis</b></h4>
                         <table class="table">
@@ -146,3 +141,96 @@
 
     </div>
 </div>
+
+{{#ifCond numOfDays '>=' 4}}
+	<script>	
+		var foodHistoryChart = document.getElementById('foodHistoryChart');
+		var foodItems = {{{ json datesWithFood }}};
+		var labels = [], data = [];
+
+		for (var [key] of Object.entries(foodItems)) {
+			labels.push(key);
+			data.push(parseInt(foodItems[key].dailyCalories));
+		}
+
+		var myFoodHistoryChart = new Chart(foodHistoryChart, {
+			type: 'line',
+			data: {
+				labels: labels,
+				datasets: [{
+					data: data,
+					label: 'Calories (kcal)',
+					backgroundColor: [
+						'rgba(255, 99, 132, 0)',
+					],
+					borderColor: [
+						'#bababa',
+					],
+					borderWidth: 2,
+					fill: false,
+				}]
+			},
+			options: {
+				responsive: true,
+				title: { display: false },
+				scales: {
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Calories (kcal)'
+						},
+						ticks: {
+							beginAtZero: true
+						}
+					}],
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Dates'
+						}
+					}],
+				},
+				annotation: {
+					annotations: [{
+						type: 'line',
+						mode: 'horizontal',
+						scaleID: 'y-axis-0',
+						value: 2000,
+						borderColor: '#4CAF50',
+						borderWidth: 1,
+						label: {
+							enabled: true,
+							content: 'Ideal Calorie Intake'
+						}
+					},{
+						type: 'line',
+						mode: 'horizontal',
+						scaleID: 'y-axis-0',
+						value: {{{ dailyAverageCalories }}},
+						borderColor: '#E82020',
+						borderWidth: 1,
+						label: {
+							enabled: true,
+							content: 'Your Average Calorie Intake'
+						}
+					}]
+				},
+			},
+			plugins: [{
+				beforeDraw: function (c) {
+					var data = c.data.datasets[0].data;
+					for (let i in data) {
+						let line = c.data.datasets[0]._meta['0'].data[i]._model;
+						if (data[i] < 2000) {
+							line.backgroundColor = '#4CAF50';
+							line.borderColor = '#4CAF50';
+						} else {
+							line.backgroundColor = '#E82020';
+							line.borderColor = '#E82020';
+						}
+					}
+				}
+			}]
+		});
+	</script>
+{{/ifCond}}

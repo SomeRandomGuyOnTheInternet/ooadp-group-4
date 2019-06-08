@@ -116,7 +116,7 @@ router.get('/settings', loggedIn, (req, res) => {
             required: true,
         }],
         order: [
-            [FoodLog, 'createdAt', 'DESC'],
+            [FoodLog, 'createdAt', 'ASC'],
         ],
         raw: true
     })
@@ -128,6 +128,8 @@ router.get('/settings', loggedIn, (req, res) => {
             user: req.user,
             title: "Settings",
             datesWithFood: groupedFoodItems,
+            numOfDays: Object.keys(groupedFoodItems).length,
+            dailyAverageCalories: getAverageDailyCalories(groupedFoodItems),
             bmiStatement: getBmiStatement(req.user.weight, req.user.height, req.user.name),
         })
     });

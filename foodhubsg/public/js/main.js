@@ -1,5 +1,3 @@
-
-
 $('#venUpload').on('change', function () {
     let image = $("#venUpload")[0].files[0];
     let formdata = new FormData();
