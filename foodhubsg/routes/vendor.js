@@ -3,7 +3,7 @@ const fs = require('fs');
 const router = express.Router();
 
 const loggedIn = require('../helpers/loggedIn');
-const upload = require('../helpers/ImageUpload');
+const upload = require('../helpers/imageUpload');
 
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
@@ -45,7 +45,7 @@ router.post('/addShops', loggedIn, (req, res) => {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
-    const img = "/images/rand.jpeg";
+    const img = req.body.imageURL;
     Shop.create({
         name,
         address,
@@ -85,40 +85,39 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 router.post('/editShop/:id', loggedIn, (req, res) => {
     const name = req.body.name;
     const user = req.user;
-    const address = req.body.shopAdd;
-    const latitude = 1.282699;
-    const longitude = 103.843908;
+    const address = req.body.address;
+    const latitude = Number(req.body.latitude);
+    const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const rating = 0;
-    const img = "/images/rand.jpeg";
-    Shop.findOne({
-        where: {
-            VendorId: user.id,
-        }
-    }).then((Shop) => {
-        console.log(address);
-        Shop.update({
-            name: name,
-            address: address,
-            rating: rating,
-            description: description,
-            imageLocation: img,
-            isDeleted: 0,
-            isRecommended: 1,
-            latitude: latitude,
-            longitude: longitude,
-        })
-        req.flash('success', 'Shop has been succcessfully added');
-        res.redirect('/vendor/showShops');
+    const img = req.body.imageURL;
+    Shop.update({
+        name: name,
+        address: address,
+        rating: rating,
+        description: description,
+        imageLocation: img,
+        isDeleted: 0,
+        isRecommended: 1,
+        latitude: latitude,
+        longitude: longitude,
+    },
+    { 
+        where: { VendorId: user.id },
     })
-
+    .then(() => {
+        req.flash('success', 'Shop has been succcessfully edited');
+        res.redirect('/vendor/showShops');
+    });
 })
+
 
 router.get('/addMenu', loggedIn, (req, res) => {
     const user = req.user;
     Shop.findAll({
         where: {
             VendorId: user.id,
+            isDeleted: false,
         }
     }).then((shops) => {
         res.render('vendors/add_fooditems', {
@@ -136,8 +135,7 @@ router.post('/addMenu', loggedIn, (req, res) => {
     const calories = req.body.calories;
     const description = req.body.description;
     const user = req.user;
-    console.log(req.body.shop);
-    const img = "/images/nice-waffle.jpg"
+    const img = req.body.imageURL;
     FoodItem.create({
         name: name,
         calories: calories,
@@ -213,24 +211,23 @@ router.get('/deleteShop/:id', loggedIn, (req, res) => {
         where: {
             id: req.params.id,
         }
-    }).then((Shop) => 
-    { 
-        Shop.update({ 
+    }).then((Shop) => {
+        Shop.update({
             isDeleted: true,
-        }), 
-        res.redirect('/vendor/deleteMenu/:id')
+        }),
+            res.redirect('/vendor/deleteMenu/:id')
     })
     req.flash('success', 'Shop has been succcessfully deleted');
     res.redirect('/vendor/showShops');
 })
 
 router.get('/deleteMenu/:id', loggedIn, (req, res) => {
-    FoodItem.findAll({ 
+    FoodItem.findAll({
         where: {
             id: req.params.id,
         }
     }).then(FoodItem => {
-        FoodItem.update({ 
+        FoodItem.update({
             isDeleted: true,
         })
     })
@@ -246,11 +243,12 @@ router.post('/upload', loggedIn, (req, res) => {
     upload(req, res, (err) => {
         if (err) {
             res.json({ file: '/images/no-image.jpg', err: err });
+            console.log(err);
         } else {
             if (req.file === undefined) {
                 res.json({ file: '/images/no-image.jpg', err: err });
             } else {
-                res.json({ file: `/uploads/${Shop.imageLocation}/${req.file.filename}` });
+                res.json({ file: `/uploads/${req.user.id}/${req.file.filename}` });
             }
         }
     });
