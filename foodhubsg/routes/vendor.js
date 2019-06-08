@@ -81,6 +81,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 })
 
 router.post('/editShop/:id', loggedIn, (req, res) => {
+    const id = req.params.id
     const name = req.body.name;
     const user = req.user;
     const address = req.body.address;
@@ -104,7 +105,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
         longitude: longitude,
     },
     { 
-        where: { VendorId: user.id },
+        where: { VendorId: user.id, id: id, },
     })
     .then(() => {
         req.flash('success', 'Shop has been succcessfully edited');
@@ -131,9 +132,11 @@ router.get('/addMenu', loggedIn, (req, res) => {
 
 
 router.post('/addMenu', loggedIn, (req, res) => {
-    const shopId = req.params.id;
     const name = req.body.name;
-    const shop = req.body.shop.toString();
+    const shops = req.body.shop.toString();
+    list_of_shops = []; 
+    const shop = shops.split(',')
+    console.log(shop); 
     const calories = req.body.calories;
     const description = req.body.description;
     const user = req.user;
@@ -145,13 +148,13 @@ router.post('/addMenu', loggedIn, (req, res) => {
         isDeleted: false,
         description: description,
         imageLocation: img,
-        ShopId: shopId,
+        ShopId: 16,
     })
     req.flash('success', 'Food has been succcessfully added');
     res.redirect('/vendor/showShops')
 })
 
-router.get('/:id/editMenu', loggedIn, (req, res) => {
+router.get('/editMenu', loggedIn, (req, res) => {
     const shopId = req.params.id;
     const user = req.user;
     FoodItem.findOne({
@@ -195,7 +198,6 @@ router.get('/showMenu', loggedIn, (req, res) => {
                     isDeleted: false,
                 }
             }).then((food) => {
-                console.log(shop.name);
                 res.render('vendors/seeMenu', {
                     user: req.user,
                     title: "Show Menu",

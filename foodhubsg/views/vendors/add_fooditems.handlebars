@@ -15,7 +15,7 @@
  					image/jpeg,image/jpg,image/gif">
                                 <img src="/images/nice-waffle.jpg" id="venImage" name="venImage" class="img-responsive"
                                     alt="Image">
-                                <input id="imageURL" type="hidden" name="imageURL">
+                                <input id="imageURL" type="hidden" name="imageURL" value="/images/nice-waffle.jpg">
                             </div>
                         </div>
 
@@ -33,7 +33,7 @@
                                     
                                         <label for="shop">{{this.name}}</label>
                                         <input name="shop" id="shop" type="checkbox" class="form-control"
-                                            value="{{this.id}}">
+                                            value="{{this.id}}" onclick="getShops()"> 
 
                                     {{/each}}
 
