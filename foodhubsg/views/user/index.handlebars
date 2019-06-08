@@ -3,25 +3,7 @@
 	<div class="container">
 		{{#ifCond numOfDays '>=' 4}}
 			<div class="row">
-				<div class="col-md-5">
-					<div class="box1" style="min-height: 450px;">
-						<div class="row row-pb-md">
-							<div class="col-md-12">
-								<div class="blog-entry">
-									<div class="blog-img">
-										<h3 class="font_color"><b class="center_subtitle">Summary of your food history</b></h3>
-										<hr>
-										<h5>You consumed an average of 2500 kcal daily over the 6 days you've entered food into your
-											food journal, which is within
-											the daily recommended amount, so keep following your current diet. </h5>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-7">
+				<div class="col-md-12">
 					<div class="box1">
 						<div class="row row-pb-md">
 							<div class="col-md-12">
@@ -99,7 +81,7 @@
 </div>
 
 {{#ifCond numOfDays '>=' 4}}
-	<script>
+	<script>	
 		var foodHistoryChart = document.getElementById('foodHistoryChart');
 		var foodItems = {{{ json foodItems }}};
 		var labels = [], data = [];
@@ -109,7 +91,7 @@
 			data.push(parseInt(foodItems[key].dailyCalories));
 		}
 
-		var foodHistoryChart = new Chart(foodHistoryChart, {
+		var myFoodHistoryChart = new Chart(foodHistoryChart, {
 			type: 'line',
 			data: {
 				labels: labels,
@@ -120,16 +102,15 @@
 						'rgba(255, 99, 132, 0)',
 					],
 					borderColor: [
-						'rgba(76, 187, 23, 0.9)',
+						'#bababa',
 					],
-					borderWidth: 1,
+					borderWidth: 2,
+					fill: false,
 				}]
 			},
 			options: {
 				responsive: true,
-				title: {
-					display: false,
-				},
+				title: { display: false },
 				scales: {
 					yAxes: [{
 						scaleLabel: {
@@ -147,96 +128,47 @@
 						}
 					}],
 				},
+				annotation: {
+					annotations: [{
+						type: 'line',
+						mode: 'horizontal',
+						scaleID: 'y-axis-0',
+						value: 2000,
+						borderColor: '#4CAF50',
+						borderWidth: 1,
+						label: {
+							enabled: true,
+							content: 'Ideal Calorie Intake'
+						}
+					},{
+						type: 'line',
+						mode: 'horizontal',
+						scaleID: 'y-axis-0',
+						value: {{{ dailyAverageCalories }}},
+						borderColor: '#E82020',
+						borderWidth: 1,
+						label: {
+							enabled: true,
+							content: 'Your Average Calorie Intake'
+						}
+					}]
+				},
 			},
+			plugins: [{
+				beforeDraw: function (c) {
+					var data = c.data.datasets[0].data;
+					for (let i in data) {
+						let line = c.data.datasets[0]._meta['0'].data[i]._model;
+						if (data[i] < 2000) {
+							line.backgroundColor = '#4CAF50';
+							line.borderColor = '#4CAF50';
+						} else {
+							line.backgroundColor = '#E82020';
+							line.borderColor = '#E82020';
+						}
+					}
+				}
+			}]
 		});
-
-		{{!-- var foodHistoryChart = document.getElementById('foodHistoryChart');
-		var foodItems = {{{ json foodItems }}};
-		var labels = [], data = [];
-
-		for (var [key] of Object.entries(foodItems)) {
-			labels.push(key);
-			data.push(parseInt(foodItems[key].dailyCalories));
-		}
-		
-		var config = {
-			type: 'line',
-			data: {
-				labels: labels,
-				datasets: [{
-					data: data,
-					label: 'Calories (kcal)',
-					backgroundColor: [
-						'rgba(255, 99, 132, 0)',
-					],
-					borderColor: [
-						'rgba(76, 187, 23, 0.9)',
-					],
-					borderWidth: 1,
-				}]
-			},
-			options: {
-				responsive: true,
-				title: {
-					display: false,
-				},
-				scales: {
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Calories (kcal)'
-						}
-					}],
-					xAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Dates'
-						}
-					}],
-				},
-				horizontalLine: [{
-					y: 2000,
-					style: "rgba(255, 0, 0, .4)",
-					text: "Ideal Calorie Intake"
-				}],
-			},
-		};
-
-		if (chartInstance.options.horizontalLine) {
-			for (index = 0; index < chartInstance.options.horizontalLine.length; index++) {
-				line = chartInstance.options.horizontalLine[index];
-
-				if (!line.style) {
-					style = "rgba(169,169,169, .6)";
-				} else {
-					style = line.style;
-				}
-
-				if (line.y) {
-					yValue = yScale.getPixelForValue(line.y);
-				} else {
-					yValue = 0;
-				}
-
-				foodHistoryChart.lineWidth = 3;
-
-				if (yValue) {
-					foodHistoryChart.beginPath();
-					foodHistoryChart.moveTo(0, yValue);
-					foodHistoryChart.lineTo(canvas.width, yValue);
-					foodHistoryChart.strokeStyle = style;
-					foodHistoryChart.stroke();
-				}
-
-				if (line.text) {
-					foodHistoryChart.fillStyle = style;
-					foodHistoryChart.fillText(line.text, 0, yValue + foodHistoryChart.lineWidth);
-				}
-			}
-		};
-					
-		Chart.pluginService.register(horizonalLinePlugin);
-
-		var myChart = new Chart(foodHistoryChart); --}}
 	</script>
 {{/ifCond}}

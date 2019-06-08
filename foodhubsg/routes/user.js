@@ -45,6 +45,7 @@ router.get('/', loggedIn, (req, res) => {
             shops: data[0],
             foodItems,
             numOfDays: Object.keys(foodItems).length,
+            dailyAverageCalories: getAverageDailyCalories(foodItems),
         })
     })
 });
