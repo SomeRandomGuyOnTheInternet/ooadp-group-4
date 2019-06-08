@@ -65,6 +65,7 @@ router.post('/addShops', loggedIn, (req, res) => {
 
 router.get('/editShop/:id', loggedIn, (req, res) => {
     var id = req.params.id;
+
     Promise.all([
         Shop.findOne({
             where: { id }
@@ -73,24 +74,26 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
             shopId: { id }
         })
     ])
-        .then((data) => {
-            res.render('vendors/editShop', {
-                shop: data[0],
-                foodItems: data[1],
-                user: req.user,
-            });
+    .then((data) => {
+        res.render('vendors/editShop', {
+            shop: data[0],
+            foodItems: data[1],
+            user: req.user,
         });
+    });
 })
 
 router.post('/editShop/:id', loggedIn, (req, res) => {
     const name = req.body.name;
     const user = req.user;
     const address = req.body.address;
+    const location = req.body.location;
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const rating = 0;
     const img = req.body.imageURL;
+
     Shop.update({
         name: name,
         address: address,
@@ -99,6 +102,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
         imageLocation: img,
         isDeleted: 0,
         isRecommended: 1,
+        location: location,
         latitude: latitude,
         longitude: longitude,
     },
