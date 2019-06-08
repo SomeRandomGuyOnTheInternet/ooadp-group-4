@@ -127,6 +127,7 @@ router.get('/editFood/:id', loggedIn, (req, res) => {
         })
     })
     .catch((err) => {
+        console.log(err);
         req.flash('error', err);
         res.redirect('/user/editFood/' + logId);
     })
@@ -238,6 +239,7 @@ router.post('/foodJournal', loggedIn, (req, res) => {
         })
     })
     .catch((err) => {
+        console.log(err)
         req.flash('error', err);
         res.redirect('/user/foodJournal');
     })
@@ -296,18 +298,16 @@ router.post('/editFood/:id', loggedIn, (req, res) => {
             })
             .catch((err) => {
                 console.log(err);
-                req.flash('error', err);
-                res.redirect('/user/editFood/' + logId);
+                res.redirect('/user/foodJournal');
             })
         } else {
             req.flash('error', "That code does not exist!");
-            res.redirect('/user/editFood/' + logId);
+            res.redirect('/user/foodJournal');
         }
     })
     .catch((err) => {
         console.log(err)
-        req.flash('error', err);
-        res.redirect('/user/editFood/' + logId);
+        res.redirect('/user/foodJournal');
     })
 });
 

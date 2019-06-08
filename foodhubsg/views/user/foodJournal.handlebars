@@ -1,6 +1,38 @@
 {{> _msg }}
 <div id="colorlib-container">
     <div class="container">
+
+        <div class="modal fade" id="editFoodModal" tabindex="-1" role="dialog" aria-labelledby="editFoodModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title font_color" id="editFoodModalLabel"><b>Edit Food Item</b></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form id="edit-food-form" action="" method="post">
+                        <div class="modal-body">
+                            <input name="codeToChange" id="codeToChange" class="form-control" type="number" value="">
+                        </div>
+
+                        <div class="modal-footer">
+                            <input type="submit" id="edit-button" class="btn btn-success edit-button" href=""
+                                value="Update Entry" name="editAction" style="margin-left: 0.5em; padding: 8px 20px;" disabled>
+                    </form>
+
+                    <form id="delete-food-form" action="" method="post">
+                            <input type="submit" id="delete-button" class="btn btn-danger edit-button" href=""
+                                value="Delete Food Entry" name="removeAction" style="padding: 8px 20px;">
+                        </div>
+                    </form>                       
+                </div>
+            </div>
+        </div>
+
+
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
@@ -14,7 +46,7 @@
                             <input name="userFoodCode" id="code" class="form-control" value=""
                                 type="number" placeholder="Food Code (eg: 000001)" required="">
                             <span class="input-group-btn">
-                                <input type="submit" name="addFood" value="Add Food" class="btn btn-primary addFoodButton"
+                                <input type="submit" name="addFood" value="Add Food" class="btn btn-primary btn-tall addFoodButton"
                                     style="margin-left: 0.5em;">
                             </span>
                         </div>
@@ -38,7 +70,7 @@
                                         <div class="input-group">
                                             <input type="date" name="searchDate" id="searchDate" class="form-control" value="{{searchDate}}" min="2005-01-01" max="2030-12-31" required>
                                             <span class="input-group-btn">
-                                                <input type="submit" name="action" value="Search Date" class="btn btn-primary searchDateButton" style="margin-left: 0.5em;">
+                                                <input type="submit" name="action" value="Search Date" class="btn btn-primary btn-tall searchDateButton" style="margin-left: 0.5em;">
                                             </span>
                                         </div>
                                     </div>
@@ -72,7 +104,10 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                                data-toggle="modal" data-target="#editFoodModal">
+                                                                <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
+                                                            </a>
                                                         </p>
                                                     {{/each}}
                                                 {{else}}
@@ -96,7 +131,10 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                                data-toggle="modal" data-target="#editFoodModal">
+                                                                <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
+                                                            </a>
                                                         </p>
                                                         {{/each}}
                                                     {{else}}
@@ -120,7 +158,9 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
+                                                                <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
+                                                            </a>
                                                         </p>
                                                         {{/each}}
                                                     {{else}}
@@ -144,7 +184,9 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a class="action" href="/user/editFood/{{'FoodLogs.id'}}"><i class="far fa-edit"></i> <i>Edit</i></a>
+                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
+                                                                <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
+                                                            </a>
                                                         </p>
                                                         {{/each}}
                                                     {{else}}
@@ -175,4 +217,24 @@
 </div>
 
 <script>
+    $('.action')
+    .bind("click keyup", function (event) {
+        var logId = jQuery(this).attr("id");
+        var logCreatedAt = jQuery(this).attr("logCreatedAt");
+        var foodName = jQuery(this).attr("foodName");
+        var foodItemId = jQuery(this).attr("foodItemId");
+
+        $('#codeToChange').attr("placeholder", `Previous Entry: ${foodName} (code: ${foodItemId})`);
+        $('#edit-food-form').attr("action", `/user/editFood/${logId}`);
+        $('#delete-food-form').attr("action", `/user/deleteFood/${logId}`);
+    });
+
+    $('#codeToChange')
+    .bind("propertychange change click keyup input paste", function (event) {
+        if ($('#codeToChange').val().length) {
+            $("#edit-button").attr("disabled", false);
+        } else {
+            $("#edit-button").attr("disabled", true);
+        }
+    });
 </script>

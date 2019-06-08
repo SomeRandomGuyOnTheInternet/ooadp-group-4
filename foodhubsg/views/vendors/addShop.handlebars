@@ -49,9 +49,9 @@
                     </div>
                 </div>
 
-                <input name="location" id="location" type="text" class="form-control invisible" value="">
-                <input name="latitude" id="latitude" type="text" class="form-control invisible" value="">
-                <input name="longitude" id="longitude" type="text" class="form-control invisible" value="">
+                <input name="location" id="location" type="text" class="form-control" value="">
+                <input name="latitude" id="latitude" type="text" class="form-control " value="">
+                <input name="longitude" id="longitude" type="text" class="form-control " value="">
 
                 <div class="col-md-12">
                     <label>Vendor</label>
@@ -78,7 +78,12 @@
     function initMap() {
         var userLocation = { lat: userLatitude, lng: userLongitude };
 
-        var map = new google.maps.Map(document.getElementById('map'), { zoom: 14 });
+        $("#location").val("{{{ user.location }}}");
+        $("#latitude").val(userLatitude);
+        $("#longitude").val(userLongitude);
+
+        var map = new google.maps.Map(document.getElementById('map'));
+
         var marker = new google.maps.Marker(
             {
                 map: map,
@@ -87,9 +92,6 @@
                 position: userLocation,
             }
         );
-
-        var bounds = fitToMarker(marker);
-        map.fitBounds(bounds);
 
         google.maps.event.addListener(marker, 'dragend', function () {
             geocodePosition(marker.getPosition());
@@ -112,7 +114,29 @@
                         $("#mapErrorMsg").val('Cannot determine address at this location.' + status);
                     }
                 }
-            );
+            )
+        }
+
+        var bounds = fitToMarker(marker);
+        map.fitBounds(bounds);
+    }
+
+    function getCity(results) {
+        if (results[1]) {
+            var c, lc, component;
+            for (var r = 0, rl = results.length; r < rl; r += 1) {
+                var result = results[r];
+
+                if (result.types[0] === 'neighborhood') {
+                    for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                        component = result.address_components[c];
+
+                        if (component.types[0] === 'neighborhood') {
+                            return component.long_name;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -130,26 +154,6 @@
         }
 
         return bounds;
-    }
-
-    function getCity(results) {
-        if (results[1]) {
-            var c, lc, component;
-            for (var r = 0, rl = results.length; r < rl; r += 1) {
-                var result = results[r];
-
-                if (result.types[0] === 'neighborhood') {
-                    for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
-                        component = result.address_components[c];
-
-                        if (component.types[0] === 'neighborhood') {
-                            console.log(component.long_name)
-                            return component.long_name;
-                        }
-                    }
-                }
-            }
-        }
     }
 </script>
 
