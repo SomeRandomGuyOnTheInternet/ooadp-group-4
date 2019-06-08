@@ -133,7 +133,9 @@ router.get('/addMenu', loggedIn, (req, res) => {
 
 router.post('/addMenu', loggedIn, (req, res) => {
     const name = req.body.name;
-    const shop = req.body.shop.toString();
+    const shops = req.body.shop.toString();
+    list_of_shops = []; 
+    const shop = shops.split(',')
     console.log(shop); 
     const calories = req.body.calories;
     const description = req.body.description;
