@@ -41,6 +41,7 @@ router.get('/', loggedIn, (req, res) => {
 
         res.render('user/index', {
             user: req.user,
+            title: "Index",
             shops: data[0],
             foodItems,
             numOfDays: Object.keys(foodItems).length,
@@ -57,6 +58,7 @@ router.get('/shops', loggedIn, (req, res) => {
     then(function (shops) {
         res.render('user/shops', {
             user: req.user,
+            title: "Shops",
             shops: shops,
         })
     })
@@ -75,6 +77,7 @@ router.get('/shops/:id', loggedIn, (req, res) => {
     ])
     .then((data) => {
         res.render('user/shop', {
+            title: "Shop",
             shop: data[0],
             foodItems: data[1],
             user: req.user
@@ -97,40 +100,11 @@ router.get('/foodJournal', loggedIn, (req, res) => {
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
+            title: "Food Journal",
             datesWithFood: groupFoodItems(FoodItems, true),
             searchDate: false,
         })
     });
-});
-
-router.get('/editFood/:id', loggedIn, (req, res) => {
-    var logId = req.params.id;
-
-    Food.findOne({
-        include: [{
-            model: FoodLog,
-            where: {
-                UserId: req.user.id,
-                id: logId,
-            },
-            required: true,
-        }],
-        order: [
-            [FoodLog, 'createdAt', 'DESC'],
-        ],
-        raw: true
-    })
-    .then((FoodItem) => {
-        res.render('user/editFood', {
-            user: req.user,
-            FoodItem,
-        })
-    })
-    .catch((err) => {
-        console.log(err);
-        req.flash('error', err);
-        res.redirect('/user/editFood/' + logId);
-    })
 });
 
 router.get('/settings', loggedIn, (req, res) => {
@@ -151,6 +125,7 @@ router.get('/settings', loggedIn, (req, res) => {
 
         res.render('user/settings', {
             user: req.user,
+            title: "Settings",
             datesWithFood: groupedFoodItems,
             bmiStatement: getBmiStatement(req.user.weight, req.user.height, req.user.name),
         })
@@ -206,11 +181,9 @@ router.post('/faq', (req, res) => {
 		UserId: req.user.id,
 		question: question,
 			
-		}).then((questions) => {
-              
+		}).then((questions) => {        
 			req.flash('success', 'You have successfully created a question!');
-            res.redirect('/user/faq');            
-           //spam check
+            res.redirect('/user/faq');
         })
     });
 
@@ -261,6 +234,7 @@ router.post('/addFood', loggedIn, (req, res) => {
                 createdAtDate: getCurrentDate(),
             })
             .then(() => {
+                req.flash('success', "That food has been successfully added!");
                 res.redirect('/user/foodJournal');
             })
             .catch((err) => {

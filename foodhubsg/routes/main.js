@@ -10,7 +10,7 @@ const User = require('../models/User');
 
 
 router.get('/register', loggedOut, (req, res) => {
-	res.render('register')
+	res.render('register', {title: "Register"})
 });
 
 router.post('/register', (req, res) => {
@@ -44,16 +44,15 @@ router.post('/register', (req, res) => {
 			});
 		} else {
 			req.flash('error', error);
-			res.render('register', {
-				user: req.user
-			});
+			res.redirect('./register')
 		};
 	});
 });
 
 router.get('/login', loggedOut, (req, res) => {
 	res.render('login', {
-		user: req.user
+		user: req.user,
+		title: "Login"
 	})
 });
 

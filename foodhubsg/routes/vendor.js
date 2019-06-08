@@ -19,6 +19,7 @@ router.get('/showShops', loggedIn, (req, res) => {
     }).then((shops) => {
         res.render('vendors/vendor_index', {
             user: req.user,
+            title: "Your Shops",
             shops: shops
         })
     })
@@ -28,12 +29,7 @@ router.get('/showShops', loggedIn, (req, res) => {
 router.get('/addShops', loggedIn, (req, res) => {
     res.render('vendors/addShop', {
         user: req.user,
-    })
-});
-
-router.get('/exampleMap', loggedIn, (req, res) => {
-    res.render('vendors/exampleMap', {
-        user: req.user,
+        title: "Add Shop",
     })
 });
 
@@ -76,6 +72,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
     ])
     .then((data) => {
         res.render('vendors/editShop', {
+            title: "Edit Shop",
             shop: data[0],
             foodItems: data[1],
             user: req.user,
@@ -126,6 +123,7 @@ router.get('/addMenu', loggedIn, (req, res) => {
     }).then((shops) => {
         res.render('vendors/add_fooditems', {
             user: req.user,
+            title: "Add Food",
             shop: shops
         })
     })
@@ -168,6 +166,7 @@ router.get('/:id/editMenu', loggedIn, (req, res) => {
         }).then((shop) => {
             res.render('vendors/edit_fooditems', {
                 user: req.user,
+                title: "Edit Menu",
                 food: food,
                 shop: shop,
 
@@ -199,6 +198,7 @@ router.get('/showMenu', loggedIn, (req, res) => {
                 console.log(shop.name);
                 res.render('vendors/seeMenu', {
                     user: req.user,
+                    title: "Show Menu",
                     food: food,
                     shops: shop,
 

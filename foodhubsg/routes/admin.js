@@ -13,6 +13,7 @@ const User = require("../models/User");
 router.get('/vendors', loggedIn, (req, res) => {
     res.render('admin/vendors', {
         user: req.user,
+        title: "Vendors",
     })
 });
 
@@ -21,6 +22,7 @@ router.get('/shops', loggedIn, (req, res) => {
     .then(function (shops) {
         res.render('admin/shops', {
             user: req.user,
+            title: "Shops",
             shops: shops,
         })
     })
@@ -38,6 +40,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
     ])
         .then((data) => {
             res.render('admin/editShop', {
+                title: "Edit Shop",
                 shop: data[0],
                 foodItems: data[1],
                 user: req.user,
@@ -48,6 +51,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 router.get('/addShop', loggedIn, (req, res) => {
     res.render('admin/addShop', {
         user: req.user,
+        title: "Add Shop",
     })
 })
 
@@ -96,7 +100,8 @@ router.post('/vendors', loggedIn, (req, res) => {
 
 router.get('/faq', loggedIn, (req, res) => {
     res.render('admin/faq'), {
-        user: req.user
+        user: req.user,
+        title: "FAQ",
     }
 
 });
