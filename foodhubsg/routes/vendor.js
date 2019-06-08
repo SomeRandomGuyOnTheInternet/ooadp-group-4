@@ -81,6 +81,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 })
 
 router.post('/editShop/:id', loggedIn, (req, res) => {
+    const id = req.params.id
     const name = req.body.name;
     const user = req.user;
     const address = req.body.address;
@@ -104,7 +105,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
         longitude: longitude,
     },
     { 
-        where: { VendorId: user.id },
+        where: { VendorId: user.id, id: id, },
     })
     .then(() => {
         req.flash('success', 'Shop has been succcessfully edited');
@@ -195,7 +196,6 @@ router.get('/showMenu', loggedIn, (req, res) => {
                     isDeleted: false,
                 }
             }).then((food) => {
-                console.log(shop.name);
                 res.render('vendors/seeMenu', {
                     user: req.user,
                     title: "Show Menu",
