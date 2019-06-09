@@ -61,13 +61,16 @@ router.post('/addShops', loggedIn, (req, res) => {
 
 router.get('/editShop/:id', loggedIn, (req, res) => {
     var id = req.params.id;
-
     Promise.all([
         Shop.findOne({
             where: { id }
         }),
         FoodItem.findAll({
-            shopId: { id }
+            where: { 
+                ShopId: id, 
+            
+            }
+            
         })
     ])
     .then((data) => {
@@ -157,7 +160,7 @@ router.post('/addMenu', loggedIn, (req, res) => {
     
 })
 
-router.get('/editMenu', loggedIn, (req, res) => {
+router.get('/editMenu/:id', loggedIn, (req, res) => {
     const shopId = req.params.id;
     const user = req.user;
     FoodItem.findOne({
