@@ -134,24 +134,27 @@ router.get('/addMenu', loggedIn, (req, res) => {
 router.post('/addMenu', loggedIn, (req, res) => {
     const name = req.body.name;
     const shops = req.body.shop.toString();
-    list_of_shops = []; 
     const shop = shops.split(',')
-    console.log(shop); 
+    let list_of_shops = shop; 
+    console.log(list_of_shops); 
     const calories = req.body.calories;
     const description = req.body.description;
-    const user = req.user;
     const img = req.body.imageURL;
-    FoodItem.create({
+    for (i=0; i<list_of_shops.length; i++) { 
+        FoodItem.create({
         name: name,
         calories: calories,
         isRecommended: true,
         isDeleted: false,
         description: description,
         imageLocation: img,
-        ShopId: 16,
+        ShopId: list_of_shops[i],
     })
-    req.flash('success', 'Food has been succcessfully added');
+   
+    }
+     req.flash('success', 'Food has been succcessfully added');
     res.redirect('/vendor/showShops')
+    
 })
 
 router.get('/editMenu', loggedIn, (req, res) => {
