@@ -5,8 +5,7 @@ const loggedIn = require('../helpers/loggedIn');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const getBmiStatement = require('../helpers/getBmiStatement');
-const getFoodIntakeStatement = require('../helpers/getFoodIntakeStatement');
-const getAverageDailyCalories = require('../helpers/getAverageDailyCalories');
+const getAverageCalories = require('../helpers/getAverageCalories');
 const groupFoodItems = require('../helpers/groupFoodItems');
 
 const Food = require('../models/FoodItem');
@@ -14,6 +13,7 @@ const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const User = require('../models/User');
 const Question = require('../models/Question');
+
 
 
 router.get('/', loggedIn, (req, res) => {
@@ -45,10 +45,11 @@ router.get('/', loggedIn, (req, res) => {
             shops: data[0],
             groupedFoodItems,
             numOfDays: Object.keys(groupedFoodItems).length,
-            dailyAverageCalories: getAverageDailyCalories(groupedFoodItems),
+            dailyAverageCalories: getAverageCalories(groupedFoodItems),
         })
     })
 });
+
 
 router.get('/shops', loggedIn, (req, res) => {
     Shop.findAll({
@@ -65,6 +66,7 @@ router.get('/shops', loggedIn, (req, res) => {
     })
 });
 
+
 router.get('/shops/:id', loggedIn, (req, res) => {
     var id = req.params.id;
 
@@ -73,10 +75,11 @@ router.get('/shops/:id', loggedIn, (req, res) => {
             where: { id }
         }), 
         Food.findAll({
-            shopId: { id }
+            where: { ShopId: id }
         })
     ])
     .then((data) => {
+        console.log(data[1])
         res.render('user/shop', {
             title: "Shop",
             shop: data[0],
@@ -86,11 +89,15 @@ router.get('/shops/:id', loggedIn, (req, res) => {
     });
 });
 
+
 router.get('/foodJournal', loggedIn, (req, res) => {
     Food.findAll({
         include: [{
             model: FoodLog,
             where: { UserId: req.user.id },
+            required: true,
+        },{
+            model: Shop,
             required: true,
         }],
         order: [
@@ -108,6 +115,24 @@ router.get('/foodJournal', loggedIn, (req, res) => {
     });
 });
 
+
+router.get('/faq', loggedIn, (req, res) => {
+    Question.findAll({
+        order: [
+            ['createdAt', 'ASC'],
+        ],
+        raw: true
+    })
+    .then((questions) => {
+        res.render('user/faq', {
+            user: req.user,
+			questions: questions
+    
+        })
+    });
+});
+
+
 router.get('/settings', loggedIn, (req, res) => {
     Food.findAll({
         include: [{
@@ -122,73 +147,19 @@ router.get('/settings', loggedIn, (req, res) => {
     })
     .then((FoodItems) => {
         groupedFoodItems = groupFoodItems(FoodItems);
-        dailyAverageCalories = getAverageDailyCalories(groupedFoodItems);
+        dailyAverageCalories = getAverageCalories(groupedFoodItems);
 
         res.render('user/settings', {
             user: req.user,
             title: "Settings",
             groupedFoodItems,
             numOfDays: Object.keys(groupedFoodItems).length,
-            dailyAverageCalories: getAverageDailyCalories(groupedFoodItems),
+            dailyAverageCalories: getAverageCalories(groupedFoodItems),
             bmiStatement: getBmiStatement(req.user.weight, req.user.height, req.user.name),
         })
     });
 });
 
-router.post('/settings', loggedIn, (req, res) => {
-	const name = req.body.name;
-	const email = req.body.email.toLowerCase();
-	const password = req.body.password;
-	const isAdmin = isBanned = isVendor = false;
-	const weight = req.body.weight;
-	const height = req.body.height;
-	
-	var error;
-
-	User.update({		
-		 weight: req.body.weight,
-         height: req.body.height
-	},{
-		where: { id: req.user.id }
-	}).then(function (user) {		
-		res.redirect('/user/settings'); 
-        })
-        .catch(err => console.log(err));
-    });
-    
-router.get('/faq', loggedIn, (req, res) => {
-    Question.findAll({
-        order: [
-            ['createdAt', 'ASC'],
-        ],
-        raw: true
-    })
-    .then((questions) => { 
-        console.log(questions)
-        res.render('user/faq', {
-            user: req.user,
-			questions: questions
-    
-    })
-});
-});
-		
-router.post('/faq', (req, res) => {
-	const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
-    let question = req.body.question;
-	var error;
-
-	Question.create({
-		
-		UserId: req.user.id,
-		question: question,
-			
-		}).then((questions) => {        
-			req.flash('success', 'You have successfully created a question!');
-            res.redirect('/user/faq');
-        })
-    });
 
 router.post('/foodJournal', loggedIn, (req, res) => {
     var searchDate = req.body.searchDate;
@@ -210,7 +181,7 @@ router.post('/foodJournal', loggedIn, (req, res) => {
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
-            datesWithFood: groupFoodItems(FoodItems, true),
+            groupedFoodItems: groupFoodItems(FoodItems, true),
             searchDate: searchDate,
         })
     })
@@ -220,6 +191,7 @@ router.post('/foodJournal', loggedIn, (req, res) => {
         res.redirect('/user/foodJournal');
     })
 });
+
 
 router.post('/addFood', loggedIn, (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
@@ -255,6 +227,7 @@ router.post('/addFood', loggedIn, (req, res) => {
     })
 });
 
+
 router.post('/editFood/:id', loggedIn, (req, res) => {
     var logId = req.params.id, foodIdToUpdateTo = req.body.codeToChange;
 
@@ -288,6 +261,7 @@ router.post('/editFood/:id', loggedIn, (req, res) => {
     })
 });
 
+
 router.post('/deleteFood/:id', loggedIn, (req, res) => {
     var logId = req.params.id;
 
@@ -301,6 +275,47 @@ router.post('/deleteFood/:id', loggedIn, (req, res) => {
         res.redirect('/user/editFood/' + logId);
     })
 });
+
+
+router.post('/faq', (req, res) => {
+	const isAdmin = isBanned = isVendor = false;
+    const isAnswered = false;
+    let question = req.body.question;
+	var error;
+
+	Question.create({	
+		UserId: req.user.id,
+		question: question,			
+    })
+    .then((questions) => {        
+        req.flash('success', 'You have successfully created a question!');
+        res.redirect('/user/faq');
+    })
+});
+
+
+router.post('/settings', loggedIn, (req, res) => {
+	const name = req.body.name;
+	const email = req.body.email.toLowerCase();
+	const password = req.body.password;
+	const isAdmin = isBanned = isVendor = false;
+	const weight = req.body.weight;
+	const height = req.body.height;
+	
+	var error;
+
+	User.update({		
+		 weight: req.body.weight,
+         height: req.body.height
+	},{
+		where: { id: req.user.id }
+    })
+    .then(function (user) {		
+		res.redirect('/user/settings'); 
+        })
+    .catch(err => console.log(err));
+});
+
 
 
 module.exports = router;

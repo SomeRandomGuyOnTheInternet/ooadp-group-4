@@ -63,8 +63,7 @@
 												<div class="col-md-12" style="padding: 0;">
 													<div class="flash error">
 														<div>
-															<i class="fas fa-exclamation-triangle"></i>
-															&nbsp {{error}}
+															{{error}}
 															<span class="pull-right"><i class="fas fa-times" onclick="hideMessage()"></i></span>
 														</div>
 													</div>
@@ -92,18 +91,3 @@
 		</div>
 	</div>
 </div>
-
-
-{{!-- const express = require('express');
-const router = express.Router();
-router.get('/', (req, res) => {
-const title = 'Video Jotter';
-res.render('index', { // renders views/index.handlebars
-title
-})
-});
-router.get('/about', (req, res) => {
-const author = 'Your name';
-res.render('about', { // renders views/about.handlebars, passing
-author as variable
-author: autho --}}

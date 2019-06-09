@@ -9,9 +9,19 @@ const loggedIn = require('../helpers/loggedIn');
 const User = require('../models/User');
 
 
+
 router.get('/register', loggedOut, (req, res) => {
 	res.render('register', {title: "Register"})
 });
+
+
+router.get('/login', loggedOut, (req, res) => {
+	res.render('login', {
+		user: req.user,
+		title: "Login"
+	})
+});
+
 
 router.post('/register', (req, res) => {
 	const name = req.body.name;
@@ -49,12 +59,6 @@ router.post('/register', (req, res) => {
 	});
 });
 
-router.get('/login', loggedOut, (req, res) => {
-	res.render('login', {
-		user: req.user,
-		title: "Login"
-	})
-});
 
 router.post('/login', (req, res, next) => {
 	passport.authenticate('local', {
@@ -74,7 +78,7 @@ router.get('/', loggedIn, (req, res) => {
 	}
 });
 
-// Logout User
+
 router.get('/logout', (req, res) => {
 	req.logout();
 	res.redirect('/login');
