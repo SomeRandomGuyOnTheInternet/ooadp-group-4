@@ -139,7 +139,6 @@ router.post('/addMenu', loggedIn, (req, res) => {
     const shops = req.body.shop.toString();
     const shop = shops.split(',')
     let list_of_shops = shop; 
-    console.log(list_of_shops); 
     const calories = req.body.calories;
     const description = req.body.description;
     const img = req.body.imageURL;
@@ -161,16 +160,17 @@ router.post('/addMenu', loggedIn, (req, res) => {
 })
 
 router.get('/editMenu/:id', loggedIn, (req, res) => {
-    const shopId = req.params.id;
+    const id = req.params.id;
     const user = req.user;
     FoodItem.findOne({
         where: {
-            id: shopId,
+            id: id,
         }
     }).then((food) => {
+        const item = food.ShopId; 
         Shop.findOne({
             where: {
-                id: shopId,
+                id: item,
             }
         }).then((shop) => {
             res.render('vendors/edit_fooditems', {
@@ -184,6 +184,28 @@ router.get('/editMenu/:id', loggedIn, (req, res) => {
 
     })
 });
+router.post('/editMenu/:id', loggedIn, (req, res) => {
+    const id = req.params.id
+    const name = req.body.name;
+    const calories = req.body.calories;
+    const shop = req.body.shop;
+    const img = req.body.imageURL;
+
+    FoodItem.update({
+        name: name,
+        calories: calories, 
+        imageLocation: img,
+        isDeleted: 0,
+        isRecommended: 1,
+    },
+    { 
+        where: { ShopId: shop, id: id, },
+    })
+    .then(() => {
+        req.flash('success', 'Shop has been succcessfully edited');
+        res.redirect('/vendor/showShops');
+    });
+})
 
 router.get('/showMenu', loggedIn, (req, res) => {
     const user = req.user;
