@@ -11,7 +11,7 @@
 									<div class="blog-img">
 										<h3 class="font_color"><b class="center_subtitle">Graph of Calorie Intake</b></h3>
 										<hr>
-										<canvas id="foodHistoryChart" width="400" height="225"></canvas>
+										<canvas id="foodHistoryChart" width="400" height="200"></canvas>
 									</div>
 								</div>
 							</div>
@@ -81,94 +81,101 @@
 </div>
 
 {{#ifCond numOfDays '>=' 4}}
-	<script>	
-		var foodHistoryChart = document.getElementById('foodHistoryChart');
-		var foodItems = {{{ json foodItems }}};
-		var labels = [], data = [];
+<script>
+	var foodHistoryChart = document.getElementById('foodHistoryChart');
+	var foodItems = {{{ json groupedFoodItems }}}, dailyAverageCalories = {{{ dailyAverageCalories }}};
+	var labels = [], data = [];
+	var red = '#E82020', green = '#4CAF50', grey = '#333333'
 
-		for (var [key] of Object.entries(foodItems)) {
-			labels.push(key);
-			data.push(parseInt(foodItems[key].dailyCalories));
-		}
+	for (var [key] of Object.entries(foodItems)) {
+		labels.push(key);
+		data.push(parseInt(foodItems[key].dailyCalories));
+	}
 
-		var myFoodHistoryChart = new Chart(foodHistoryChart, {
-			type: 'line',
-			data: {
-				labels: labels,
-				datasets: [{
-					data: data,
-					label: 'Calories (kcal)',
-					backgroundColor: [
-						'rgba(255, 99, 132, 0)',
-					],
-					borderColor: [
-						'#bababa',
-					],
-					borderWidth: 2,
-					fill: false,
+	var myFoodHistoryChart = new Chart(foodHistoryChart, {
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: [{
+				data: data,
+				label: 'Calories (kcal)',
+				backgroundColor: [
+					'rgba(255, 99, 132, 0)',
+				],
+				borderColor: [
+					'#bababa',
+				],
+				borderWidth: 2,
+				fill: false,
+			}]
+		},
+		options: {
+			responsive: true,
+			title: { display: false },
+			scales: {
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Calories (kcal)'
+					},
+					ticks: {
+						beginAtZero: true
+					}
+				}],
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Dates'
+					}
+				}],
+			},
+			annotation: {
+				annotations: [{
+					type: 'line',
+					mode: 'horizontal',
+					scaleID: 'y-axis-0',
+					value: 2000,
+					borderColor: green,
+					borderWidth: 1,
+					label: {
+						enabled: true,
+						content: 'Ideal Calorie Intake',
+						backgroundColor: 'transparent',
+						fontColor: green,
+						yAdjust: 10
+					}
+				}, {
+					type: 'line',
+					mode: 'horizontal',
+					scaleID: 'y-axis-0',
+					value: dailyAverageCalories,
+					borderColor: red,
+					borderWidth: 1,
+					label: {
+						enabled: true,
+						content: 'Your Average Calorie Intake',
+						backgroundColor: 'transparent',
+						fontColor: red,
+						yAdjust: 10
+					}
 				}]
 			},
-			options: {
-				responsive: true,
-				title: { display: false },
-				scales: {
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Calories (kcal)'
-						},
-						ticks: {
-							beginAtZero: true
-						}
-					}],
-					xAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Dates'
-						}
-					}],
-				},
-				annotation: {
-					annotations: [{
-						type: 'line',
-						mode: 'horizontal',
-						scaleID: 'y-axis-0',
-						value: 2000,
-						borderColor: '#4CAF50',
-						borderWidth: 1,
-						label: {
-							enabled: true,
-							content: 'Ideal Calorie Intake'
-						}
-					},{
-						type: 'line',
-						mode: 'horizontal',
-						scaleID: 'y-axis-0',
-						value: {{{ dailyAverageCalories }}},
-						borderColor: '#E82020',
-						borderWidth: 1,
-						label: {
-							enabled: true,
-							content: 'Your Average Calorie Intake'
-						}
-					}]
-				},
-			},
-			plugins: [{
-				beforeDraw: function (c) {
-					var data = c.data.datasets[0].data;
-					for (let i in data) {
-						let line = c.data.datasets[0]._meta['0'].data[i]._model;
-						if (data[i] < 2000) {
-							line.backgroundColor = '#4CAF50';
-							line.borderColor = '#4CAF50';
-						} else {
-							line.backgroundColor = '#E82020';
-							line.borderColor = '#E82020';
-						}
+		},
+		plugins: [{
+			beforeDraw: function (c) {
+				var data = c.data.datasets[0].data;
+				for (let i in data) {
+					let line = c.data.datasets[0]._meta['0'].data[i]._model;
+					if (data[i] < 2000) {
+						line.backgroundColor = green;
+						line.borderColor = green;
+					} else {
+						line.backgroundColor = red;
+						line.borderColor = red;
 					}
 				}
-			}]
-		});
-	</script>
+			}
+		}]
+	});
+</script>
 {{/ifCond}}

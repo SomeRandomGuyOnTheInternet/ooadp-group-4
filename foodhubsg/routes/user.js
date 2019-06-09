@@ -37,15 +37,15 @@ router.get('/', loggedIn, (req, res) => {
         })
     ])
     .then(function (data) {
-        foodItems = groupFoodItems(data[1]);
+        groupedFoodItems = groupFoodItems(data[1]);
 
         res.render('user/index', {
             user: req.user,
             title: "Index",
             shops: data[0],
-            foodItems,
-            numOfDays: Object.keys(foodItems).length,
-            dailyAverageCalories: getAverageDailyCalories(foodItems),
+            groupedFoodItems,
+            numOfDays: Object.keys(groupedFoodItems).length,
+            dailyAverageCalories: getAverageDailyCalories(groupedFoodItems),
         })
     })
 });
@@ -102,7 +102,7 @@ router.get('/foodJournal', loggedIn, (req, res) => {
         res.render('user/foodJournal', {
             user: req.user,
             title: "Food Journal",
-            datesWithFood: groupFoodItems(FoodItems, true),
+            groupedFoodItems: groupFoodItems(FoodItems, true),
             searchDate: false,
         })
     });
@@ -127,7 +127,7 @@ router.get('/settings', loggedIn, (req, res) => {
         res.render('user/settings', {
             user: req.user,
             title: "Settings",
-            datesWithFood: groupedFoodItems,
+            groupedFoodItems,
             numOfDays: Object.keys(groupedFoodItems).length,
             dailyAverageCalories: getAverageDailyCalories(groupedFoodItems),
             bmiStatement: getBmiStatement(req.user.weight, req.user.height, req.user.name),
