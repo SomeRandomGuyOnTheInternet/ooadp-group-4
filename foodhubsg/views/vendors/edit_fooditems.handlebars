@@ -13,7 +13,7 @@
                             <div class="blog-entry">
                                 <input type="file" id="venUpload" name="venUpload" accept="image/png,
  					image/jpeg,image/jpg,image/gif">
-                                <img src="/images/nice-waffle.jpg" class="img-responsive" id="venImage" alt="Image">
+                                <img src="{{food.imageLocation}}" class="img-responsive" id="venImage" alt="Image">
                                 <input id="imageURL" type="hidden" name="imageURL" value="{{food.imageLocation}}">
                             </div>
                         </div>
@@ -34,13 +34,19 @@
                         </div>
                         <div class="col-md-12">
                             <label for="shop">Shop</label>
-                            <input name="shop" id="shop" type="text" class="form-control" value="{{shop.name}}"
+                            <input id="shop" type="hidden" name="shop" value="{{shop.id}}">
+                            <input name="shopName" id="shopName" type="text" class="form-control" value="{{shop.name}}"
                                 placeholder="vendor" readonly>
                         </div>
                         <div class="col-md-12">
                             <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Edit Food</button>
                     </form>
+
+                     <a href="/vendor/deleteMenu/{{shop.id}}" style="color: #ffff;"><button type="submit" name="action"
+                            value="Delete Shop" height="200"class="btn btn-primary" id="remove-shop"
+                            style="background-color: #d9534f;">
+                            Delete </a></button>
                 </div>
             </div>
             <br>

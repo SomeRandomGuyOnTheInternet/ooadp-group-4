@@ -5,15 +5,15 @@
                 <div class="row row-pb-md">
                     <div class="col-md-12">
                         <h1 class="font_color" style="display:inline-block;"><b>All Menu Added</b></h1>
-                        {{!-- <a href="/vendor/addMenu"><button type="button" class="btn btn-success" style="float:right;">Add New Menu</button></a>
-                        <hr> --}}
+                        <a href="/vendor/addMenu"><button type="button" class="btn btn-success" style="float:right;">Add New Menu</button></a>
+                        <hr>
                     </div>
                     
                     {{#each food}}
                     <div class="col-md-6 recommended-shops">
                         <div class="blog-entry">
                             <div class="blog-img">
-                            <img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop">
+                            <a class="action" href="/vendor/editMenu/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
                             </div>
                             <div class="desc">
                                 <p class="meta">
