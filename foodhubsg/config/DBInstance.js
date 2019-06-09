@@ -76,12 +76,12 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
     ]);
 
     FoodItems.bulkCreate([
-        { name: 'Aglio Olio', calories: 571, ShopId: 1, isRecommended: false, },
-        { name: 'Cesear Salad', calories: 346, ShopId: 1, isRecommended: true, },
-        { name: 'Cream of Mushroom Soup', ShopId: 1, calories: 827, isRecommended: false, },
-        { name: 'Carbonara', calories: 436, ShopId: 1, isRecommended: true, },
-        { name: 'Mushroom Pasta', calories: 682, ShopId: 1, isRecommended: false, },
-        { name: 'Teriyaki Bento', calories: 682, ShopId: 2, isRecommended: false, },
+        { name: 'Aglio Olio', calories: 571, imageLocation: "/images/food-image-1.png", ShopId: 1, isRecommended: false, },
+        { name: 'Cesear Salad', calories: 346, imageLocation: "/images/food-image-2.png", ShopId: 1, isRecommended: true, },
+        { name: 'Cream of Mushroom Soup', calories: 827, imageLocation: "/images/food-image-3.png", ShopId: 1, isRecommended: false, },
+        { name: 'Carbonara', calories: 436, imageLocation: "/images/food-image-4.jpg", ShopId: 1, isRecommended: true, },
+        { name: 'Mushroom Pasta', calories: 682, imageLocation: "/images/food-image-5.hpg", ShopId: 1, isRecommended: false, },
+        { name: 'Teriyaki Bento', calories: 682, imageLocation: "/images/food-image-6.png", ShopId: 2, isRecommended: false, },
     ]);
 
     // The password for the following accounts is just 'password'
