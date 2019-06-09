@@ -2,13 +2,14 @@
 <div id="colorlib-container">
     <div class="container">
 
+
         <div class="modal fade" id="viewFoodModal" tabindex="-1" role="dialog" aria-labelledby="viewFoodModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <h3 class="modal-title font_color" id="viewFoodModalLabel"><b>Details</b></h3>
+                        <h3 class="modal-title font_color" id="viewFoodModalLabel"><b>Details Of Food Item</b></h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -84,6 +85,7 @@
             </div>
         </div>
 
+
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
@@ -134,9 +136,10 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" foodItemId="{{id}}"
-                                                                foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
-                                                                data-toggle="modal" data-target="#viewFoodModal">
+                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
+                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
+                                                            data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
@@ -169,8 +172,10 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
-                                                                data-toggle="modal" data-target="#viewFoodModal">
+                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
+                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
+                                                            data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
@@ -203,9 +208,10 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" foodItemId="{{id}}"
-                                                                foodName="{{name}}" foodImage="{{imageLocation}}" foodCalories="{{calories}}" shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
-                                                                data-toggle="modal" data-target="#viewFoodModal">
+                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            foodItemId="{{id}}" foodName="{{name}}" foodImage="{{imageLocation}}" foodCalories="{{calories}}" 
+                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}" 
+                                                            data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
@@ -237,9 +243,10 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" foodItemId="{{id}}"
-                                                                foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
-                                                                data-toggle="modal" data-target="#viewFoodModal">
+                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
+                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
+                                                            data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
@@ -299,7 +306,6 @@
         var foodImageLocation = jQuery(this).attr("foodImage");
         var shopId = jQuery(this).attr("shopId");
         var shopName = jQuery(this).attr("shopName");
-        console.log(foodCalories)
 
         $('#viewFoodName').text(foodName);
         $('#viewFoodImage').attr("src", foodImageLocation);
