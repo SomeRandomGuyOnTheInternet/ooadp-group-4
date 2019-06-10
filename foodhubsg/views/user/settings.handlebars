@@ -65,179 +65,264 @@
             <div class="box1">
                 <div class="row row-pb-md">
                     <div class="col-md-12">
-
                         <header id="summary-header">
-                            <h1 class="font_color"><b>Summary of your stats</b></h1>
-
-                            <h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
-
+                            <h2 class="font_color"><b>Body Mass Index Summary</b></h2>
                             <hr>
                         </header>
-                        <h4><b>Body Mass Index Summary</b></h4>
-                        <h5>{{bmiStatement}}</h5>
-
-                        <h4><b>Graph of Calorie Intake</b></h4>
-                        <canvas id="foodHistoryChart" width="400" height="200"></canvas>
-
-                        <h4><b>Breakdown on meal-by-meal basis</b></h4>
-                        <table class="table">
-                            <thead class="thead-green">
-                                <tr>
-                                    <th scope="col">Meal Type</th>
-                                    <th scope="col">Ideal Calorie Intake</th>
-                                    <th scope="col">Average Calorie Intake</th>
-                                    <th scope="col">Est. Calories To Lose/Gain</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Breakfast (5am-10am)</th>
-                                    <td>400 - 600 kcal</td>
-                                    <td>974.83 kcal</td>
-                                    <td>
-
-                                        -474.83 kcal
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Lunch (11am-2pm)</th>
-                                    <td>300 - 500 kcal</td>
-                                    <td>580.17 kcal</td>
-                                    <td>
-
-                                        -180.17 kcal
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Dinner (5pm-10pm)</th>
-                                    <td>400 - 600 kcal</td>
-                                    <td>755.5 kcal</td>
-                                    <td>
-
-                                        -255.5 kcal
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Out-of-schedule snacks</th>
-                                    <td>&lt;300 kcal</td>
-                                    <td>190.0 kcal</td>
-                                    <td>
-
-                                        Your snack intake is within limit
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-
+        
+                        <h5 style="margin-bottom:-1em;">{{bmiStatement}}</h5>
+                        <br>
                     </div>
                 </div>
             </div>
         </div>
 
+        {{#ifCond numOfDays '>=' 4}}
+            <div class="col-md-12">
+                <div class="box1">
+                    <div class="row row-pb-md">
+            
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h1 class="font_color"><b>Summary of your stats</b></h1>
+                                    <h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
+                                </div>
+            
+                                <div class="col-md-4">
+                                    <br>
+                                    <div class="input-group">
+                                        <label>Calorie Intake Filter</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <select class="custom-select form-control" id="selectCalorieFilter"
+                                            name="selectCalorieFilter" style="top:-0.7em;">
+                                            <option value="Daily" selected>Daily</option>
+                                            <option value="Breakfast">Breakfast</option>
+                                            <option value="Lunch">Lunch</option>
+                                            <option value="Dinner">Dinner</option>
+                                            <option value="Snacks">Snacks</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <hr>
+                            <canvas id="foodHistoryChart" width="400" height="180"></canvas>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <br><br>
+                            <h4><b>Breakdown on meal-by-meal basis</b></h4>
+                            <hr align="left" width="5%">
+                            <table class="table">
+                                <thead class="thead-green">
+                                    <tr>
+                                        <th scope="col">Meal Type</th>
+                                        <th scope="col">Ideal Calorie Intake</th>
+                                        <th scope="col">Average Calorie Intake</th>
+                                        <th scope="col">Est. Calories To Lose/Gain</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Breakfast (6am-10am)</th>
+                                        <td>~500 kcal</td>
+                                        <td>{{ breakfastAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "500" "-" breakfastAverageCalories}} kcal              
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Lunch (12am-3pm)</th>
+                                        <td>~400 kcal</td>
+                                        <td>{{ lunchAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "400" "-" lunchAverageCalories}} kcal
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Dinner (6pm-10pm)</th>
+                                        <td>~450 kcal</td>
+                                        <td>{{ dinnerAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "450" "-" dinnerAverageCalories}} kcal
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Out-of-schedule snacks</th>
+                                        <td>&lt;150 kcal</td>
+                                        <td>{{ snacksAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "150" "-" snacksAverageCalories}} kcal
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+        {{else}}
+            <h4><b>Keep adding more food to generate a detailed summary on your food intake!</b></h4>
+        {{/ifCond}}
+
     </div>
 </div>
 
 {{#ifCond numOfDays '>=' 4}}
-	<script>	
-		var foodHistoryChart = document.getElementById('foodHistoryChart');
-		var foodItems = {{{ json groupedFoodItems }}}, dailyAverageCalories = {{{ dailyAverageCalories }}};
-		var labels = [], data = [];
+    <script>
+        var foodHistoryChart = document.getElementById('foodHistoryChart');
+        var foodItems = {{{ json groupedFoodItems }}}, dailyAverageCalories = {{{ dailyAverageCalories }}};
+        var labels = [], data = [], dailyData = [], breakfastData = [], lunchData = [], dinnerData = [], snacksData = [];
         var red = '#E82020', green = '#4CAF50', grey = '#333333'
 
-		for (var [key] of Object.entries(foodItems)) {
-			labels.push(key);
-			data.push(parseInt(foodItems[key].dailyCalories));
-		}
+        for (var [key] of Object.entries(foodItems)) {
+            labels.push(key);
+            data.push(parseInt(foodItems[key].dailyCalories));
+            dailyData.push(parseInt(foodItems[key].dailyCalories));
+            breakfastData.push(parseInt(foodItems[key].breakfastCalories));
+            lunchData.push(parseInt(foodItems[key].lunchCalories));
+            dinnerData.push(parseInt(foodItems[key].dinnerCalories));
+            snacksData.push(parseInt(foodItems[key].snacksCalories));
+        }
 
-		var myFoodHistoryChart = new Chart(foodHistoryChart, {
-			type: 'line',
-			data: {
-				labels: labels,
-				datasets: [{
-					data: data,
-					label: 'Calories (kcal)',
-					backgroundColor: [
-						'rgba(255, 99, 132, 0)',
-					],
-					borderColor: [
-						'#bababa',
-					],
-					borderWidth: 2,
-					fill: false,
-				}]
-			},
-			options: {
-				responsive: true,
-				title: { display: false },
-				scales: {
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Calories (kcal)'
-						},
-						ticks: {
-							beginAtZero: true
-						}
-					}],
-					xAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Dates'
-						}
-					}],
-				},
-				annotation: {
-					annotations: [{
-						type: 'line',
-						mode: 'horizontal',
-						scaleID: 'y-axis-0',
-						value: 2000,
-						borderColor: green,
-						borderWidth: 1,
-						label: {
-							enabled: true,
-							content: 'Ideal Calorie Intake',
+        var myFoodHistoryChart = new Chart(foodHistoryChart, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    label: 'Calories (kcal)',
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0)',
+                    ],
+                    borderColor: [
+                        '#bababa',
+                    ],
+                    borderWidth: 2,
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                title: { display: false },
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Calories (kcal)'
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Dates'
+                        }
+                    }],
+                },
+                annotation: {
+                    annotations: [{
+                        id: 'ideal-calories-line',
+                        type: 'line',
+                        mode: 'horizontal',
+                        scaleID: 'y-axis-0',
+                        value: 1500,
+                        borderColor: green,
+                        borderWidth: 1,
+                        label: {
+                            enabled: true,
+                            content: 'Ideal Calorie Intake',
                             backgroundColor: 'transparent',
                             fontColor: green,
-                            yAdjust: -10
-						}
-					},{
-						type: 'line',
-						mode: 'horizontal',
-						scaleID: 'y-axis-0',
-						value: dailyAverageCalories,
-						borderColor: red,
-						borderWidth: 1,
-						label: {
-							enabled: true,
-							content: 'Your Average Calorie Intake',
+                            yAdjust: 10
+                        }
+                    }, {
+                        id: 'average-calories-line',
+                        type: 'line',
+                        mode: 'horizontal',
+                        scaleID: 'y-axis-0',
+                        value: dailyAverageCalories,
+                        borderColor: red,
+                        borderWidth: 1,
+                        label: {
+                            enabled: true,
+                            content: 'Your Average Calorie Intake',
                             backgroundColor: 'transparent',
                             fontColor: red,
-                            yAdjust: -10
-						}
-					}]
-				},
-			},
-			plugins: [{
-				beforeDraw: function (c) {
-					var data = c.data.datasets[0].data;
-					for (let i in data) {
-						let line = c.data.datasets[0]._meta['0'].data[i]._model;
-						if (data[i] < 2000) {
-							line.backgroundColor = green;
-							line.borderColor = green;
-						} else {
-							line.backgroundColor = red;
-							line.borderColor = red;
-						}
-					}
-				}
-			}]
-		});
-	</script>
+                            yAdjust: 10
+                        }
+                    }]
+                },
+            },
+            plugins: [{
+                beforeDraw: function (c) {
+                    var data = c.data.datasets[0].data;
+                    for (let i in data) {
+                        let line = c.data.datasets[0]._meta['0'].data[i]._model;
+                        if (data[i] < c.annotation.elements['ideal-calories-line'].options.value) {
+                            line.backgroundColor = green;
+                            line.borderColor = green;
+                        } else {
+                            line.backgroundColor = red;
+                            line.borderColor = red;
+                        }
+                    }
+                }
+            }],
+        });
+
+        $('#selectCalorieFilter').change(function () {
+            var sel = $(this).val();
+            var foodHistoryData = myFoodHistoryChart.config.data.datasets[0].data;
+            var idealCaloriesValue = 0, averageCaloriesValue = 0;
+            var newData = [];
+
+            switch (sel) {
+                case 'Daily':
+                    newData = dailyData;
+                    idealCaloriesValue = 1500;
+                    averageCaloriesValue = dailyAverageCalories;
+                    break;
+                case 'Breakfast':
+                    newData = breakfastData;
+                    idealCaloriesValue = 500;
+                    averageCaloriesValue = {{{ breakfastAverageCalories }}};
+                    break;
+                case 'Lunch':
+                    newData = lunchData;
+                    idealCaloriesValue = 400;
+                    averageCaloriesValue = {{{ lunchAverageCalories }}};
+                    break;
+                case 'Dinner':
+                    newData = dinnerData;
+                    idealCaloriesValue = 450;
+                    averageCaloriesValue = {{{ dinnerAverageCalories }}};
+                    break;
+                case 'Snacks':
+                    newData = snacksData;
+                    idealCaloriesValue = 150;
+                    averageCaloriesValue = {{{ snacksAverageCalories }}};
+                    break;
+                default:
+                    newData = dailyData;
+                    idealCaloriesValue = 1500;
+                    averageCaloriesValue = dailyAverageCalories;
+                    break;
+            }
+
+            foodHistoryData.length = 0;
+            foodHistoryData.push.apply(
+                foodHistoryData, newData
+            );
+
+            myFoodHistoryChart.annotation.elements['ideal-calories-line'].options.value = idealCaloriesValue;
+            myFoodHistoryChart.annotation.elements['average-calories-line'].options.value = averageCaloriesValue;
+
+            myFoodHistoryChart.update();
+        });
+    </script>
 {{/ifCond}}

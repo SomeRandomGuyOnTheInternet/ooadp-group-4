@@ -43,4 +43,17 @@ module.exports = {
                 return options.inverse(this);
         }
     },
+
+    math: function(lvalue, operator, rvalue, options) {
+        lvalue = parseFloat(lvalue);
+        rvalue = parseFloat(rvalue);
+
+        return {
+            "+": ((lvalue + rvalue) < 0 ? "" : "+") + (lvalue + rvalue),
+            "-": ((lvalue - rvalue) < 0 ? "" : "+") + (lvalue - rvalue),
+            "*": lvalue * rvalue,
+            "/": lvalue / rvalue,
+            "%": lvalue % rvalue
+        }[operator];
+    },
 };
