@@ -4,14 +4,12 @@ const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
-const getBmiStatement = require('../helpers/getBmiStatement');
 const getAverageCalories = require('../helpers/getAverageCalories');
 const groupFoodItems = require('../helpers/groupFoodItems');
 
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
-const Vendor = require('../models/Vendor');
 const User = require('../models/User');
 const Question = require('../models/Question');
 
@@ -95,7 +93,7 @@ router.get('/shops/:id', loggedIn, (req, res) => {
         })
         .then((vendor) => {
             res.render('user/shop', {
-                title: "Shop",
+                title: data[0].name,
                 shop: data[0],
                 foodItems: data[1],
                 vendor,
