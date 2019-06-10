@@ -13,6 +13,7 @@ const { formatDate } = require('./helpers/hbs');
 const { checkMealType } = require('./helpers/hbs');
 const { json } = require('./helpers/hbs');
 const { ifCond } = require('./helpers/hbs');
+const { math } = require('./helpers/hbs');
 
 const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
@@ -27,6 +28,7 @@ app.engine('handlebars', exphbs({
 		checkMealType: checkMealType,
 		json: json,
 		ifCond: ifCond,
+		math: math,
 	},
 }));
 

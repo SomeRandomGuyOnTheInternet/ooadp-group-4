@@ -6,15 +6,32 @@
 				<div class="col-md-12">
 					<div class="box1">
 						<div class="row row-pb-md">
+
 							<div class="col-md-12">
-								<div class="blog-entry">
-									<div class="blog-img">
-										<h3 class="font_color"><b class="center_subtitle">Graph of Calorie Intake</b></h3>
-										<hr>
-										<canvas id="foodHistoryChart" width="400" height="200"></canvas>
+								<div class="row">
+									<div class="col-md-8">
+										<h2 class="font_color"><b class="center_subtitle">Graph of Calorie Intake</b></h2>
+									</div>
+								
+									<div class="col-md-4">
+										<div class="input-group">
+											<label>Calorie Intake Filter</label>
+											&nbsp;&nbsp;&nbsp;&nbsp;
+											<select class="custom-select form-control" id="selectCalorieFilter" name="selectCalorieFilter" style="top:-0.7em;">
+												<option value="Daily" selected>Daily</option>
+												<option value="Breakfast">Breakfast</option>
+												<option value="Lunch">Lunch</option>
+												<option value="Dinner">Dinner</option>
+												<option value="Snacks">Snacks</option>
+											</select>
+										</div>
 									</div>
 								</div>
+										
+								<hr>
+								<canvas id="foodHistoryChart" width="400" height="180"></canvas>
 							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -84,12 +101,17 @@
 <script>
 	var foodHistoryChart = document.getElementById('foodHistoryChart');
 	var foodItems = {{{ json groupedFoodItems }}}, dailyAverageCalories = {{{ dailyAverageCalories }}};
-	var labels = [], data = [];
+	var labels = [], data = [], dailyData = [], breakfastData = [], lunchData = [], dinnerData = [], snacksData = [];
 	var red = '#E82020', green = '#4CAF50', grey = '#333333'
 
 	for (var [key] of Object.entries(foodItems)) {
 		labels.push(key);
 		data.push(parseInt(foodItems[key].dailyCalories));
+		dailyData.push(parseInt(foodItems[key].dailyCalories));
+		breakfastData.push(parseInt(foodItems[key].breakfastCalories));
+		lunchData.push(parseInt(foodItems[key].lunchCalories));
+		dinnerData.push(parseInt(foodItems[key].dinnerCalories));
+		snacksData.push(parseInt(foodItems[key].snacksCalories));
 	}
 
 	var myFoodHistoryChart = new Chart(foodHistoryChart, {
@@ -131,10 +153,11 @@
 			},
 			annotation: {
 				annotations: [{
+					id: 'ideal-calories-line',
 					type: 'line',
 					mode: 'horizontal',
 					scaleID: 'y-axis-0',
-					value: 2000,
+					value: 1500,
 					borderColor: green,
 					borderWidth: 1,
 					label: {
@@ -145,6 +168,7 @@
 						yAdjust: 10
 					}
 				}, {
+					id: 'average-calories-line',
 					type: 'line',
 					mode: 'horizontal',
 					scaleID: 'y-axis-0',
@@ -166,7 +190,7 @@
 				var data = c.data.datasets[0].data;
 				for (let i in data) {
 					let line = c.data.datasets[0]._meta['0'].data[i]._model;
-					if (data[i] < 2000) {
+					if (data[i] < c.annotation.elements['ideal-calories-line'].options.value) {
 						line.backgroundColor = green;
 						line.borderColor = green;
 					} else {
@@ -175,7 +199,57 @@
 					}
 				}
 			}
-		}]
+		}],
 	});
+
+	$('#selectCalorieFilter').change(function () {
+			var sel = $(this).val();
+			var foodHistoryData = myFoodHistoryChart.config.data.datasets[0].data;
+			var idealCaloriesValue = 0, averageCaloriesValue = 0;
+			var newData = [];
+
+			switch (sel) {
+				case 'Daily':
+					newData = dailyData;
+					idealCaloriesValue = 1500;
+					averageCaloriesValue = {{{ dailyAverageCalories }}};
+					break;
+				case 'Breakfast':
+					newData = breakfastData;
+					idealCaloriesValue = 500;
+					averageCaloriesValue = {{{ breakfastAverageCalories }}};
+					break;
+				case 'Lunch':
+					newData = lunchData;
+					idealCaloriesValue = 400;
+					averageCaloriesValue = {{{ lunchAverageCalories }}};
+					break;
+				case 'Dinner':
+					newData = dinnerData;
+					idealCaloriesValue = 450;
+					averageCaloriesValue = {{{ dinnerAverageCalories }}};
+					break;
+				case 'Snacks':
+					newData = snacksData;
+					idealCaloriesValue = 150;
+					averageCaloriesValue = {{{ snacksAverageCalories }}};
+					break;
+				default:
+					newData = dailyData;
+					idealCaloriesValue = 1500;
+					averageCaloriesValue = {{{ dailyAverageCalories }}};
+					break;
+			}
+
+			foodHistoryData.length = 0;
+			foodHistoryData.push.apply(
+				foodHistoryData, newData
+			);
+
+			myFoodHistoryChart.annotation.elements['ideal-calories-line'].options.value = idealCaloriesValue;
+			myFoodHistoryChart.annotation.elements['average-calories-line'].options.value = averageCaloriesValue;
+
+			myFoodHistoryChart.update();
+		});
 </script>
 {{/ifCond}}

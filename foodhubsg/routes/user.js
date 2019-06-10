@@ -46,6 +46,10 @@ router.get('/', loggedIn, (req, res) => {
             groupedFoodItems,
             numOfDays: Object.keys(groupedFoodItems).length,
             dailyAverageCalories: getAverageCalories(groupedFoodItems),
+            breakfastAverageCalories: getAverageCalories(groupedFoodItems, "breakfastCalories"),
+            lunchAverageCalories: getAverageCalories(groupedFoodItems, "lunchCalories"),
+            dinnerAverageCalories: getAverageCalories(groupedFoodItems, "dinnerCalories"),
+            snacksAverageCalories: getAverageCalories(groupedFoodItems, "snacksCalories"),
         })
     })
 });
@@ -154,8 +158,12 @@ router.get('/settings', loggedIn, (req, res) => {
             title: "Settings",
             groupedFoodItems,
             numOfDays: Object.keys(groupedFoodItems).length,
-            dailyAverageCalories: getAverageCalories(groupedFoodItems),
             bmiStatement: getBmiStatement(req.user.weight, req.user.height, req.user.name),
+            dailyAverageCalories: getAverageCalories(groupedFoodItems),
+            breakfastAverageCalories: getAverageCalories(groupedFoodItems, "breakfastCalories"),
+            lunchAverageCalories: getAverageCalories(groupedFoodItems, "lunchCalories"),
+            dinnerAverageCalories: getAverageCalories(groupedFoodItems, "dinnerCalories"),
+            snacksAverageCalories: getAverageCalories(groupedFoodItems, "snacksCalories"),
         })
     });
 });
