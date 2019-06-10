@@ -64,30 +64,14 @@
         <div class="col-md-12">
             <div class="box1">
                 <div class="row row-pb-md">
-                    <div class="col-md-12">
-                        <header id="summary-header">
-                            <h2 class="font_color"><b>Body Mass Index Summary</b></h2>
-                            <hr>
-                        </header>
-        
-                        <h5 style="margin-bottom:-1em;">{{bmiStatement}}</h5>
-                        <br>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        {{#ifCond numOfDays '>=' 4}}
-            <div class="col-md-12">
-                <div class="box1">
-                    <div class="row row-pb-md">
-            
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <h1 class="font_color"><b>Summary of your stats</b></h1>
-                                    <h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
-                                </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h1 class="font_color"><b>Summary of your stats</b></h1>
+                                <h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
+                            </div>
+                            {{#ifCond numOfDays '>=' 4}}
             
                                 <div class="col-md-4">
                                     <br>
@@ -105,7 +89,7 @@
                                     </div>
                                 </div>
                             </div>
-            
+
                             <hr>
                             <canvas id="foodHistoryChart" width="400" height="180"></canvas>
                         </div>
@@ -160,12 +144,32 @@
                             </table>
                         </div>
             
+                    {{else}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <h4><b>Keep adding more food to generate a detailed summary on your food intake!</b></h4>
+                    {{/ifCond}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="box1">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+                        <header id="summary-header">
+                            <h1 class="font_color"><b>Body Mass Index Summary</b></h1>
+                            <hr>
+                        </header>
+        
+                        <h5 style="margin-bottom:-1em;">{{bmiStatement}}</h5>
+                        <br>
                     </div>
                 </div>
             </div>
-        {{else}}
-            <h4><b>Keep adding more food to generate a detailed summary on your food intake!</b></h4>
-        {{/ifCond}}
+        </div>
 
     </div>
 </div>
