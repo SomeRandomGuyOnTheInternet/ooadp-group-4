@@ -25,21 +25,21 @@ router.get('/showShops', loggedIn, (req, res) => {
         for (i = 0; i < shops.length; i++) {
             FoodItem.findAll({
                 attributes: { 
-                    include: [calories]
+                    include: ['calories']
                 }, 
                 where: {
                     id: shops[i].id,
                     isDeleted: false,
                 }
             }).then((calories) => {
-                console.log(calories); 
                 for (k = 0; k < calories.length; k++) {
-                    let foodRatings = getFoodRatings(calories[k].ratings);
+                    let foodRatings = getFoodRatings(calories[k]);
+                    console.log(foodRatings); 
                     FoodItem.update({
                         ratings: foodRatings,
                         where: {
                             id: food.id,
-                        }
+                        } 
                     })
                 }
 
