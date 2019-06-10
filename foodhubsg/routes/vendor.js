@@ -8,21 +8,21 @@ const upload = require('../helpers/imageUpload');
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
+const getRatings = require('../helpers/vendorRatings');
 
 router.get('/showShops', loggedIn, (req, res) => {
     const user = req.user;
     Shop.findAll({
-        where: {
-            VendorId: user.id,
-            isDeleted: false,
-        }
-    }).then((shops) => {
-        res.render('vendors/vendor_index', {
+        where: { VendorId: req.user.id }
+    }).then((data) => {
+        console.log(data);
+        // getRatings(data.calories, shop.ratings)
+        res.render('vendors/vendor_indes', {
+            title: "View Shops",
+            shop: data,
             user: req.user,
-            title: "Your Shops",
-            shops: shops
-        })
-    })
+        });
+    });
 
 });
 
