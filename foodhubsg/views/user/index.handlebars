@@ -1,61 +1,11 @@
 {{> _msg }}
 <div id="colorlib-container">
 	<div class="container">
-		{{#ifCond numOfDays '>=' 4}}
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box1">
-						<div class="row row-pb-md">
-
-							<div class="col-md-12">
-								<div class="row">
-									<div class="col-md-8">
-										<h2 class="font_color"><b class="center_subtitle">Graph of Calorie Intake</b></h2>
-									</div>
-								
-									<div class="col-md-4">
-										<div class="input-group">
-											<label>Calorie Intake Filter</label>
-											&nbsp;&nbsp;&nbsp;&nbsp;
-											<select class="custom-select form-control" id="selectCalorieFilter" name="selectCalorieFilter" style="top:-0.7em;">
-												<option value="Daily" selected>Daily</option>
-												<option value="Breakfast">Breakfast</option>
-												<option value="Lunch">Lunch</option>
-												<option value="Dinner">Dinner</option>
-												<option value="Snacks">Snacks</option>
-											</select>
-										</div>
-									</div>
-								</div>
-										
-								<hr>
-								<canvas id="foodHistoryChart" width="400" height="180"></canvas>
-							</div>
-							
-						</div>
-					</div>
-				</div>
-			</div>
-		{{else}}
-			<div class="box1">
-				<div class="row row-pb-md">
-					<div class="col-md-12">
-						<div class="blog-entry">
-							<div class="blog-img">
-								<h3 class="font_color"><b class="center_subtitle">Summary of your food history</b></h3>
-								<hr>
-								<h4>You have not added enough food to generate a summary. Keep adding more food!</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		{{/ifCond}}
 
 		<div class="box1">
 			<div class="row row-pb-md">
 				<div class="col-md-12">
-					<h3 class="font_color"><b class="center_subtitle">Recommended food vendors near you</b></h3>
+					<h1 class="font_color"><b class="center_subtitle">Recommended food vendors near you</b></h1>
 					<hr>
 				</div>
 
@@ -93,6 +43,100 @@
 
 			</div>
 		</div> 
+
+		<div class="col-md-12">
+            <div class="box1">
+                <div class="row row-pb-md">
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h1 class="font_color"><b>Summary of your stats</b></h1>
+                                <h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
+                            </div>
+                            {{#ifCond numOfDays '>=' 4}}
+            
+                                <div class="col-md-4">
+                                    <br>
+                                    <div class="input-group">
+                                        <label>Calorie Intake Filter</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <select class="custom-select form-control" id="selectCalorieFilter"
+                                            name="selectCalorieFilter" style="top:-0.7em;">
+                                            <option value="Daily" selected>Daily</option>
+                                            <option value="Breakfast">Breakfast</option>
+                                            <option value="Lunch">Lunch</option>
+                                            <option value="Dinner">Dinner</option>
+                                            <option value="Snacks">Snacks</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <canvas id="foodHistoryChart" width="400" height="180"></canvas>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <br><br>
+                            <h4><b>Breakdown on meal-by-meal basis</b></h4>
+                            <hr align="left" width="5%">
+                            <table class="table">
+                                <thead class="thead-green">
+                                    <tr>
+                                        <th scope="col">Meal Type</th>
+                                        <th scope="col">Ideal Calorie Intake</th>
+                                        <th scope="col">Average Calorie Intake</th>
+                                        <th scope="col">Est. Calories To Lose/Gain</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Breakfast (6am-10am)</th>
+                                        <td>~500 kcal</td>
+                                        <td>{{ breakfastAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "500" "-" breakfastAverageCalories}} kcal              
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Lunch (12am-3pm)</th>
+                                        <td>~400 kcal</td>
+                                        <td>{{ lunchAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "400" "-" lunchAverageCalories}} kcal
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Dinner (6pm-10pm)</th>
+                                        <td>~450 kcal</td>
+                                        <td>{{ dinnerAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "450" "-" dinnerAverageCalories}} kcal
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Out-of-schedule snacks</th>
+                                        <td>&lt;150 kcal</td>
+                                        <td>{{ snacksAverageCalories }} kcal</td>
+                                        <td>
+                                            {{math "150" "-" snacksAverageCalories}} kcal
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+            
+                    {{else}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <h4><b>Keep adding more food to generate a detailed summary on your food intake!</b></h4>
+                    {{/ifCond}}
+                </div>
+            </div>
+        </div>
 
 	</div>
 </div>
