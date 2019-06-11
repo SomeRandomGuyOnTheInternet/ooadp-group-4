@@ -138,34 +138,10 @@ router.get('/faq', loggedIn, (req, res) => {
 
 
 router.get('/settings', loggedIn, (req, res) => {
-    Food.findAll({
-        include: [{
-            model: FoodLog,
-            where: { UserId: req.user.id },
-            required: true,
-        }],
-        order: [
-            [FoodLog, 'createdAt', 'ASC'],
-        ],
-        raw: true
+    res.render('user/settings', {
+        user: req.user,
+        title: "Settings",
     })
-    .then((FoodItems) => {
-        groupedFoodItems = groupFoodItems(FoodItems);
-        dailyAverageCalories = getAverageCalories(groupedFoodItems);
-
-        res.render('user/settings', {
-            user: req.user,
-            title: "Settings",
-            groupedFoodItems,
-            numOfDays: Object.keys(groupedFoodItems).length,
-            bmiStatement: getBmiStatement(req.user.weight, req.user.height, req.user.name),
-            dailyAverageCalories: getAverageCalories(groupedFoodItems),
-            breakfastAverageCalories: getAverageCalories(groupedFoodItems, "breakfastCalories"),
-            lunchAverageCalories: getAverageCalories(groupedFoodItems, "lunchCalories"),
-            dinnerAverageCalories: getAverageCalories(groupedFoodItems, "dinnerCalories"),
-            snacksAverageCalories: getAverageCalories(groupedFoodItems, "snacksCalories"),
-        })
-    });
 });
 
 
@@ -175,10 +151,13 @@ router.post('/foodJournal', loggedIn, (req, res) => {
     Food.findAll({
         include: [{
             model: FoodLog,
-            where: {
+            where: { 
                 UserId: req.user.id,
-                createdAtDate: searchDate,
+                createdAtDate: searchDate
             },
+            required: true,
+        }, {
+            model: Shop,
             required: true,
         }],
         order: [
