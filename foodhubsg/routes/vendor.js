@@ -101,14 +101,15 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
         address: address,
         description: description,
         imageLocation: img,
-        isDeleted: 0,
-        isRecommended: 1,
         location: location,
         latitude: latitude,
         longitude: longitude,
     },
         {
-            where: { VendorId: user.id, id: id, },
+            where: { 
+                VendorId: user.id, 
+                id, 
+            },
         })
         .then(() => {
             req.flash('success', 'Shop has been succcessfully edited');

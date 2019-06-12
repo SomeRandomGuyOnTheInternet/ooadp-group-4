@@ -13,10 +13,7 @@ function getShopRating(foodItems) {
     else if (averageCalories > 500) { rating = 4 } 
     else if (averageCalories > 400) { rating = 5 } 
     else { rating = 1 }
-
-    console.log(foodItems)
-    console.log(rating)
-
+    
     return rating;
 };
 
