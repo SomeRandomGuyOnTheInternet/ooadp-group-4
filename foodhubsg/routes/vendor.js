@@ -157,11 +157,7 @@ router.post('/addMenu', loggedIn, (req, res) => {
         .then((foodItems) => {
             Shop.update(
                 { rating: getShopRatings(foodItems) },
-                {
-                    where: {
-                        id: foodItems[0].ShopId,
-                    }
-                },
+                { where: { id: foodItems[0].ShopId } }
             )
         })
     }
@@ -195,6 +191,7 @@ router.get('/editMenu/:id', loggedIn, (req, res) => {
 
     })
 });
+
 router.post('/editMenu/:id', loggedIn, (req, res) => {
     const id = req.params.id
     const name = req.body.name;
