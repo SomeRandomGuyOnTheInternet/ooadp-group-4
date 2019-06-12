@@ -8,7 +8,8 @@ const upload = require('../helpers/imageUpload');
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
-const getShopRatings = require('../helpers/getShopRating');
+const getFoodRatings = require('../helpers/foodRating');
+const getShopRatings = require('../helpers/shopRating');
 
 router.get('/showShops', loggedIn, (req, res) => {
     Shop.findAll({
@@ -44,6 +45,7 @@ router.post('/addShops', loggedIn, (req, res) => {
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const img = req.body.imageURL;
+    let list_of_items = 0;
     Shop.create({
         name,
         address,
@@ -52,6 +54,8 @@ router.post('/addShops', loggedIn, (req, res) => {
         latitude,
         longitude,
         description,
+        menuList: list_of_items,
+        totalCalories: 0, 
         imageLocation: img,
         isDeleted: 0,
         isRecommended: 1,
@@ -141,8 +145,8 @@ router.post('/addMenu', loggedIn, (req, res) => {
     const calories = req.body.calories;
     const description = req.body.description;
     const img = req.body.imageURL;
-
-    for (i = 0; i < shops.length; i++) {
+    if (shop.length == 1) { 
+        let id = shop[0]; 
         FoodItem.create({
             name: name,
             calories: calories,
@@ -150,8 +154,9 @@ router.post('/addMenu', loggedIn, (req, res) => {
             isDeleted: false,
             description: description,
             imageLocation: img,
-            ShopId: shops[i],                    
+            ShopId: id,
         })
+<<<<<<< HEAD
         FoodItem.findAll({ where: { ShopId: shops[i] } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
@@ -162,10 +167,72 @@ router.post('/addMenu', loggedIn, (req, res) => {
                 },
                 { where: { id: foodItems[0].ShopId } }
             )
+=======
+        Shop.findOne({
+            attribute: ['menuList'], 
+
+            where : {
+                id: id, 
+            }
+        }).then((itemList) => {
+            let id = itemList.id; 
+            let menuitems = itemList.menuList;
+            menuitems = menuitems + 1;
+            let food = getFoodRatings(calories);
+            let rating = getShopRatings(food, menuitems);
+            console.log(rating)
+            Shop.update({
+                rating: rating,
+                menuList: menuitems,
+            },
+                {
+                    where: { id: id },
+                }).then(() => {
+                    req.flash('success', 'Food has been succcessfully added');
+
+                })
+>>>>>>> 360afa4f5fd318a34384d68d4770f3b6566cb376
         })
     }
 
-    req.flash('success', 'Food has been succcessfully added');
+    else { 
+
+        for (i = 0; i < list_of_shops.length; i++) { 
+        FoodItem.create({
+            name: name,
+            calories: calories,
+            isRecommended: true,
+            isDeleted: false,
+            description: description,
+            imageLocation: img,
+            ShopId: list_of_shops[i],
+        })
+        Shop.findOne({
+            attribute: ['menuList'], 
+
+            where : {
+                id: list_of_shops[i], 
+            }
+        }).then((itemList) => {
+            let id = itemList.id; 
+            let menuitems = itemList.menuList;
+            menuitems = menuitems + 1;
+            let food = getFoodRatings(calories);
+            let rating = getShopRatings(food, menuitems);
+            Shop.update({
+                rating: rating,
+                menuList: menuitems,
+            },
+                {
+                    where: { id: id },
+                }).then(() => {
+                    req.flash('success', 'Food has been succcessfully added');
+
+                })
+        })
+    }
+    }
+    
     res.redirect('/vendor/showShops')
 })
 
