@@ -8,7 +8,8 @@ const upload = require('../helpers/imageUpload');
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
-const getFoodRatings = require('../helpers/vendorRatings');
+const getFoodRatings = require('../helpers/foodRating');
+const getShopRatings = require('../helpers/shopRating'); 
 
 router.get('/showShops', loggedIn, (req, res) => {
     Shop.findAll({
@@ -153,8 +154,16 @@ router.post('/addMenu', loggedIn, (req, res) => {
             description: description,
             imageLocation: img,
             ShopId: list_of_shops[i],
+           
+            
         })
-
+    let food = getFoodRatings(calories); 
+    let rating = getShopRatings(food)
+    Shop.update({ 
+        ratings:rating, 
+        where : { ShopId: list_of_shops[i]
+        }
+    }); 
     }
     req.flash('success', 'Food has been succcessfully added');
     res.redirect('/vendor/showShops')
@@ -256,16 +265,17 @@ router.get('/deleteShop/:id', loggedIn, (req, res) => {
 })
 
 router.get('/deleteMenu/:id', loggedIn, (req, res) => {
+
     FoodItem.update({
-        isDeleted: 1
+        isDeleted: 1,
     },
         {
-            where: { id: req.params.id }
-        }
-
-    )
-    req.flash('success', 'Shop has been succcessfully deleted');
-    res.redirect('/vendor/showMenu');
+            where: { id: req.params.id, },
+        })
+        .then(() => {
+            req.flash('success', 'Shop has been succcessfully edited');
+            res.redirect('/vendor/showMenu');
+        });
 })
 
 router.post('/upload', loggedIn, (req, res) => {
