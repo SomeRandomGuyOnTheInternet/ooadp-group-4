@@ -8,8 +8,7 @@ const upload = require('../helpers/imageUpload');
 const Vendor = require('../models/Vendor');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
-const getFoodRatings = require('../helpers/foodRating');
-const getShopRatings = require('../helpers/shopRating'); 
+const getShopRatings = require('../helpers/getShopRating');
 
 router.get('/showShops', loggedIn, (req, res) => {
     Shop.findAll({
@@ -139,13 +138,12 @@ router.get('/addMenu', loggedIn, (req, res) => {
 
 router.post('/addMenu', loggedIn, (req, res) => {
     const name = req.body.name;
-    const shops = req.body.shop.toString();
-    const shop = shops.split(',')
-    let list_of_shops = shop;
+    const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
     const description = req.body.description;
     const img = req.body.imageURL;
-    for (i = 0; i < list_of_shops.length; i++) {
+
+    for (i = 0; i < shops.length; i++) {
         FoodItem.create({
             name: name,
             calories: calories,
@@ -153,21 +151,23 @@ router.post('/addMenu', loggedIn, (req, res) => {
             isDeleted: false,
             description: description,
             imageLocation: img,
-            ShopId: list_of_shops[i],
-           
-            
+            ShopId: shops[i],                    
         })
-    let food = getFoodRatings(calories); 
-    let rating = getShopRatings(food)
-    Shop.update({ 
-        ratings:rating, 
-        where : { ShopId: list_of_shops[i]
-        }
-    }); 
+        FoodItem.findAll({ where: { ShopId: shops[i] } })
+        .then((foodItems) => {
+            Shop.update(
+                { rating: getShopRatings(foodItems) },
+                {
+                    where: {
+                        id: foodItems[0].ShopId,
+                    }
+                },
+            )
+        })
     }
+
     req.flash('success', 'Food has been succcessfully added');
     res.redirect('/vendor/showShops')
-
 })
 
 router.get('/editMenu/:id', loggedIn, (req, res) => {
@@ -209,9 +209,9 @@ router.post('/editMenu/:id', loggedIn, (req, res) => {
         isDeleted: 0,
         isRecommended: 1,
     },
-        {
-            where: { ShopId: shop, id: id, },
-        })
+    {
+        where: { ShopId: shop, id: id, },
+    })
         .then(() => {
             req.flash('success', 'Shop has been succcessfully edited');
             res.redirect('/vendor/showShops');
