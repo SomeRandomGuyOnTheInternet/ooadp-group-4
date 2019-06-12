@@ -62,7 +62,10 @@ router.get('/shops', loggedIn, (req, res) => {
         where: {
             location: req.user.location,
             isDeleted: false,
-        }
+        },
+        order: [
+            ['rating', 'DESC'],
+        ],
     }).
     then(function (shops) {
         res.render('user/shops', {
