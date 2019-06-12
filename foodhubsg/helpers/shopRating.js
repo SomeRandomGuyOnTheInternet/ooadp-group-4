@@ -1,14 +1,17 @@
-var shopRatings; 
-const getRatings = require('./foodRating'); 
+var shopRatings;
+const getRatings = require('./foodRating');
 
-function calculateShopRatings(food) { 
-    let amount = food.length; 
-    for (i=0; i < food.length; i++) { 
-        let ratings = getRatings(food);
-        shopRatings += ratings; 
+function calculateShopRatings(rating, items) {
+    if (items <= 1) {
+        return rating;
     }
 
-    shopRatings = shopRatings/amount
+    else {
+        const total_ratings = rating * (items - 1)
+        let newRatings = total_ratings / items
+        return newRatings; 
+    }
+
 }
 
 module.exports = calculateShopRatings; 

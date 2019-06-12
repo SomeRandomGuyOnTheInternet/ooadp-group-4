@@ -21,6 +21,9 @@ const Shop = db.define('Shop', {
     rating: {
         type: Sequelize.FLOAT
     },
+    menuList: { 
+        type: Sequelize.INTEGER
+    }, 
     description: {
         type: Sequelize.STRING(2000)
     },
