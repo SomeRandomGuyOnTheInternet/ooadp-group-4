@@ -116,10 +116,14 @@
 </div>
 
 <script>
-    var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+    var shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
 
     function initMap() {
-        var userLocation = { lat: userLatitude, lng: userLongitude };
+        var shopLocation = { lat: shopLatitude, lng: shopLongitude };
+
+        $("#location").val("{{{ shop.location }}}");
+        $("#latitude").val(shopLatitude);
+        $("#longitude").val(shopLongitude);
 
         var map = new google.maps.Map(document.getElementById('map'), { zoom: 14 });
         var marker = new google.maps.Marker(
@@ -127,7 +131,7 @@
                 map: map,
                 draggable: true,
                 animation: google.maps.Animation.DROP,
-                position: userLocation,
+                position: shopLocation,
             }
         );
 

@@ -94,13 +94,11 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
-    const rating = 0;
     const img = req.body.imageURL;
 
     Shop.update({
         name: name,
         address: address,
-        rating: rating,
         description: description,
         imageLocation: img,
         isDeleted: 0,
@@ -265,7 +263,6 @@ router.get('/deleteShop/:id', loggedIn, (req, res) => {
 })
 
 router.get('/deleteMenu/:id', loggedIn, (req, res) => {
-
     FoodItem.update({
         isDeleted: 1,
     },
@@ -279,7 +276,6 @@ router.get('/deleteMenu/:id', loggedIn, (req, res) => {
 })
 
 router.post('/upload', loggedIn, (req, res) => {
-    // Creates user id directory for upload if not exist
     if (!fs.existsSync('./public/uploads/' + req.user.id)) {
         fs.mkdirSync('./public/uploads/' + req.user.id);
     }

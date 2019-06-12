@@ -23,6 +23,7 @@ router.get('/', loggedIn, (req, res) => {
             where: {
                 location: req.user.location,
                 isRecommended: true,
+                isDeleted: false,
             }
         }),
         Food.findAll({
@@ -60,6 +61,7 @@ router.get('/shops', loggedIn, (req, res) => {
     Shop.findAll({
         where: {
             location: req.user.location,
+            isDeleted: false,
         }
     }).
     then(function (shops) {
