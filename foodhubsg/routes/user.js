@@ -168,6 +168,7 @@ router.post('/foodJournal', loggedIn, (req, res) => {
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
+            title: "Food Journal",
             groupedFoodItems: groupFoodItems(FoodItems, true),
             searchDate: searchDate,
         })

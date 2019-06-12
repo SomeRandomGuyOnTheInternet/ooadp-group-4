@@ -136,14 +136,14 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
                                                             foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
                                                             shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
                                                             data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
                                                                 data-toggle="modal" data-target="#editFoodModal">
                                                                 <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
                                                             </a>
@@ -172,14 +172,14 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
                                                             foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
                                                             shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
                                                             data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
                                                                 data-toggle="modal" data-target="#editFoodModal">
                                                                 <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
                                                             </a>
@@ -208,14 +208,14 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
                                                             foodItemId="{{id}}" foodName="{{name}}" foodImage="{{imageLocation}}" foodCalories="{{calories}}" 
                                                             shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}" 
                                                             data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
+                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
                                                                 <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
                                                             </a>
                                                         </p>
@@ -243,14 +243,14 @@
                                                         <p>
                                                             {{calories}} calories
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="detail-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
+                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
                                                             foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
                                                             shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
                                                             data-toggle="modal" data-target="#viewFoodModal">
                                                                 <i class="fas fa-eye hyperlink"></i></i> <i class="hyperlink">Details</i>
                                                             </a>
                                                             &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
+                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
                                                                 <i class="far fa-edit hyperlink"></i> <i class="hyperlink">Edit</i>
                                                             </a>
                                                         </p>
@@ -270,9 +270,9 @@
 
                         {{else}}
                             {{#if searchDate}}
-                                <h4 id="current_location">There was no food found on that date!</b></h4>
+                                <h4 id="current_location"><b>There was no food found on that date!</b></h4>
                             {{else}}
-                                <h4 id="current_location">You have not added any food yet!</b></h4>
+                                <h4 id="current_location"><b>You have not added any food yet!</b></h4>
                             {{/if}}
                         {{/each}}
 
@@ -284,7 +284,8 @@
 </div>
 
 <script>
-    $('.action')
+
+    $('.edit-action')
     .bind("click keyup", function (event) {
         var logId = jQuery(this).attr("id");
         var logCreatedAt = jQuery(this).attr("logCreatedAt");
@@ -296,7 +297,7 @@
         $('#delete-food-form').attr("action", `/user/deleteFood/${logId}`);
     });
 
-    $('.detail-action')
+    $('.view-action')
     .bind("click keyup", function (event) {
         var logId = jQuery(this).attr("id");
         var logCreatedAt = jQuery(this).attr("logCreatedAt");
@@ -313,6 +314,10 @@
         $('#viewFoodCalories').html(foodCalories);
         $('#viewFoodShop').text(shopName);
         $('#viewFoodShop').attr("href", `/user/shops/${shopId}`);
+
+        $('#codeToChange').attr("placeholder", `Previous Entry: ${foodName} (code: ${foodItemId})`);
+        $('#edit-food-form').attr("action", `/user/editFood/${logId}`);
+        $('#delete-food-form').attr("action", `/user/deleteFood/${logId}`);
     });
 
     $('#codeToChange')

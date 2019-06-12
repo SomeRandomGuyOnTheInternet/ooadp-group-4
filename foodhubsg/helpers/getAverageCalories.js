@@ -11,7 +11,7 @@ function getAverageCalories(datesWithFood, mealType = "dailyCalories") {
         averageCalories = totalCalorieIntake / numOfDays;
     }
 
-    return averageCalories;
+    return Number(averageCalories).toFixed(2);
 };
 
 module.exports = getAverageCalories;

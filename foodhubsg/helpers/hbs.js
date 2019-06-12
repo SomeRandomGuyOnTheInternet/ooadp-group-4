@@ -49,8 +49,8 @@ module.exports = {
         rvalue = parseFloat(rvalue);
 
         return {
-            "+": ((lvalue + rvalue) < 0 ? "" : "+") + (lvalue + rvalue),
-            "-": ((lvalue - rvalue) < 0 ? "" : "+") + (lvalue - rvalue),
+            "+": ((lvalue + rvalue) < 0 ? "" : "+") + Number((lvalue + rvalue)).toFixed(2),
+            "-": ((lvalue - rvalue) < 0 ? "" : "+") + Number((lvalue - rvalue)).toFixed(2),
             "*": lvalue * rvalue,
             "/": lvalue / rvalue,
             "%": lvalue % rvalue

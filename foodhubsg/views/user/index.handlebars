@@ -123,6 +123,16 @@
 									</td>
 								</tr>
 							</tbody>
+							<tfoot>
+								<tr>
+									<th scope="row">Daily</th>
+									<td>~1500 kcal</td>
+									<td>{{ dailyAverageCalories }} kcal</td>
+									<td>
+										{{math "1500" "-" dailyAverageCalories}} kcal
+									</td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 		
