@@ -156,7 +156,10 @@ router.post('/addMenu', loggedIn, (req, res) => {
         FoodItem.findAll({ where: { ShopId: shops[i] } })
         .then((foodItems) => {
             Shop.update(
-                { rating: getShopRatings(foodItems) },
+                { 
+                    rating: getShopRatings(foodItems),
+                    isRecommended: (getShopRatings(foodItems) >= 4) ? true : false,
+                },
                 { where: { id: foodItems[0].ShopId } }
             )
         })
