@@ -156,7 +156,6 @@ router.post('/addMenu', loggedIn, (req, res) => {
             imageLocation: img,
             ShopId: id,
         })
-<<<<<<< HEAD
         FoodItem.findAll({ where: { ShopId: shops[i] } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
@@ -167,31 +166,6 @@ router.post('/addMenu', loggedIn, (req, res) => {
                 },
                 { where: { id: foodItems[0].ShopId } }
             )
-=======
-        Shop.findOne({
-            attribute: ['menuList'], 
-
-            where : {
-                id: id, 
-            }
-        }).then((itemList) => {
-            let id = itemList.id; 
-            let menuitems = itemList.menuList;
-            menuitems = menuitems + 1;
-            let food = getFoodRatings(calories);
-            let rating = getShopRatings(food, menuitems);
-            console.log(rating)
-            Shop.update({
-                rating: rating,
-                menuList: menuitems,
-            },
-                {
-                    where: { id: id },
-                }).then(() => {
-                    req.flash('success', 'Food has been succcessfully added');
-
-                })
->>>>>>> 360afa4f5fd318a34384d68d4770f3b6566cb376
         })
     }
 
