@@ -11,6 +11,7 @@ const groupFoodItems = require('../helpers/groupFoodItems');
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
+const Vendor = require('../models/Vendor');
 const User = require('../models/User');
 const Question = require('../models/Question');
 
@@ -22,6 +23,7 @@ router.get('/', loggedIn, (req, res) => {
             where: {
                 location: req.user.location,
                 isRecommended: true,
+                isDeleted: false,
             }
         }),
         Food.findAll({
@@ -59,6 +61,7 @@ router.get('/shops', loggedIn, (req, res) => {
     Shop.findAll({
         where: {
             location: req.user.location,
+            isDeleted: false,
         }
     }).
     then(function (shops) {
@@ -76,7 +79,7 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 
     Promise.all([
         Shop.findOne({
-            where: { id }
+            where: { id },
         }), 
         Food.findAll({
             where: { ShopId: id }

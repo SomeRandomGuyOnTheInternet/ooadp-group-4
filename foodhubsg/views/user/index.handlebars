@@ -5,13 +5,13 @@
 		<div class="box1">
 			<div class="row row-pb-md">
 				<div class="col-md-12">
-					<h1 class="font_color"><b class="center_subtitle">Recommended food vendors near you</b></h1>
+					<h1 class="font_color"><b class="center_subtitle">Recommended shops near you</b></h1>
 					<hr>
 				</div>
 
 				{{#if user.location}}
 				<div class="col-md-12">
-					<h4 id="current_location">Current Location: <b class="center_subtitle">{{user.location}}</b></h4>
+					<h4 id="current_location">Current City: <b class="center_subtitle">{{user.location}}</b></h4>
 				</div>
 
 					{{#each shops}}
@@ -24,7 +24,12 @@
 								<p class="meta">
 									<b class="vendors"><b>{{this.name}}</b></b><br>
 									<span class="food_location"><b>{{ this.address }}</b></span><br>
-									<span class="food_rating">Rating: <b class="recommended-{{ this.isRecommended }}">{{ this.rating }}</b></span><br>
+									<span class="food_rating">Rating:&nbsp;<b class="recommended-{{ this.isRecommended }}">
+										{{#times this.rating}}
+											<i class="fas fa-leaf"></i>
+										{{/times}}
+									</b></span>
+									<br>
 								</p>
 							</div>
 						</div>

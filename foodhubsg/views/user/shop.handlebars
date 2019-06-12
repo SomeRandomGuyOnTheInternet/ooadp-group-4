@@ -17,7 +17,11 @@
                             <p class="meta">
                                 <h1 class="font_color"><b>{{ shop.name }}</b></h1>
                                 <span class="food_location"><b>{{ shop.address }}</b></span><br>
-                                <span class="food_rating">Rating: <b class="recommended-{{ shop.isRecommended }}">{{ shop.rating }}</b></span>
+                                <span class="food_rating">Rating:&nbsp;<b class="recommended-{{ shop.isRecommended }}">
+                                    {{#times shop.rating}}
+                                        <i class="fas fa-leaf"></i>
+                                    {{/times}}
+                                </b></span>
                                 <hr>
                                 {{ shop.description }}
                             </p>

@@ -98,13 +98,11 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
-    const rating = 0;
     const img = req.body.imageURL;
 
     Shop.update({
         name: name,
         address: address,
-        rating: rating,
         description: description,
         imageLocation: img,
         isDeleted: 0,
@@ -142,9 +140,7 @@ router.get('/addMenu', loggedIn, (req, res) => {
 
 router.post('/addMenu', loggedIn, (req, res) => {
     const name = req.body.name;
-    const shops = req.body.shop.toString();
-    const shop = shops.split(',')
-    let list_of_shops = shop;
+    const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
     const description = req.body.description;
     const img = req.body.imageURL;
@@ -251,6 +247,7 @@ router.get('/editMenu/:id', loggedIn, (req, res) => {
 
     })
 });
+
 router.post('/editMenu/:id', loggedIn, (req, res) => {
     const id = req.params.id
     const name = req.body.name;
@@ -265,9 +262,9 @@ router.post('/editMenu/:id', loggedIn, (req, res) => {
         isDeleted: 0,
         isRecommended: 1,
     },
-        {
-            where: { ShopId: shop, id: id, },
-        })
+    {
+        where: { ShopId: shop, id: id, },
+    })
         .then(() => {
             req.flash('success', 'Shop has been succcessfully edited');
             res.redirect('/vendor/showShops');
@@ -334,7 +331,6 @@ router.get('/deleteMenu/:id', loggedIn, (req, res) => {
 })
 
 router.post('/upload', loggedIn, (req, res) => {
-    // Creates user id directory for upload if not exist
     if (!fs.existsSync('./public/uploads/' + req.user.id)) {
         fs.mkdirSync('./public/uploads/' + req.user.id);
     }
