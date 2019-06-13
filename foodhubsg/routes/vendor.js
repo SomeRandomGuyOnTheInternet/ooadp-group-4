@@ -47,7 +47,6 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
                 ShopId: id,
 
             }
-
         })
     ])
     .then((data) => {
@@ -78,10 +77,9 @@ router.get('/deleteShop/:id', loggedIn, (req, res) => {
 
 
 router.get('/allFoodItems', loggedIn, (req, res) => {
-    const user = req.user;
     Vendor.findOne({
         where: {
-            UserId: user.id,
+            UserId: req.user.id,
         }
     })
     .then((vendor) => {
@@ -133,17 +131,15 @@ router.get('/addFoodItem', loggedIn, (req, res) => {
 
 router.get('/editFoodItem/:id', loggedIn, (req, res) => {
     const id = req.params.id;
-    const user = req.user;
     FoodItem.findOne({
         where: {
             id: id,
         }
     })
     .then((food) => {
-        const item = food.ShopId;
         Shop.findOne({
             where: {
-                id: item,
+                id: food.ShopId,
             }
         }).
         then((shop) => {
@@ -162,7 +158,7 @@ router.get('/editFoodItem/:id', loggedIn, (req, res) => {
 
 router.get('/deleteFoodItem/:id', loggedIn, (req, res) => {
     FoodItem.update({
-        isDeleted: 1,
+        isDeleted: true,
     },
     {
         where: { id: req.params.id, },
@@ -182,18 +178,18 @@ router.post('/addShop', loggedIn, (req, res) => {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
-    const img = req.body.imageURL;
+    const imageLocation = req.body.imageURL;
     Shop.create({
         name,
         address,
         location,
-        rating: 0,
+        rating: 1,
         latitude,
         longitude,
         description,
-        imageLocation: img,
-        isDeleted: 0,
-        isRecommended: 0,
+        imageLocation,
+        isDeleted: false,
+        isRecommended: false,
         VendorId: user.id,
     })
     req.flash('success', "This shop has been successfully added");
@@ -210,16 +206,16 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
-    const img = req.body.imageURL;
+    const imageLocation = req.body.imageURL;
 
     Shop.update({
-        name: name,
-        address: address,
-        description: description,
-        imageLocation: img,
-        location: location,
-        latitude: latitude,
-        longitude: longitude,
+        name,
+        address,
+        description,
+        imageLocation,
+        location,
+        latitude,
+        longitude,
     },
     {
         where: { 
@@ -239,16 +235,16 @@ router.post('/addFoodItem', loggedIn, (req, res) => {
     const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
     const description = req.body.description;
-    const img = req.body.imageURL;
+    const imageLocation = req.body.imageURL;
 
     for (i = 0; i < shops.length; i++) {
         FoodItem.create({
-            name: name,
-            calories: calories,
+            name,
+            calories,
             isRecommended: true,
             isDeleted: false,
-            description: description,
-            imageLocation: img,
+            description,
+            imageLocation,
             ShopId: shops[i],                    
         })
         FoodItem.findAll({ where: { ShopId: shops[i] } })
@@ -274,13 +270,14 @@ router.post('/editFoodItem/:id', loggedIn, (req, res) => {
     const name = req.body.name;
     const calories = req.body.calories;
     const shop = req.body.shop;
-    const img = req.body.imageURL;
+    const imageLocation = req.body.imageURL;
 
     FoodItem.update({
-        name: name,
-        calories: calories,
-        imageLocation: img,
-        isDeleted: 0,
+        name,
+        calories,
+        imageLocation,
+        isRecommended: (calories <= 400) ? true : false,
+        isDeleted: false,
     },
     {
         where: { ShopId: shop, id: id, },
