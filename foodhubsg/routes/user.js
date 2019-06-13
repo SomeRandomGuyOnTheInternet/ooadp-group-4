@@ -4,14 +4,12 @@ const router = express.Router();
 const loggedIn = require('../helpers/loggedIn');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
-const getBmiStatement = require('../helpers/getBmiStatement');
 const getAverageCalories = require('../helpers/getAverageCalories');
 const groupFoodItems = require('../helpers/groupFoodItems');
 
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
-const Vendor = require('../models/Vendor');
 const User = require('../models/User');
 const Question = require('../models/Question');
 
@@ -40,11 +38,12 @@ router.get('/', loggedIn, (req, res) => {
     ])
     .then(function (data) {
         groupedFoodItems = groupFoodItems(data[1]);
-
+        shops = data[0];
+        shops.length = 2;
         res.render('user/index', {
             user: req.user,
             title: "Index",
-            shops: data[0],
+            shops,
             groupedFoodItems,
             numOfDays: Object.keys(groupedFoodItems).length,
             dailyAverageCalories: getAverageCalories(groupedFoodItems),
@@ -89,13 +88,18 @@ router.get('/shops/:id', loggedIn, (req, res) => {
         })
     ])
     .then((data) => {
-        console.log(data[1])
-        res.render('user/shop', {
-            title: "Shop",
-            shop: data[0],
-            foodItems: data[1],
-            user: req.user
-        });
+        User.findOne({
+            where: { id: data[0].VendorId },
+        })
+        .then((vendor) => {
+            res.render('user/shop', {
+                title: data[0].name,
+                shop: data[0],
+                foodItems: data[1],
+                vendor,
+                user: req.user
+            });
+        })
     });
 });
 
