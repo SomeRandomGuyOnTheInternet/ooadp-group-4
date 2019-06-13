@@ -207,7 +207,6 @@ router.post('/editMenu/:id', loggedIn, (req, res) => {
         calories: calories,
         imageLocation: img,
         isDeleted: 0,
-        isRecommended: 1,
     },
     {
         where: { ShopId: shop, id: id, },
@@ -297,3 +296,4 @@ router.post('/upload', loggedIn, (req, res) => {
 })
 
 module.exports = router;
+
