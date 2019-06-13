@@ -2,50 +2,48 @@
 <div id="colorlib-container">
     <div class="container">
         <div class="box1">
-            <div class="col-md-12">
-                <div class="row row-pb-md">
-                    <div class="col-md-12">
-                        <h1 class="font_color"><b class="center_subtitle">Shops Near You</b></h1>
-                        <hr>
-                    </div>
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+                    <h1 class="font_color"><b class="center_subtitle">All Shops Near You</b></h1>
+                    <hr>
+                </div>
 
-                    {{#if user.location}}
-                    <div class="col-md-12">
-                        <h4 id="current_location">Current City: <b class="center_subtitle">{{user.location}}</b></h4>
-                    </div>
-                    
-                    {{#each shops}}
-                    <div class="col-md-6 recommended-shops">
-                        <div class="blog-entry">
-                            <div class="blog-img">
-                                <a class="action" href="/user/shops/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
-                            </div>
-                            <div class="desc">
-                                <p class="meta">
-                                    <b class="vendors"><b>{{this.name}}</b></b><br>
-                                    <span class="food_location"><b>{{ this.address }}</b></span><br>
-                                    <span class="food_rating">Rating:&nbsp;<b class="recommended-{{ this.isRecommended }}">
-                                        {{#times this.rating}}
-                                        <i class="fas fa-leaf"></i>
-                                        {{/times}}
-                                    </b></span>
-                                </p>
-                            </div>
+                {{#if user.location}}
+                <div class="col-md-12">
+                    <h4 id="current_location">Current City: <b>{{user.location}}</b></h4>
+                </div>
+                
+                {{#each shops}}
+                <div class="col-md-6 recommended-shops">
+                    <div class="blog-entry">
+                        <div class="blog-img">
+                            <a class="action" href="/user/shops/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+                        </div>
+                        <div class="desc">
+                            <p class="meta">
+                                <b class="vendors"><b>{{this.name}}</b></b><br>
+                                <span class="food_location"><b>{{ this.address }}</b></span><br>
+                                <span class="food_rating">Rating:&nbsp;<b class="recommended-{{ this.isRecommended }}">
+                                    {{#times this.rating}}
+                                    <i class="fas fa-leaf"></i>
+                                    {{/times}}
+                                </b></span>
+                            </p>
                         </div>
                     </div>
-                    {{else}}
-                    <div class="col-md-12">
-                        <h3 id="current_location"><b class="center_subtitle">There are no recommended shops near you</b></h4>
-                    </div>
-                    {{/each}}
-                    
-                    {{else}}
-                    <div class="col-md-12">
-                        <h4 id="current_location">We could not detect your current location</b></h4>
-                    </div>
-                    {{/if}}
-                    
                 </div>
+                {{else}}
+                <div class="col-md-12">
+                    <h3 id="current_location"><b class="center_subtitle">There are no recommended shops near you</b></h4>
+                </div>
+                {{/each}}
+                
+                {{else}}
+                <div class="col-md-12">
+                    <h4 id="current_location"><b>We could not detect your current location</b></h4>
+                </div>
+                {{/if}}
+                
             </div>
         </div>
     </div>

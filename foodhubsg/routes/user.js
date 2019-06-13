@@ -40,11 +40,12 @@ router.get('/', loggedIn, (req, res) => {
     ])
     .then(function (data) {
         groupedFoodItems = groupFoodItems(data[1]);
-
+        shops = data[0];
+        shops.length = 2;
         res.render('user/index', {
             user: req.user,
             title: "Index",
-            shops: data[0],
+            shops,
             groupedFoodItems,
             numOfDays: Object.keys(groupedFoodItems).length,
             dailyAverageCalories: getAverageCalories(groupedFoodItems),

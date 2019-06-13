@@ -18,7 +18,7 @@
                         <div class="desc">
                             <p class="meta">
                                 <h1 class="font_color"><b>{{ shop.name }}</b></h1>
-                                Address:&nbsp;{{ shop.address }}
+                                <span class="thick">{{ shop.address }}</span>
                                 <br>
                                 <span class="food_rating">Rating:&nbsp;
                                     <b class="recommended-{{ shop.isRecommended }}">
@@ -44,6 +44,7 @@
                         <h3 class="font_color"><b>Map</b></h3>
                     </div>
                     <hr>
+                    <br>
                     <div id="map"></div>
                 </div>
             </div>     
@@ -63,8 +64,7 @@
                 <div class="menuFood">
                     <header>
                         <div class="blog-img">
-                            <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}"
-                                alt="Food Image">
+                            <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}" alt="Food Image">
                         </div>
                     </header>
                     <div class="text-center">
@@ -72,10 +72,10 @@
                             <b>{{ this.name }}</b>
                         </h4>
                         {{#if this.isRecommended}}
-                        <i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i>
+                            <b style="font-size:20px;"><i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i></b>
                         {{/if}}
                         <br>
-                        <p style="display: inline">(code: <span class="thick">{{ this.id }}</span>)</p>
+                        <p style="display: inline">(code: {{ this.id }})</p>
                         <br>
                         <p><span class="thick">{{ this.calories }}</span> kcal</p>
                     </div>

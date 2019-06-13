@@ -5,13 +5,13 @@
 		<div class="box1">
 			<div class="row row-pb-md">
 				<div class="col-md-12">
-					<h1 class="font_color"><b class="center_subtitle">Recommended shops near you</b></h1>
+					<h1 class="font_color"><b>Recommended Shops Near You</b></h1>
 					<hr>
 				</div>
 
 				{{#if user.location}}
 				<div class="col-md-12">
-					<h4 id="current_location">Current City: <b class="center_subtitle">{{user.location}}</b></h4>
+					<h4>Current City: <b>{{user.location}}</b></h4>
 				</div>
 
 					{{#each shops}}
@@ -42,7 +42,7 @@
 
 				{{else}}
 				<div class="col-md-12">
-					<h4 id="current_location">We could not detect your current location</b></h4>
+					<h4 id="current_location"><b>We could not detect your current location</b></h4>
 				</div>
 				{{/if}}
 
