@@ -47,12 +47,12 @@
 
                     <form id="edit-food-form" action="" method="post">
                         <div class="modal-body">
-                            <input name="codeToChange" id="codeToChange" class="form-control" type="number" value="">
+                            <input name="codeToChange" id="codeToChange" class="form-control" type="number" value="" required>
                         </div>
 
                         <div class="modal-footer">
                             <input type="submit" id="edit-button" class="btn btn-success edit-button" href=""
-                                value="Update Entry" name="editAction" style="margin-left: 0.5em; padding: 8px 20px;" disabled>
+                                value="Update Entry" name="editAction" style="margin-left: 0.5em; padding: 8px 20px;">
                     </form>
 
                     <form id="delete-food-form" action="" method="post">
@@ -107,8 +107,8 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                             <hr>
                         </header>
                     </form>
@@ -129,31 +129,29 @@
                                         <article class="food-journal">
                                             <header>
                                                 <div class="food-subsection">
-                                                {{#if this.Breakfast}}
                                                     {{#each this.Breakfast}}
 
+                                                        <div class="foodItemLog" logId="{{'FoodLogs.id'}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                        foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}"
+                                                        shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}">
                                                         <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
                                                         <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
                                                         <p>
                                                             {{calories}} kcal
                                                             <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
-                                                            foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
-                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
-                                                            data-toggle="modal" data-target="#viewFoodModal">
-                                                                <i class="fas fa-eye hyperlink"></i><span class="hyperlink">Details</span>
+                                                            <a class="modal-action" data-toggle="modal" data-target="#viewFoodModal">
+                                                                <i class="fas fa-eye hyperlink"></i>&nbsp;<span class="hyperlink">Details</span>
                                                             </a>
                                                             &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
-                                                                data-toggle="modal" data-target="#editFoodModal">
-                                                                <i class="far fa-edit hyperlink"></i> <span class="hyperlink">Edit</span>
+                                                            <a class="modal-action" data-toggle="modal" data-target="#editFoodModal">
+                                                                <i class="far fa-edit hyperlink"></i>&nbsp;<span class="hyperlink">Edit</span>
                                                             </a>
                                                         </p>
+                                                        </div>
 
+                                                    {{else}}
+                                                        <h5 style="margin-bottom: 0; display: inline"><b>No breakfast consumed</b></h5>
                                                     {{/each}}
-                                                {{else}}
-                                                    <h5 style="margin-bottom: 0; display: inline"><b>No breakfast consumed</b></h5>
-                                                {{/if}}
                                                 </div>
                                             </header>
                                         </article>
@@ -164,31 +162,29 @@
                                         <article class="food-journal">
                                             <header>
                                                 <div class="food-subsection">
-                                                    {{#if this.Lunch}}
-                                                        {{#each this.Lunch}}
+                                                    {{#each this.Lunch}}
 
-                                                        <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
-                                                        <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
-                                                        <p>
-                                                            {{calories}} kcal
-                                                            <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
-                                                            foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
-                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
-                                                            data-toggle="modal" data-target="#viewFoodModal">
-                                                                <i class="fas fa-eye hyperlink"></i> <span class="hyperlink">Details</span>
-                                                            </a>
-                                                            &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
-                                                                data-toggle="modal" data-target="#editFoodModal">
-                                                                <i class="far fa-edit hyperlink"></i> <span class="hyperlink">Edit</span>
-                                                            </a>
-                                                        </p>
+                                                        <div class="foodItemLog" logId="{{'FoodLogs.id'}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                        foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}"
+                                                        shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}">
+                                                            <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                            <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                            <p>
+                                                                {{calories}} kcal
+                                                                <br>
+                                                                <a class="modal-action" data-toggle="modal" data-target="#viewFoodModal">
+                                                                    <i class="fas fa-eye hyperlink"></i>&nbsp;<span class="hyperlink">Details</span>
+                                                                </a>
+                                                                &nbsp;
+                                                                <a class="modal-action" data-toggle="modal" data-target="#editFoodModal">
+                                                                    <i class="far fa-edit hyperlink"></i>&nbsp;<span class="hyperlink">Edit</span>
+                                                                </a>
+                                                            </p>
+                                                        </div>
 
-                                                        {{/each}}
                                                     {{else}}
-                                                    <h5 style="margin-bottom: 0; display: inline"><b>No lunch consumed</b></h5>
-                                                    {{/if}}
+                                                        <h5 style="margin-bottom: 0; display: inline"><b>No lunch consumed</b></h5>
+                                                    {{/each}}
                                                 </div>
                                             </header>
                                         </article>
@@ -199,30 +195,29 @@
                                         <article class="food-journal">
                                             <header>
                                                 <div class="food-subsection">
-                                                    {{#if this.Dinner}}
-                                                        {{#each this.Dinner}}
+                                                    {{#each this.Dinner}}
 
-                                                        <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
-                                                        <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
-                                                        <p>
-                                                            {{calories}} kcal
-                                                            <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
-                                                            foodItemId="{{id}}" foodName="{{name}}" foodImage="{{imageLocation}}" foodCalories="{{calories}}" 
-                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}" 
-                                                            data-toggle="modal" data-target="#viewFoodModal">
-                                                                <i class="fas fa-eye hyperlink"></i> <span class="hyperlink">Details</span>
-                                                            </a>
-                                                            &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
-                                                                <i class="far fa-edit hyperlink"></i> <span class="hyperlink">Edit</span>
-                                                            </a>
-                                                        </p>
+                                                        <div class="foodItemLog" logId="{{'FoodLogs.id'}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                        foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}"
+                                                        shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}">
+                                                            <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                            <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                            <p>
+                                                                {{calories}} kcal
+                                                                <br>
+                                                                <a class="modal-action" data-toggle="modal" data-target="#viewFoodModal">
+                                                                    <i class="fas fa-eye hyperlink"></i>&nbsp;<span class="hyperlink">Details</span>
+                                                                </a>
+                                                                &nbsp;
+                                                                <a class="modal-action" data-toggle="modal" data-target="#editFoodModal">
+                                                                    <i class="far fa-edit hyperlink"></i>&nbsp;<span class="hyperlink">Edit</span>
+                                                                </a>
+                                                            </p>
+                                                        </div>
 
-                                                        {{/each}}
                                                     {{else}}
-                                                    <h5 style="margin-bottom: 0; display: inline"><b>No dinner consumed</b></h5>
-                                                    {{/if}}
+                                                        <h5 style="margin-bottom: 0; display: inline"><b>No dinner consumed</b></h5>
+                                                    {{/each}}
                                                 </div>
                                             </header>
                                         </article>
@@ -232,31 +227,32 @@
                                         <h5 style="margin-bottom: 0; display: inline"><b>Snacks</b></h5>
                                         <article class="food-journal">
                                             <header>
-                                                <div class="food-subsection">
-                                                    {{#if this.Snacks}}
-                                                        {{#each this.Snacks}}
+                                                <div class="food-subsection" logId="{{'FoodLogs.id'}}" logCreatedAt="{{'FoodLogs.createdAt'}}"
+                                                foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}"
+                                                shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}">
+                                                    {{#each this.Snacks}}
 
-                                                        <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
-                                                        <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
-                                                        <p>
-                                                            {{calories}} kcal
-                                                            <br>
-                                                            <a id="{{'FoodLogs.id'}}" class="view-action" logCreatedAt="{{'FoodLogs.createdAt'}}" 
-                                                            foodItemId="{{id}}" foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" 
-                                                            shopId="{{'Shop.id'}}" shopName="{{'Shop.name'}}"
-                                                            data-toggle="modal" data-target="#viewFoodModal">
-                                                                <i class="fas fa-eye hyperlink"></i> <span class="hyperlink">Details</span>
-                                                            </a>
-                                                            &nbsp;
-                                                            <a id="{{'FoodLogs.id'}}" class="edit-action" foodItemId="{{id}}" foodName="{{name}}" logCreatedAt="{{'FoodLogs.createdAt'}}" data-toggle="modal" data-target="#editFoodModal">
-                                                                <i class="far fa-edit hyperlink"></i> <span class="hyperlink">Edit</span>
-                                                            </a>
-                                                        </p>
+                                                        <div class="foodItemLog" logId="{{'FoodLogs.id'}}" logCreatedAt="{{'FoodLogs.createdAt'}}" foodItemId="{{id}}"
+                                                            foodName="{{name}}" foodCalories="{{calories}}" foodImage="{{imageLocation}}" shopId="{{'Shop.id'}}"
+                                                            shopName="{{'Shop.name'}}">
+                                                            <div id="time-created"> <i>{{'FoodLogs.createdAt'}}</i> </div>
+                                                            <h4 style="margin-bottom: 0; display: inline"><b>{{name}}</b></h4>
+                                                            <p>
+                                                                {{calories}} kcal
+                                                                <br>
+                                                                <a class="modal-action" data-toggle="modal" data-target="#viewFoodModal">
+                                                                    <i class="fas fa-eye hyperlink"></i>&nbsp;<span class="hyperlink">Details</span>
+                                                                </a>
+                                                                &nbsp;
+                                                                <a class="modal-action" data-toggle="modal" data-target="#editFoodModal">
+                                                                    <i class="far fa-edit hyperlink"></i>&nbsp;<span class="hyperlink">Edit</span>
+                                                                </a>
+                                                            </p>
+                                                        </div>
 
-                                                        {{/each}}
                                                     {{else}}
-                                                    <h5 style="margin-bottom: 0; display: inline"><b>No snacks consumed</b></h5>
-                                                    {{/if}}
+                                                        <h5 style="margin-bottom: 0; display: inline"><b>No snacks consumed</b></h5>
+                                                    {{/each}}
                                                 </div>
                                             </header>
                                         </article>
@@ -282,29 +278,18 @@
 </div>
 
 <script>
-
-    $('.edit-action')
+    $('.modal-action')
     .bind("click keyup", function (event) {
-        var logId = jQuery(this).attr("id");
-        var logCreatedAt = jQuery(this).attr("logCreatedAt");
-        var foodName = jQuery(this).attr("foodName");
-        var foodItemId = jQuery(this).attr("foodItemId");
+        const foodSubsection = $(this).parent().closest('div');
 
-        $('#codeToChange').attr("placeholder", `Previous Entry: ${foodName} (code: ${foodItemId})`);
-        $('#edit-food-form').attr("action", `/user/editFood/${logId}`);
-        $('#delete-food-form').attr("action", `/user/deleteFood/${logId}`);
-    });
-
-    $('.view-action')
-    .bind("click keyup", function (event) {
-        var logId = jQuery(this).attr("id");
-        var logCreatedAt = jQuery(this).attr("logCreatedAt");
-        var foodName = jQuery(this).attr("foodName");
-        var foodItemId = jQuery(this).attr("foodItemId");
-        var foodCalories = jQuery(this).attr("foodCalories");
-        var foodImageLocation = jQuery(this).attr("foodImage");
-        var shopId = jQuery(this).attr("shopId");
-        var shopName = jQuery(this).attr("shopName");
+        var logId = jQuery(foodSubsection).attr("id");
+        var logCreatedAt = jQuery(foodSubsection).attr("logCreatedAt");
+        var foodName = jQuery(foodSubsection).attr("foodName");
+        var foodItemId = jQuery(foodSubsection).attr("foodItemId");
+        var foodCalories = jQuery(foodSubsection).attr("foodCalories");
+        var foodImageLocation = jQuery(foodSubsection).attr("foodImage");
+        var shopId = jQuery(foodSubsection).attr("shopId");
+        var shopName = jQuery(foodSubsection).attr("shopName");
 
         $('#viewFoodName').text(foodName);
         $('#viewFoodImage').attr("src", foodImageLocation);
@@ -316,14 +301,5 @@
         $('#codeToChange').attr("placeholder", `Previous Entry: ${foodName} (code: ${foodItemId})`);
         $('#edit-food-form').attr("action", `/user/editFood/${logId}`);
         $('#delete-food-form').attr("action", `/user/deleteFood/${logId}`);
-    });
-
-    $('#codeToChange')
-    .bind("propertychange change click keyup input paste", function (event) {
-        if ($('#codeToChange').val().length) {
-            $("#edit-button").attr("disabled", false);
-        } else {
-            $("#edit-button").attr("disabled", true);
-        }
     });
 </script>

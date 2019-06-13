@@ -100,6 +100,11 @@ router.get('/shops/:id', loggedIn, (req, res) => {
                 user: req.user
             });
         })
+    })
+    .catch((err) => {
+        console.log(err);
+        req.flash('error', "That vendor does not exist!");
+        res.redirect('/user/');
     });
 });
 

@@ -23,7 +23,7 @@
                                 <span class="food_rating">Rating:&nbsp;
                                     <b class="recommended-{{ shop.isRecommended }}">
                                         {{#times shop.rating}}
-                                            <i class="fas fa-leaf"></i>
+                                            <i class="fas fa-star"></i>
                                         {{/times}}
                                     </b>
                                 </span>
@@ -60,7 +60,7 @@
 
             <div class="row row-pb-md">
             {{#each foodItems}}
-            <div class="col-md-4" style="padding:15px;">
+            <div class="col-4" style="padding:15px;">
                 <div class="menuFood">
                     <header>
                         <div class="blog-img">
@@ -82,9 +82,9 @@
                 </div>
             </div>
             {{else}}
-                <div class="col-md-12">
-                    <h4><b>This shop has no food available currently!</b></h4>
-                </div>
+            <div class="col-md-12">
+                <h4><b>This shop has no food available currently!</b></h4>
+            </div>
             {{/each}}
             </div> 
         </div>
