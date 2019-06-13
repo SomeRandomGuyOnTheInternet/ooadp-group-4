@@ -257,7 +257,7 @@ router.post('/addFoodItem', loggedIn, (req, res) => {
                 },
                 { where: { id: foodItems[0].ShopId } }
             )
-        })
+        });
     }
 
     req.flash('success', 'Food has been succcessfully added');
@@ -276,7 +276,7 @@ router.post('/editFoodItem/:id', loggedIn, (req, res) => {
         name,
         calories,
         imageLocation,
-        isRecommended: (calories <= 400) ? true : false,
+        isRecommended: (calories <= 500) ? true : false,
         isDeleted: false,
     },
     {

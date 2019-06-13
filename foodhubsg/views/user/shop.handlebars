@@ -1,13 +1,15 @@
 {{> _msg }}
+
 <div id="colorlib-container">
     <div class="container">
+
         <div class="box1">
             <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;">
                 <div class="row row-pb-md">
 
                     <div class="col-md-6">
                         <div class="blog-img" style="overflow:hidden;">
-                            <img src="{{shop.imageLocation}}" class="img-responsive"
+                            <img src="{{shop.imageLocation}}" class="img-responsive shopImage"
                                 alt="{{ shop.name }} Image">
                         </div>
                     </div>
@@ -16,19 +18,25 @@
                         <div class="desc">
                             <p class="meta">
                                 <h1 class="font_color"><b>{{ shop.name }}</b></h1>
-                                <span class="food_location"><b>{{ shop.address }}</b></span><br>
-                                <span class="food_rating">Rating:&nbsp;<b class="recommended-{{ shop.isRecommended }}">
-                                    {{#times shop.rating}}
-                                        <i class="fas fa-leaf"></i>
-                                    {{/times}}
-                                </b></span>
+                                Address:&nbsp;{{ shop.address }}
+                                <br>
+                                <span class="food_rating">Rating:&nbsp;
+                                    <b class="recommended-{{ shop.isRecommended }}">
+                                        {{#times shop.rating}}
+                                            <i class="fas fa-leaf"></i>
+                                        {{/times}}
+                                    </b>
+                                </span>
                                 <hr>
                                 {{ shop.description }}
                             </p>
                         </div>
                     </div>
-                </div><br>
-            </div><br>
+
+                </div>
+                <br>
+            </div>
+            <br>
 
             <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
                 <div class="col-md">
@@ -38,10 +46,7 @@
                     <hr>
                     <div id="map"></div>
                 </div>
-            </div>
-
-            
-            
+            </div>     
 
             <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
                 <div class="col-md">
@@ -51,35 +56,45 @@
                     <hr>
                 </div>
             </div>
-            <div class="row row-pb-md">
 
+            <div class="row row-pb-md">
             {{#each foodItems}}
-            <article class="food-journal">
-                <header>
-                    <div id="vendor-food">
+            <div class="col-md-4" style="padding:15px;">
+                <div class="menuFood">
+                    <header>
+                        <div class="blog-img">
+                            <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}"
+                                alt="Food Image">
+                        </div>
+                    </header>
+                    <div class="text-center">
                         <h4 class="font_color" style="margin-bottom: 0; display: inline">
                             <b>{{ this.name }}</b>
                         </h4>
                         {{#if this.isRecommended}}
-                            <i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i>
+                        <i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i>
                         {{/if}}
                         <br>
-                        <p style="display: inline">(code: {{ this.id }})</p><br>
-                        <p>{{ this.calories }} calories <br></p>
+                        <p style="display: inline">(code: <span class="thick">{{ this.id }}</span>)</p>
+                        <br>
+                        <p><span class="thick">{{ this.calories }}</span> kcal</p>
                     </div>
-                </header>
-            </article>
-            {{/each}}
-
+                </div>
             </div>
+            {{else}}
+                <div class="col-md-12">
+                    <h4><b>This shop has no food available currently!</b></h4>
+                </div>
+            {{/each}}
+            </div> 
         </div>
-    </div>
 
-    <div class="col-md-12">
-        <span>Owned by <i>Vendor - <u><a href="#">vendor@mail.com</a></u></i></span>
-        <hr>
-    </div>
+        <div class="col-md-12" style="padding:0;">
+            <span>Owned by <i>{{ vendor.name }} - <u><a href="#">{{ vendor.email }}</a></u></i></span>
+            <hr>
+        </div>
 
+    </div>
 </div>
 
 <script>

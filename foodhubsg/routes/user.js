@@ -89,13 +89,18 @@ router.get('/shops/:id', loggedIn, (req, res) => {
         })
     ])
     .then((data) => {
-        console.log(data[1])
-        res.render('user/shop', {
-            title: "Shop",
-            shop: data[0],
-            foodItems: data[1],
-            user: req.user
-        });
+        User.findOne({
+            where: { id: data[0].VendorId },
+        })
+        .then((vendor) => {
+            res.render('user/shop', {
+                title: "Shop",
+                shop: data[0],
+                foodItems: data[1],
+                vendor,
+                user: req.user
+            });
+        })
     });
 });
 
