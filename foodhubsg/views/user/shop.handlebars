@@ -65,16 +65,14 @@
                         <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}" alt="Food Image">
                     </div>
                     <div class="text-center">
-                        <h4 class="font_color" style="margin-bottom: 0; display: inline">
+                        <h4 class="font_color" style="margin: 0; display: inline">
                             <b>{{ this.name }}</b>
                         </h4>
                         {{#if this.isRecommended}}
                             &nbsp;<b style="font-size:23px;"><i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i></b>
                         {{/if}}
-                        <br>
-                        <p style="display: inline">(code: {{ this.id }})</p>
-                        <br>
-                        <p><span class="thick">{{ this.calories }}</span> kcal</p>
+                        <p style="margin-bottom: 0.4em;">(code: {{ this.id }})</p>
+                        <h5><span class="thick">{{ this.calories }}</span> kcal</h5>
                     </div>
                 </div>
             {{else}}
