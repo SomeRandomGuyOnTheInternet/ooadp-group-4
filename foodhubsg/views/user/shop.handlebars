@@ -58,15 +58,12 @@
                 </div>
             </div>
 
-            <div class="row row-pb-md">
+            <div class="card-columns row-pb-md">
             {{#each foodItems}}
-            <div class="col-4" style="padding:15px;">
-                <div class="menuFood">
-                    <header>
-                        <div class="blog-img">
-                            <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}" alt="Food Image">
-                        </div>
-                    </header>
+                <div style="" class="menuFood card p-3">
+                    <div class="blog-img">
+                        <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}" alt="Food Image">
+                    </div>
                     <div class="text-center">
                         <h4 class="font_color" style="margin-bottom: 0; display: inline">
                             <b>{{ this.name }}</b>
@@ -80,7 +77,6 @@
                         <p><span class="thick">{{ this.calories }}</span> kcal</p>
                     </div>
                 </div>
-            </div>
             {{else}}
             <div class="col-md-12">
                 <h4><b>This shop has no food available currently!</b></h4>

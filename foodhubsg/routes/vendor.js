@@ -72,7 +72,7 @@ router.get('/deleteShop/:id', loggedIn, (req, res) => {
         })
     });
     req.flash('success', 'Shop has been succcessfully deleted');
-    res.redirect('/vendor/showShops');
+    res.redirect('/vendor/allShops');
 });
 
 
@@ -193,7 +193,7 @@ router.post('/addShop', loggedIn, (req, res) => {
         VendorId: user.id,
     })
     req.flash('success', "This shop has been successfully added");
-    res.redirect('/vendor/showShops');
+    res.redirect('/vendor/allShops');
 });
 
 
@@ -225,7 +225,7 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
     })
     .then(() => {
         req.flash('success', 'Shop has been succcessfully edited');
-        res.redirect('/vendor/showShops');
+        res.redirect('/vendor/allShops');
     });
 })
 
@@ -241,7 +241,7 @@ router.post('/addFoodItem', loggedIn, (req, res) => {
         FoodItem.create({
             name,
             calories,
-            isRecommended: true,
+            isRecommended: (calories <= 500) ? true : false,
             isDeleted: false,
             description,
             imageLocation,
@@ -261,7 +261,7 @@ router.post('/addFoodItem', loggedIn, (req, res) => {
     }
 
     req.flash('success', 'Food has been succcessfully added');
-    res.redirect('/vendor/showShops')
+    res.redirect('/vendor/allShops')
 })
 
 
@@ -284,7 +284,7 @@ router.post('/editFoodItem/:id', loggedIn, (req, res) => {
     })
     .then(() => {
         req.flash('success', 'Shop has been succcessfully edited');
-        res.redirect('/vendor/showShops');
+        res.redirect('/vendor/allShops');
     });
 })
 
