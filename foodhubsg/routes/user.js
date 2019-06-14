@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const loggedIn = require('../helpers/loggedIn');
+const isUser = require('../helpers/isUser');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const getAverageCalories = require('../helpers/getAverageCalories');
@@ -15,7 +15,7 @@ const Question = require('../models/Question');
 
 
 
-router.get('/', loggedIn, (req, res) => {
+router.get('/', isUser, (req, res) => {
     Promise.all([
         Shop.findAll({
             where: {
@@ -56,7 +56,7 @@ router.get('/', loggedIn, (req, res) => {
 });
 
 
-router.get('/shops', loggedIn, (req, res) => {
+router.get('/shops', isUser, (req, res) => {
     Shop.findAll({
         where: {
             location: req.user.location,
@@ -76,7 +76,7 @@ router.get('/shops', loggedIn, (req, res) => {
 });
 
 
-router.get('/shops/:id', loggedIn, (req, res) => {
+router.get('/shops/:id', isUser, (req, res) => {
     var id = req.params.id;
 
     Promise.all([
@@ -109,7 +109,7 @@ router.get('/shops/:id', loggedIn, (req, res) => {
 });
 
 
-router.get('/foodJournal', loggedIn, (req, res) => {
+router.get('/foodJournal', isUser, (req, res) => {
     Food.findAll({
         include: [{
             model: FoodLog,
@@ -135,7 +135,7 @@ router.get('/foodJournal', loggedIn, (req, res) => {
 });
 
 
-router.get('/faq', loggedIn, (req, res) => {
+router.get('/faq', isUser, (req, res) => {
     Question.findAll({
         order: [
             ['createdAt', 'ASC'],
@@ -152,7 +152,7 @@ router.get('/faq', loggedIn, (req, res) => {
 });
 
 
-router.get('/settings', loggedIn, (req, res) => {
+router.get('/settings', isUser, (req, res) => {
     res.render('user/settings', {
         user: req.user,
         title: "Settings",
@@ -160,7 +160,7 @@ router.get('/settings', loggedIn, (req, res) => {
 });
 
 
-router.post('/foodJournal', loggedIn, (req, res) => {
+router.post('/foodJournal', isUser, (req, res) => {
     var searchDate = req.body.searchDate;
 
     Food.findAll({
@@ -196,7 +196,7 @@ router.post('/foodJournal', loggedIn, (req, res) => {
 });
 
 
-router.post('/addFood', loggedIn, (req, res) => {
+router.post('/addFood', isUser, (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
 
     Food.findOne({
@@ -231,9 +231,10 @@ router.post('/addFood', loggedIn, (req, res) => {
 });
 
 
-router.post('/editFood/:id', loggedIn, (req, res) => {
-    var logId = req.params.id, foodIdToUpdateTo = req.body.codeToChange;
-    console.log(logId)
+router.post('/editFood/:id', isUser, (req, res) => {
+    const logId = req.params.id;
+    const foodIdToUpdateTo = req.body.codeToChange;
+
     Food.findOne({ where: { id: foodIdToUpdateTo }, })
     .then((foodItem) => {
         if (foodItem) {
@@ -261,7 +262,7 @@ router.post('/editFood/:id', loggedIn, (req, res) => {
 });
 
 
-router.post('/deleteFood/:id', loggedIn, (req, res) => {
+router.post('/deleteFood/:id', isUser, (req, res) => {
     var logId = req.params.id;
 
     FoodLog.destroy({ where: { id: logId } })
@@ -276,7 +277,7 @@ router.post('/deleteFood/:id', loggedIn, (req, res) => {
 });
 
 
-router.post('/faq', (req, res) => {
+router.post('/faq', isUser, (req, res) => {
 	const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let question = req.body.question;
@@ -293,7 +294,7 @@ router.post('/faq', (req, res) => {
 });
 
 
-router.post('/settings', loggedIn, (req, res) => {
+router.post('/settings', isUser, (req, res) => {
 	const name = req.body.name;
 	const email = req.body.email.toLowerCase();
 	const password = req.body.password;

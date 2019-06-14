@@ -20,7 +20,11 @@
                                 <p class="meta">
                                     <b class="vendors"><b>{{this.name}}</b></b><br>
                                     <span class="food_location"><b>{{ this.address }}</b></span><br>
-                                    <span class="food_rating">Rating: <b class="recommended-{{ this.isRecommended }}">{{ this.rating }}</b></span><br>
+                                    <span class="food_rating">Rating:&nbsp;<b class="recommended-{{ this.isRecommended }}">
+                                        {{#times this.rating}}
+                                            <i class="fas fa-star"></i>
+                                        {{/times}}
+                                    </b></span>
                                 </p>
                             </div>
                         </div>

@@ -1,21 +1,22 @@
 const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 const router = express.Router();
 
-const loggedOut = require('../helpers/loggedOut');
-const loggedIn = require('../helpers/loggedIn');
+const isloggedOut = require('../helpers/isloggedOut');
+const upload = require('../helpers/imageUpload');
 
 const User = require('../models/User');
 
 
 
-router.get('/register', loggedOut, (req, res) => {
+router.get('/register', isloggedOut, (req, res) => {
 	res.render('register', {title: "Register"})
 });
 
 
-router.get('/login', loggedOut, (req, res) => {
+router.get('/login', isloggedOut, (req, res) => {
 	res.render('login', {
 		user: req.user,
 		title: "Login"
@@ -23,7 +24,7 @@ router.get('/login', loggedOut, (req, res) => {
 });
 
 
-router.post('/register', (req, res) => {
+router.post('/register', isloggedOut, (req, res) => {
 	const name = req.body.name;
 	const weight = req.body.weight;
 	const height = req.body.height;
@@ -60,7 +61,7 @@ router.post('/register', (req, res) => {
 });
 
 
-router.post('/login', (req, res, next) => {
+router.post('/login', isloggedOut, (req, res, next) => {
 	passport.authenticate('local', {
 		successRedirect: './',
 		failureRedirect: './login',
@@ -68,13 +69,15 @@ router.post('/login', (req, res, next) => {
 	})(req, res, next);
 });
 
-router.get('/', loggedIn, (req, res) => {
-	if (req.user.isAdmin === true) {
+router.get('/', (req, res) => {
+	if (!req.user) {
+		res.redirect('/logout')
+	} else if (req.user.isAdmin === true) {
 		res.redirect('/admin/vendors')
 	} else if (req.user.isVendor === true) {
 		res.redirect('/vendor/allShops')
 	} else {
-		res.redirect('/user/')
+		res.redirect('/user')
 	}
 });
 
@@ -83,6 +86,27 @@ router.get('/logout', (req, res) => {
 	req.logout();
 	res.redirect('/login');
 });
+
+
+router.post('/upload', (req, res) => {
+	if (!fs.existsSync('./public/uploads/' + req.user.id)) {
+		fs.mkdirSync('./public/uploads/' + req.user.id);
+	}
+
+	upload(req, res, (err) => {
+		if (err) {
+			res.json({ file: '/images/no-image.jpg', err: err });
+			console.log(err);
+		} else {
+			if (req.file === undefined) {
+				res.json({ file: '/images/no-image.jpg', err: err });
+			} else {
+				res.json({ file: `/uploads/${req.user.id}/${req.file.filename}` });
+			}
+		}
+	});
+})
+
 
 
 module.exports = router;

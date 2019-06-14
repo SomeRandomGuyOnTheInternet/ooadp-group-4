@@ -23,14 +23,13 @@ body {
   overflow:hidden; 
   margin-top:1em; 
   margin-bottom:1.2em;
-  width:70%;
+  width:80%;
   height:auto;
 }
 
 .shopImage {
-  overflow:hidden; 
-  max-width:100em;
-  max-width:80em;
+  overflow:hidden;
+  width:90%;
   height:auto;
 }
 
@@ -1398,6 +1397,12 @@ input[type="text"] {
     -webkit-box-shadow: none;
     box-shadow: none; }
 
+.btn-primary.disabled, .btn-primary:disabled {
+    color: #fff;
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
 .btn-tall {
   height: 54px;
 }
@@ -1626,4 +1631,13 @@ select {
 .hyperlink {
   color: #F6490D;
   cursor: pointer;  
+}
+
+#venUpload {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.marginBottom {
+  margin-bottom: 1em;
 }

@@ -1,99 +1,228 @@
 {{> _msg }}
 <div id="colorlib-container">
     <div class="container">
+
         <div class="box1">
             <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;">
                 <div class="row row-pb-md">
-                    <form method="post" action="" id="shop-form">
-                        <div class="col-md-12">
-                            <h1 class="font_color"><b>Edit Shop</b></h1>
-                            <span>Owned by <i>Vendor - <u><a href="#">vendor@mail.com</a></u></i></span>
-                            <hr>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="blog-entry">
-                                <img src="{{shop.imageLocation}}" class="img-responsive" alt="{{ shop.name }} Image">
+                    <div class="col-md-12">
+                        <h1 class="font_color"><b>Update Shop</b></h1>
+                        <hr>
+                    </div>
+
+                    <form method="POST" style="width:100%">
+                        <div class="row form-group" style="margin:0;">
+                            <div class="col-md-6" style="margin-bottom:2em;">
+                                <label>Shop Image</label>
+                                <img src="{{shop.imageLocation}}" id="venImage"
+                                    class="img-responsive shopImage" alt="Image">
+                                <input type="file" id="venUpload" name="venUpload"
+                                    accept="image/png,image/jpeg,image/jpg,image/gif">
+                                <input id="imageURL" type="hidden" name="imageURL"
+                                    value="{{shop.imageLocation}}">
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="desc">
-                                <p class="meta">
-                                    <label>Shop Name</label>
-                                    <input name="name" id="name" type="text" class="form-control"
-                                        value="{{ shop.name }}" placeholder="Name">
-                                    <label>Shop Address</label>
-                                    <input name="shopAdd" id="shopAdd" type="text" class="form-control"
-                                        value="{{ shop.address }}" placeholder="Address">
-                                    <label>Shop Location</label>
-                                    <select name="shoploc" id="shoploc" type="text" class="form-control">
-                                        <option value="Chinatown">Chinatown</option>
-                                        <option value="Tampines">Tampines</option>
-                                        <option value="Ang Mo Kio">Ang Mo Kio</option>
-                                        <option value="Sengkang">Sengkang</option>
-                                        <option value="...">More to come!</option>
-                                    </select>
-                                    <hr>
-                                </p>
+                            <div class="col-md-6">
+                                <div class="desc">
+                                    <p class="meta">
+                                        <label>Shop Name</label>
+                                        <input name="name" id="name" type="text" class="form-control marginBottom" value="{{shop.name}}"
+                                            placeholder="Name" required>
+                                        <label>Vendor</label>
+                                        <select name="vendor" id="vendorSelect" type="text" class="form-control">
+                                            <option value="{{shop.User.id}}" selected>{{shop.User.name}}</option>
+                                            {{#each vendors}}
+                                                <option value="{{id}}">{{name}}</option>
+                                            {{else}}
+                                                <option value="none" disabled>No Vendors Available</option>
+                                            {{/each}}
+                                        </select>
+                                        <hr>
+                                        <label for="description">Description</label>
+                                        <textarea id="description" name="description" form="description-form"
+                                            class="form-control" rows="4" cols="50" placeholder="Description"
+                                            required>{{shop.description}}</textarea>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-12">
-                            <label for="description">Description</label>
-                            <textarea id="description" name="description" form="description-form" class="form-control"
-                                rows="4" cols="50">{{ shop.description }}</textarea><br>
-                        </div>
+                            <div class="col-md-12" style="margin-bottom:4em;">
+                                <div class="blog-entry">
+                                    <h3 class="font_color"><b>Map</b></h3>
+                                </div>
+                                <hr>
+                                <div id="map" style="margin-bottom:2em;"></div>
+                                <label>Shop Address</label>
+                                <input name="address" id="address" type="text" class="form-control"
+                                    placeholder="Address" value="{{shop.address}}" required>
+                                <input name="location" id="location" type="hidden" class="" value="">
+                                <input name="latitude" id="latitude" type="hidden" class="" value="">
+                                <input name="longitude" id="longitude" type="hidden" class="" value="">
+                            </div>
 
-                        <div class="col-md-12">
-                            <button type="submit" name="action" value="Update Shop Details" class="btn btn-primary"
-                                style="background-color: #4CAF50;">Update</button>
-                            <button type="submit" name="action" value="Delete Shop" class="btn btn-primary"
-                                id="remove-shop" style="background-color: #d9534f;">Delete </button>
-                        </div>
+                            <div class="col-md-12">
+                                <input type="submit" name="action" value="Update Shop" class="btn btn-primary"
+                                   id="updateShopButton" style="float:right;" disabled>
+                            </div>
 
+                        </div>
                     </form>
+                    
                 </div>
                 <br>
             </div>
         </div>
-    </div>
 
-    <div class="container">
         <div class="box1">
-            <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;"></div>
             <div class="row row-pb-md">
                 <div class="col-md-12">
                     <h1 class="font_color"><b>Edit Menu</b></h1>
                     <hr>
                 </div>
-
-                {{#each foodItems}}
-                <article class="food-journal">
-                    <header>
-                        <div id="vendor-food">
-                            <h4 class="font_color" style="margin-bottom: 0; display: inline">
-                                <b>{{ this.name }}</b></h4><br>
-                            <i class="fas fa-edit" style="float:right;"></i>
-                            <p style="display: inline">(code: {{ this.id }})</p><br>
-                            <p class="recommended-{{ this.isRecommended }}">{{ this.calories }} calories <br></p>
+        
+                <div class="col-md-12 card-columns">
+                    {{#each foodItems}}
+                    <div style="" class="menuFood card p-3">
+                        <div class="blog-img">
+                            <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage"
+                                src="{{ this.imageLocation }}" alt="Food Image">
                         </div>
-                    </header>
-                </article>
-                {{/each}}
-
-                <article class="food-journal">
-                    <header>
-                        <div id="vendor-food">
-                            <i class="fas fa-plus-square" style="font-size: 3em;"></i>
+                        <div class="text-center">
+                            <h4 class="font_color" style="margin: 0; display: inline">
+                                <b>{{ this.name }}</b>
+                            </h4>
+                            {{#if this.isRecommended}}
+                            &nbsp;<b style="font-size:23px;"><i
+                                    class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i></b>
+                            {{/if}}
+                            <p style="margin-bottom: 0.4em;">(code: {{ this.id }})</p>
+                            <h5><span class="thick">{{ this.calories }}</span> kcal</h5>
+                            <a href="/admin/editFoodItem/{{ this.id }}"><i class="fas fa-edit"
+                                    style="float:right;font-size:1.2em;"></i></a>
+                        </div>
+                    </div>
+                    {{/each}}
+                    <div style="" class="menuFood card p-3 text-center">
+                        <a href="/admin/addFoodItem"><i href="/admin/addFoodItem" class="fas fa-plus-square"
+                                style="font-size: 70px;"></i>
                             <br>
-                            <p style="display: inline">Add New Food Item</p><br>
-                        </div>
-                    </header>
-                </article>
-
+                            <p style="display: inline"><b>Add Food Item</b></p>
+                        </a>
+                    </div>
+                </div>
+        
             </div>
         </div>
+
     </div>
 </div>
-</div>
+
+
+<script>
+    var shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
+    var oldElem = [], newElem = [];
+
+    function initMap() {
+        var shopLocation = { lat: shopLatitude, lng: shopLongitude };
+
+        $("#location").val("{{{ shop.location }}}");
+        $("#latitude").val(shopLatitude);
+        $("#longitude").val(shopLongitude);
+
+        var map = new google.maps.Map(document.getElementById('map'), { zoom: 14 });
+        var marker = new google.maps.Marker(
+            {
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                position: shopLocation,
+            }
+        );
+
+        var bounds = fitToMarker(marker);
+        map.fitBounds(bounds);
+
+        google.maps.event.addListener(marker, 'dragend', function () {
+            geocodePosition(marker.getPosition());
+        });
+
+        function geocodePosition(pos) {
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode(
+                {
+                    latLng: pos
+                },
+                function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        $("#address").val(results[0].formatted_address);
+                        $("#location").val(getCity(results));
+                        $("#latitude").val(pos.lat());
+                        $("#longitude").val(pos.lng());
+                    }
+                    else {
+                        $("#mapErrorMsg").val('Cannot determine address at this location.' + status);
+                    }
+                }
+            );
+        }
+    }
+
+    function fitToMarker(marker) {
+        var bounds = new google.maps.LatLngBounds();
+
+        var latlng = marker.getPosition();
+        bounds.extend(latlng);
+
+        if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+            var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
+            var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
+            bounds.extend(extendPoint1);
+            bounds.extend(extendPoint2);
+        }
+
+        return bounds;
+    }
+
+    function getCity(results) {
+        if (results[1]) {
+            var c, lc, component;
+            for (var r = 0, rl = results.length; r < rl; r += 1) {
+                var result = results[r];
+
+                if (result.types[0] === 'neighborhood') {
+                    for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                        component = result.address_components[c];
+
+                        if (component.types[0] === 'neighborhood') {
+                            return component.long_name;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $('.form-control').each(function () {
+        elem = $(this);
+        oldElem.push(elem.val());
+    });
+
+    $('.form-control')
+    .bind("propertychange change click keyup input paste", function (event) {
+        newElem = [];
+        $('.form-control').each(function () {
+            var elem = $(this);
+            newElem.push(elem.val());
+        })
+
+        if (JSON.stringify(oldElem) == JSON.stringify(newElem)) {
+            $("#updateShopButton").attr("disabled", true);
+        } else {
+            $("#updateShopButton").attr("disabled", false);
+        }
+    });
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg&callback=initMap" async
+    defer></script>

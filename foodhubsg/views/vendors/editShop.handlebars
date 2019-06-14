@@ -77,38 +77,38 @@
 
     <div class="container">
         <div class="box1">
-            <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;"></div>
             <div class="row row-pb-md">
-                t <div class="col-md-12">
+                <div class="col-md-12">
                     <h1 class="font_color"><b>Edit Menu</b></h1>
                     <hr>
                 </div>
 
+                <div class="col-md-12 card-columns">
                 {{#each foodItems}}
-                <article class="food-journal">
-                    <header>
-                        <div id="vendor-food">
-                            <h4 class="font_color" style="margin-bottom: 0; display: inline"><b>{{ this.name }}</b></h4>
+                    <div style="" class="menuFood card p-3">
+                        <div class="blog-img">
+                            <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}" alt="Food Image">
+                        </div>
+                        <div class="text-center">
+                            <h4 class="font_color" style="margin: 0; display: inline">
+                                <b>{{ this.name }}</b>
+                            </h4>
+                            {{#if this.isRecommended}}
+                                &nbsp;<b style="font-size:23px;"><i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i></b>
+                            {{/if}}
+                            <p style="margin-bottom: 0.4em;">(code: {{ this.id }})</p>
+                            <h5><span class="thick">{{ this.calories }}</span> kcal</h5>
                             <a href="/vendor/editFoodItem/{{ this.id }}"><i class="fas fa-edit" style="float:right;font-size:1.2em;"></i></a>
-                            <br>
-                            <p style="display: inline">(code: {{ this.id }})</p><br>
-                            <p class="recommended-{{ this.isRecommended }}">{{ this.calories }} calories <br></p>
                         </div>
-                    </header>
-                </article>
+                    </div>
                 {{/each}}
-
-                <article class="food-journal">
-                    <header>
-                        <div id="vendor-food">
-                            <a href="/vendor/addFoodItem"><i href="/vendor/addFoodItem" class="fas fa-plus-square" style="font-size: 3em;"></i>
-                                <br>
-                                <p style="display: inline"><b>Add Food Item</b></p>
-                            </a>
+                    <div style="" class="menuFood card p-3 text-center">
+                        <a href="/vendor/addFoodItem"><i href="/vendor/addFoodItem" class="fas fa-plus-square" style="font-size: 70px;"></i>
                             <br>
-                        </div>
-                    </header>
-                </article>
+                            <p style="display: inline"><b>Add Food Item</b></p>
+                        </a>
+                    </div>
+                </div>
 
             </div>
         </div>

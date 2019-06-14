@@ -3,7 +3,7 @@ $('#venUpload').on('change', function () {
     let formdata = new FormData();
     formdata.append('venImage', image);
     $.ajax({
-        url: '/vendor/upload',
+        url: '/upload',
         type: 'POST',
         data: formdata,
         contentType: false,

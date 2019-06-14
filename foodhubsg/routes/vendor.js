@@ -1,18 +1,16 @@
 const express = require('express');
-const fs = require('fs');
 const router = express.Router();
 
-const loggedIn = require('../helpers/loggedIn');
-const upload = require('../helpers/imageUpload');
+const isVendor = require('../helpers/isVendor');
 
-const Vendor = require('../models/Vendor');
+const Vendor = require('../models/User');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
 const getShopRatings = require('../helpers/getShopRating');
 
 
 
-router.get('/allShops', loggedIn, (req, res) => {
+router.get('/allShops', isVendor, (req, res) => {
     Shop.findAll({
         where: {
             VendorId: req.user.id,
@@ -28,7 +26,7 @@ router.get('/allShops', loggedIn, (req, res) => {
 })
 
 
-router.get('/addShops', loggedIn, (req, res) => {
+router.get('/addShop', isVendor, (req, res) => {
     res.render('vendors/addShop', {
         user: req.user,
         title: "Add Shop",
@@ -36,7 +34,7 @@ router.get('/addShops', loggedIn, (req, res) => {
 });
 
 
-router.get('/editShop/:id', loggedIn, (req, res) => {
+router.get('/editShop/:id', isVendor, (req, res) => {
     var id = req.params.id;
     Promise.all([
         Shop.findOne({
@@ -45,7 +43,6 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
         FoodItem.findAll({
             where: {
                 ShopId: id,
-
             }
         })
     ])
@@ -60,7 +57,7 @@ router.get('/editShop/:id', loggedIn, (req, res) => {
 });
 
 
-router.get('/deleteShop/:id', loggedIn, (req, res) => {
+router.get('/deleteShop/:id', isVendor, (req, res) => {
     Shop.findOne({
         where: {
             id: req.params.id,
@@ -76,10 +73,10 @@ router.get('/deleteShop/:id', loggedIn, (req, res) => {
 });
 
 
-router.get('/allFoodItems', loggedIn, (req, res) => {
+router.get('/allFoodItems', isVendor, (req, res) => {
     Vendor.findOne({
         where: {
-            UserId: req.user.id,
+            id: req.user.id,
         }
     })
     .then((vendor) => {
@@ -104,14 +101,12 @@ router.get('/allFoodItems', loggedIn, (req, res) => {
 
                 })
             })
-
         })
-
     })
 });
 
 
-router.get('/addFoodItem', loggedIn, (req, res) => {
+router.get('/addFoodItem', isVendor, (req, res) => {
     const user = req.user;
     Shop.findAll({
         where: {
@@ -129,7 +124,7 @@ router.get('/addFoodItem', loggedIn, (req, res) => {
 });
 
 
-router.get('/editFoodItem/:id', loggedIn, (req, res) => {
+router.get('/editFoodItem/:id', isVendor, (req, res) => {
     const id = req.params.id;
     FoodItem.findOne({
         where: {
@@ -155,7 +150,7 @@ router.get('/editFoodItem/:id', loggedIn, (req, res) => {
 });
 
 
-router.get('/deleteFoodItem/:id', loggedIn, (req, res) => {
+router.get('/deleteFoodItem/:id', isVendor, (req, res) => {
     FoodItem.update({
         isDeleted: true,
     },
@@ -169,7 +164,7 @@ router.get('/deleteFoodItem/:id', loggedIn, (req, res) => {
 })
 
 
-router.post('/addShop', loggedIn, (req, res) => {
+router.post('/addShop', isVendor, (req, res) => {
     const name = req.body.name;
     const user = req.user;
     const address = req.body.address;
@@ -178,7 +173,7 @@ router.post('/addShop', loggedIn, (req, res) => {
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const imageLocation = req.body.imageURL;
-    
+
     Shop.create({
         name,
         address,
@@ -197,7 +192,7 @@ router.post('/addShop', loggedIn, (req, res) => {
 });
 
 
-router.post('/editShop/:id', loggedIn, (req, res) => {
+router.post('/editShop/:id', isVendor, (req, res) => {
     const id = req.params.id
     const name = req.body.name;
     const user = req.user;
@@ -230,19 +225,21 @@ router.post('/editShop/:id', loggedIn, (req, res) => {
 })
 
 
-router.post('/addFoodItem', loggedIn, (req, res) => {
+router.post('/addFoodItem', isVendor, (req, res) => {
     const name = req.body.name;
     const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
     const description = req.body.description;
     const imageLocation = req.body.imageURL;
+    const isRecommended = (calories <= 500) ? true : false;
+    const isDeleted = false;
 
     for (i = 0; i < shops.length; i++) {
         FoodItem.create({
             name,
             calories,
-            isRecommended: (calories <= 500) ? true : false,
-            isDeleted: false,
+            isRecommended,
+            isDeleted,
             description,
             imageLocation,
             ShopId: shops[i],                    
@@ -265,7 +262,7 @@ router.post('/addFoodItem', loggedIn, (req, res) => {
 })
 
 
-router.post('/editFoodItem/:id', loggedIn, (req, res) => {
+router.post('/editFoodItem/:id', isVendor, (req, res) => {
     const id = req.params.id
     const name = req.body.name;
     const calories = req.body.calories;
@@ -285,26 +282,6 @@ router.post('/editFoodItem/:id', loggedIn, (req, res) => {
     .then(() => {
         req.flash('success', 'Shop has been succcessfully edited');
         res.redirect('/vendor/allShops');
-    });
-})
-
-
-router.post('/upload', loggedIn, (req, res) => {
-    if (!fs.existsSync('./public/uploads/' + req.user.id)) {
-        fs.mkdirSync('./public/uploads/' + req.user.id);
-    }
-
-    upload(req, res, (err) => {
-        if (err) {
-            res.json({ file: '/images/no-image.jpg', err: err });
-            console.log(err);
-        } else {
-            if (req.file === undefined) {
-                res.json({ file: '/images/no-image.jpg', err: err });
-            } else {
-                res.json({ file: `/uploads/${req.user.id}/${req.file.filename}` });
-            }
-        }
     });
 })
 

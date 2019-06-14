@@ -2,12 +2,10 @@
 <div id="colorlib-container">
     <div class="container">
 
-        <div class="col-md-12">
-            <div class="box1">
-                <div class="row row-pb-md">
-                    <div class="col-md-12">
-
-                        <header id="summary-header">
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+                    <header id="summary-header">
                         <h1 class="font_color" style="display:inline-block;"><b>All Available Vendors</b></h1>
                         {{!-- <a href="/user/foodJournal"><button type="button" class="btn btn-success" style="float:right;">Add New Vendor</button></a> --}}
                         <hr>
@@ -20,75 +18,67 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">Koufu Group</th>
-                                    <td>admin@koufu.com</td>
-                                    <td>
-                                        <u><a href="/admin/editShop/6/">The Warm Drum</a></u>,
-                                        <u><a href="/admin/editShop/4/">Lean Bento</a></u>,
-                                        <u><a href="/admin/editShop/5/">The Lawn</a></u>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">ABR Holdings</th>
-                                    <td>admin@abrhldings.com</td>
-                                    <td>
-                                        <u><a href="/admin/editShop/1/">Misaka</a></u>
-                                    </td>
-                                </tr>
+                            {{#each groupedVendors}}
+                            <tr>
+                                <th scope="row">{{0.name}}</th>
+                                <td>{{0.email}}</td>
+                                <td>
+                                    |
+                                    {{#each this}}
+                                    <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u> |
+                                    {{else}}
+                                    <h6>No shops added!</h6>
+                                    {{/each}}
+                                </td>
+                            </tr>
+                            {{else}}
+    
+                            {{/each}}
                             </tbody>
                         </table>
-
-
-                    </div>
+                    </header>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="box1">
-                <div class="row row-pb-md">
-                    <div class="col-md-12">
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
         
-                        <header>
-                            <h1 class="font_color"><b>Add Vendor</b></h1>
-                            <hr>
-                        </header>
+                    <header>
+                        <h1 class="font_color"><b>Add Vendor</b></h1>
+                        <hr>
+                    </header>
         
-                        <form method="post">
+                    <form method="post">
         
-                            <div class="row form-group">
-                                <div class="col-md-6">
-                                    <label>Vendor Name</label>
-                                    <input name="name" id="name" type="text" class="form-control" value=""
-                                        placeholder="Name">
-                                </div>
-        
-                                <div class="col-md-6">
-                                    <label>Vendor Email</label>
-                                    <input name="email" id="email" type="email" class="form-control" value=""
-                                        placeholder="Email">
-                                </div>
-        
-                                <div class="col-md-12 new-password">
-                                    <label>Password</label>
-                                    <input name="password" id="password" type="password" class="form-control delprefix"
-                                        placeholder="Password">
-                                </div>
-
-                                <div class="col-md-12 confirm-password">
-                                    <label>Confirm Password</label>
-                                    <input name="confirm-password" id="confirm-password" type="password" class="form-control delprefix"
-                                        placeholder="Confirm Password">
-                                </div>
+                        <div class="row form-group">
+                            <div class="col-md-12" style="margin-bottom:1em;">
+                                <label>Name</label>
+                                <input name="name" id="name" type="text" class="form-control" value="" placeholder="Name" required>
                             </div>
         
-                            <br>
+                            <div class="col-md-12" style="margin-bottom:1em;">
+                                <label>Email</label>
+                                <input name="email" id="email" type="email" class="form-control" value="" placeholder="Email" required>
+                            </div>
         
-                            <input type="submit" name="action" value="Add New Vendor" class="btn btn-primary"
-                                style="background-color: #4CAF50;">
-                        </form>
-                    </div>
+                            <div class="col-md-6 password">
+                                <label>Password</label>
+                                <input name="password" id="password" type="password" class="form-control delprefix"
+                                    placeholder="Password" required>
+                            </div>
+        
+                            <div class="col-md-6 confirm-password">
+                                <label>Confirm Password</label>
+                                <input name="confirmPassword" id="confirmPassword" type="password"
+                                    class="form-control delprefix" placeholder="Confirm Password" required>
+                            </div>
+                        </div>
+                        <br>    
+                        <input type="submit" name="action" value="Add New Vendor" class="btn btn-primary"
+                            style="background-color: #4CAF50;">
+                    </form>
                 </div>
             </div>
         </div>

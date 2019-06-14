@@ -1,0 +1,53 @@
+{{> _msg }}
+<div id="colorlib-container">
+    <div class="container">
+
+        <div class="box1">
+            <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;">
+                <div class="row row-pb-md">
+
+                    <div class="col-md-12">
+                        <h1 class="font_color"><b>Add Food Item</b></h1>
+                        <hr>
+                    </div>
+
+                    <form method="POST" style="width:100%">
+                        <div class="row form-group" style="margin:0;">
+                            <div class="col-md-6" style="margin-bottom:2em;">
+                                <label>Food Image</label>
+                                <img src="/images/nice-waffle.jpg" id="venImage" class="img-responsive shopImage"
+                                    alt="Image">
+                                <input type="file" id="venUpload" name="venUpload"
+                                    accept="image/png,image/jpeg,image/jpg,image/gif">
+                                <input id="imageURL" type="hidden" name="imageURL" value="/images/nice-waffle.jpg">
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="desc">
+                                    <p class="meta">
+                                        <label>Name of Food</label>
+                                        <input name="name" id="name" type="text" class="form-control" value="" placeholder="Name">
+                                        <label>Calories</label>
+                                        <input name="calories" id="calories" type="text" class="form-control" value="" placeholder="Calories">
+                                        {{#each shop}}
+                                        <input name="shop" id="shop" type="checkbox" class="form-control" value="{{this.id}}"> {{this.name}}
+                                        {{/each}}
+                                        
+                                        <hr>
+
+                                        <button type="submit" name="action" value="Add Food" class="btn btn-primary" style="float:right">Add
+                                            Food</button>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+                <br>
+            </div>
+        </div>
+
+    </div>
+</div>
