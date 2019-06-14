@@ -282,7 +282,7 @@
     .bind("click keyup", function (event) {
         const foodSubsection = $(this).parent().closest('div');
 
-        var logId = jQuery(foodSubsection).attr("id");
+        var logId = jQuery(foodSubsection).attr("logId");
         var logCreatedAt = jQuery(foodSubsection).attr("logCreatedAt");
         var foodName = jQuery(foodSubsection).attr("foodName");
         var foodItemId = jQuery(foodSubsection).attr("foodItemId");
@@ -298,7 +298,7 @@
         $('#viewFoodShop').text(shopName);
         $('#viewFoodShop').attr("href", `/user/shops/${shopId}`);
 
-        $('#codeToChange').attr("placeholder", `Previous Entry: ${foodName} (code: ${foodItemId})`);
+        $('#codeToChange').attr("placeholder", `Previous Entry - ${foodName} (code: ${foodItemId})`);
         $('#edit-food-form').attr("action", `/user/editFood/${logId}`);
         $('#delete-food-form').attr("action", `/user/deleteFood/${logId}`);
     });

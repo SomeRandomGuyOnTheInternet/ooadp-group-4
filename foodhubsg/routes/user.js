@@ -233,17 +233,13 @@ router.post('/addFood', loggedIn, (req, res) => {
 
 router.post('/editFood/:id', loggedIn, (req, res) => {
     var logId = req.params.id, foodIdToUpdateTo = req.body.codeToChange;
-
+    console.log(logId)
     Food.findOne({ where: { id: foodIdToUpdateTo }, })
     .then((foodItem) => {
         if (foodItem) {
             FoodLog.update(
                 { FoodId: foodIdToUpdateTo },
-                {
-                    where: {
-                        id: logId,
-                    }
-                },
+                { where: { id: logId } },
             )
             .then(() => {
                 req.flash('success', "You've successfully edited that food item!");

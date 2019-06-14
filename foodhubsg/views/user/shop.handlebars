@@ -69,7 +69,7 @@
                             <b>{{ this.name }}</b>
                         </h4>
                         {{#if this.isRecommended}}
-                            <b style="font-size:20px;"><i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i></b>
+                            &nbsp;<b style="font-size:23px;"><i class="fas fa-thumbs-up recommended-{{ this.isRecommended }}"></i></b>
                         {{/if}}
                         <br>
                         <p style="display: inline">(code: {{ this.id }})</p>
@@ -86,7 +86,7 @@
         </div>
 
         <div class="col-md-12" style="padding:0;">
-            <span>Owned by <i>{{ vendor.name }} - <u><a href="#">{{ vendor.email }}</a></u></i></span>
+            <span>Owned by <i>{{ vendor.name }} - <u><a href="mailto:{{ vendor.email }}" target="_top">{{ vendor.email }}</a></u></i></span>
             <hr>
         </div>
 

@@ -150,8 +150,7 @@ router.get('/editFoodItem/:id', loggedIn, (req, res) => {
                 shop: shop,
 
             })
-        })
-
+        });
     })
 });
 
@@ -179,6 +178,7 @@ router.post('/addShop', loggedIn, (req, res) => {
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const imageLocation = req.body.imageURL;
+    
     Shop.create({
         name,
         address,
