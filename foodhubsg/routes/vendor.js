@@ -162,7 +162,18 @@ router.get('/deleteFoodItem/:id', loggedIn, (req, res) => {
     {
         where: { id: req.params.id, },
     })
-    .then(() => {
+    .then((food) => {
+        FoodItem.findAll({ where: { ShopId: food, isDeleted: false } })
+        .then((foodItems) => {
+            var rating = getShopRatings(foodItems);
+            Shop.update(
+                { 
+                    rating,
+                    isRecommended: (rating >= 4) ? true : false,
+                },
+                { where: { id: foodItems[0].ShopId } }
+            )
+        });
         req.flash('success', 'Shop has been succcessfully edited');
         res.redirect('/vendor/allFoodItem');
     });
@@ -247,12 +258,12 @@ router.post('/addFoodItem', loggedIn, (req, res) => {
             imageLocation,
             ShopId: shops[i],                    
         })
-        FoodItem.findAll({ where: { ShopId: shops[i] } })
+        FoodItem.findAll({ where: { ShopId: shops[i] }, isDeleted: false})
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
             Shop.update(
                 { 
-                    rating,
+                    rating: rating,
                     isRecommended: (rating >= 4) ? true : false,
                 },
                 { where: { id: foodItems[0].ShopId } }
@@ -282,7 +293,18 @@ router.post('/editFoodItem/:id', loggedIn, (req, res) => {
     {
         where: { ShopId: shop, id: id, },
     })
-    .then(() => {
+    .then((food) => {
+        FoodItem.findAll({ where: { ShopId: food.ShopId, isDeleted: false } })
+        .then((foodItems) => {
+            var rating = getShopRatings(foodItems);
+            Shop.update(
+                { 
+                    rating,
+                    isRecommended: (rating >= 4) ? true : false,
+                },
+                { where: { id: foodItems[0].ShopId } }
+            )
+        });
         req.flash('success', 'Shop has been succcessfully edited');
         res.redirect('/vendor/allShops');
     });
