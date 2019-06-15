@@ -29,7 +29,7 @@ router.post('/settings', isVendor, (req, res) => {
 		where: { id: req.user.id }
     })
     .then(() => {		
-        res.redirect('vendors/vendorSettings'); 
+        res.redirect('/vendor/settings'); 
         req.flash('success', 'Settings have been updated successfully');
         })
         
