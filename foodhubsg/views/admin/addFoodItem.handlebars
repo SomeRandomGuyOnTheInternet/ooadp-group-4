@@ -28,13 +28,13 @@
                                         <label>Name of Food</label>
                                         <input name="name" id="name" type="text" class="form-control" value="" placeholder="Name" required>
                                         <label>Calories</label>
-                                        <input name="calories" id="calories" type="text" class="form-control" value="" placeholder="Calories" required>
+                                        <input name="calories" id="calories" type="text" class="form-control" value="" placeholder="Calories" style="margin-bottom:3em;" required>
                                         <h4 class="font_color"><b>Shops</b></h4>
                                         <hr>
                                         {{#each shop}}
                                         <div class="checkbox-group" style="display:inline-block;">
-                                            <input name="shop" id="shop" type="checkbox" class="checkbox" value="{{this.id}}">
-                                            <label>{{this.name}}</label>{{#unless @last}}&nbsp;•&nbsp;{{/unless}}
+                                            <input name="shop" id="shop" type="checkbox" class="checkbox" value="{{this.id}}">&nbsp;
+                                            <label>{{this.name}}</label>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
                                         </div>
                                         {{/each}}
                                     </p>
