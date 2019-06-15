@@ -290,8 +290,8 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
     {
         where: { ShopId: shop, id: id, },
     })
-    .then((food) => {
-        FoodItem.findAll({ where: { ShopId: food.ShopId, isDeleted: false } })
+    .then(() => {
+        FoodItem.findAll({ where: { ShopId: shop, isDeleted: false } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
             Shop.update(
@@ -299,7 +299,7 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
                     rating,
                     isRecommended: (rating >= 4) ? true : false,
                 },
-                { where: { id: foodItems[0].ShopId } }
+                { where: { id: shop } }
             )
         });
         req.flash('success', 'Shop has been succcessfully edited');
