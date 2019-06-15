@@ -1,0 +1,54 @@
+{{> _msg }}
+<div id="colorlib-container">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="box1">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+
+                        <header>
+                            <h1 class="font_color"><b>User Settings</b></h1>
+                            <h5>({{user.email}})</h5>
+                            <hr>
+                        </header>
+
+                        <form action="">
+
+                            <div class="row form-group">
+
+                                <div class="col-md-12">
+                                    <label>Email</label>
+                                    <input name="email" id="email" type="email" class="form-control" value="{{user.email}}" placeholder="{{user.email}}">
+                                </div>
+
+                                <div class="col-md-12 new-password">
+                                    <label>Password</label>
+                                    <input name="password" id="password" type="password" class="form-control delprefix"
+                                        placeholder="(unchanged)">
+                                </div>
+                            </div>
+
+                            <div class="hide-tax" style="display:none;">
+                                <div class="row form-group">
+                                    <div class="col-md-12 old-password">
+                                        <label>Confirm Current Password</label>
+                                        <input name="old-password" id="old-password" type="password"
+                                            class="form-control delprefix" placeholder="Enter your current password">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <input type="submit" name="action" value="Update Settings" class="btn btn-primary"
+                                style="background-color: #4CAF50;">
+                            <input type="submit" name="action" value="Delete Account" onclick="remove_confirm()"
+                                class="btn btn-primary" id="remove-account" style="background-color: #d9534f;">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

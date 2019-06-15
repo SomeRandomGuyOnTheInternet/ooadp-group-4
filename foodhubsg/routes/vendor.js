@@ -2,12 +2,39 @@ const express = require('express');
 const router = express.Router();
 
 const isVendor = require('../helpers/isVendor');
-
 const Vendor = require('../models/User');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
 const getShopRatings = require('../helpers/getShopRating');
 
+router.get('/settings', isVendor, (req, res) => {
+    res.render('vendors/vendorSettings', {
+        user: req.user,
+        title: "Settings",
+    })
+});
+
+router.post('/settings', isVendor, (req, res) => {
+	const name = req.body.name;
+	const email = req.body.email.toLowerCase();
+	const password = req.body.password;
+	
+	var error;
+
+	Vendor.update({		
+         name: name, 
+         email: email, 
+         password: password
+	},{
+		where: { id: req.user.id }
+    })
+    .then(() => {		
+        res.redirect('vendors/vendorSettings'); 
+        req.flash('success', 'Settings have been updated successfully');
+        })
+        
+    .catch(err => console.log(err));
+});
 
 
 router.get('/allShops', isVendor, (req, res) => {
