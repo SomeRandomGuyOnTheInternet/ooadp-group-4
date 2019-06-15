@@ -7,12 +7,13 @@
                 <div class="row row-pb-md">
 
                     <div class="col-md-12">
-                        <h1 class="font_color"><b>Add Food Item</b></h1>
+                        <h1 class="font_color"><b>Edit Food Item</b></h1>
                         <hr>
                     </div>
 
                     <form method="POST" style="width:100%">
                         <div class="row form-group" style="margin:0;">
+
                             <div class="col-md-6" style="margin-bottom:2em;">
                                 <label>Food Image</label>
                                 <img src="{{food.imageLocation}}" id="venImage" class="img-responsive shopImage"
@@ -26,32 +27,26 @@
                                 <div class="desc">
                                     <p class="meta">
                                         <label>Name of Food</label>
-                                        <input name="name" id="name" type="text" class="form-control" value="{{food.name}}"
-                                            placeholder="Name">
+                                        <input name="name" id="name" type="text" class="form-control" value="{{food.name}}" placeholder="Name" required>
                                         <label>Calories</label>
-                                        <input name="calories" id="calories" type="text" class="form-control" value="{{food.calories}}"
-                                            placeholder="Calories">
-                                        {{#each shop}}
-                                        <input name="shop" id="shop" type="checkbox" class="form-control"
-                                            value="{{this.id}}"> {{this.name}}
-                                        {{/each}}
-
+                                        <input name="calories" id="calories" type="text" class="form-control" value="{{food.calories}}" placeholder="Calories" required>
+                                        <h4 class="font_color"><b>Shop</b></h4>
                                         <hr>
-
-                                        <button type="submit" name="action" value="Delete Food" class="btn btn-danger btn-tall"
-                                        style="float:right">Delete
-                                        Food</button>
-
-                                        <button type="submit" name="action" value="Edit Food" class="btn btn-primary btn-tall"
-                                        style="float:right">Edit
-                                        Food</button>
+                                        <input id="shop" type="hidden" name="shop" value="{{shop.id}}">
+                                        <input name="shopName" id="shopName" type="text" class="form-control" value="{{currentShop.name}}" placeholder="vendor"
+                                            readonly>
                                     </p>
                                 </div>
+                                <button type="submit" name="action" value="Edit Food" class="btn btn-primary btn-tall" id="editFoodButton" style="float:right" disabled>Edit
+                                    Food</button>
+                                </form>
+                                <form method="POST" action="" style="width:100%">
+                                    <button type="submit" name="action" value="Delete Food" class="btn btn-danger btn-tall" style="float:right">Delete
+                                        Food</button>
+                                </form>
                             </div>
 
                         </div>
-                    </form>
-
                 </div>
                 <br>
             </div>
@@ -59,3 +54,27 @@
 
     </div>
 </div>
+
+<script>
+    var oldElem = [], newElem = [];
+
+    $('.form-control').each(function () {
+        elem = $(this);
+        oldElem.push(elem.val());
+    });
+
+    $('.form-control')
+    .bind("propertychange change click keyup input paste", function (event) {
+        newElem = [];
+        $('.form-control').each(function () {
+            var elem = $(this);
+            newElem.push(elem.val());
+        });
+
+        if (JSON.stringify(oldElem) != JSON.stringify(newElem)) {
+            $("#editFoodButton").attr("disabled", false);
+        } else {
+            $("#editFoodButton").attr("disabled", true);
+        }
+    });
+</script>

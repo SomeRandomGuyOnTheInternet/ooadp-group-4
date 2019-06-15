@@ -26,19 +26,21 @@
                                 <div class="desc">
                                     <p class="meta">
                                         <label>Name of Food</label>
-                                        <input name="name" id="name" type="text" class="form-control" value="" placeholder="Name">
+                                        <input name="name" id="name" type="text" class="form-control" value="" placeholder="Name" required>
                                         <label>Calories</label>
-                                        <input name="calories" id="calories" type="text" class="form-control" value="" placeholder="Calories">
-                                        {{#each shop}}
-                                        <input name="shop" id="shop" type="checkbox" class="form-control" value="{{this.id}}"> {{this.name}}
-                                        {{/each}}
-                                        
+                                        <input name="calories" id="calories" type="text" class="form-control" value="" placeholder="Calories" required>
+                                        <h4 class="font_color"><b>Shops</b></h4>
                                         <hr>
-
-                                        <button type="submit" name="action" value="Add Food" class="btn btn-primary" style="float:right">Add
-                                            Food</button>
+                                        {{#each shop}}
+                                        <div class="checkbox-group" style="display:inline-block;">
+                                            <input name="shop" id="shop" type="checkbox" class="checkbox" value="{{this.id}}">
+                                            <label>{{this.name}}</label>&nbsp;|&nbsp;
+                                        </div>
+                                        {{/each}}
                                     </p>
                                 </div>
+                                <button type="submit" name="action" value="Add Food" class="btn btn-primary btn-tall" id="addFoodButton" style="float:right" disabled>Add
+                                    Food</button>
                             </div>
 
                         </div>
@@ -51,3 +53,14 @@
 
     </div>
 </div>
+
+<script>
+    $('.checkbox')
+    .bind("propertychange change click keyup input paste", function (event) {
+        if ($('.checkbox:checkbox:checked').length == 0) {
+            $("#addFoodButton").attr("disabled", true);
+        } else {
+            $("#addFoodButton").attr("disabled", false);
+        }
+    });
+</script>

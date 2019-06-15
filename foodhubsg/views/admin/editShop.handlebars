@@ -62,12 +62,15 @@
                             </div>
 
                             <div class="col-md-12">
-                                <input type="submit" name="action" value="Update Shop" class="btn btn-primary"
-                                   id="updateShopButton" style="float:right;" disabled>
+                                <input type="submit" name="action" value="Update Shop" class="btn btn-primary btn-tall"
+                                   id="updateShopButton" style="float:right;" disabled>       
+                                </form>
+                                <form method="POST" action="/admin/deleteShop/{{shop.id}}" style="width:100%">
+                                    <input type="submit" name="action" value="Delete Shop" class="btn btn-danger btn-tall" id="updateShopButton"
+                                        style="float:right;">
+                                </form>
                             </div>
-
                         </div>
-                    </form>
                     
                 </div>
                 <br>

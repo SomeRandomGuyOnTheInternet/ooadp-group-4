@@ -4,6 +4,7 @@ const router = express.Router();
 
 const isAdmin = require('../helpers/isAdmin');
 const groupVendors = require('../helpers/groupVendors');
+const getShopRatings = require('../helpers/getShopRating');
 
 const Shop = require('../models/Shop');
 const FoodItem = require('../models/FoodItem')
@@ -31,7 +32,9 @@ router.get('/vendors', isAdmin, (req, res) => {
 
 
 router.get('/shops', isAdmin, (req, res) => {
-    Shop.findAll()
+    Shop.findAll({
+        where: { isDeleted: false },
+    })
     .then(function (shops) {
         res.render('admin/shops', {
             user: req.user,
@@ -99,11 +102,11 @@ router.get('/addShop', isAdmin, (req, res) => {
 router.get('/addFoodItem', isAdmin, (req, res) => {
     Shop.findAll({
         where: {
-            VendorId: user.id,
             isDeleted: false,
         }
     })
     .then((shops) => {
+        console.log(shops)
         res.render('admin/addFoodItem', {
             user: req.user,
             title: "Add Food",
@@ -115,6 +118,7 @@ router.get('/addFoodItem', isAdmin, (req, res) => {
 
 router.get('/editFoodItem/:id', isAdmin, (req, res) => {
     const id = req.params.id;
+
     FoodItem.findOne({
         where: {
             id: id,
@@ -125,14 +129,23 @@ router.get('/editFoodItem/:id', isAdmin, (req, res) => {
             where: {
                 id: food.ShopId,
             }
-        }).
-        then((shop) => {
-            res.render('admin/editFoodItem', {
-                user: req.user,
-                title: "Edit Menu",
-                food: food,
-                shop: shop,
+        })
+        .then((currentShop) => {
+            Shop.findAll({
+                where: {
+                    isDeleted: false,
+                    VendorId: currentShop.VendorId,
+                }
             })
+            .then((shops) => {
+                res.render('admin/editFoodItem', {
+                    user: req.user,
+                    title: "Edit Menu",
+                    food,
+                    currentShop,
+                    shops,
+                });
+            });
         });
     })
 });
@@ -244,11 +257,29 @@ router.post('/editShop/:id', (req, res) => {
 });
 
 
+router.post('/deleteShop/:id', (req, res) => {
+    FoodItem.update({
+        isDeleted: true,
+    },
+    {
+        where: { ShopId: req.params.id, },
+    })
+    .then(() => {
+        Shop.update({
+            isDeleted: true,
+        },{
+            where: { id: req.params.id, },
+        });
+        req.flash('success', 'Shop has been succcessfully deleted!');
+        res.redirect('/admin/shops');
+    });
+});
+
+
 router.post('/addFoodItem', isAdmin, (req, res) => {
     const name = req.body.name;
     const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
-    const description = req.body.description;
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
@@ -259,10 +290,10 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
             calories,
             isRecommended,
             isDeleted,
-            description,
             imageLocation,
             ShopId: shops[i],
         })
+
         FoodItem.findAll({ where: { ShopId: shops[i] } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
@@ -276,31 +307,46 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
         });
     }
 
-    req.flash('success', 'Food has been succcessfully added');
+    req.flash('success', 'Food has been succcessfully added!');
     res.redirect('/admin/shops')
 })
 
 
 router.post('/editFoodItem/:id', isAdmin, (req, res) => {
-    const id = req.params.id
+    const id = req.params.id;
     const name = req.body.name;
-    const calories = req.body.calories;
     const shop = req.body.shop;
+    const calories = req.body.calories;
     const imageLocation = req.body.imageURL;
+    const isRecommended = (calories <= 500) ? true : false;
+    const isDeleted = false;
 
-    FoodItem.update({
-        name,
-        calories,
-        imageLocation,
-        isRecommended: (calories <= 500) ? true : false,
-        isDeleted: false,
-    },
-    {
-        where: { ShopId: shop, id: id, },
-    })
-    .then(() => {
-        req.flash('success', 'Shop has been succcessfully edited');
-        res.redirect('/vendor/shops');
+    FoodItem.update(
+        {
+            name,
+            calories,
+            isRecommended,
+            isDeleted,
+            imageLocation,
+        },{
+            where: { id }
+        }
+    )
+
+    FoodItem.findAll({ where: { ShopId: shop } })
+    .then((foodItems) => {
+        var rating = getShopRatings(foodItems);
+        Shop.update(
+            {
+                rating,
+                isRecommended: (rating >= 4) ? true : false,
+            },
+            { where: { id: foodItems[0].ShopId } }
+        )
+        .then(() => {
+            req.flash('success', 'Food has been succcessfully edited!');
+            res.redirect('/admin/shops');
+        });
     });
 })
 
