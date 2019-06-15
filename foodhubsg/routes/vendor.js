@@ -43,6 +43,7 @@ router.get('/editShop/:id', isVendor, (req, res) => {
         FoodItem.findAll({
             where: {
                 ShopId: id,
+                isDeleted: false, 
             }
         })
     ])
@@ -157,8 +158,13 @@ router.get('/deleteFoodItem/:id', isVendor, (req, res) => {
     {
         where: { id: req.params.id, },
     })
-    .then((food) => {
-        FoodItem.findAll({ where: { ShopId: food, isDeleted: false } })
+    .then((id) => {
+        var food = FoodItem.findOne({
+            attributes: ['ShopId'],  
+            where: { id: id }, 
+    }).then((food) => { 
+         console.log(food); 
+        FoodItem.findAll({ where: { ShopId: food.ShopId, isDeleted: false } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
             Shop.update(
@@ -169,8 +175,10 @@ router.get('/deleteFoodItem/:id', isVendor, (req, res) => {
                 { where: { id: foodItems[0].ShopId } }
             )
         });
+    })
+       
         req.flash('success', 'Shop has been succcessfully edited');
-        res.redirect('/vendor/allFoodItem');
+        res.redirect('/vendor/allFoodItems');
     });
 })
 
