@@ -314,12 +314,14 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
         FoodItem.findAll({ where: { ShopId: shops[i] } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
+            console.log(rating)
             Shop.update(
                 {
                     rating,
                     isRecommended: (rating >= 4) ? true : false,
-                },
-                { where: { id: foodItems[0].ShopId } }
+                },{ 
+                    where: { id: foodItems[0].ShopId } 
+                }
             )
         });
     }
@@ -337,7 +339,7 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
-    console.log(shop)
+
     FoodItem.update(
         {
             name,

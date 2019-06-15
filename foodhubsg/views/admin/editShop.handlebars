@@ -147,6 +147,7 @@
         map.fitBounds(bounds);
 
         google.maps.event.addListener(marker, 'dragend', function () {
+            $("#updateShopButton").attr("disabled", false);
             geocodePosition(marker.getPosition());
         });
 
