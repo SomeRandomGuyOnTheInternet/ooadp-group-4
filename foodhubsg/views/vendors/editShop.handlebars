@@ -194,7 +194,6 @@
                         component = result.address_components[c];
 
                         if (component.types[0] === 'neighborhood') {
-                            console.log(component.long_name)
                             return component.long_name;
                         }
                     }

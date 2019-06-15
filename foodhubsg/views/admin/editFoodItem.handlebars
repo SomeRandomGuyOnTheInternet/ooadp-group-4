@@ -15,7 +15,7 @@
                         <div class="row form-group" style="margin:0;">
 
                             <div class="col-md-6" style="margin-bottom:2em;">
-                                <label>Food Image</label>
+                                <label>Food Image</label><br>
                                 <img src="{{food.imageLocation}}" id="venImage" class="img-responsive shopImage"
                                     alt="Image">
                                 <input type="file" id="venUpload" name="venUpload"
@@ -32,7 +32,7 @@
                                         <input name="calories" id="calories" type="text" class="form-control" value="{{food.calories}}" placeholder="Calories" required>
                                         <h4 class="font_color"><b>Shop</b></h4>
                                         <hr>
-                                        <input id="shop" type="hidden" name="shop" value="{{shop.id}}">
+                                        <input name="shopId" id="shopId" type="hidden" value="{{currentShop.id}}">
                                         <input name="shopName" id="shopName" type="text" class="form-control" value="{{currentShop.name}}" placeholder="vendor"
                                             readonly>
                                     </p>
@@ -40,7 +40,7 @@
                                 <button type="submit" name="action" value="Edit Food" class="btn btn-primary btn-tall" id="editFoodButton" style="float:right" disabled>Edit
                                     Food</button>
                                 </form>
-                                <form method="POST" action="" style="width:100%">
+                                <form method="POST" action="/admin/deleteFoodItem/{{food.id}}" style="width:100%">
                                     <button type="submit" name="action" value="Delete Food" class="btn btn-danger btn-tall" style="float:right">Delete
                                         Food</button>
                                 </form>

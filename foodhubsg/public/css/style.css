@@ -23,13 +23,13 @@ body {
   overflow:hidden; 
   margin-top:1em; 
   margin-bottom:1.2em;
-  width:80%;
+  max-width:80%;
   height:auto;
 }
 
 .shopImage {
   overflow:hidden;
-  width:90%;
+  max-width:90%;
   height:auto;
 }
 

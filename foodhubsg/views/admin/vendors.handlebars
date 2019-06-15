@@ -23,9 +23,8 @@
                                 <th scope="row">{{0.name}}</th>
                                 <td>{{0.email}}</td>
                                 <td>
-                                    |
                                     {{#each this}}
-                                    <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u> |
+                                    <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u>{{#unless @last}} • {{/unless}}
                                     {{else}}
                                     <h6>No shops added!</h6>
                                     {{/each}}

@@ -14,7 +14,7 @@
                     <form method="POST" style="width:100%">
                         <div class="row form-group" style="margin:0;">
                             <div class="col-md-6" style="margin-bottom:2em;">
-                                <label>Food Image</label>
+                                <label>Food Image</label><br>
                                 <img src="/images/nice-waffle.jpg" id="venImage" class="img-responsive shopImage"
                                     alt="Image">
                                 <input type="file" id="venUpload" name="venUpload"
@@ -34,7 +34,7 @@
                                         {{#each shop}}
                                         <div class="checkbox-group" style="display:inline-block;">
                                             <input name="shop" id="shop" type="checkbox" class="checkbox" value="{{this.id}}">
-                                            <label>{{this.name}}</label>&nbsp;|&nbsp;
+                                            <label>{{this.name}}</label>{{#unless @last}}&nbsp;•&nbsp;{{/unless}}
                                         </div>
                                         {{/each}}
                                     </p>

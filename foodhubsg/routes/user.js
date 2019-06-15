@@ -203,7 +203,6 @@ router.post('/addFood', isUser, (req, res) => {
         where: { id: req.body.userFoodCode, }
     })
     .then((foodItem) => {
-        console.log(foodItem);
         if (foodItem) {
             FoodLog.create({
                 UserId: user.id,

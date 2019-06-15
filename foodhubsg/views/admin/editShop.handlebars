@@ -30,7 +30,8 @@
                                         <input name="name" id="name" type="text" class="form-control marginBottom" value="{{shop.name}}"
                                             placeholder="Name" required>
                                         <label>Vendor</label>
-                                        <select name="vendor" id="vendorSelect" type="text" class="form-control">
+                                        <input name="currentVendor" id="currentVendor" type="hidden" class="form-control" value="{{shop.User.id}}">
+                                        <select name="vendor" id="vendorSelect" type="text" class="form-control" required>
                                             <option value="{{shop.User.id}}" selected>{{shop.User.name}}</option>
                                             {{#each vendors}}
                                                 <option value="{{id}}">{{name}}</option>
@@ -40,8 +41,7 @@
                                         </select>
                                         <hr>
                                         <label for="description">Description</label>
-                                        <textarea id="description" name="description" form="description-form"
-                                            class="form-control" rows="4" cols="50" placeholder="Description"
+                                        <textarea id="description" name="description" class="form-control" rows="4" cols="50" placeholder="Description"
                                             required>{{shop.description}}</textarea>
                                     </p>
                                 </div>
