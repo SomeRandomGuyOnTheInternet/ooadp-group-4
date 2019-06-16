@@ -21,11 +21,11 @@
                                     <b class="vendors"><b>{{this.name}}</b></b><br>
                                     <span class="food_location"><b>{{ this.address }}</b></span><br>
                                     <span class="food_rating">Rating:&nbsp;
-                                        <b class="recommended-{{ shop.isRecommended }}">
-                                            {{#times shop.rating}}
+                                        <b class="recommended-{{ this.isRecommended }}">
+                                            {{#times this.rating}}
                                                 <i class="fas fa-star"></i>
                                             {{/times}}
-                                            {{#times (math 5 "-" shop.rating)}}
+                                            {{#times (math 5 "-" this.rating)}}
                                                 <i class="far fa-star"></i>
                                             {{/times}}
                                         </b>
