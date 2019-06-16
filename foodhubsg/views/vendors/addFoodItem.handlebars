@@ -32,9 +32,11 @@
 
                                     {{#if shop}}
                                     {{#each shop}}
-                                    <input name="shop" id="shop" type="checkbox" class="form-control"
-                                        value="{{this.id}}"> {{this.name}}>
-
+                                        <div class="checkbox-group" style="display:inline-block;">
+                                            <input name="shop" id="shop" type="checkbox" class="checkbox" value="{{this.id}}">&nbsp;
+                                            <label>{{this.name}}</label>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
+                                        </div>
+                                        {{/each}}
                                     <hr>
                                 </p>
                             </div>
@@ -43,7 +45,7 @@
                             <button type="submit" name="action" value="Add Shop" id="submitFood"
                                 class="btn btn-primary btn-tall">Add
                                 Menu</button>
-                            {{/each}}
+
                             {{else}}
                             <p> You have no shops available, please add a shop </p>
                             {{/if}}
@@ -59,3 +61,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('.checkbox')
+    .bind("propertychange change click keyup input paste", function (event) {
+        if ($('.checkbox:checkbox:checked').length == 0) {
+            $("#addFoodButton").attr("disabled", true);
+        } else {
+            $("#addFoodButton").attr("disabled", false);
+        }
+    });
+</script>
