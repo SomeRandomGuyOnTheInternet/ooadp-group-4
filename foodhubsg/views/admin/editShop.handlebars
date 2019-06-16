@@ -7,7 +7,7 @@
                 <div class="row row-pb-md">
 
                     <div class="col-md-12">
-                        <h1 class="font_color"><b>Update Shop</b></h1>
+                        <h1 class="font_color"><b>Edit Shop</b></h1>
                         <hr>
                     </div>
 
@@ -62,11 +62,11 @@
                             </div>
 
                             <div class="col-md-12">
-                                <input type="submit" name="action" value="Update Shop" class="btn btn-primary btn-tall"
+                                <input type="submit" name="action" value="Edit Shop" class="btn btn-primary btn-tall"
                                    id="updateShopButton" style="float:right;" disabled>       
                                 </form>
-                                <form method="POST" action="/admin/deleteShop/{{shop.id}}" style="width:100%">
-                                    <input type="submit" name="action" value="Delete Shop" class="btn btn-danger btn-tall" id="updateShopButton"
+                                <form method="POST" action="/admin/deleteShop/{{shop.id}}" style="width:100%" onsubmit="return confirm('Are you sure you want to delete this shop?');">
+                                    <input type="submit" name="action" value="Delete Shop" class="btn btn-danger btn-tall" id="editShopButton"
                                         style="float:right;">
                                 </form>
                             </div>

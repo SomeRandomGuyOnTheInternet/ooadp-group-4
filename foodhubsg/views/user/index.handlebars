@@ -24,11 +24,16 @@
 								<p class="meta">
 									<b class="vendors"><b>{{this.name}}</b></b><br>
 									<span class="food_location"><b>{{ this.address }}</b></span><br>
-									<span class="food_rating">Rating:&nbsp;<b class="recommended-{{ this.isRecommended }}">
+									<span class="food_rating">Rating:&nbsp;
+										<b class="recommended-{{ this.isRecommended }}">
 										{{#times this.rating}}
-											<i class="fas fa-star"></i>
+												<i class="fas fa-star"></i>
 										{{/times}}
-									</b></span>
+										{{#times (math 5 "-" this.rating)}}
+											<i class="far fa-star"></i>
+										{{/times}}
+										</b>
+									</span>
 									<br>
 								</p>
 							</div>
@@ -221,9 +226,8 @@
 					label: {
 						enabled: true,
 						content: 'Ideal Calorie Intake',
-						backgroundColor: 'transparent',
+						backgroundColor: 'white',
 						fontColor: green,
-						yAdjust: 10
 					}
 				}, {
 					id: 'average-calories-line',
@@ -236,9 +240,8 @@
 					label: {
 						enabled: true,
 						content: 'Your Average Calorie Intake',
-						backgroundColor: 'transparent',
+						backgroundColor: 'white',
 						fontColor: red,
-						yAdjust: 10
 					}
 				}]
 			},

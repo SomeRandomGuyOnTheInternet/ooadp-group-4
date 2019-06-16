@@ -125,9 +125,9 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
         { name: 'Aglio Olio', calories: 571, imageLocation: "/images/food-image-1.png", ShopId: 1, isRecommended: false, isDeleted: false, },
         { name: 'Cesear Salad', calories: 346, imageLocation: "/images/food-image-2.png", ShopId: 1, isRecommended: true, isDeleted: false, },
         { name: 'Cream of Mushroom Soup', calories: 207, imageLocation: "/images/food-image-8.jpg", ShopId: 1, isRecommended: false, isDeleted: false, },
-        { name: 'Carbonara', calories: 436, imageLocation: "/images/food-image-4.jpg", ShopId: 1, isRecommended: true, isDeleted: false, },
-        { name: 'Mushroom Pasta', calories: 682, imageLocation: "/images/food-image-5.jpg", ShopId: 1, isRecommended: false, isDeleted: false, },
-        { name: 'Teriyaki Bento', calories: 682, imageLocation: "/images/food-image-6.png", ShopId: 2, isRecommended: false, isDeleted: false, },
+        { name: 'Chicken Rice', calories: 436, imageLocation: "/images/food-image-4.jpg", ShopId: 1, isRecommended: true, isDeleted: false, },
+        { name: 'Chicken Pulao', calories: 682, imageLocation: "/images/food-image-5.jpg", ShopId: 1, isRecommended: false, isDeleted: false, },
+        { name: 'Mixed Vegetable Rice', calories: 682, imageLocation: "/images/food-image-6.png", ShopId: 2, isRecommended: false, isDeleted: false, },
     ]);
 };
 

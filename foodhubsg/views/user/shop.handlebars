@@ -25,6 +25,9 @@
                                         {{#times shop.rating}}
                                             <i class="fas fa-star"></i>
                                         {{/times}}
+                                        {{#times (math 5 "-" shop.rating)}}
+                                            <i class="far fa-star"></i>
+                                        {{/times}}
                                     </b>
                                 </span>
                                 <hr>

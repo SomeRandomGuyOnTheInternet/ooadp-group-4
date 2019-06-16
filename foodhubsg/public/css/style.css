@@ -14,6 +14,10 @@ body {
   height:100%;
 }
 
+label {
+  font-style: italic;
+}
+
 .menuFood {
   border: 3px solid gainsboro;
   box-shadow: 0 0 20px 0 rgba(0,0,0,0.15);
@@ -62,11 +66,6 @@ body {
   }
 }
 
-@media screen and (max-width: 1200px) {
-  #form-input {
-    padding: 5em;
-  }
-}
 #ratingstars{
 padding: 5px 5px 5px 5px;
 border: 1px solid lightgrey;
@@ -98,7 +97,7 @@ margin: 20em 0 20em 0;
 }
 
 .font_color {
-  color: #3d8b3d;
+  color: rgb(90, 170, 92);
 }
 
 #page {
@@ -171,6 +170,8 @@ h1, h2, h3, h4, h5, h6, figure {
     position: relative;
     color: #707070;
   }
+
+
 
 @media screen and (max-width: 768px) {
   .colorlib-nav .menu-1 {
@@ -1544,20 +1545,51 @@ input[type="text"] {
 
 #search-date { width: 10em; }
 
-.navbar-nav { flex-direction: row; }
+.navbar-nav { flex-direction: column; }
 
-.nav-item {
-  padding: 10px 10px 10px 10px;
-  margin: 10px;
+.first-link {
+  padding: 0 10px 0 10px;
+}
+
+.last-link {
+  padding: 0 10px 0 10px;
+}
+
+@media (max-width: 1200px) {
+  h1 {
+    font-size: 35px;
+  }
+  .nav-item {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline;
+  }
+
+  .navbar-nav{
+    text-align: center !important;
+  }
+
+  .settings, .btn-food-code {
+    margin: 1em 0 1em 0 !important;
+  }
+  
+  .container {
+    padding:0;
+  }
+
+  .meal-type {
+    min-width: 100% !important;
+    margin-bottom: 1.5em;
+    border-right: none !important;
+  }
 }
 
 .navbar-nav > .settings {
   position: relative;
   display: block;
   margin-right: 0;
-  padding-right: 0;
   margin-left: 0;
-  padding-left: 0;
+  padding: 0;
   color: #4CAF50;
 
 }
@@ -1602,11 +1634,11 @@ input[type="text"] {
 }
 
 .recommended-false {
-  color: #d9534f;
+  color: #c9706d;
 }
 
 .recommended-true {
-  color: #3d8b3d;
+  color: #649c64;
 }
 
 select {
