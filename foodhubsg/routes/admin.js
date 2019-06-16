@@ -65,11 +65,18 @@ router.get('/editShop/:id', isAdmin, (req, res) => {
         User.findAll({
             where: { 
                 isVendor: true, 
-
+                
             }
         }),
     ])
     .then((data) => {
+        for (i = 0; i < data[2].length; i++) {
+            if (data[2][i].id == data[0].VendorId) {
+                data[2].splice(i, 1);
+                break;
+            }
+        }
+
         res.render('admin/editShop', {
             title: "Edit Shop",
             shop: data[0],
@@ -253,7 +260,7 @@ router.post('/editShop/:id', (req, res) => {
                 VendorId: vendorId,
                 id,
             },
-        })
+        });
     } else {
         Shop.update({
             name,
@@ -266,8 +273,8 @@ router.post('/editShop/:id', (req, res) => {
             VendorId: vendorId,
         },{
             where: { id },
-        })
-    }
+        });
+    };
 
     req.flash('success', 'Shop has been succcessfully edited!');
     res.redirect(`/admin/editShop/${id}`);
@@ -309,9 +316,9 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
             isDeleted,
             imageLocation,
             ShopId: shops[i],
-        })
+        });
 
-        FoodItem.findAll({ where: { ShopId: shops[i] } })
+        FoodItem.findAll({ where: { ShopId: shops[i], isDeleted: false } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
             console.log(rating)
@@ -322,13 +329,13 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
                 },{ 
                     where: { id: foodItems[0].ShopId } 
                 }
-            )
+            );
         });
-    }
+    };
 
     req.flash('success', 'Food has been succcessfully added!');
-    res.redirect('/admin/vendors')
-})
+    res.redirect('/admin/vendors');
+});
 
 
 router.post('/editFoodItem/:id', isAdmin, (req, res) => {
@@ -350,9 +357,9 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
         },{
             where: { id }
         }
-    )
+    );
 
-    FoodItem.findAll({ where: { ShopId: shop } })
+    FoodItem.findAll({ where: { ShopId: shop, isDeleted: false } })
     .then((foodItems) => {
         var rating = getShopRatings(foodItems);
         Shop.update(
@@ -381,7 +388,7 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
 
     FoodItem.findOne({ where: { id } })
     .then((food) => {
-        FoodItem.findAll({ where: { ShopId: food.ShopId } })
+        FoodItem.findAll({ where: { ShopId: food.ShopId, isDeleted: false } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
             Shop.update(
@@ -396,8 +403,8 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
                 res.redirect(`/admin/editShop/${foodItems[0].ShopId}`);
             });
         });
-    })
-})
+    });
+});
 
 
 

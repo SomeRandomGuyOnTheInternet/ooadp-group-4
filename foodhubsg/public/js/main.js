@@ -20,3 +20,7 @@ $('#venUpload').on('change', function () {
         }
     });
 });
+
+$(".select option").val(function (idx, val) {
+    $(this).siblings('[value="' + val + '"]').remove();
+});

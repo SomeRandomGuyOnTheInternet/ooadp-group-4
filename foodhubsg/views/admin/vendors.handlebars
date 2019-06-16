@@ -7,7 +7,6 @@
                 <div class="col-md-12">
                     <header id="summary-header">
                         <h1 class="font_color" style="display:inline-block;"><b>All Available Vendors</b></h1>
-                        {{!-- <a href="/user/foodJournal"><button type="button" class="btn btn-success" style="float:right;">Add New Vendor</button></a> --}}
                         <hr>
                         <table class="table table-hover">
                             <thead class="thead-green">
@@ -24,7 +23,7 @@
                                 <td>{{0.email}}</td>
                                 <td>
                                     {{#each this}}
-                                    <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u>{{#unless @last}} • {{/unless}}
+                                    <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
                                     {{else}}
                                     <h6>No shops added!</h6>
                                     {{/each}}
