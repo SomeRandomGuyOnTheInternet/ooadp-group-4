@@ -399,7 +399,7 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
                 { where: { id: foodItems[0].ShopId } }
             )
             .then(() => {
-                req.flash('success', 'Food has been succcessfully edited!');
+                req.flash('success', 'Food has been succcessfully deleted!');
                 res.redirect(`/admin/editShop/${foodItems[0].ShopId}`);
             });
         });

@@ -11,21 +11,21 @@ function localStrategy(passport) {
                     return done(null, false, { message: 'Please enter a valid email address' });
                 }
                 bcrypt.compare(password, user.password, (err, isMatch) => {
-                        if (err) throw err;
-                        if (isMatch) {
-                            var location = req.body.location; 
-                            var latitude = req.body.latitude, longitude = req.body.longitude;
-                            User.update(
-                                { location, latitude, longitude },
-                                { where: { email: email.toLowerCase() } },
-                            );
-                            return done(null, user);
-                        } else {
-                            return done(null, false, { message: 'Please enter the correct password' })
-                        }
-                    })
+                    if (err) throw err;
+                    if (isMatch) {
+                        var location = req.body.location; 
+                        var latitude = req.body.latitude, longitude = req.body.longitude;
+                        User.update(
+                            { location, latitude, longitude },
+                            { where: { email: email.toLowerCase() } },
+                        );
+                        return done(null, user);
+                    } else {
+                        return done(null, false, { message: 'Please enter the correct password' })
+                    }
                 })
-            }));
+            })
+        }));
 
     // Serializes (stores) user id into session upon successful authentication
     passport.serializeUser((user, done) => { done(null, user.id); });// user.id is used to identify authenticated user 

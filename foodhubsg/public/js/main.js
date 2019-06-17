@@ -1,3 +1,13 @@
+$(".select option").val(function (idx, val) {
+    $(this).siblings('[value="' + val + '"]').remove();
+});
+
+$(".name-input").focusout(function () {
+    $(this).val(
+        toTitleCase($(this).val())
+    );
+});
+
 $('#venUpload').on('change', function () {
     let image = $("#venUpload")[0].files[0];
     let formdata = new FormData();
@@ -21,7 +31,8 @@ $('#venUpload').on('change', function () {
     });
 });
 
-$(".select option").val(function (idx, val) {
-    $(this).siblings('[value="' + val + '"]').remove();
-});
-
+function toTitleCase(str) {
+    return str.replace(/(?:^|\s)\w/g, function (match) {
+        return match.toUpperCase();
+    });
+}

@@ -24,6 +24,25 @@ router.get('/login', isloggedOut, (req, res) => {
 });
 
 
+router.get('/', (req, res) => {
+	if (!req.user) {
+		res.redirect('/logout')
+	} else if (req.user.isAdmin === true) {
+		res.redirect('/admin/vendors')
+	} else if (req.user.isVendor === true) {
+		res.redirect('/vendor/allShops')
+	} else {
+		res.redirect('/user')
+	}
+});
+
+
+router.get('/logout', (req, res) => {
+	req.logout();
+	res.redirect('/login');
+});
+
+
 router.post('/register', isloggedOut, (req, res) => {
 	const name = req.body.name;
 	const weight = req.body.weight;
@@ -32,6 +51,13 @@ router.post('/register', isloggedOut, (req, res) => {
 	const password = req.body.password;
 	const isAdmin = isBanned = isVendor = false;
 	var error;
+
+	var form = {
+		name: name,
+		weight: weight,
+		height: height,
+		email: email
+	};
 
 	User.findOne({
 		where: { email }
@@ -55,7 +81,10 @@ router.post('/register', isloggedOut, (req, res) => {
 			});
 		} else {
 			req.flash('error', error);
-			res.redirect('./register')
+			res.render('register', { 
+				title: "Register",
+				form
+			});
 		};
 	});
 });
@@ -67,24 +96,6 @@ router.post('/login', isloggedOut, (req, res, next) => {
 		failureRedirect: './login',
 		failureFlash: true
 	})(req, res, next);
-});
-
-router.get('/', (req, res) => {
-	if (!req.user) {
-		res.redirect('/logout')
-	} else if (req.user.isAdmin === true) {
-		res.redirect('/admin/vendors')
-	} else if (req.user.isVendor === true) {
-		res.redirect('/vendor/allShops')
-	} else {
-		res.redirect('/user')
-	}
-});
-
-
-router.get('/logout', (req, res) => {
-	req.logout();
-	res.redirect('/login');
 });
 
 

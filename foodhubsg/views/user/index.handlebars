@@ -14,7 +14,7 @@
 					<h4>Current City: <b>{{user.location}}</b></h4>
 				</div>
 
-					{{#each shops}}
+				{{#each shops}}
 					<div class="col-md-6 recommended-shops">
 						<div class="blog-entry">
 							<div class="blog-img">
@@ -39,11 +39,11 @@
 							</div>
 						</div>
 					</div>
-					{{else}}
+				{{else}}
 					<div class="col-md-12">
 						<h3 id="current_location"><b class="center_subtitle">There are no recommended shops near you</b></h4>
 					</div>
-					{{/each}}
+				{{/each}}
 
 				{{else}}
 				<div class="col-md-12">
