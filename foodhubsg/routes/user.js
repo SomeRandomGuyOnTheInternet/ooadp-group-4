@@ -84,7 +84,10 @@ router.get('/shops/:id', isUser, (req, res) => {
             where: { id },
         }), 
         Food.findAll({
-            where: { ShopId: id }
+            where: { 
+                ShopId: id, 
+                isDeleted: false, 
+            }
         })
     ])
     .then((data) => {
