@@ -264,53 +264,53 @@
 	});
 
 	$('#selectCalorieFilter').change(function () {
-			var sel = $(this).val();
-			var foodHistoryData = myFoodHistoryChart.config.data.datasets[0].data;
-			var idealCaloriesValue = 0, averageCaloriesValue = 0;
-			var newData = [];
+		var sel = $(this).val();
+		var foodHistoryData = myFoodHistoryChart.config.data.datasets[0].data;
+		var idealCaloriesValue = 0, averageCaloriesValue = 0;
+		var newData = [];
 
-			switch (sel) {
-				case 'Daily':
-					newData = dailyData;
-					idealCaloriesValue = 1500;
-					averageCaloriesValue = {{{ dailyAverageCalories }}};
-					break;
-				case 'Breakfast':
-					newData = breakfastData;
-					idealCaloriesValue = 500;
-					averageCaloriesValue = {{{ breakfastAverageCalories }}};
-					break;
-				case 'Lunch':
-					newData = lunchData;
-					idealCaloriesValue = 400;
-					averageCaloriesValue = {{{ lunchAverageCalories }}};
-					break;
-				case 'Dinner':
-					newData = dinnerData;
-					idealCaloriesValue = 450;
-					averageCaloriesValue = {{{ dinnerAverageCalories }}};
-					break;
-				case 'Snacks':
-					newData = snacksData;
-					idealCaloriesValue = 150;
-					averageCaloriesValue = {{{ snacksAverageCalories }}};
-					break;
-				default:
-					newData = dailyData;
-					idealCaloriesValue = 1500;
-					averageCaloriesValue = {{{ dailyAverageCalories }}};
-					break;
-			}
+		switch (sel) {
+			case 'Daily':
+				newData = dailyData;
+				idealCaloriesValue = 1500;
+				averageCaloriesValue = {{{ dailyAverageCalories }}};
+				break;
+			case 'Breakfast':
+				newData = breakfastData;
+				idealCaloriesValue = 500;
+				averageCaloriesValue = {{{ breakfastAverageCalories }}};
+				break;
+			case 'Lunch':
+				newData = lunchData;
+				idealCaloriesValue = 400;
+				averageCaloriesValue = {{{ lunchAverageCalories }}};
+				break;
+			case 'Dinner':
+				newData = dinnerData;
+				idealCaloriesValue = 450;
+				averageCaloriesValue = {{{ dinnerAverageCalories }}};
+				break;
+			case 'Snacks':
+				newData = snacksData;
+				idealCaloriesValue = 150;
+				averageCaloriesValue = {{{ snacksAverageCalories }}};
+				break;
+			default:
+				newData = dailyData;
+				idealCaloriesValue = 1500;
+				averageCaloriesValue = {{{ dailyAverageCalories }}};
+				break;
+		}
 
-			foodHistoryData.length = 0;
-			foodHistoryData.push.apply(
-				foodHistoryData, newData
-			);
+		foodHistoryData.length = 0;
+		foodHistoryData.push.apply(
+			foodHistoryData, newData
+		);
 
-			myFoodHistoryChart.annotation.elements['ideal-calories-line'].options.value = idealCaloriesValue;
-			myFoodHistoryChart.annotation.elements['average-calories-line'].options.value = averageCaloriesValue;
+		myFoodHistoryChart.annotation.elements['ideal-calories-line'].options.value = idealCaloriesValue;
+		myFoodHistoryChart.annotation.elements['average-calories-line'].options.value = averageCaloriesValue;
 
-			myFoodHistoryChart.update();
-		});
+		myFoodHistoryChart.update();
+	});
 </script>
 {{/ifCond}}

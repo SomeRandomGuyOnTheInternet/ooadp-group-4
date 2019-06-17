@@ -1449,7 +1449,7 @@ input[type="text"] {
   padding: 6em !important; }
 
 .row-pb-md {
-  padding: 2em !important; }
+  padding: 2em; }
 
 .row-pb-sm {
   padding: 2em !important; }
@@ -1578,9 +1578,23 @@ input[type="text"] {
   }
 
   .meal-type {
-    min-width: 100% !important;
+    min-width: 50% !important;
     margin-bottom: 1.5em;
+  }
+
+  .date-meal > .row {
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .meal-type {
+    min-width: 100% !important;
     border-right: none !important;
+  }
+
+  .row-pb-md {
+    padding: 2em 16px;
   }
 }
 
