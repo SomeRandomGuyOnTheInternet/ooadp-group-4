@@ -134,28 +134,31 @@ router.get('/editFoodItem/:id', isAdmin, (req, res) => {
         }
     })
     .then((food) => {
-        Shop.findOne({
-            where: {
-                id: food.ShopId,
-            }
-        })
-        .then((currentShop) => {
-            Shop.findAll({
-                where: {
-                    isDeleted: false,
-                    VendorId: currentShop.VendorId,
-                }
+        if (food) {
+            Shop.findOne({
+                where: { id: food.ShopId }
             })
-            .then((shops) => {
-                res.render('admin/editFoodItem', {
-                    user: req.user,
-                    title: "Edit Menu",
-                    food,
-                    currentShop,
-                    shops,
+            .then((currentShop) => {
+                Shop.findAll({
+                    where: {
+                        isDeleted: false,
+                        VendorId: currentShop.VendorId,
+                    }
+                })
+                .then((shops) => {
+                    res.render('admin/editFoodItem', {
+                        user: req.user,
+                        title: "Edit Menu",
+                        food,
+                        currentShop,
+                        shops,
+                    });
                 });
             });
-        });
+        } else {
+            req.flash('error', "That food does not exist!");
+            res.redirect('/admin/vendors');
+        };
     })
 });
 
@@ -175,11 +178,12 @@ router.post('/vendors', (req, res) => {
     const confirmPassword = req.body.confirmPassword;
     const isAdmin = isBanned = false;
     const isVendor = true; 
-	var error;
+    var error;
 
-	User.findOne({
-		where: { email, name }
-	}).then(function (user) {
+    var form = { name, email };
+
+	User.findOne({ where: { email } })
+    .then(function (user) {
         if (user) { error = 'This email or name has already been registered'; };
         if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
         if (password != confirmPassword) { error = 'Passwords do not match'; };
@@ -197,8 +201,24 @@ router.post('/vendors', (req, res) => {
                 });
             });
 		} else {
-            req.flash('error', error);
-            res.redirect('/admin/vendors');
+            User.findAll({
+                where: { isVendor: true },
+                include: [{
+                    model: Shop,
+                }],
+                raw: true
+            })
+            .then((vendors) => {
+                var groupedVendors = groupVendors(vendors);
+                
+                req.flash('error', error);
+                res.render('admin/vendors', {
+                    user: req.user,
+                    title: "Vendors",
+                    groupedVendors,
+                    form
+                });
+            });
 		};
     });
 }); 

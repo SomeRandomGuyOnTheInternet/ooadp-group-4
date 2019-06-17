@@ -49,33 +49,28 @@
                     </header>
         
                     <form method="post">
-        
                         <div class="row form-group">
                             <div class="col-md-12" style="margin-bottom:1em;">
-                                <label>Name</label>
-                                <input name="name" id="name" type="text" class="form-control" value="" placeholder="Name" required>
+                                <input name="name" id="name" type="text" class="form-control name-input" value="{{form.name}}" placeholder="Name" required>
                             </div>
         
                             <div class="col-md-12" style="margin-bottom:1em;">
-                                <label>Email</label>
-                                <input name="email" id="email" type="email" class="form-control" value="" placeholder="Email" required>
+                                <input name="email" id="email" type="email" class="form-control" value="{{form.email}}" placeholder="Email" required>
                             </div>
         
                             <div class="col-md-6 password">
-                                <label>Password</label>
                                 <input name="password" id="password" type="password" class="form-control delprefix"
                                     placeholder="Password" required>
                             </div>
         
                             <div class="col-md-6 confirm-password">
-                                <label>Confirm Password</label>
                                 <input name="confirmPassword" id="confirmPassword" type="password"
                                     class="form-control delprefix" placeholder="Confirm Password" required>
                             </div>
                         </div>
                         <br>    
                         <input type="submit" name="action" value="Add New Vendor" class="btn btn-primary"
-                            style="background-color: #4CAF50;">
+                            style="float:right;">
                     </form>
                 </div>
             </div>
