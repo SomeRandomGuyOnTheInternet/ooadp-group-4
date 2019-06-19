@@ -25,14 +25,18 @@
 									<b class="vendors"><b>{{this.name}}</b></b><br>
 									<span class="food_location"><b>{{ this.address }}</b></span><br>
 									<span class="food_rating">Rating:&nbsp;
+										{{#if this.rating}} 
 										<b class="recommended-{{ this.isRecommended }}">
-										{{#times this.rating}}
+											{{#times this.rating}}
 												<i class="fas fa-star"></i>
-										{{/times}}
-										{{#times (math 5 "-" this.rating)}}
-											<i class="far fa-star"></i>
-										{{/times}}
+											{{/times}}
+											{{#times (math 5 "-" this.rating)}}
+												<i class="far fa-star"></i>
+											{{/times}}
 										</b>
+										{{else}} 
+											No rating available 
+										{{/if}}
 									</span>
 									<br>
 								</p>

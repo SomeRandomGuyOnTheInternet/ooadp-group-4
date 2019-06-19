@@ -1,0 +1,82 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg" type="text/javascript"></script>
+
+
+<div class="container h-100">
+	<div class="row h-100 justify-content-center align-items-center text-center">
+		Loading...
+	</div>
+</div>
+
+
+<form name="geolocationForm" id="geolocationForm" method="POST">
+	<div class="row form-group">
+		<input name="location" id="location" class="form-control" type="hidden">
+	</div>
+
+	<div class="row form-group">
+		<input name="latitude" id="latitude" class="form-control" type="hidden">
+	</div>
+
+	<div class="row form-group">
+		<input name="longitude" id="longitude" class="form-control" type="hidden">
+	</div>
+</form>
+
+
+{{!-- below are common locations to simulate geolocation and check the city names --}}
+
+{{!-- Nanyang Poly = latlng = new google.maps.LatLng(1.380096, 103.848895);
+Sengkang = latlng = new google.maps.LatLng(1.393593, chr);
+Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213); --}}
+
+<script>
+	const locationInput = document.querySelector("#location");
+	const latitudeInput = document.querySelector("#latitude");
+	const longitudeInput = document.querySelector("#longitude");
+	const geolocationForm = document.querySelector("#geolocationForm");
+	var currentCity = null;
+
+	function success(position) {
+		latitudeInput.setAttribute("value", position.coords.latitude);
+		longitudeInput.setAttribute("value", position.coords.longitude);
+
+		latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		new google.maps.Geocoder().geocode({ 'latLng': latlng }, function (results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				if (results[1]) {
+					var c, lc, component;
+					for (var r = 0, rl = results.length; r < rl; r += 1) {
+						var result = results[r];
+
+						if (!currentCity && result.types[0] === 'neighborhood') {
+							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+								component = result.address_components[c];
+
+								if (component.types[0] === 'neighborhood') {
+									currentCity = component.long_name;
+									locationInput.setAttribute("value", currentCity);
+									geolocationForm.submit();
+									break;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				error();
+			}
+		});
+	}
+
+	function error() {
+		locationInput.setAttribute("value", currentCity);
+		alert("We could not determine your location.")
+		geolocationForm.submit();
+	}
+
+	if (!navigator.geolocation) {
+		error();
+	} else {
+		navigator.geolocation.getCurrentPosition(success, error);
+	}
+</script>

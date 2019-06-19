@@ -44,18 +44,6 @@
 										placeholder="Password" required>
 								</div>
 
-								<div class="row form-group" style="display: none;">
-									<input name="location" id="location" class="form-control">
-								</div>
-
-								<div class="row form-group" style="display: none;">
-									<input name="latitude" id="latitude" class="form-control">
-								</div>
-
-								<div class="row form-group" style="display: none;">
-									<input name="longitude" id="longitude" class="form-control">
-								</div>
-
 								<div class="flash-div">
 								{{#if error}}
 									<div class="row form-group">
@@ -75,13 +63,21 @@
 
 								<div class="row form-group">
 									<div class="form-group" id="login-button">
-										<input type="submit" value="Log In" class="btn btn-success" id="submit-button" data-toggle="tooltip" data-placement="left" title="Please wait while we determine your location"
-											style="width:135px;" disabled>
+										<input type="submit" value="Log In" class="btn btn-success" id="submit-button" data-toggle="tooltip" data-placement="left" style="width:135px;">
+										<a href="/google" class="btn btn-google">
+										<img src="https://developers.google.com/identity/images/g-logo.png" class="img-responsive google-logo" alt="Image" style="width:25px;height:25px;">
+										&nbsp;Sign in with Google
+										</a>
 									</div>
 								</div>
 
 								<div class="row form-group">
-									<p id="new-acc"><a href="/register">Create a new account</a>
+
+								</div>
+
+								<div class="row form-group">
+									<p id="new-acc">
+										<a href="/register">Create a new FoodHub.SG account</a>
 									</p>
 								</div>
 
@@ -93,63 +89,3 @@
 		</div>
 	</div>
 </div>
-
-{{!-- below are common locations to simulate geolocation and check the city names --}}
-
-{{!-- Nanyang Poly = latlng = new google.maps.LatLng(1.380096, 103.848895);
-Sengkang = latlng = new google.maps.LatLng(1.393593, chr);
-Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213); --}}
-
-<script>
-	const locationInput = document.querySelector("#location");
-	const latitudeInput = document.querySelector("#latitude");
-	const longitudeInput = document.querySelector("#longitude");
-	const submitButton = document.querySelector("#submit-button")
-	var currentCity = null;
-
-	function success(position) {
-		latitudeInput.setAttribute("value", position.coords.latitude);
-		longitudeInput.setAttribute("value", position.coords.longitude);
-
-		latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-		new google.maps.Geocoder().geocode({ 'latLng': latlng }, function (results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				if (results[1]) {
-					var c, lc, component;
-					for (var r = 0, rl = results.length; r < rl; r += 1) {
-						var result = results[r];
-
-						if (!currentCity && result.types[0] === 'neighborhood') {
-							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
-								component = result.address_components[c];
-
-								if (component.types[0] === 'neighborhood') {
-									currentCity = component.long_name;
-									locationInput.setAttribute("value", currentCity);
-									submitButton.setAttribute("title", "");
-									submitButton.disabled = false;
-									break;
-								}
-							}
-						}
-					}
-				}
-			} else {
-				error();
-			}
-		});
-	}
-
-	function error() {
-		locationInput.setAttribute("value", currentCity);
-		submitButton.setAttribute("title", "");
-		submitButton.disabled = false;
-		alert("We could not determine your location.")
-	}
-
-	if (!navigator.geolocation) {
-		error();
-	} else {
-		navigator.geolocation.getCurrentPosition(success, error);
-	}
-</script>

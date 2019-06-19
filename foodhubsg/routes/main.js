@@ -24,22 +24,48 @@ router.get('/login', isloggedOut, (req, res) => {
 });
 
 
-router.get('/', (req, res) => {
-	if (!req.user) {
-		res.redirect('/logout')
-	} else if (req.user.isAdmin === true) {
-		res.redirect('/admin/vendors')
-	} else if (req.user.isVendor === true) {
-		res.redirect('/vendor/allShops')
-	} else {
-		res.redirect('/user')
-	}
-});
+router.get("/google", isloggedOut, passport.authenticate("google", {
+	scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+    ]
+}));
+
+
+router.get('/google/callback', 
+    passport.authenticate( 'google', { 
+        successRedirect: './',
+        failureRedirect: './login'
+}));
 
 
 router.get('/logout', (req, res) => {
 	req.logout();
 	res.redirect('/login');
+});
+
+
+router.get('/', (req, res) => {
+	res.render('redirect', { title: "Redirecting..." })
+});
+
+
+router.post('/', (req, res) => {
+	const location = req.body.location; 
+	const latitude = req.body.latitude, longitude = req.body.longitude;
+
+	if (!req.user) {
+		res.redirect('/logout')
+	} else {
+		User.update(
+			{ location, latitude, longitude },
+			{ where: { id: req.user.id } },
+		);
+
+		if (req.user.isAdmin) res.redirect('/admin/vendors')
+		if (req.user.isVendor) res.redirect('/vendor/allShops')
+		if (!req.user.isVendor && !req.user.isAdmin) res.redirect('/user')
+	}
 });
 
 
@@ -73,7 +99,8 @@ router.post('/register', isloggedOut, (req, res) => {
 				bcrypt.hash(password, salt, function (err, hash) {
 					User.create({
 						name, email, password: hash, weight, height, isAdmin, isBanned, isVendor
-					}).then(function () {
+					})
+					.then(function () {
 						req.flash('success', "Your email has been successfully registered!");
 						res.redirect('./login');
 					})

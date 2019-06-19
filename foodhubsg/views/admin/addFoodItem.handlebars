@@ -56,7 +56,7 @@
 
 <script>
     $('.checkbox')
-    .bind("propertychange change click keyup input paste", function (event) {
+    .bind("propertychange change click keyup input", function (event) {
         if ($('.checkbox:checkbox:checked').length == 0) {
             $("#addFoodButton").attr("disabled", true);
         } else {

@@ -301,7 +301,6 @@ router.post('/addFoodItem', isVendor, (req, res) => {
     const name = req.body.name;
     const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
-    const description = req.body.description;
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
@@ -312,25 +311,26 @@ router.post('/addFoodItem', isVendor, (req, res) => {
             calories,
             isRecommended,
             isDeleted,
-            description,
             imageLocation,
             ShopId: shops[i],
-        })
-        FoodItem.findAll({ where: { ShopId: shops[i] }, isDeleted: false })
-            .then((foodItems) => {
-                var rating = getShopRatings(foodItems);
-                Shop.update(
-                    {
-                        rating: rating,
-                        isRecommended: (rating >= 4) ? true : false,
-                    },
-                    { where: { id: foodItems[0].ShopId } }
-                )
-            });
-    }
+        });
 
-    req.flash('success', 'Food has been succcessfully added');
-    res.redirect('/vendor/allShops')
+        FoodItem.findAll({ where: { ShopId: shops[i], isDeleted: false } })
+        .then((foodItems) => {
+            var rating = getShopRatings(foodItems);
+            Shop.update(
+                {
+                    rating,
+                    isRecommended: (rating >= 4) ? true : false,
+                },{ 
+                    where: { id: foodItems[0].ShopId } 
+                }
+            );
+        });
+    };
+
+    req.flash('success', 'Food has been succcessfully added!');
+    res.redirect('/vendor/allShops');
 })
 
 

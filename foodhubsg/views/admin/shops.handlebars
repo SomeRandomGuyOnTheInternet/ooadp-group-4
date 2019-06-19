@@ -21,20 +21,56 @@
                                     <b class="vendors"><b>{{this.name}}</b></b><br>
                                     <span class="food_location"><b>{{ this.address }}</b></span><br>
                                     <span class="food_rating">Rating:&nbsp;
-                                        <b class="recommended-{{ this.isRecommended }}">
-                                            {{#times this.rating}}
-                                                <i class="fas fa-star"></i>
-                                            {{/times}}
-                                            {{#times (math 5 "-" this.rating)}}
-                                                <i class="far fa-star"></i>
-                                            {{/times}}
-                                        </b>
+										{{#if this.rating}} 
+										<b class="recommended-{{ this.isRecommended }}">
+											{{#times this.rating}}
+												<i class="fas fa-star"></i>
+											{{/times}}
+											{{#times (math 5 "-" this.rating)}}
+												<i class="far fa-star"></i>
+											{{/times}}
+										</b>
+										{{else}} 
+											No rating available 
+										{{/if}}
                                     </span>
                                 </p>
                             </div>
                         </div>
                     </div>
                     {{/each}}
+
+                    {{#if deletedShops}}
+                        {{#each deletedShops}}
+                        <div class="col-md-6 recommended-shops">
+                            <div class="blog-entry">
+                                <div class="blog-img" style="opacity:50%;">
+                                    <a class="action" href="/admin/editShop/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+                                </div>
+                                <div class="desc">
+                                    <p class="meta">
+                                        <b class="vendors"><b>{{this.name}}</b></b><br>
+                                        <span class="food_location"><b>{{ this.address }}</b></span><br>
+                                        <span class="food_rating">Rating:&nbsp;
+                                            {{#if this.rating}} 
+                                            <b class="recommended-{{ this.isRecommended }}">
+                                                {{#times this.rating}}
+                                                    <i class="fas fa-star"></i>
+                                                {{/times}}
+                                                {{#times (math 5 "-" this.rating)}}
+                                                    <i class="far fa-star"></i>
+                                                {{/times}}
+                                            </b>
+                                            {{else}} 
+                                                No rating available 
+                                            {{/if}}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    {{/if}}
 
                 </div>
             </div>

@@ -11,7 +11,7 @@ function localStrategy(passport) {
                     return done(null, false, { message: 'Please enter a valid email address' });
                 }
                 bcrypt.compare(password, user.password, (err, isMatch) => {
-                    if (err) throw err;
+                    if (err) return done(null, false, { message: 'Please sign in using your Google Account' });
                     if (isMatch) {
                         var location = req.body.location; 
                         var latitude = req.body.latitude, longitude = req.body.longitude;
