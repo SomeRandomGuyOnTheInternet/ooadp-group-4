@@ -17,30 +17,30 @@ router.get('/settings', isVendor, (req, res) => {
 
 router.post('/settings', isVendor, (req, res) => {
 
-    let email = req.body.email.toLowerCase(); 
+    let email = req.body.email.toLowerCase();
     if (email.length === 0) {
         Vendor.findOne({
-            attributes: ['email'], 
-            raw: true, 
+            attributes: ['email'],
+            raw: true,
             where: {
                 id: req.user.id,
-            }, 
-           
-        }).then((mail)=> { 
-            return email = mail; 
+            },
+
+        }).then((mail) => {
+            return email = mail;
         })
     }
-    console.log(email); 
-    let password = req.body.password; 
+    console.log(email);
+    let password = req.body.password;
     if (password.length === 0) {
         password = Vendor.findOne({
             attribute: ['password'],
             where: {
                 id: req.user.id,
-            }, 
-            raw: true, 
-        }).then((pass)=> { 
-            return password = pass;  
+            },
+            raw: true,
+        }).then((pass) => {
+            return password = pass;
         })
     }
 
@@ -49,15 +49,15 @@ router.post('/settings', isVendor, (req, res) => {
         bcrypt.hash(password, salt, function (err, hash) {
             Vendor.update({
                 email: email,
-                password: hash, 
+                password: hash,
             }, {
                     where: { id: req.user.id }
                 })
 
         });
     })
-            res.redirect('/vendor/settings');
-            req.flash('success', 'Settings have been updated successfully');
+    res.redirect('/vendor/settings');
+    req.flash('success', 'Settings have been updated successfully');
 });
 
 
@@ -128,36 +128,28 @@ router.get('/deleteShop/:id', isVendor, (req, res) => {
 
 
 router.get('/allFoodItems', isVendor, (req, res) => {
-    Vendor.findOne({
+    Shop.findOne({
         where: {
-            id: req.user.id,
+            VendorId: req.user.id,
+            isDeleted: false,
         }
-    })
-        .then((vendor) => {
-            Shop.findOne({
-                where: {
-                    VendorId: vendor.id,
-                    isDeleted: false,
-                }
-            })
-                .then((shop) => {
-                    FoodItem.findAll({
-                        where: {
-                            isDeleted: false,
-                        }
-                    })
-                        .then((food) => {
-                            res.render('vendors/allFoodItems', {
-                                user: req.user,
-                                title: "Show Menu",
-                                food: food,
-                                shops: shop,
+    }).then((shop) => {
+        FoodItem.findAll({
+            where: {
+                isDeleted: false,
+                ShopId: shop.id,
+            }
+        }).then((food) => {
+            res.render('vendors/allFoodItems', {
+                user: req.user,
+                title: "Show Menu",
+                food: food,
+                shops: shop,
 
-                            })
-                        })
-                })
+            })
         })
-});
+    })
+})
 
 
 router.get('/addFoodItem', isVendor, (req, res) => {
@@ -168,7 +160,7 @@ router.get('/addFoodItem', isVendor, (req, res) => {
             isDeleted: false,
         }
     })
-        .then((shops) => { 
+        .then((shops) => {
             res.render('vendors/addFoodItem', {
                 user: req.user,
                 title: "Add Food",
@@ -185,6 +177,7 @@ router.get('/editFoodItem/:id', isVendor, (req, res) => {
             id: id,
         }
     })
+
         .then((food) => {
             Shop.findOne({
                 where: {
@@ -316,17 +309,17 @@ router.post('/addFoodItem', isVendor, (req, res) => {
         });
 
         FoodItem.findAll({ where: { ShopId: shops[i], isDeleted: false } })
-        .then((foodItems) => {
-            var rating = getShopRatings(foodItems);
-            Shop.update(
-                {
-                    rating,
-                    isRecommended: (rating >= 4) ? true : false,
-                },{ 
-                    where: { id: foodItems[0].ShopId } 
-                }
-            );
-        });
+            .then((foodItems) => {
+                var rating = getShopRatings(foodItems);
+                Shop.update(
+                    {
+                        rating,
+                        isRecommended: (rating >= 4) ? true : false,
+                    }, {
+                        where: { id: foodItems[0].ShopId }
+                    }
+                );
+            });
     };
 
     req.flash('success', 'Food has been succcessfully added!');
@@ -368,6 +361,15 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
         });
 })
 
+router.get('/delete/:id', isVendor, (req, res) => {
+    Vendor.destroy({
+        where: {
+            id: req.params.id,
+        }
+    }).then(() => { 
+        res.redirect('/login')
+    })
+})
 
 
 module.exports = router;
