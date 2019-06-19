@@ -17,20 +17,20 @@ router.get('/settings', isVendor, (req, res) => {
 
 router.post('/settings', isVendor, (req, res) => {
 
-    const email = req.body.email.toLowerCase();
-    if (email.length = " ") {
+    let email = req.body.email.toLowerCase(); 
+    if (email.length === 0) {
 
-        name = User.findOne({
+        email = Vendor.findOne({
             attribute: ['email'],
             where: {
                 id: req.user.id,
             }
         })
     }
-    const password = req.body.password;
-
-    if (password.length = " ") {
-        password = User.findOne({
+    console.log(email); 
+    let password = req.body.password;
+    if (password.length === 0) {
+        password = Vendor.findOne({
             attribute: ['password'],
             where: {
                 id: req.user.id,
@@ -42,20 +42,16 @@ router.post('/settings', isVendor, (req, res) => {
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
             Vendor.update({
-                name: name,
                 email: email,
-                password: password
+                password: hash, 
             }, {
                     where: { id: req.user.id }
                 })
 
         });
-    }).then(() => {
+    })
             res.redirect('/vendor/settings');
             req.flash('success', 'Settings have been updated successfully');
-        })
-
-        .catch(err => console.log(err));
 });
 
 
