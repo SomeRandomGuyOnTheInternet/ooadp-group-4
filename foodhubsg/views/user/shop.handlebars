@@ -98,55 +98,75 @@
     </div>
 </div>
 
-<script>
-     var shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
-     var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+{{#if user.location}}
+    <script>
+        var shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
+        var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
 
-    function initMap() {
-        var shopLocation = { lat: shopLatitude, lng: shopLongitude };
-        var userLocation = { lat: userLatitude, lng: userLongitude };
+        function initMap() {
+            var shopLocation = { lat: shopLatitude, lng: shopLongitude };
+            var userLocation = { lat: userLatitude, lng: userLongitude };
 
-        var icon = {
-            url: "/images/user-marker.png",
-            scaledSize: new google.maps.Size(27, 45),
-        };
+            var icon = {
+                url: "/images/user-marker.png",
+                scaledSize: new google.maps.Size(27, 45),
+            };
 
-        var directionsService = new google.maps.DirectionsService();
-        var directionsDisplay = new google.maps.DirectionsRenderer({ suppressMarkers: true });       
-        var request = {
-            origin: userLocation,
-            destination: shopLocation,
-            travelMode: google.maps.TravelMode.WALKING
-        };
-        
-        var map = new google.maps.Map( document.getElementById('map'), { zoom: 16 } );
+            var directionsService = new google.maps.DirectionsService();
+            var directionsDisplay = new google.maps.DirectionsRenderer({ suppressMarkers: true });       
+            var request = {
+                origin: userLocation,
+                destination: shopLocation,
+                travelMode: google.maps.TravelMode.WALKING
+            };
+            
+            var map = new google.maps.Map( document.getElementById('map'), { zoom: 16 } );
 
-        var shopMarker = new google.maps.Marker({ 
-                            position: shopLocation, 
-                            map: map,
-                            label: "S",
-                        });
-        var userMarker = new google.maps.Marker({ 
-                            position: userLocation, 
-                            map: map, 
-                            icon: icon, 
-                        });
+            var shopMarker = new google.maps.Marker({ 
+                                position: shopLocation, 
+                                map: map,
+                                label: "S",
+                            });
+            var userMarker = new google.maps.Marker({ 
+                                position: userLocation, 
+                                map: map, 
+                                icon: icon, 
+                            });
 
-        directionsService.route(request, function (response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-                directionsDisplay.setDirections(response);
-                directionsDisplay.setMap(map);
-            } else {
-                alert("Directions Request from your location to " + "{{{ shop.name }}}" + " failed: " + status);
-            }
-        });
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                    directionsDisplay.setMap(map);
+                } else {
+                    alert("Directions Request from your location to " + "{{{ shop.name }}}" + " failed: " + status);
+                }
+            });
 
-        var bounds = new google.maps.LatLngBounds();
-        bounds.extend(shopMarker.position);
-        bounds.extend(userMarker.position);
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(shopMarker.position);
+            bounds.extend(userMarker.position);
 
-        map.fitBounds(bounds);
-    }
-</script>
+            map.fitBounds(bounds);
+        }
+    </script>
+{{else}}
+    <script>
+        var shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
+
+        function initMap() {
+            var shopLocation = { lat: shopLatitude, lng: shopLongitude };
+            
+            var map = new google.maps.Map( document.getElementById('map'), { zoom: 17 } );
+
+            var shopMarker = new google.maps.Marker({ 
+                                position: shopLocation, 
+                                map: map,
+                                label: "S",
+                            });
+
+            map.setCenter(shopMarker.getPosition());
+        }
+    </script>
+{{/if}}
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg&callback=initMap" async defer></script>

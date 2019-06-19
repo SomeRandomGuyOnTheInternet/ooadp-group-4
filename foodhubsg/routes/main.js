@@ -51,20 +51,23 @@ router.get('/', (req, res) => {
 
 
 router.post('/', (req, res) => {
-	const location = req.body.location; 
-	const latitude = req.body.latitude, longitude = req.body.longitude;
-
+	var location = (req.body.location != "null") ? req.body.location : null;
+	var latitude = (req.body.latitude) ? parseFloat(req.body.latitude) : null; 
+	var longitude = (req.body.longitude) ? parseFloat(req.body.longitude) : null;
+	console.log("Location: ", req.body.location)
+	
 	if (!req.user) {
 		res.redirect('/logout')
 	} else {
 		User.update(
 			{ location, latitude, longitude },
 			{ where: { id: req.user.id } },
-		);
-
-		if (req.user.isAdmin) res.redirect('/admin/vendors')
-		if (req.user.isVendor) res.redirect('/vendor/allShops')
-		if (!req.user.isVendor && !req.user.isAdmin) res.redirect('/user')
+		)
+		.then(function () {
+			if (req.user.isAdmin) res.redirect('/admin/vendors');
+			if (req.user.isVendor) res.redirect('/vendor/allShops');
+			if (!req.user.isVendor && !req.user.isAdmin) res.redirect('/user');
+		});
 	}
 });
 
