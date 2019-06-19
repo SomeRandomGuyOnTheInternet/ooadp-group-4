@@ -24,7 +24,7 @@
                                 <div class="col-md-12 new-password">
                                     <label>Password</label>
                                     <input name="password" id="password" type="password" class="form-control delprefix"
-                                        placeholder="new-password">
+                                        placeholder="(unchanged)">
                                 </div>
                             </div>
 
@@ -42,9 +42,12 @@
 
                             <button type="submit" name="action" value="updateSettings" id="updateSettings" class="btn btn-primary"
                                 style="background-color: #4CAF50;" disabled>Update Settings</button>
-                            <input type="submit" name="action" value="Delete Account" onclick="remove_confirm()"
-                                class="btn btn-primary" id="remove-account" style="background-color: #d9534f;">
                         </form>
+
+                         <a href="/vendor/delete/{{user.id}}" style="color: #ffff;"><button type="submit" name="action"
+                            value="Delete Shop" height="200"class="btn btn-primary" id="remove-shop"
+                            style="background-color: #d9534f;">
+                            Delete User</a></button>
                     </div>
                 </div>
             </div>
