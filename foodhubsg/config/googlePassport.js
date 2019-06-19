@@ -13,13 +13,12 @@ function googleStrategy(passport) {
             where: { email: profile.emails[0].value }
         })
         .then(user => {
+            const name = profile.name.givenName;
+            const email = profile.emails[0].value;
+            const isAdmin = isBanned = isVendor = false;
+
             if (!user) {
-                User.create({
-                    name: profile.name.givenName, 
-                    email: profile.emails[0].value,
-                    weight: 0,
-                    height: 0,
-                })
+                User.create({ name, email, isAdmin, isBanned, isVendor })
                 .then(user => done(null, user));
             } else {
                 done(null, user);

@@ -18,8 +18,9 @@ router.get('/vendors', isAdmin, (req, res) => {
         include: [{
             model: Shop,
             where: { isDeleted: false },
+            required: false,
         }],
-        raw: true
+        raw: true,
     })
     .then((vendors) => {
         var groupedVendors = groupVendors(vendors)
@@ -321,6 +322,25 @@ router.post('/deleteShop/:id', (req, res) => {
             where: { id: req.params.id, },
         });
         req.flash('success', 'Shop has been succcessfully deleted!');
+        res.redirect('/admin/vendors');
+    });
+});
+
+
+router.post('/undeleteShop/:id', (req, res) => {
+    FoodItem.update({
+        isDeleted: false,
+    },
+    {
+        where: { ShopId: req.params.id, },
+    })
+    .then(() => {
+        Shop.update({
+            isDeleted: false,
+        },{
+            where: { id: req.params.id, },
+        });
+        req.flash('success', 'Shop has been succcessfully reinstated!');
         res.redirect('/admin/vendors');
     });
 });

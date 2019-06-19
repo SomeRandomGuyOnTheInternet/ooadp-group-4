@@ -174,7 +174,7 @@ router.post('/foodJournal', isUser, (req, res) => {
                 createdAtDate: searchDate
             },
             required: true,
-        }, {
+        },{
             model: Shop,
             required: true,
         }],
@@ -203,7 +203,10 @@ router.post('/addFood', isUser, (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
 
     Food.findOne({
-        where: { id: req.body.userFoodCode, }
+        where: { 
+            id: req.body.userFoodCode, 
+            isDeleted: false 
+        }
     })
     .then((foodItem) => {
         if (foodItem) {

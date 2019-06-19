@@ -54,7 +54,6 @@ router.post('/', (req, res) => {
 	var location = (req.body.location != "null") ? req.body.location : null;
 	var latitude = (req.body.latitude) ? parseFloat(req.body.latitude) : null; 
 	var longitude = (req.body.longitude) ? parseFloat(req.body.longitude) : null;
-	console.log("Location: ", req.body.location)
 	
 	if (!req.user) {
 		res.redirect('/logout')
