@@ -19,22 +19,28 @@ router.post('/settings', isVendor, (req, res) => {
 
     let email = req.body.email.toLowerCase(); 
     if (email.length === 0) {
-
-        email = Vendor.findOne({
-            attribute: ['email'],
+        Vendor.findOne({
+            attributes: ['email'], 
+            raw: true, 
             where: {
                 id: req.user.id,
-            }
+            }, 
+           
+        }).then((mail)=> { 
+            return email = mail; 
         })
     }
     console.log(email); 
-    let password = req.body.password;
+    let password = req.body.password; 
     if (password.length === 0) {
         password = Vendor.findOne({
             attribute: ['password'],
             where: {
                 id: req.user.id,
-            }
+            }, 
+            raw: true, 
+        }).then((pass)=> { 
+            return password = pass;  
         })
     }
 

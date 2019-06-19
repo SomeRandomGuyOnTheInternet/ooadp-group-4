@@ -24,7 +24,7 @@
                                 <div class="col-md-12 new-password">
                                     <label>Password</label>
                                     <input name="password" id="password" type="password" class="form-control delprefix"
-                                        placeholder="(unchanged)">
+                                        placeholder="new-password">
                                 </div>
                             </div>
 
@@ -40,8 +40,8 @@
 
                             <br>
 
-                            <input type="submit" name="action" value="Update Settings" class="btn btn-primary"
-                                style="background-color: #4CAF50;">
+                            <button type="submit" name="action" value="updateSettings" id="updateSettings" class="btn btn-primary"
+                                style="background-color: #4CAF50;" disabled>Update Settings</button>
                             <input type="submit" name="action" value="Delete Account" onclick="remove_confirm()"
                                 class="btn btn-primary" id="remove-account" style="background-color: #d9534f;">
                         </form>
@@ -52,3 +52,14 @@
 
     </div>
 </div>
+
+<script>
+    $('#email, #password')
+    .on("change", function(event) {
+        if ($('#email').length == 0|| $('#password').length==0) {
+            $("#updateSettings").attr("disabled", true);
+        } else {
+            $("#updateSettings").attr("disabled", false);
+        }
+    });
+</script>
