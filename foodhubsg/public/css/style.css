@@ -1406,6 +1406,21 @@ input[type="text"] {
       background: #d9534f;
       color: #fff; }
 
+.btn-undelete {
+  background: none;
+  border: none;
+  padding: 0; }
+  .btn-danger:hover, .btn-danger:focus, .btn-danger:active {
+    background: #d43f3a !important;
+    border-color: #d43f3a !important; }
+  .btn-danger.btn-outline {
+    background: transparent;
+    color: #d9534f;
+    border: 2px solid #d9534f; }
+    .btn-danger.btn-outline:hover, .btn-danger.btn-outline:focus, .btn-danger.btn-outline:active {
+      background: #d9534f;
+      color: #fff; }
+
 .btn-outline {
   background: none;
   border: 2px solid gray;
@@ -1493,9 +1508,18 @@ input[type="text"] {
   float: right;
 }
 
+.popover.confirmation.fade.bs-popover-top.show {
+  border-radius: 0;
+  box-shadow: 0 5px 10px -2px rgba(0,0,0,0.2);
+}
+
+.popover-header {
+  font-weight: bold;
+}
+
 .welcome-header {
   color: whitesmoke;
-  font-weight: bold;
+  font-weight: 200;
 }
 
 .flash {

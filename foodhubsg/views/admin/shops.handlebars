@@ -57,7 +57,7 @@
                     <div class="col-md-6 recommended-shops">
                         <div class="blog-entry">
                             <div class="blog-img">
-                                <a class="action" href="/admin/editShop/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop" style="opacity:0.5;"></a>
+                                <img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop" style="opacity:0.5;">
                             </div>
                             <div class="desc">
                                 <p class="meta">
@@ -77,6 +77,11 @@
                                             No rating available 
                                         {{/if}}
                                     </span>
+                                    <form method="POST" action="/admin/undeleteShop/{{this.id}}">
+                                        <button type="submit" name="action" value="Undelete Shop" class="btn-undelete hyperlink" data-toggle="confirmation" data-title="Confirm undelete?">
+                                            <i class="fas fa-ban"></i>&nbsp;Undelete Shop
+                                        </button>
+                                    </form>
                                 </p>
                             </div>
                         </div>
