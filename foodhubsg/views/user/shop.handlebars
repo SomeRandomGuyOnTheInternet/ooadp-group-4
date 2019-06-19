@@ -21,6 +21,7 @@
                                 <span class="thick">{{ shop.address }}</span>
                                 <br>
                                 <span class="food_rating">Rating:&nbsp;
+                                    {{#if shop.rating}} 
                                     <b class="recommended-{{ shop.isRecommended }}">
                                         {{#times shop.rating}}
                                             <i class="fas fa-star"></i>
@@ -29,6 +30,9 @@
                                             <i class="far fa-star"></i>
                                         {{/times}}
                                     </b>
+                                    {{else}} 
+                                        No rating available 
+                                    {{/if}}
                                 </span>
                                 <hr>
                                 {{ shop.description }}

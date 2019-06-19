@@ -17,6 +17,7 @@ router.get('/vendors', isAdmin, (req, res) => {
         where: { isVendor: true },
         include: [{
             model: Shop,
+            where: { isDeleted: false },
         }],
         raw: true
     })
@@ -36,10 +37,16 @@ router.get('/shops', isAdmin, (req, res) => {
         where: { isDeleted: false },
     })
     .then(function (shops) {
-        res.render('admin/shops', {
-            user: req.user,
-            title: "Shops",
-            shops: shops,
+        Shop.findAll({
+            where: { isDeleted: true },
+        })
+        .then(function (deletedShops) {
+            res.render('admin/shops', {
+                user: req.user,
+                title: "Shops",
+                shops,
+                deletedShops
+            })
         })
     })
 });
@@ -238,7 +245,6 @@ router.post('/addShop', (req, res) => {
         name,
         address,
         location,
-        rating: 1,
         latitude,
         longitude,
         description,
@@ -341,7 +347,6 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
         FoodItem.findAll({ where: { ShopId: shops[i], isDeleted: false } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
-            console.log(rating)
             Shop.update(
                 {
                     rating,

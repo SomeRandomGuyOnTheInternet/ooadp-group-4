@@ -77,6 +77,9 @@ app.use(passport.session());
 const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);
 
+const googleAuthenticate = require('./config/googlePassport');
+googleAuthenticate.googleStrategy(passport);
+
 app.use('/', mainRoute);
 app.use('/user', userRoute);
 app.use('/admin', adminRoute);
