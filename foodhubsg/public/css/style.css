@@ -50,7 +50,7 @@ label {
 	right: 0;
 	top: 0;
     box-shadow: 0 0 10px -10px rgba(0,0,0,0.75);
-    overflow: scroll;
+    overflow: auto;
   }
   
 .modal-content {
@@ -86,6 +86,11 @@ padding-left: 55px;
 #welcome-msg{
 color: white;
 margin: 20em 0 20em 0;
+}
+
+.splash-text-container {
+  padding: 4em 0 0 2em;
+  position: relative;
 }
 
 .checked {
@@ -1331,11 +1336,9 @@ input[type="text"] {
 .btn-google {
   background: white;
   color: #212529; 
-  box-shadow: 0 2px 10px 0 #d1d0d0;
-text-align:left;}
+  box-shadow: 0 5px 10px -2px rgba(0,0,0,0.2); }
   .btn-google:hover, .btn-google:focus, .btn-google:active {
-    background: white !important;
-    border-color: white !important; }
+    background: white !important; }
   .btn-google.btn-outline {
     background: transparent;
     color: white;
