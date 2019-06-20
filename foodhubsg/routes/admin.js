@@ -192,11 +192,11 @@ router.post('/vendors', (req, res) => {
 
 	User.findOne({ where: { email } })
     .then(function (user) {
-        if (user) { error = 'This email or name has already been registered'; };
+        if (user) { error = 'This email has already been registered'; };
         if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
         if (password != confirmPassword) { error = 'Passwords do not match'; };
 
-		if (typeof error === 'undefined') {
+		if (!error) {
 			bcrypt.genSalt(10, function (err, salt) {
 				bcrypt.hash(password, salt, function (err, hash) {
                     User.create({
@@ -218,7 +218,7 @@ router.post('/vendors', (req, res) => {
             })
             .then((vendors) => {
                 var groupedVendors = groupVendors(vendors);
-                
+
                 req.flash('error', error);
                 res.render('admin/vendors', {
                     user: req.user,
@@ -364,7 +364,7 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
             ShopId: shops[i],
         });
 
-        FoodItem.findAll({ where: { ShopId: shops[i], isDeleted: false } })
+        FoodItem.findAll({ where: { ShopId: shops[i], isDeleted } })
         .then((foodItems) => {
             var rating = getShopRatings(foodItems);
             Shop.update(
