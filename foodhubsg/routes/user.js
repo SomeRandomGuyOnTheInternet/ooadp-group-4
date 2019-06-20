@@ -39,7 +39,8 @@ router.get('/', isUser, (req, res) => {
     .then(function (data) {
         groupedFoodItems = groupFoodItems(data[1]);
         shops = data[0];
-        shops.length = 2;
+        (shops.length > 0) ? 2 : 0
+        
         res.render('user/index', {
             user: req.user,
             title: "Index",

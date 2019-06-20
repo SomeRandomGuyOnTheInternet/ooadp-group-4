@@ -1,4 +1,4 @@
-function createInstance(Shops, FoodItems, Users, Vendors) {
+function createInstance(Shops, FoodItems, Users, FoodLogs) {
     // The password for the following accounts is just 'password'
     Users.bulkCreate([
         { 
@@ -6,10 +6,7 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             email: "user@mail.com", 
             password: '$2a$10$JgDMXgbEoiJdzIn8pk11Zusq2E0p8aq3ccCoqyv9dgInOK3xGGYJ6',
             height: 1.78, 
-            weight: 74, 
-            location: null, 
-            latitude: null, 
-            longitude: null,
+            weight: 74,
             isAdmin: false, 
             isVendor: false, 
             isBanned: false 
@@ -19,10 +16,7 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             email: "admin@foodhubsg.com", 
             password: '$2a$10$wQZ8DoV.HcnEBsks4mrIZO5bauhynH.puDtMCbH1axpDV71htRQM2', 
             height: null, 
-            weight: null, 
-            location: null, 
-            latitude: null,
-            longitude: null,
+            weight: null,
             isAdmin: true, 
             isVendor: false, 
             isBanned: false 
@@ -33,7 +27,6 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             password: '$2a$10$1ZxU3n6AqWrAlOeuFkxLYOsUpnMTcu4BAlu4AANCFSoyJJLi7kBo2', 
             height: null, 
             weight: null, 
-            location: null, 
             isAdmin: false, 
             isVendor: true, 
             isBanned: false 
@@ -76,7 +69,7 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             description: 'Ensuring that better food, prepared from whole, unprocessed ingredients is accessible to everyone.',
             imageLocation: '/images/grains-amk-image.jpg',
             isDeleted: false,
-            isRecommended: true,
+            isRecommended: false,
             VendorId: 3,
         },
         {
@@ -88,7 +81,7 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             description: 'The blatantly correct choice.',
             imageLocation: '/images/leanbento-amk-image.jpeg',
             isDeleted: false,
-            isRecommended: true,
+            isRecommended: false,
             VendorId: 3,
         },
         {
@@ -100,7 +93,7 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
             description: 'Ensuring that better food, prepared from whole, unprocessed ingredients is accessible to everyone.',
             imageLocation: '/images/thelawn-amk-image.jpeg',
             isDeleted: false,
-            isRecommended: true,
+            isRecommended: false,
             VendorId: 3,
         },
         {
@@ -120,10 +113,34 @@ function createInstance(Shops, FoodItems, Users, Vendors) {
     FoodItems.bulkCreate([
         { name: 'Aglio Olio', calories: 571, imageLocation: "/images/food-image-1.png", ShopId: 1, isRecommended: false, isDeleted: false, },
         { name: 'Cesear Salad', calories: 346, imageLocation: "/images/food-image-2.png", ShopId: 1, isRecommended: true, isDeleted: false, },
-        { name: 'Cream of Mushroom Soup', calories: 207, imageLocation: "/images/food-image-8.jpg", ShopId: 1, isRecommended: false, isDeleted: false, },
+        { name: 'Cream of Mushroom Soup', calories: 207, imageLocation: "/images/food-image-8.jpg", ShopId: 1, isRecommended: true, isDeleted: false, },
         { name: 'Chicken Rice', calories: 436, imageLocation: "/images/food-image-4.jpg", ShopId: 1, isRecommended: true, isDeleted: false, },
         { name: 'Chicken Pulao', calories: 682, imageLocation: "/images/food-image-5.jpg", ShopId: 1, isRecommended: false, isDeleted: false, },
         { name: 'Mixed Vegetable Rice', calories: 682, imageLocation: "/images/food-image-6.png", ShopId: 2, isRecommended: false, isDeleted: false, },
+    ]);
+
+    FoodLogs.bulkCreate([
+        { mealType: 'Breakfast', createdAtDate: "2019-06-14", createdAt: "2019-06-14 01:45:46", UserId: 1, FoodId: 1, },
+        { mealType: 'Lunch', createdAtDate: "2019-06-14", createdAt: "2019-06-14 04:20:46", UserId: 1, FoodId: 2, },
+
+        { mealType: 'Breakfast', createdAtDate: "2019-06-15", createdAt: "2019-06-15 01:45:46", UserId: 1, FoodId: 2, },
+        { mealType: 'Lunch', createdAtDate: "2019-06-15", createdAt: "2019-06-15 04:20:46", UserId: 1, FoodId: 1, },
+        { mealType: 'Dinner', createdAtDate: "2019-06-15", createdAt: "2019-06-15 12:57:46", UserId: 1, FoodId: 3, },
+
+        { mealType: 'Breakfast', createdAtDate: "2019-06-16", createdAt: "2019-06-16 01:45:46", UserId: 1, FoodId: 1, },
+        { mealType: 'Dinner', createdAtDate: "2019-06-16", createdAt: "2019-06-16 12:57:46", UserId: 1, FoodId: 2, },
+
+        { mealType: 'Breakfast', createdAtDate: "2019-06-17", createdAt: "2019-06-17 01:45:46", UserId: 1, FoodId: 2, },
+        { mealType: 'Dinner', createdAtDate: "2019-06-17", createdAt: "2019-06-17 12:57:46", UserId: 1, FoodId: 1, },
+        { mealType: 'Snacks', createdAtDate: "2019-06-17", createdAt: "2019-06-17 07:35:46", UserId: 1, FoodId: 1, },
+
+        { mealType: 'Breakfast', createdAtDate: "2019-06-18", createdAt: "2019-06-18 01:45:46", UserId: 1, FoodId: 1, },
+        { mealType: 'Lunch', createdAtDate: "2019-06-18", createdAt: "2019-06-18 04:20:46", UserId: 1, FoodId: 2, },
+        { mealType: 'Dinner', createdAtDate: "2019-06-18", createdAt: "2019-06-18 12:57:46", UserId: 1, FoodId: 3, },
+
+        { mealType: 'Breakfast', createdAtDate: "2019-06-19", createdAt: "2019-06-19 01:45:46", UserId: 1, FoodId: 2, },
+        { mealType: 'Lunch', createdAtDate: "2019-06-19", createdAt: "2019-06-19 04:20:46", UserId: 1, FoodId: 1, },
+        { mealType: 'Snacks', createdAtDate: "2019-06-19", createdAt: "2019-06-19 07:35:46", UserId: 1, FoodId: 1, },
     ]);
 };
 

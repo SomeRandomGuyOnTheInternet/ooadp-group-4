@@ -1336,7 +1336,8 @@ input[type="text"] {
 .btn-google {
   background: white;
   color: #212529; 
-  box-shadow: 0 5px 10px -2px rgba(0,0,0,0.2); }
+  box-shadow: 0 5px 10px -2px rgba(0,0,0,0.2);
+  border: 1px solid #999999; }
   .btn-google:hover, .btn-google:focus, .btn-google:active {
     background: white !important; }
   .btn-google.btn-outline {
@@ -1520,6 +1521,10 @@ input[type="text"] {
 .welcome-header {
   color: whitesmoke;
   font-weight: 200;
+}
+
+.pull-right {
+  float: right;
 }
 
 .flash {

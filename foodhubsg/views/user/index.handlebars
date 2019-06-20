@@ -13,7 +13,6 @@
 					<div class="col-md-12">
 						<h4>Current City: <b>{{user.location}}</b></h4>
 					</div>
-
 					{{#each shops}}
 						<div class="col-md-6 recommended-shops">
 							<div class="blog-entry">
@@ -67,7 +66,7 @@
 							<h1 class="font_color"><b>Summary of your stats</b></h1>
 							<h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
 						</div>
-						{{#ifCond numOfDays '>=' 4}}
+						{{#ifCond numOfDays '>=' 3}}
 		
 							<div class="col-md-4">
 								<br>
@@ -164,7 +163,7 @@
 	</div>
 </div>
 
-{{#ifCond numOfDays '>=' 4}}
+{{#ifCond numOfDays '>=' 3}}
 <script>
 	var foodHistoryChart = document.getElementById('foodHistoryChart');
 	var foodItems = {{{ json groupedFoodItems }}}, dailyAverageCalories = {{{ dailyAverageCalories }}};

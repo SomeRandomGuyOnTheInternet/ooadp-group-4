@@ -15,6 +15,7 @@ const setUpDB = (drop) => {
         })
         .then(() => {
             User.hasMany(FoodLog);
+            
             FoodItem.hasMany(FoodLog, { foreignKey: 'FoodId' });
             FoodLog.belongsTo(FoodItem, { foreignKey: 'FoodId' });
 
@@ -25,12 +26,13 @@ const setUpDB = (drop) => {
             Shop.belongsTo(User, { foreignKey: 'VendorId' });
 
             User.hasMany(Question, { foreignKey: 'UserId' }); 
+
             mySQLDB.sync({ // Creates table if none exists
                 force: drop
             })
             .then(() => {
                 console.log('Create tables if none exists');
-                if (drop == true) { createInstance(Shop, FoodItem, User); }
+                if (drop == true) createInstance(Shop, FoodItem, User, FoodLog) 
             })
             .catch(err => console.log(err))
         })
