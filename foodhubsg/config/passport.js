@@ -21,18 +21,16 @@ function localStrategy(passport) {
             })
         }));
 
-    // Serializes (stores) user id into session upon successful authentication
-    passport.serializeUser((user, done) => { done(null, user.id); });// user.id is used to identify authenticated user 
+    passport.serializeUser((user, done) => { done(null, user.id); }); 
 
-    // User object is retrieved by userId from session and put into req.user
     passport.deserializeUser((userId, done) => {
         User.findOne({ where: { id: userId }})
-            .then((user) => {
-                done(null, user); // user object saved in req.session
-            })
-            .catch((done) => { // No user found, not stored in req.session
-                console.log(done);
-            });
+        .then((user) => {
+            done(null, user);
+        })
+        .catch((done) => {
+            console.log(done);
+        });
     });
 }
 

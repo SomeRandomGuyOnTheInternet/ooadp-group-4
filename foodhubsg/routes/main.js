@@ -64,8 +64,8 @@ router.post('/', (req, res) => {
 		)
 		.then(function () {
 			if (req.user.isAdmin) res.redirect('/admin/vendors');
-			if (req.user.isVendor) res.redirect('/vendor/allShops');
-			if (!req.user.isVendor && !req.user.isAdmin) res.redirect('/user');
+			else if (req.user.isVendor) res.redirect('/vendor/allShops');
+			else res.redirect('/user');
 		});
 	}
 });
@@ -91,10 +91,13 @@ router.post('/register', isloggedOut, (req, res) => {
 		where: { email }
 	})
 	.then(function (user) {
-		if (user) { error = 'This email has already been registered'; };
-		if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
-		if (height > 3 || weight < 0.5) { error = 'Please enter a valid height value'; };
-		if (weight > 200 || weight < 20) { error = 'Please enter a valid weight value'; };
+		if (user) { 
+			if (!user.password) error = 'This email has already been registered through Google';
+			else error = 'This email has already been registered'; 
+		};
+		if (password.length < 6) error = 'Password must contain at least 6 characters';
+		if (height > 3 || weight < 0.5) error = 'Please enter a valid height value';
+		if (weight > 200 || weight < 20) error = 'Please enter a valid weight value';
 
 		if (typeof error === 'undefined') {
 			bcrypt.genSalt(10, function (err, salt) {

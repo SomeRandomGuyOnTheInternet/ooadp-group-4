@@ -289,18 +289,20 @@ router.post('/editShop/:id', (req, res) => {
             },
         });
     } else {
-        Shop.update({
-            name,
-            address,
-            description,
-            imageLocation,
-            location,
-            latitude,
-            longitude,
-            VendorId: vendorId,
-        },{
-            where: { id },
-        });
+        Shop.update(
+            {
+                name,
+                address,
+                description,
+                imageLocation,
+                location,
+                latitude,
+                longitude,
+                VendorId: vendorId,
+            },{
+                where: { id },
+            }
+        );
     };
 
     req.flash('success', 'Shop has been succcessfully edited!');
@@ -309,18 +311,15 @@ router.post('/editShop/:id', (req, res) => {
 
 
 router.post('/deleteShop/:id', (req, res) => {
-    FoodItem.update({
-        isDeleted: true,
-    },
-    {
-        where: { ShopId: req.params.id, },
-    })
+    FoodItem.update(
+        { isDeleted: true, },
+        { where: { ShopId: req.params.id } }
+    )
     .then(() => {
-        Shop.update({
-            isDeleted: true,
-        },{
-            where: { id: req.params.id, },
-        });
+        Shop.update(
+            { isDeleted: true },
+            { where: { id: req.params.id } }
+        );
         req.flash('success', 'Shop has been succcessfully deleted!');
         res.redirect('/admin/vendors');
     });
@@ -328,18 +327,15 @@ router.post('/deleteShop/:id', (req, res) => {
 
 
 router.post('/undeleteShop/:id', (req, res) => {
-    FoodItem.update({
-        isDeleted: false,
-    },
-    {
-        where: { ShopId: req.params.id, },
-    })
+    FoodItem.update(
+        { isDeleted: false },
+        { where: { ShopId: req.params.id } }
+    )
     .then(() => {
-        Shop.update({
-            isDeleted: false,
-        },{
-            where: { id: req.params.id, },
-        });
+        Shop.update(
+            { isDeleted: false },
+            { where: { id: req.params.id } }
+        );
         req.flash('success', 'Shop has been succcessfully reinstated!');
         res.redirect('/admin/vendors');
     });

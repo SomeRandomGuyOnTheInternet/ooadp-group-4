@@ -40,11 +40,10 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             latitude: 1.391430,
             longitude: 103.893420,
             location: 'Sengkang',
-            rating: 4,
             description: 'Sandwiches & salads made to order, right in front of you, down to your specifications, with the use of a variety of ingredients',
             imageLocation: '/images/misaka-sengkang-image.jpeg',
             isDeleted: false,
-            isRecommended: true,
+            isRecommended: false,
             VendorId: 3,
         },
         {
@@ -53,7 +52,6 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             location: 'Sengkang',
             latitude: 1.391299,
             longitude: 103.893600,
-            rating: 3,
             description: 'Sandwiches & salads made to order, right in front of you, down to your specifications, with the use of a variety of ingredients',
             imageLocation: '/images/thebistro-sengkang-image.jpeg',
             isDeleted: false,
@@ -66,10 +64,11 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             location: 'Ang Mo Kio',
             latitude: 1.373938,
             longitude: 103.862897,
+            rating: 4,
             description: 'Ensuring that better food, prepared from whole, unprocessed ingredients is accessible to everyone.',
             imageLocation: '/images/grains-amk-image.jpg',
             isDeleted: false,
-            isRecommended: false,
+            isRecommended: true,
             VendorId: 3,
         },
         {
@@ -78,6 +77,7 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             location: 'Ang Mo Kio',
             latitude: 1.370057,
             longitude: 103.848459,
+            rating: 3,
             description: 'The blatantly correct choice.',
             imageLocation: '/images/leanbento-amk-image.jpeg',
             isDeleted: false,
@@ -111,11 +111,11 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
     ]);
 
     FoodItems.bulkCreate([
-        { name: 'Aglio Olio', calories: 571, imageLocation: "/images/food-image-1.png", ShopId: 1, isRecommended: false, isDeleted: false, },
-        { name: 'Cesear Salad', calories: 346, imageLocation: "/images/food-image-2.png", ShopId: 1, isRecommended: true, isDeleted: false, },
-        { name: 'Cream of Mushroom Soup', calories: 207, imageLocation: "/images/food-image-8.jpg", ShopId: 1, isRecommended: true, isDeleted: false, },
-        { name: 'Chicken Rice', calories: 436, imageLocation: "/images/food-image-4.jpg", ShopId: 1, isRecommended: true, isDeleted: false, },
-        { name: 'Chicken Pulao', calories: 682, imageLocation: "/images/food-image-5.jpg", ShopId: 1, isRecommended: false, isDeleted: false, },
+        { name: 'Aglio Olio', calories: 571, imageLocation: "/images/food-image-1.png", ShopId: 3, isRecommended: false, isDeleted: false, },
+        { name: 'Cesear Salad', calories: 346, imageLocation: "/images/food-image-2.png", ShopId: 3, isRecommended: true, isDeleted: false, },
+        { name: 'Cream of Mushroom Soup', calories: 207, imageLocation: "/images/food-image-8.jpg", ShopId: 3, isRecommended: true, isDeleted: false, },
+        { name: 'Chicken Rice', calories: 436, imageLocation: "/images/food-image-4.jpg", ShopId: 3, isRecommended: true, isDeleted: false, },
+        { name: 'Chicken Pulao', calories: 682, imageLocation: "/images/food-image-5.jpg", ShopId: 3, isRecommended: false, isDeleted: false, },
         { name: 'Mixed Vegetable Rice', calories: 682, imageLocation: "/images/food-image-6.png", ShopId: 2, isRecommended: false, isDeleted: false, },
     ]);
 
