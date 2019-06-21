@@ -6,9 +6,6 @@ function getShopRating(foodItems) {
     }
 
     averageCalories = (totalCalories / foodItems.length);
-
-    console.log(averageCalories)
-
     if (averageCalories > 800) { rating = 1 } 
     else if (700 < averageCalories && averageCalories < 799) { rating = 2 } 
     else if (600 < averageCalories && averageCalories < 699) { rating = 3 } 

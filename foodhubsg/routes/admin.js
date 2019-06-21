@@ -304,7 +304,6 @@ router.post('/editShop/:id', (req, res) => {
             }
         );
     };
-
     req.flash('success', 'Shop has been succcessfully edited!');
     res.redirect(`/admin/editShop/${id}`);
 });
@@ -366,14 +365,13 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
             Shop.update(
                 {
                     rating,
-                    isRecommended: (rating >= 4) ? true : false,
+                    isRecommended: (rating >= 3) ? true : false,
                 },{ 
                     where: { id: foodItems[0].ShopId } 
                 }
             );
         });
     };
-
     req.flash('success', 'Food has been succcessfully added!');
     res.redirect('/admin/vendors');
 });
@@ -406,7 +404,7 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
         Shop.update(
             {
                 rating,
-                isRecommended: (rating >= 4) ? true : false,
+                isRecommended: (rating >= 3) ? true : false,
             },
             { where: { id: foodItems[0].ShopId } }
         )
@@ -435,7 +433,7 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
             Shop.update(
                 {
                     rating,
-                    isRecommended: (rating >= 4) ? true : false,
+                    isRecommended: (rating >= 3) ? true : false,
                 },
                 { where: { id: foodItems[0].ShopId } }
             )

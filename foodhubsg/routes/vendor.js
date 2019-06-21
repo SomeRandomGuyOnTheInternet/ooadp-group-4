@@ -216,7 +216,7 @@ router.get('/deleteFoodItem/:id', isVendor, (req, res) => {
                         Shop.update(
                             {
                                 rating,
-                                isRecommended: (rating >= 4) ? true : false,
+                                isRecommended: (rating >= 3) ? true : false,
                             },
                             { where: { id: foodItems[0].ShopId } }
                         )
@@ -314,7 +314,7 @@ router.post('/addFoodItem', isVendor, (req, res) => {
                 Shop.update(
                     {
                         rating,
-                        isRecommended: (rating >= 4) ? true : false,
+                        isRecommended: (rating >= 3) ? true : false,
                     }, {
                         where: { id: foodItems[0].ShopId }
                     }
@@ -351,7 +351,7 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
                     Shop.update(
                         {
                             rating,
-                            isRecommended: (rating >= 4) ? true : false,
+                            isRecommended: (rating >= 3) ? true : false,
                         },
                         { where: { id: shop } }
                     )

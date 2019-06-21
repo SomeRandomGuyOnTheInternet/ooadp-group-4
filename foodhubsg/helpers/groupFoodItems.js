@@ -23,13 +23,10 @@ function groupFoodItems(foodItems, setDates = false) {
                     snacksCalories += parseInt(value[i].calories);
                     break;
             }
-
             dailyCalories += parseInt(value[i].calories);
-
             if (setDates == true){ value[i]["FoodLogs.createdAt"] = moment(value[i]["FoodLogs.createdAt"]).format("h:mm a"); }
         }
         datesWithFood[key] = _.groupBy(value, 'FoodLogs.mealType');
-
         datesWithFood[key].breakfastCalories = breakfastCalories;
         datesWithFood[key].lunchCalories = lunchCalories;
         datesWithFood[key].dinnerCalories = dinnerCalories;

@@ -81,7 +81,7 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             description: 'The blatantly correct choice.',
             imageLocation: '/images/leanbento-amk-image.jpeg',
             isDeleted: false,
-            isRecommended: false,
+            isRecommended: true,
             VendorId: 3,
         },
         {
