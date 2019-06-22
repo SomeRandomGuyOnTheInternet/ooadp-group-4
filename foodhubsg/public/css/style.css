@@ -32,7 +32,10 @@ label {
 }
 
 .shopImage {
+  overflow:hidden;
+  max-width:100%;
   height:auto;
+  max-height: 270px; 
 }
 
 .thick {
