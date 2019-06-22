@@ -1527,7 +1527,6 @@ input[type="text"] {
 
 .img-responsive {
   overflow: hidden;
-  max-height: 270px; 
   width: 100%;
   height: auto;
 }
@@ -1731,4 +1730,5 @@ select {
 #venImage {
   max-width: 100%;
   width:auto;
+  max-height: 270px;
 }
