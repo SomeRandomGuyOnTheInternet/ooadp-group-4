@@ -4,7 +4,7 @@ const router = express.Router();
 
 const isAdmin = require('../helpers/isAdmin');
 const groupVendors = require('../helpers/groupVendors');
-const getShopRatings = require('../helpers/getShopRating');
+const updateShopRating = require('../helpers/updateShopRating');
 
 const Shop = require('../models/Shop');
 const FoodItem = require('../models/FoodItem')
@@ -357,21 +357,10 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
             isDeleted,
             imageLocation,
             ShopId: shops[i],
-        });
-
-        FoodItem.findAll({ where: { ShopId: shops[i], isDeleted } })
-        .then((foodItems) => {
-            var rating = getShopRatings(foodItems);
-            Shop.update(
-                {
-                    rating,
-                    isRecommended: (rating >= 3) ? true : false,
-                },{ 
-                    where: { id: foodItems[0].ShopId } 
-                }
-            );
-        });
+        })
+        .then((foodItem) => { updateShopRating(foodItem.ShopId) });
     };
+
     req.flash('success', 'Food has been succcessfully added!');
     res.redirect('/admin/vendors');
 });
@@ -380,7 +369,7 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
 router.post('/editFoodItem/:id', isAdmin, (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
-    const shop = req.body.shopId;
+    const shopId = req.body.shopId;
     const calories = req.body.calories;
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
@@ -396,23 +385,11 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
         },{
             where: { id }
         }
-    );
+    )
+    .then((foodItem) => { updateShopRating(shopId); })
 
-    FoodItem.findAll({ where: { ShopId: shop, isDeleted: false } })
-    .then((foodItems) => {
-        var rating = getShopRatings(foodItems);
-        Shop.update(
-            {
-                rating,
-                isRecommended: (rating >= 3) ? true : false,
-            },
-            { where: { id: foodItems[0].ShopId } }
-        )
-        .then(() => {
-            req.flash('success', 'Food has been succcessfully edited!');
-            res.redirect(`/admin/editShop/${shop}`);
-        });
-    });
+    req.flash('success', 'Food has been succcessfully edited!');
+    res.redirect(`/admin/editShop/${shopId}`);
 });
 
 
@@ -420,28 +397,18 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     const id = req.params.id;
     const isDeleted = true;
 
-    FoodItem.update(
-        { isDeleted },
-        { where: { id } }
-    )
-
     FoodItem.findOne({ where: { id } })
-    .then((food) => {
-        FoodItem.findAll({ where: { ShopId: food.ShopId, isDeleted: false } })
-        .then((foodItems) => {
-            var rating = getShopRatings(foodItems);
-            Shop.update(
-                {
-                    rating,
-                    isRecommended: (rating >= 3) ? true : false,
-                },
-                { where: { id: foodItems[0].ShopId } }
-            )
-            .then(() => {
-                req.flash('success', 'Food has been succcessfully deleted!');
-                res.redirect(`/admin/editShop/${foodItems[0].ShopId}`);
-            });
-        });
+    .then((foodItem) => {
+        var foodItem = foodItem;
+
+        FoodItem.update(
+            { isDeleted },
+            { where: { id } }
+        )
+        .then((deletedFoodItem) => { updateShopRating(foodItem.ShopId); })
+
+        req.flash('success', 'Food has been succcessfully deleted!');
+        res.redirect(`/admin/editShop/${foodItem.ShopId}`);
     });
 });
 

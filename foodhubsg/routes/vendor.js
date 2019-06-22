@@ -243,7 +243,6 @@ router.post('/addShop', isVendor, (req, res) => {
         name,
         address,
         location,
-        rating: 1,
         latitude,
         longitude,
         description,
@@ -348,6 +347,7 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
             FoodItem.findAll({ where: { ShopId: shop, isDeleted: false } })
                 .then((foodItems) => {
                     var rating = getShopRatings(foodItems);
+                    console.log(rating);
                     Shop.update(
                         {
                             rating,
