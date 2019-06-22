@@ -37,11 +37,11 @@ router.get('/shops', isAdmin, (req, res) => {
     Shop.findAll({
         where: { isDeleted: false },
     })
-    .then(function (shops) {
+    .then((shops) => {
         Shop.findAll({
             where: { isDeleted: true },
         })
-        .then(function (deletedShops) {
+        .then((deletedShops) => {
             res.render('admin/shops', {
                 user: req.user,
                 title: "Shops",
@@ -94,7 +94,6 @@ router.get('/editShop/:id', isAdmin, (req, res) => {
         });
     })
     .catch((err) => {
-        console.log(err);
         req.flash('error', "That shop does not exist!");
         res.redirect('/admin/vendors');
     });
@@ -102,11 +101,7 @@ router.get('/editShop/:id', isAdmin, (req, res) => {
 
 
 router.get('/addShop', isAdmin, (req, res) => {
-    User.findAll({
-        where: {
-            isVendor: true,
-        }
-    })
+    User.findAll({ where: { isVendor: true } })
     .then((vendors) => {
         res.render('admin/addShop', {
             user: req.user,
@@ -118,11 +113,7 @@ router.get('/addShop', isAdmin, (req, res) => {
 
 
 router.get('/addFoodItem', isAdmin, (req, res) => {
-    Shop.findAll({
-        where: {
-            isDeleted: false,
-        }
-    })
+    Shop.findAll({ where: { isDeleted: false } })
     .then((shops) => {
         res.render('admin/addFoodItem', {
             user: req.user,
@@ -143,9 +134,7 @@ router.get('/editFoodItem/:id', isAdmin, (req, res) => {
     })
     .then((food) => {
         if (food) {
-            Shop.findOne({
-                where: { id: food.ShopId }
-            })
+            Shop.findOne({  where: { id: food.ShopId } })
             .then((currentShop) => {
                 Shop.findAll({
                     where: {
@@ -304,6 +293,7 @@ router.post('/editShop/:id', (req, res) => {
             }
         );
     };
+
     req.flash('success', 'Shop has been succcessfully edited!');
     res.redirect(`/admin/editShop/${id}`);
 });
@@ -319,9 +309,10 @@ router.post('/deleteShop/:id', (req, res) => {
             { isDeleted: true },
             { where: { id: req.params.id } }
         );
-        req.flash('success', 'Shop has been succcessfully deleted!');
-        res.redirect('/admin/vendors');
     });
+
+    req.flash('success', 'Shop has been succcessfully deleted!');
+    res.redirect('/admin/vendors');
 });
 
 
@@ -335,9 +326,10 @@ router.post('/undeleteShop/:id', (req, res) => {
             { isDeleted: false },
             { where: { id: req.params.id } }
         );
-        req.flash('success', 'Shop has been succcessfully reinstated!');
-        res.redirect('/admin/vendors');
     });
+    
+    req.flash('success', 'Shop has been succcessfully reinstated!');
+    res.redirect('/admin/vendors');
 });
 
 

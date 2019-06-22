@@ -14,30 +14,6 @@ body {
   height:100%;
 }
 
-label {
-  font-style: italic;
-}
-
-.menuFood {
-  border: 3px solid gainsboro;
-  box-shadow: 0 0 20px 0 rgba(0,0,0,0.15);
-}
-
-.menuImage {
-  overflow:hidden; 
-  margin-top:1em; 
-  margin-bottom:1.2em;
-  max-width:80%;
-  height:auto;
-}
-
-.shopImage {
-  overflow:hidden;
-  max-width:100%;
-  height:auto;
-  max-height: 270px; 
-}
-
 .thick {
   font-weight: bold;
 }
@@ -1552,6 +1528,8 @@ input[type="text"] {
 .img-responsive {
   overflow: hidden;
   max-height: 270px; 
+  width: 100%;
+  height: auto;
 }
 
 .code-flash {
@@ -1735,4 +1713,22 @@ select {
 
 .marginBottom {
   margin-bottom: 1em;
+}
+
+.menuFood {
+  border: 3px solid gainsboro;
+  box-shadow: 0 0 20px 0 rgba(0,0,0,0.15);
+}
+
+.menuImage {
+  overflow:hidden; 
+  margin-top:1em; 
+  margin-bottom:1.2em;
+  max-width:80%;
+  height:auto;
+}
+
+#venImage {
+  max-width: 100%;
+  width:auto;
 }
