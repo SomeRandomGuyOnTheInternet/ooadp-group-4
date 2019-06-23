@@ -36,10 +36,12 @@ router.get('/vendors', isAdmin, (req, res) => {
 router.get('/shops', isAdmin, (req, res) => {
     Shop.findAll({
         where: { isDeleted: false },
+        order: [ ['name', 'ASC'] ]
     })
     .then((shops) => {
         Shop.findAll({
             where: { isDeleted: true },
+            order: [ ['name', 'ASC'] ]
         })
         .then((deletedShops) => {
             res.render('admin/shops', {
@@ -70,12 +72,7 @@ router.get('/editShop/:id', isAdmin, (req, res) => {
                 isDeleted: false,
             },
         }),
-        User.findAll({
-            where: { 
-                isVendor: true, 
-                
-            }
-        }),
+        User.findAll({ where: { isVendor: true } }),
     ])
     .then((data) => {
         for (i = 0; i < data[2].length; i++) {
@@ -128,9 +125,7 @@ router.get('/editFoodItem/:id', isAdmin, (req, res) => {
     const id = req.params.id;
 
     FoodItem.findOne({
-        where: {
-            id: id,
-        }
+        where: { id }
     })
     .then((food) => {
         if (food) {
