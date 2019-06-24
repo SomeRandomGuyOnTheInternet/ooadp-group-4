@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const isVendor = require('../helpers/isVendor');
 const Vendor = require('../models/User');
 const FoodItem = require('../models/FoodItem');
@@ -19,7 +18,7 @@ router.get('/settings', isVendor, (req, res) => {
 router.post('/settings', isVendor, (req, res) => {
 
     let email = req.body.email.toLowerCase();
-    
+
     let password = req.body.password;
 
     var error;
@@ -106,28 +105,31 @@ router.get('/deleteShop/:id', isVendor, (req, res) => {
 
 
 router.get('/allFoodItems', isVendor, (req, res) => {
-    Shop.findOne({
+    // Shop.findOne({
+    //     where: {
+    //         VendorId: req.user.id,
+    //         isDeleted: false,
+    //     }
+    // }).then((shop) => {
+    
+    FoodItem.findAll({
         where: {
-            VendorId: req.user.id,
             isDeleted: false,
         }
-    }).then((shop) => {
-        FoodItem.findAll({
-            where: {
-                isDeleted: false,
-                ShopId: shop.id,
-            }
-        }).then((food) => {
-            res.render('vendors/allFoodItems', {
-                user: req.user,
-                title: "Show Menu",
-                food: food,
-                shops: shop,
+    }).then((food) => {
+        let query_list = []
+        for (i=0; i< food.length; i++) { 
+            query_list.push(food[i].name); 
+        } 
+        res.render('vendors/allFoodItems', {
+            user: req.user,
+            title: "Show Menu",
+            food: food,
 
-            })
         })
     })
 })
+// })
 
 
 router.get('/addFoodItem', isVendor, (req, res) => {
@@ -284,13 +286,13 @@ router.post('/addFoodItem', isVendor, (req, res) => {
             imageLocation,
             ShopId: shops[i],
         })
-        .then((foodItem) => { updateShopRating(foodItem.ShopId) });
+            .then((foodItem) => { updateShopRating(foodItem.ShopId) });
     };
 
     req.flash('success', 'Food has been succcessfully added!');
     res.redirect('/admin/vendors');
 });
-    
+
 
 
 router.post('/editFoodItem/:id', isVendor, (req, res) => {
@@ -329,14 +331,30 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
 })
 
 router.get('/delete/:id', isVendor, (req, res) => {
-    Vendor.destroy({
-        where: {
-            id: req.params.id,
-        }
-    }).then(() => { 
-        res.redirect('/login')
-    })
+    Shop.update({
+        isDeleted: 1,
+
+
+    },
+        {
+            where: { VendorId: req.params.id }
+        }).then((shop) => {
+            FoodItem.update({
+                isDeleted: 1
+            },
+
+                { where: { ShopId: shop.id } }
+            )
+        }).then(() => {
+            Vendor.destroy({
+                where: {
+                    id: req.params.id,
+                }
+            })
+        })
+
 })
+
 
 
 module.exports = router;
