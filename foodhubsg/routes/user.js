@@ -52,8 +52,8 @@ router.get('/', isUser, (req, res) => {
             lunchAverageCalories: getAverageCalories(groupedFoodItems, "lunchCalories"),
             dinnerAverageCalories: getAverageCalories(groupedFoodItems, "dinnerCalories"),
             snacksAverageCalories: getAverageCalories(groupedFoodItems, "snacksCalories"),
-        })
-    })
+        });
+    });
 });
 
 
@@ -66,14 +66,14 @@ router.get('/shops', isUser, (req, res) => {
         order: [
             ['rating', 'DESC'],
         ],
-    }).
-    then(function (shops) {
+    })
+    .then(function (shops) {
         res.render('user/shops', {
             user: req.user,
             title: "Shops",
             shops: shops,
-        })
-    })
+        });
+    });
 });
 
 
@@ -106,7 +106,6 @@ router.get('/shops/:id', isUser, (req, res) => {
         })
     })
     .catch((err) => {
-        console.log(err);
         req.flash('error', "That vendor does not exist!");
         res.redirect('/user/');
     });
@@ -134,7 +133,7 @@ router.get('/foodJournal', isUser, (req, res) => {
             title: "Food Journal",
             groupedFoodItems: groupFoodItems(FoodItems, true),
             searchDate: false,
-        })
+        });
     });
 });
 
@@ -149,9 +148,8 @@ router.get('/faq', isUser, (req, res) => {
     .then((questions) => {
         res.render('user/faq', {
             user: req.user,
-			questions: questions
-    
-        })
+			questions
+        });
     });
 });
 
@@ -190,13 +188,8 @@ router.post('/foodJournal', isUser, (req, res) => {
             title: "Food Journal",
             groupedFoodItems: groupFoodItems(FoodItems, true),
             searchDate: searchDate,
-        })
-    })
-    .catch((err) => {
-        console.log(err)
-        req.flash('error', err);
-        res.redirect('/user/foodJournal');
-    })
+        });
+    });
 });
 
 
@@ -220,20 +213,12 @@ router.post('/addFood', isUser, (req, res) => {
             .then(() => {
                 req.flash('success', "That food has been successfully added!");
                 res.redirect('/user/foodJournal');
-            })
-            .catch((err) => {
-                req.flash('error', err);
-                res.redirect('/user/foodJournal');
-            })
+            });
         } else {
             req.flash('error', "This code does not exist!");
             res.redirect('/user/foodJournal');
         }
-    })
-    .catch((err) => {
-        req.flash('error', err);
-        res.redirect('/logout');
-    })
+    });
 });
 
 
@@ -251,19 +236,11 @@ router.post('/editFood/:id', isUser, (req, res) => {
             .then(() => {
                 req.flash('success', "You've successfully edited that food item!");
                 res.redirect('/user/foodJournal');
-            })
-            .catch((err) => {
-                console.log(err);
-                res.redirect('/user/foodJournal');
-            })
+            });
         } else {
             req.flash('error', "That code does not exist!");
             res.redirect('/user/foodJournal');
         }
-    })
-    .catch((err) => {
-        console.log(err)
-        res.redirect('/user/foodJournal');
     })
 });
 
@@ -275,10 +252,6 @@ router.post('/deleteFood/:id', isUser, (req, res) => {
     .then(() => {
         req.flash('success', "You've successfully deleted that food item from your log!");
         res.redirect('/user/foodJournal');
-    })
-    .catch((err) => {
-        req.flash('error', err);
-        res.redirect('/user/editFood/' + logId);
     })
 });
 

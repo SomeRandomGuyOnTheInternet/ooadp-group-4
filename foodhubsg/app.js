@@ -10,7 +10,6 @@ const MySQLStore = require('express-mysql-session'); // Library to use MySQL to 
 const passport = require('passport');
 const db = require('./config/db');
 const { formatDate } = require('./helpers/hbs');
-const { checkMealType } = require('./helpers/hbs');
 const { json } = require('./helpers/hbs');
 const { ifCond } = require('./helpers/hbs');
 const { math } = require('./helpers/hbs');
@@ -26,7 +25,6 @@ app.engine('handlebars', exphbs({
 	defaultLayout: 'main' ,
 	helpers: {
 		formatDate: formatDate,
-		checkMealType: checkMealType,
 		json: json,
 		ifCond: ifCond,
 		math: math,

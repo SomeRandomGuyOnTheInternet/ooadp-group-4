@@ -1,6 +1,6 @@
 const multer = require('multer');
 const path = require('path');
-// Set The Storage Engine
+
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, './public/uploads/' + req.user.id + '/');
@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         callback(null, req.user.id + '-' + Date.now() + path.extname(file.originalname));
     }
 });
-// Initialise Upload
+
 const upload = multer({
     storage: storage,
     limits: {
@@ -18,14 +18,11 @@ const upload = multer({
     fileFilter: (req, file, callback) => {
         checkFileType(file, callback);
     }
-}).single('venImage'); // Must be the name as the HTML file upload input
-// Check File Type
+}).single('venImage');
+
 function checkFileType(file, callback) {
-    // Allowed file extensions
     const filetypes = /jpeg|jpg|png|gif/;
-    // Test extension
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    // Test mime
     const mimetype = filetypes.test(file.mimetype);
     if (mimetype && extname) {
         return callback(null, true);

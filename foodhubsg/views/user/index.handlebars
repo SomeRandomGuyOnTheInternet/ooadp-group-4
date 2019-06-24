@@ -64,7 +64,7 @@
 					<div class="row">
 						<div class="col-md-8">
 							<h1 class="font_color"><b>Summary of your stats</b></h1>
-							<h5>(based on the previous {{numOfDays}} days with entries in food journal)</h5>
+							<h5>(based on the previous {{numOfDays}} day{{#ifCond numOfDays '>' 1}}s{{/ifCond}} with entries in food journal)</h5>
 						</div>
 						{{#ifCond numOfDays '>=' 3}}
 		

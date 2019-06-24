@@ -23,7 +23,8 @@ router.get('/vendors', isAdmin, (req, res) => {
         raw: true,
     })
     .then((vendors) => {
-        var groupedVendors = groupVendors(vendors)
+        var groupedVendors = groupVendors(vendors);
+        
         res.render('admin/vendors', {
             user: req.user,
             title: "Vendors",
@@ -110,12 +111,21 @@ router.get('/addShop', isAdmin, (req, res) => {
 
 
 router.get('/addFoodItem', isAdmin, (req, res) => {
-    Shop.findAll({ where: { isDeleted: false } })
-    .then((shops) => {
+    User.findAll({
+        where: { isVendor: true },
+        include: [{
+            model: Shop,
+            where: { isDeleted: false },
+            required: true,
+        }],
+        raw: true,
+    })
+    .then((vendors) => {
+        var groupedVendors = groupVendors(vendors)
         res.render('admin/addFoodItem', {
             user: req.user,
             title: "Add Food",
-            shop: shops
+            groupedVendors
         })
     })
 });
