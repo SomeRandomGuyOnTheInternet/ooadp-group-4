@@ -6,6 +6,7 @@ const Vendor = require('../models/User');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
 const getShopRatings = require('../helpers/getShopRating');
+const updateShopRating = require('../helpers/updateShopRating')
 const bcrypt = require('bcryptjs');
 
 router.get('/settings', isVendor, (req, res) => {
@@ -282,25 +283,14 @@ router.post('/addFoodItem', isVendor, (req, res) => {
             isDeleted,
             imageLocation,
             ShopId: shops[i],
-        });
-
-        FoodItem.findAll({ where: { ShopId: shops[i], isDeleted: false } })
-            .then((foodItems) => {
-                var rating = getShopRatings(foodItems);
-                Shop.update(
-                    {
-                        rating,
-                        isRecommended: (rating >= 3) ? true : false,
-                    }, {
-                        where: { id: foodItems[0].ShopId }
-                    }
-                );
-            });
+        })
+        .then((foodItem) => { updateShopRating(foodItem.ShopId) });
     };
 
     req.flash('success', 'Food has been succcessfully added!');
-    res.redirect('/vendor/allShops');
-})
+    res.redirect('/admin/vendors');
+});
+    
 
 
 router.post('/editFoodItem/:id', isVendor, (req, res) => {
