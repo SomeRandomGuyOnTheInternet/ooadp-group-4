@@ -8,8 +8,8 @@
                         <h1 class="font_color" style="display:inline-block;"><b>All Menu Added</b></h1>
                         <a href="/vendor/addFoodItem"><button type="button" class="btn btn-success" style="float:right;">Add New Menu</button></a>
                         <hr>
-                        <form method="post" action="/"> 
-                         <input type="text" id="search" name="search" class="font_color" style="display:inline-block;" placeholder="search">
+                        <form method="get" action="/searchFoodItems"> 
+                         <input type="text"  class="typeahead tt-query" spellcheck="false" autocomplete="off" id="search" name="search" class="font_color" style="display:inline-block;" placeholder="search">
                          <button><i class="fas fa-search"></i></button>
                         </form>
                     </div> 
