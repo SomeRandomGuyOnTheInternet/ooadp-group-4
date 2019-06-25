@@ -16,10 +16,6 @@ const Question = db.define('Question', {
     isAnswered: { 
         type: Sequelize.BOOLEAN, 
     },
-    
-    isDeleted: {
-        type: Sequelize.BOOLEAN
-    },
 });
 
 module.exports = Question;
