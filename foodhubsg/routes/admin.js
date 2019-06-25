@@ -110,7 +110,9 @@ router.get('/addShop', isAdmin, (req, res) => {
 });
 
 
-router.get('/addFoodItem', isAdmin, (req, res) => {
+router.get('/addFoodItem/:currentShopId?', isAdmin, (req, res) => {
+    const currentShopId = req.params.currentShopId;
+
     User.findAll({
         where: { isVendor: true },
         include: [{
@@ -121,11 +123,13 @@ router.get('/addFoodItem', isAdmin, (req, res) => {
         raw: true,
     })
     .then((vendors) => {
-        var groupedVendors = groupVendors(vendors)
+        var groupedVendors = groupVendors(vendors);
+        
         res.render('admin/addFoodItem', {
             user: req.user,
             title: "Add Food",
-            groupedVendors
+            groupedVendors,
+            currentShopId
         })
     })
 });
@@ -213,7 +217,7 @@ router.post('/vendors', (req, res) => {
             .then((vendors) => {
                 var groupedVendors = groupVendors(vendors);
 
-                req.flash('error', error);
+                res.locals.error = error;
                 res.render('admin/vendors', {
                     user: req.user,
                     title: "Vendors",
@@ -338,28 +342,36 @@ router.post('/undeleteShop/:id', (req, res) => {
 });
 
 
-router.post('/addFoodItem', isAdmin, (req, res) => {
+router.post('/addFoodItem/:id?', isAdmin, (req, res) => {
     const name = req.body.name;
     const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
+    var error;
 
-    for (i = 0; i < shops.length; i++) {
-        FoodItem.create({
-            name,
-            calories,
-            isRecommended,
-            isDeleted,
-            imageLocation,
-            ShopId: shops[i],
-        })
-        .then((foodItem) => { updateShopRating(foodItem.ShopId) });
-    };
+    if (calories > 1500 || calories < 1) error = 'Please enter a valid number of calories';
 
-    req.flash('success', 'Food has been succcessfully added!');
-    res.redirect('/admin/vendors');
+    if (!error) {
+        for (i = 0; i < shops.length; i++) {
+            FoodItem.create({
+                name,
+                calories,
+                isRecommended,
+                isDeleted,
+                imageLocation,
+                ShopId: shops[i],
+            })
+                .then((foodItem) => { updateShopRating(foodItem.ShopId) });
+        };
+
+        req.flash('success', 'Food has been succcessfully added!');
+        res.redirect('/admin/vendors');
+    } else {
+        req.flash('error', error);
+        res.redirect('/admin/addFoodItem');
+    }
 });
 
 
@@ -371,22 +383,30 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
+    var error;
 
-    FoodItem.update(
-        {
-            name,
-            calories,
-            isRecommended,
-            isDeleted,
-            imageLocation,
-        },{
-            where: { id }
-        }
-    )
-    .then((foodItem) => { updateShopRating(shopId); })
+    if (calories > 1500 || calories < 1) error = 'Please enter a valid number of calories';
 
-    req.flash('success', 'Food has been succcessfully edited!');
-    res.redirect(`/admin/editShop/${shopId}`);
+    if (!error) {
+        FoodItem.update(
+            {
+                name,
+                calories,
+                isRecommended,
+                isDeleted,
+                imageLocation,
+            },{
+                where: { id }
+            }
+        )
+        .then((foodItem) => { updateShopRating(shopId); })
+
+        req.flash('success', 'Food has been succcessfully edited!');
+        res.redirect(`/admin/editShop/${shopId}`);
+    } else {
+        req.flash('error', error);
+        res.redirect(`/admin/editFoodItem/${id}`);
+    }
 });
 
 

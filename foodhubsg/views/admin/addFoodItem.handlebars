@@ -24,26 +24,29 @@
 
                             <div class="col-md-6">
                                 <div class="desc">
-                                    <p class="meta">
-                                        <label>Name of Food</label>
-                                        <input name="name" id="name" type="text" class="form-control name-input marginBottom" value="" placeholder="Name" required>
-                                        <label>Calories</label>
+                                    <h4 class="font_color"><b>Info</b></h4>
+                                    <hr>
+                                        <input name="name" id="name" type="text" class="form-control name-input marginBottom" value="" placeholder="Food Name" required>
                                         <input name="calories" id="calories" type="number" class="form-control" value="" placeholder="Calories" style="margin-bottom:3em;" required>
-                                        <h4 class="font_color"><b>Shops</b></h4>
-                                        <hr>
-                                        {{#each groupedVendors}}
-                                            <h6><b>{{0.name}}</b></h6>
-                                            <hr align="left" width="5%">
-                                                {{#each this}}
-                                                    <div class="checkbox-group" style="display:inline-block;">
-                                                        <input name="shop" id="shop" type="checkbox" class="checkbox" value="{{'Shops.id'}}">&nbsp;
-                                                        <label>{{'Shops.name'}}</label>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
-                                                    </div>
-                                                {{/each}}
-                                            <br><br>
-                                        {{/each}}
-                                    </p>
                                 </div>
+                                <div class="desc">
+                                    <h4 class="font_color"><b>Shops</b></h4>
+                                    <hr>
+                                    {{#each groupedVendors}}
+                                        <h6><b>{{0.name}}</b></h6>
+                                        <hr align="left" width="5%">
+                                            {{#each this}}
+                                                <div class="checkbox-group" style="display:inline-block;">
+                                                    <input name="shop" id="shop" type="checkbox" class="checkbox" value="{{'Shops.id'}}">&nbsp;
+                                                    <label>{{'Shops.name'}}</label>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
+                                                </div>
+                                            {{/each}}
+                                        <br><br>
+                                    {{/each}}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
                                 <button type="submit" name="action" value="Add Food" class="btn btn-primary btn-tall" id="addFoodButton" style="float:right" disabled>Add
                                     Food</button>
                             </div>
@@ -59,13 +62,35 @@
     </div>
 </div>
 
-<script>
-    $('.checkbox')
-    .bind("propertychange change click keyup input", function (event) {
-        if ($('.checkbox:checkbox:checked').length == 0) {
-            $("#addFoodButton").attr("disabled", true);
-        } else {
-            $("#addFoodButton").attr("disabled", false);
-        }
-    });
-</script>
+{{#if currentShopId}}
+    <script>
+        const currentShopId = {{{ currentShopId }}};
+
+        $('.checkbox').each(function () { 
+            if ($(this).val() == currentShopId) $(this).attr('checked', true);
+            if ($('.checkbox:checkbox:checked').length > 0) {
+                $("#addFoodButton").attr("disabled", false);
+            }
+        });
+
+        $('.checkbox')
+        .bind("propertychange change click keyup input", function (event) {
+            if ($('.checkbox:checkbox:checked').length == 0) {
+                $("#addFoodButton").attr("disabled", true);
+            } else {
+                $("#addFoodButton").attr("disabled", false);
+            }
+        });
+    </script>
+{{else}}
+    <script>
+        $('.checkbox')
+        .bind("propertychange change click keyup input", function (event) {
+            if ($('.checkbox:checkbox:checked').length == 0) {
+                $("#addFoodButton").attr("disabled", true);
+            } else {
+                $("#addFoodButton").attr("disabled", false);
+            }
+        });
+    </script>
+{{/if}}
