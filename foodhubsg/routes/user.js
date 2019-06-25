@@ -148,7 +148,7 @@ router.get('/faq', isUser, (req, res) => {
     .then((questions) => {
         res.render('user/faq', {
             user: req.user,
-			questions
+	    questions: questions
         });
     });
 });
