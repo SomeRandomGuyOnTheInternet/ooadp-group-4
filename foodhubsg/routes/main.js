@@ -155,11 +155,12 @@ router.post('/upload', (req, res) => {
 
 router.get('/searchFoodItems', (req, res)=> { 
 	search = req.query.search; 
+	console.log(search);
 	FoodItem.findAll({ 
 		limit: 10, 
 		where: { 
 			name: { 
-				[Op.Like] : '%' + search + '%'
+				[Op.like] : '%' + search + '%'
 			} 
 		}
 	}).then((search_results) => { 
