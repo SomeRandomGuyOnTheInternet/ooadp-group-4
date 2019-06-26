@@ -5,74 +5,70 @@
         <div class="box1">
             <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;">
                 <div class="row row-pb-md">
-                    <form method="post" action="" id="shop-form">
-                        <div class="col-md-12">
-                            <h1 class="font_color"><b>Add Shop</b></h1>
-                            <hr>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="blog-entry"></div>
-                            <input type="file" id="venUpload" name="venUpload" accept="image/png,
- 					image/jpeg,image/jpg,image/gif">
-                            <img src="/images/deafult-shop-image.jpeg" id="venImage" class="img-responsive" alt="Image">
-                        </div>
-
-                        <input id="imageURL" type="hidden" name="imageURL" value="/images/deafult-shop-image.jpeg">
-                </div>
-
-                <div class="col-md-6">
-                    <div class="desc">
-                        <p class="meta">
-                            <label>Shop Name</label>
-                            <input name="name" id="name" type="text" class="form-control" value="" placeholder="Name">
-                            <label>Shop Address</label>
-                            <input name="address" id="address" type="text" class="form-control" value="" placeholder="Address">
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" form="shop-form" class="form-control" rows="4"
-                        cols="50"></textarea>
-                    <br>
-                </div>
-
-                <div class="row row-pb-md" style="padding: 0 2em 0 2em !important;">
-                    <div class="col-md">
-                        <div class="blog-entry">
-                            <h3 class="font_color"><b>Map</b></h3>
-                        </div>
+                    <div class="col-md-12">
+                        <h1 class="font_color"><b>Add Shop</b></h1>
                         <hr>
-                        <div id="map"></div>
                     </div>
-                </div>
 
-                <input name="location" id="location" type="text" class="form-control invisible" value="">
-                <input name="latitude" id="latitude" type="text" class="form-control invisible" value="">
-                <input name="longitude" id="longitude" type="text" class="form-control invisible" value="">
+                    <form method="POST" style="width:100%">
+                        <div class="row form-group" style="margin:0;">
+                            <div class="col-md-6" style="margin-bottom:2em;">
+                                <label>Shop Image</label>
+                                <img src="/images/deafult-shop-image.jpeg" id="venImage"
+                                    class="img-responsive shopImage" alt="Image">
+                                <input type="file" id="venUpload" name="venUpload"
+                                    accept="image/png,image/jpeg,image/jpg,image/gif">
+                                <input id="imageURL" type="hidden" name="imageURL"
+                                    value="/images/deafult-shop-image.jpeg">
+                            </div>
 
-                <div class="col-md-12">
-                    <label>Vendor</label>
-                    <input name="vendor" id="vendor" type="text" class="form-control" value="{{user.name}}"
-                        placeholder="vendor" readonly>
-                    <p id="mapErrorMsg"></p>
-                </div>
+                            <div class="col-md-6">
+                                <div class="desc">
+                                    <p class="meta">
+                                        <label>Shop Name</label>
+                                        <input name="name" id="name" type="text"
+                                            class="form-control marginBottom name-input" placeholder="Name" required>
+                                        <label>Vendor</label>
+                                        <input name="vendor" id="vendor" type="text" class="form-control"
+                                            value="{{user.name}}" placeholder="vendor" readonly> 
+                                        <hr>
+                                        <label for="description">Shop Description</label>
+                                        <textarea id="description" name="description" class="form-control" rows="4"
+                                            cols="50" placeholder="Description" required></textarea>
+                                    </p>
+                                </div>
+                            </div>
 
-                <div class="col-md-12">
-                    <button type="submit" name="action" value="Add Shop" class="btn btn-primary"
-                        style="background-color: #4CAF50;">Add Shop</button>
+                            <div class="col-md-12" style="margin-bottom:4em;">
+                                <div class="blog-entry">
+                                    <h3 class="font_color"><b>Map</b></h3>
+                                </div>
+                                <hr>
+                                <div id="map" style="margin-bottom:2em;"></div>
+                                <label>Shop Address</label>
+                                <input name="address" id="address" type="text" class="form-control"
+                                    placeholder="Address" required>
+                                <input name="location" id="location" type="hidden" class="form-control" value="">
+                                <input name="latitude" id="latitude" type="hidden" class="form-control" value="">
+                                <input name="longitude" id="longitude" type="hidden" class="form-control" value="">
+                            </div>
 
+                            <div class="col-md-12">
+                                <input type="submit" name="action" value="Add Shop" class="btn btn-primary"
+                                    style="float:right;">
+                            </div>
+                        </div>
                     </form>
                 </div>
+                <br>
             </div>
-            <br>
         </div>
-        
+
     </div>
 </div>
 
+{{#if user.location}}
 <script>
     var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
 
@@ -112,7 +108,7 @@
                         $("#longitude").val(pos.lng());
                     }
                     else {
-                        $("#mapErrorMsg").val('Cannot determine address at this location.' + status);
+                        alert("Cannot determine address at this location.");
                     }
                 }
             )
@@ -157,6 +153,92 @@
         return bounds;
     }
 </script>
+{{else}}
+<script>
+    var userLatitude = 1.380096, userLongitude = 103.848895;
+
+    function initMap() {
+        var userLocation = { lat: userLatitude, lng: userLongitude };
+
+        $("#location").val("Ang Mio Kio");
+        $("#latitude").val(userLatitude);
+        $("#longitude").val(userLongitude);
+
+        var map = new google.maps.Map(document.getElementById('map'));
+
+        var marker = new google.maps.Marker(
+            {
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                position: userLocation,
+            }
+        );
+
+        google.maps.event.addListener(marker, 'dragend', function () {
+            geocodePosition(marker.getPosition());
+        });
+
+        function geocodePosition(pos) {
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode(
+                {
+                    latLng: pos
+                },
+                function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        $("#address").val(results[0].formatted_address);
+                        $("#location").val(getCity(results));
+                        $("#latitude").val(pos.lat());
+                        $("#longitude").val(pos.lng());
+                    }
+                    else {
+                        alert("Cannot determine address at this location.");
+                    }
+                }
+            )
+        }
+
+        var bounds = fitToMarker(marker);
+        map.fitBounds(bounds);
+    }
+
+    function getCity(results) {
+        if (results[1]) {
+            var c, lc, component;
+            for (var r = 0, rl = results.length; r < rl; r += 1) {
+                var result = results[r];
+
+                if (result.types[0] === 'neighborhood') {
+                    for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                        component = result.address_components[c];
+
+                        if (component.types[0] === 'neighborhood') {
+                            return component.long_name;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function fitToMarker(marker) {
+        var bounds = new google.maps.LatLngBounds();
+
+        var latlng = marker.getPosition();
+        bounds.extend(latlng);
+
+        if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+            var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
+            var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
+            bounds.extend(extendPoint1);
+            bounds.extend(extendPoint2);
+        }
+
+        return bounds;
+    }
+</script>
+{{/if}}
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg3Y-44lgOHZmGOV9TXTDxJ2vb2e2R_Cg&callback=initMap" async
     defer></script>
