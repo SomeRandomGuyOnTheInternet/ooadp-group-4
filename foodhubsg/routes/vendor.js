@@ -117,7 +117,14 @@ router.get('/allFoodItems', isVendor, (req, res) => {
     FoodItem.findAll({
         where: {
             isDeleted: false,
-        }
+        }, 
+        include: [{
+            model: Shop,
+            where: { 
+                VendorId: req.user.id,
+            },
+            required: true,
+        }],
     }).then((food) => {
         let query_list = []
         for (i=0; i< food.length; i++) { 
@@ -366,7 +373,14 @@ router.post('/searchFoodItems', (req, res)=> {
 			name: { 
 				[Op.like] : '%' + search + '%'
 			} 
-		}
+        },
+        include: [{
+            model: Shop,
+            where: { 
+                VendorId: req.user.id,
+            },
+            required: true,
+        }],
 	}).then((search_results) => { 
 		res.render( 'vendors/queryFood', { 
                 result: search_results, 
@@ -382,6 +396,7 @@ router.post('/searchShops', (req, res)=> {
 	Shop.findAll({ 
 		limit: 10, 
 		where: { 
+            VendorId: req.user.id,
 			name: { 
 				[Op.like] : '%' + search + '%'
             }
