@@ -153,42 +153,4 @@ router.post('/upload', (req, res) => {
 	});
 })
 
-router.get('/searchShops', (req, res)=> { 
-	search = req.query.search; 
-	console.log(search);
-	Shop.findAll({ 
-		limit: 10, 
-		where: { 
-			name: { 
-				[Op.like] : '%' + search + '%'
-			} 
-		}
-	}).then((search_results) => { 
-		res.render( 'query', { 
-				result: search_results, 
-			}
-		)
-	})
-})
-
-router.get('/searchFoodItems', (req, res)=> { 
-	search = req.query.search; 
-	console.log(search);
-	FoodItem.findAll({ 
-		limit: 10, 
-		where: { 
-			name: { 
-				[Op.like] : '%' + search + '%'
-			} 
-		}
-	}).then((search_results) => { 
-		res.render( 'query', { 
-				result: search_results, 
-			}
-		)
-	})
-})
-
-
-
 module.exports = router;
