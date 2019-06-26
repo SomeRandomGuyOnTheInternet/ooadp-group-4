@@ -383,7 +383,7 @@ router.post('/searchShops', (req, res)=> {
 		where: { 
 			name: { 
 				[Op.like] : '%' + search + '%'
-			} 
+            }
 		}
 	}).then((search_results) => { 
 		res.render( 'vendors/queryShops', { 
