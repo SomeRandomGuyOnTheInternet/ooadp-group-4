@@ -369,7 +369,8 @@ router.post('/searchFoodItems', (req, res)=> {
 		}
 	}).then((search_results) => { 
 		res.render( 'vendors/queryFood', { 
-				result: search_results, 
+                result: search_results, 
+                user: req.user,
 			}
 		)
 	})
@@ -387,7 +388,8 @@ router.post('/searchShops', (req, res)=> {
 		}
 	}).then((search_results) => { 
 		res.render( 'vendors/queryShops', { 
-				result: search_results, 
+                result: search_results, 
+                user: req.user,
 			}
 		)
 	})

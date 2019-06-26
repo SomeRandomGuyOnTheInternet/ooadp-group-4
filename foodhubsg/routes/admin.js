@@ -443,7 +443,8 @@ router.post('/searchFoodItems', (req, res)=> {
 		}
 	}).then((search_results) => { 
 		res.render( 'admin/queryFood', { 
-				result: search_results, 
+                result: search_results, 
+                user: req.user,
 			}
 		)
 	})
@@ -461,7 +462,8 @@ router.post('/searchShops', (req, res)=> {
 		}
 	}).then((search_results) => { 
 		res.render( 'admin/queryShops', { 
-				result: search_results, 
+                result: search_results,
+                user: req.user, 
 			}
 		)
 	})
