@@ -2,58 +2,49 @@
 <div id="colorlib-container">
     <div class="container">
         <div class="box1">
-            <div class="row row-pb-md">
-                <div class="col-md-12">
-                    <h1 class="font_color"><b class="center_subtitle">All Shops Near You</b></h1>
-                    <hr>
-                </div>
+            <div class="row row-pb-md" id="all-shops-container">
 
-                {{#if user.location}}
                 <div class="col-md-12">
-                    <h4 id="current_location">Current City: <b>{{user.location}}</b></h4>
-                </div>
-                
-                {{#each shops}}
-                <div class="col-md-6 recommended-shops">
-                    <div class="blog-entry">
-                        <div class="blog-img">
-                            <a class="action" href="/user/shops/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+                    <div class="accordion" id="filerAccordion">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h1 class="font_color"><b class="center_subtitle">All Shops Near You</b></h1>
+                            </div>
+                            <div class="col-md-4">
+                                <a  data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" style="float:right;">
+                                    <i class="fas fa-filter hyperlink"></i>&nbsp;<span class="hyperlink">Filter</span>
+                                </a>
+                            </div>
                         </div>
-                        <div class="desc">
-                            <p class="meta">
-                                <b class="vendors"><b>{{this.name}}</b></b><br>
-                                <span class="food_location"><b>{{ this.address }}</b></span><br>
-                                <span class="food_rating">Rating:&nbsp;
-                                    {{#if this.rating}} 
-                                    <b class="recommended-{{ this.isRecommended }}">
-                                        {{#times this.rating}}
-                                            <i class="fas fa-star"></i>
-                                        {{/times}}
-                                        {{#times (math 5 "-" this.rating)}}
-                                            <i class="far fa-star"></i>
-                                        {{/times}}
-                                    </b>
-                                    {{else}} 
-                                        No rating available 
-                                    {{/if}}
-                                </span>
-                            </p>
+                    
+                        <div id="collapseFilter" class="collapse" aria-labelledby="filterHeading" data-parent="#filerAccordion">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="isCurrentCity" id="isCurrentCity" value="isCurrentCity" checked>
+                                <label class="form-check-label" for="isCurrentCity">Current City</label>
+                            </div>
                         </div>
                     </div>
+                    <hr>
                 </div>
-                {{else}}
-                <div class="col-md-12">
-                    <h3 id="current_location"><b class="center_subtitle">There are no recommended shops near you</b></h4>
-                </div>
-                {{/each}}
-                
-                {{else}}
-                <div class="col-md-12">
-                    <h4 id="current_location"><b>We could not detect your current location</b></h4>
-                </div>
-                {{/if}}
-                
+      
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    var allShops = {{{ json shops }}};
+
+    for (i = 0; i < allShops.length; i++) createShopContainer(allShops[i])
+
+    function createShopContainer(shop) {
+        $('#all-shops-container').append(
+            '<div class="col-md-6 recommended-shops"><div class="blog-entry"><div class="blog-img">' +
+            '<a class="action" href="/user/shops/' + shop.id + '"><img src="' + shop.imageLocation + '" class="img-responsive" alt="Image of shop"></a>' +
+            '</div><div class="desc all-shops">' +
+            '<b class="vendors"><b>' + shop.name + '</b></b><br>' +
+            '<span class="food_location"><b>' + shop.address + '</b></span><br>' +
+            '</div></div></div>'
+        );
+    };
+</script>

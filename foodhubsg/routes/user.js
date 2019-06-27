@@ -1,4 +1,5 @@
 const express = require('express');
+const Sequelize = require('sequelize');
 const router = express.Router();
 
 const isUser = require('../helpers/isUser');
@@ -59,10 +60,7 @@ router.get('/', isUser, (req, res) => {
 
 router.get('/shops', isUser, (req, res) => {
     Shop.findAll({
-        where: {
-            location: req.user.location,
-            isDeleted: false,
-        },
+        where: { isDeleted: false },
         order: [
             ['rating', 'DESC'],
         ],
@@ -89,17 +87,22 @@ router.get('/shops/:id', isUser, (req, res) => {
                 ShopId: id, 
                 isDeleted: false, 
             }
-        })
+        }),
+        Shop.findAll({
+            where: { id: { [Sequelize.Op.not]: id } },
+        }),
     ])
     .then((data) => {
         User.findOne({
             where: { id: data[0].VendorId },
         })
         .then((vendor) => {
+            console.log(data[2])
             res.render('user/shop', {
                 title: data[0].name,
                 shop: data[0],
                 foodItems: data[1],
+                otherShops: data[2],
                 vendor,
                 user: req.user
             });
@@ -292,6 +295,29 @@ router.post('/settings', isUser, (req, res) => {
     .then(function (user) {		
 		res.redirect('/user/settings'); 
         })
+    .catch(err => console.log(err));
+});
+
+
+router.post('/filterShops', isUser, (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email.toLowerCase();
+    const password = req.body.password;
+    const isAdmin = isBanned = isVendor = false;
+    const weight = req.body.weight;
+    const height = req.body.height;
+
+    var error;
+
+    User.update({
+        weight: req.body.weight,
+        height: req.body.height
+    }, {
+        where: { id: req.user.id }
+    })
+    .then(function (user) {
+        res.redirect('/user/settings');
+    })
     .catch(err => console.log(err));
 });
 

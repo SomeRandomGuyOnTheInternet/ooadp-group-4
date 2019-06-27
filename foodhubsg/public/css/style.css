@@ -1733,3 +1733,7 @@ select {
   width:auto;
   max-height: 270px;
 }
+
+.recommended-shops{
+  margin: 1.5em 0;
+}
