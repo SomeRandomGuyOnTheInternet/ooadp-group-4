@@ -2,7 +2,7 @@
 <div id="colorlib-container">
     <div class="container">
         <div class="box1">
-            <div class="row row-pb-md" id="all-shops-container">
+            <div class="row row-pb-md">
 
                 <div class="col-md-12">
                     <div class="accordion" id="filerAccordion">
@@ -11,20 +11,28 @@
                                 <h1 class="font_color"><b class="center_subtitle">All Shops Near You</b></h1>
                             </div>
                             <div class="col-md-4">
-                                <a  data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" style="float:right;">
+                                <a data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" style="float:right;">
                                     <i class="fas fa-filter hyperlink"></i>&nbsp;<span class="hyperlink">Filter</span>
                                 </a>
                             </div>
                         </div>
                     
                         <div id="collapseFilter" class="collapse" aria-labelledby="filterHeading" data-parent="#filerAccordion">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="isCurrentCity" id="isCurrentCity" value="isCurrentCity" checked>
-                                <label class="form-check-label" for="isCurrentCity">Current City</label>
-                            </div>
+                            <form id="searchFoodForm" action="" style="width:100%">
+                                <div class="col-md-12 input-group" style="padding:0">
+                                <input type="text" name="searchShopInput" id="searchShopInput" class="form-control" required>
+                                <span class="input-group-btn">
+                                    <input type="submit" name="action" value="Search Shops" class="btn btn-primary btn-tall" style="margin-left: 0.5em;">
+                                </span>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <hr>
+                </div>
+
+                <div class="row" id="all-shops-container">
+                    <h4 id="filter-result-err" style="display:none"><b>Keep adding more food to generate a detailed summary on your food intake!</b></h4>
                 </div>
       
             </div>
@@ -34,17 +42,41 @@
 
 <script>
     var allShops = {{{ json shops }}};
+    createShopContainer(allShops);
 
-    for (i = 0; i < allShops.length; i++) createShopContainer(allShops[i])
+    $("form#searchFoodForm").submit(function (event) {
+        event.preventDefault();
+        let searchName = $('#searchShopInput').val();
 
-    function createShopContainer(shop) {
-        $('#all-shops-container').append(
-            '<div class="col-md-6 recommended-shops"><div class="blog-entry"><div class="blog-img">' +
-            '<a class="action" href="/user/shops/' + shop.id + '"><img src="' + shop.imageLocation + '" class="img-responsive" alt="Image of shop"></a>' +
-            '</div><div class="desc all-shops">' +
-            '<b class="vendors"><b>' + shop.name + '</b></b><br>' +
-            '<span class="food_location"><b>' + shop.address + '</b></span><br>' +
-            '</div></div></div>'
-        );
+        $.ajax({
+            type: 'post',
+            url: `/user/filterShops`,
+            data: { searchName: searchName },
+            dataType: 'text'
+        })
+        .done(function (data) {
+            var searchResults = JSON.parse(data);
+            $("#all-shops-container").empty();
+            
+            if (searchResults) {
+                createShopContainer(searchResults);
+            } else {
+                $("#filter-result-err").css("display", "block");
+            }
+            
+        });
+    });
+
+    function createShopContainer(allShops) {
+        for (i = 0; i < allShops.length; i++) {
+            $('#all-shops-container').append(
+                '<div class="col-md-6 recommended-shops"><div class="blog-entry"><div class="blog-img">' +
+                '<a class="action" href="/user/shops/' + allShops[i].id + '"><img src="' + allShops[i].imageLocation + '" class="img-responsive" alt="Image of shop"></a>' +
+                '</div><div class="desc all-shops">' +
+                '<b class="vendors"><b>' + allShops[i].name + '</b></b><br>' +
+                '<span class="food_location"><b>' + allShops[i].address + '</b></span><br>' +
+                '</div></div></div>'
+            );  
+        }
     };
 </script>

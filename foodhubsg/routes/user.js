@@ -305,26 +305,21 @@ router.post('/settings', isUser, (req, res) => {
 });
 
 
-router.post('/filterShops', isUser, (req, res) => {
-    const name = req.body.name;
-    const email = req.body.email.toLowerCase();
-    const password = req.body.password;
-    const isAdmin = isBanned = isVendor = false;
-    const weight = req.body.weight;
-    const height = req.body.height;
+router.post('/filterShops', (req, res) => {
+    var searchName = req.body.searchName;
+    console.log("search name: ", searchName)
 
-    var error;
-
-    User.update({
-        weight: req.body.weight,
-        height: req.body.height
-    }, {
-        where: { id: req.user.id }
+    Shop.findAll({
+        where: {
+            name: {
+                [Sequelize.Op.like]: '%' + searchName + '%'
+            }
+        },
     })
-    .then(function (user) {
-        res.redirect('/user/settings');
+    .then(function (searchResults) {
+        console.log(searchResults)
+        res.send(searchResults);
     })
-    .catch(err => console.log(err));
 });
 
 
