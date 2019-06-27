@@ -1,0 +1,27 @@
+{{> _msg }}
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+
+                    {{#if result}}
+                    {{#each result}}
+                    <a href="/vendor/editShop/{{this.id}}"><h3 class="font_color">{{this.name}}</h3></a>
+                    <div></div>
+                    {{/each}}
+                       
+                    
+                    {{else}}  
+                    <h3><b class="font_color">No data found</b></h3>
+                    {{/if}}
+                    <br>
+                    <hr>
+
+                   
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

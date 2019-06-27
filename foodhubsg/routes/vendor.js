@@ -7,6 +7,8 @@ const Shop = require('../models/Shop');
 const getShopRatings = require('../helpers/getShopRating');
 const updateShopRating = require('../helpers/updateShopRating')
 const bcrypt = require('bcryptjs');
+const Sequelize = require('sequelize'); 
+const Op = Sequelize.Op; 
 
 router.get('/settings', isVendor, (req, res) => {
     res.render('vendors/vendorSettings', {
@@ -115,7 +117,14 @@ router.get('/allFoodItems', isVendor, (req, res) => {
     FoodItem.findAll({
         where: {
             isDeleted: false,
-        }
+        }, 
+        include: [{
+            model: Shop,
+            where: { 
+                VendorId: req.user.id,
+            },
+            required: true,
+        }],
     }).then((food) => {
         let query_list = []
         for (i=0; i< food.length; i++) { 
@@ -125,7 +134,7 @@ router.get('/allFoodItems', isVendor, (req, res) => {
             user: req.user,
             title: "Show Menu",
             food: food,
-
+            tags: query_list
         })
     })
 })
@@ -353,6 +362,52 @@ router.get('/delete/:id', isVendor, (req, res) => {
             })
         })
 
+})
+
+router.post('/searchFoodItems', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	FoodItem.findAll({ 
+		limit: 10, 
+		where: { 
+			name: { 
+				[Op.like] : '%' + search + '%'
+			} 
+        },
+        include: [{
+            model: Shop,
+            where: { 
+                VendorId: req.user.id,
+            },
+            required: true,
+        }],
+	}).then((search_results) => { 
+		res.render( 'vendors/queryFood', { 
+                result: search_results, 
+                user: req.user,
+			}
+		)
+	})
+})
+
+router.post('/searchShops', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	Shop.findAll({ 
+		limit: 10, 
+		where: { 
+            VendorId: req.user.id,
+			name: { 
+				[Op.like] : '%' + search + '%'
+            }
+		}
+	}).then((search_results) => { 
+		res.render( 'vendors/queryShops', { 
+                result: search_results, 
+                user: req.user,
+			}
+		)
+	})
 })
 
 

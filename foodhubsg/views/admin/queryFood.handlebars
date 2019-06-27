@@ -5,10 +5,16 @@
             <div class="row row-pb-md">
                 <div class="col-md-12">
 
+                    {{#if result}}
                     {{#each result}}
-                    <h3><b class="font_color">{{this.name}}</b></h3>
+                    <a href="/admin/editFoodItem/{{this.id}}"><h3 class="font_color">{{this.name}}</h3></a>
+                    <div></div>
                     {{/each}}
-                   
+                       
+                    
+                    {{else}}  
+                    <h3><b class="font_color">No data found</b></h3>
+                    {{/if}}
                     <br>
                     <hr>
 

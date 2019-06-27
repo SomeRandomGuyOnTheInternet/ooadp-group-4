@@ -9,6 +9,8 @@ const updateShopRating = require('../helpers/updateShopRating');
 const Shop = require('../models/Shop');
 const FoodItem = require('../models/FoodItem')
 const User = require("../models/User"); 
+const Sequelize = require('sequelize'); 
+const Op = Sequelize.Op; 
 
 
 
@@ -429,6 +431,43 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     });
 });
 
+router.post('/searchFoodItems', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	FoodItem.findAll({ 
+		limit: 10, 
+		where: { 
+			name: { 
+				[Op.like] : '%' + search + '%'
+			} 
+		}
+	}).then((search_results) => { 
+		res.render( 'admin/queryFood', { 
+                result: search_results, 
+                user: req.user,
+			}
+		)
+	})
+})
+
+router.post('/searchShops', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	Shop.findAll({ 
+		limit: 10, 
+		where: { 
+			name: { 
+				[Op.like] : '%' + search + '%'
+			} 
+		}
+	}).then((search_results) => { 
+		res.render( 'admin/queryShops', { 
+                result: search_results,
+                user: req.user, 
+			}
+		)
+	})
+})
 
 
 module.exports = router;

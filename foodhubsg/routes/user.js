@@ -151,7 +151,7 @@ router.get('/faq', isUser, (req, res) => {
     .then((questions) => {
         res.render('user/faq', {
             user: req.user,
-			questions
+	    questions: questions
         });
     });
 });
@@ -278,24 +278,30 @@ router.post('/faq', isUser, (req, res) => {
 
 router.post('/settings', isUser, (req, res) => {
 	const name = req.body.name;
-	const email = req.body.email.toLowerCase();
-	const password = req.body.password;
+	let email = req.body.email.toLowerCase();
+	let password = req.body.password;
 	const isAdmin = isBanned = isVendor = false;
-	const weight = req.body.weight;
-	const height = req.body.height;
-	
+	let weight = req.body.weight;
+	let height = req.body.height;	
 	var error;
 
-	User.update({		
-		 weight: req.body.weight,
-         height: req.body.height
-	},{
-		where: { id: req.user.id }
+    bcrypt.genSalt(function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+            User.update({
+                weight: req.body.weight,
+                height: req.body.height,
+                email: email,
+                password: hash,
+            }, {
+                where: { id: req.user.id }
+            })
+            .then(function (user) {
+                res.redirect('/user/settings');
+            })
+            .catch(err => console.log(err));
+
+        });
     })
-    .then(function (user) {		
-		res.redirect('/user/settings'); 
-        })
-    .catch(err => console.log(err));
 });
 
 
