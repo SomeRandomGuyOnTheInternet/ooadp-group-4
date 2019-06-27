@@ -36,13 +36,16 @@
     </div>
 </div>
 <script>
-
+ var availabletags = "{{{tags}}}"
+ var tags = availabletags.split(',')
+ tags_list = []
+ console.log(tags);
+ for (i=0, i<tags.length; i++;) { 
+     tags_list.push(tags[i])
+ }
     $('#search').on('change', function(event) { 
-         var availabletags = ["{{{tags}}}"]  
-         availabletags = availabletags.splice(',')
-         console.log(availabletags); 
         $('#search').autocomplete({ 
-        source: availabletags
+        source: tags_list
     })
 
     })
