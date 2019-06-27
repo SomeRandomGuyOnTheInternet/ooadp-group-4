@@ -134,7 +134,7 @@ router.get('/allFoodItems', isVendor, (req, res) => {
             user: req.user,
             title: "Show Menu",
             food: food,
-
+            tags: query_list
         })
     })
 })

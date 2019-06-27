@@ -35,7 +35,16 @@
         </div>
     </div>
 </div>
+<script>
 
-<script> 
+    $('#search').on('change', function(event) { 
+         var availabletags = ["{{{tags}}}"]  
+         availabletags = availabletags.splice(',')
+         console.log(availabletags); 
+        $('#search').autocomplete({ 
+        source: availabletags
+    })
 
+    })
+   
 </script>
