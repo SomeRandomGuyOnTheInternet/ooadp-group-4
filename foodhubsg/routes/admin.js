@@ -335,21 +335,29 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
+    var error;
 
-    for (i = 0; i < shops.length; i++) {
-        FoodItem.create({
-            name,
-            calories,
-            isRecommended,
-            isDeleted,
-            imageLocation,
-            ShopId: shops[i],
-        })
-        .then((foodItem) => { updateShopRating(foodItem.ShopId) });
-    };
+    if (calories > 1500 || calories < 1) error = "Please enter a valid number of calories"
 
-    req.flash('success', 'Food has been succcessfully added!');
-    res.redirect('/admin/vendors');
+    if (!error) { 
+        for (i = 0; i < shops.length; i++) {
+            FoodItem.create({
+                name,
+                calories,
+                isRecommended,
+                isDeleted,
+                imageLocation,
+                ShopId: shops[i],
+            })
+            .then((foodItem) => { updateShopRating(foodItem.ShopId) });
+        };
+    
+        req.flash('success', 'Food has been succcessfully added!');
+        res.redirect('/admin/vendors');
+    } else {
+        req.flash('error', error);
+        res.redirect(`/admin/addFoodItem`);
+    }
 });
 
 
@@ -361,22 +369,31 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
+    var error;
 
-    FoodItem.update(
-        {
-            name,
-            calories,
-            isRecommended,
-            isDeleted,
-            imageLocation,
-        },{
-            where: { id }
-        }
-    )
-    .then((foodItem) => { updateShopRating(shopId); })
+    if (calories > 1500 || calories < 1) error = "Please enter a valid number of calories"
 
-    req.flash('success', 'Food has been succcessfully edited!');
-    res.redirect(`/admin/editShop/${shopId}`);
+    if (!error) {
+        FoodItem.update(
+            {
+                name,
+                calories,
+                isRecommended,
+                isDeleted,
+                imageLocation,
+            },{
+                where: { id }
+            }
+        )
+        .then((foodItem) => { updateShopRating(shopId); })
+
+        req.flash('success', 'Food has been succcessfully edited!');
+        res.redirect(`/admin/editShop/${shopId}`);
+    } else {
+        req.flash('error', error);
+        res.redirect(`/admin/editFoodItem/${id}`);
+    }
+
 });
 
 
