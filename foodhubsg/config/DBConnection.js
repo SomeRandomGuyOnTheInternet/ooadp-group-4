@@ -26,6 +26,7 @@ const setUpDB = (drop) => {
             Shop.belongsTo(User, { foreignKey: 'VendorId' });
 
             User.hasMany(Question, { foreignKey: 'UserId' }); 
+            Question.belongsTo(User, { foreignKey: 'UserId' })
 
             mySQLDB.sync({ // Creates table if none exists
                 force: drop

@@ -7,6 +7,10 @@
                     <div class="col-md-12">
                         <h1 class="font_color" style="display:inline-block;"><b>All Available Shops</b></h1>
                         <a href="/vendor/addShop"><button type="button" class="btn btn-success" style="float:right;">Add New Shop</button></a>
+                         <form method="post" action="/vendor/searchShops"> 
+                         <input type="text"  class="typeahead tt-query" spellcheck="false" autocomplete="off" id="search" name="search" class="font_color" style="display:inline-block;" placeholder="search">
+                         <button><i class="fas fa-search"></i></button>
+                        </form>
                         <hr>
                     </div>
                     
@@ -20,13 +24,25 @@
                                 <p class="meta">
                                     <b class="vendors"><b>{{this.name}}</b></b><br>
                                     <span class="food_location"><b>{{ this.address }}</b></span><br>
-                                    <span class="food_rating">Rating: <b class="recommended-{{ this.isRecommended }}">{{ this.rating }}</b></span><br>
+                                    <span class="food_rating">Rating:&nbsp;
+										{{#if this.rating}} 
+										<b class="recommended-{{ this.isRecommended }}">
+											{{#times this.rating}}
+												<i class="fas fa-star"></i>
+											{{/times}}
+											{{#times (math 5 "-" this.rating)}}
+												<i class="far fa-star"></i>
+											{{/times}}
+										</b>
+										{{else}} 
+											No rating available 
+										{{/if}}
+                                    </span>
                                 </p>
                             </div>
                         </div>
                     </div>
                     {{/each}}
-
                 </div>
             </div>
         </div>

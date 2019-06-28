@@ -9,6 +9,8 @@ const updateShopRating = require('../helpers/updateShopRating');
 const Shop = require('../models/Shop');
 const FoodItem = require('../models/FoodItem')
 const User = require("../models/User"); 
+const Sequelize = require('sequelize'); 
+const Op = Sequelize.Op; 
 
 
 
@@ -23,7 +25,8 @@ router.get('/vendors', isAdmin, (req, res) => {
         raw: true,
     })
     .then((vendors) => {
-        var groupedVendors = groupVendors(vendors)
+        var groupedVendors = groupVendors(vendors);
+        
         res.render('admin/vendors', {
             user: req.user,
             title: "Vendors",
@@ -109,13 +112,26 @@ router.get('/addShop', isAdmin, (req, res) => {
 });
 
 
-router.get('/addFoodItem', isAdmin, (req, res) => {
-    Shop.findAll({ where: { isDeleted: false } })
-    .then((shops) => {
+router.get('/addFoodItem/:currentShopId?', isAdmin, (req, res) => {
+    const currentShopId = req.params.currentShopId;
+
+    User.findAll({
+        where: { isVendor: true },
+        include: [{
+            model: Shop,
+            where: { isDeleted: false },
+            required: true,
+        }],
+        raw: true,
+    })
+    .then((vendors) => {
+        var groupedVendors = groupVendors(vendors);
+        
         res.render('admin/addFoodItem', {
             user: req.user,
             title: "Add Food",
-            shop: shops
+            groupedVendors,
+            currentShopId
         })
     })
 });
@@ -203,7 +219,7 @@ router.post('/vendors', (req, res) => {
             .then((vendors) => {
                 var groupedVendors = groupVendors(vendors);
 
-                req.flash('error', error);
+                res.locals.error = error;
                 res.render('admin/vendors', {
                     user: req.user,
                     title: "Vendors",
@@ -328,7 +344,7 @@ router.post('/undeleteShop/:id', (req, res) => {
 });
 
 
-router.post('/addFoodItem', isAdmin, (req, res) => {
+router.post('/addFoodItem/:id?', isAdmin, (req, res) => {
     const name = req.body.name;
     const shops = (req.body.shop.toString()).split(',');
     const calories = req.body.calories;
@@ -337,9 +353,9 @@ router.post('/addFoodItem', isAdmin, (req, res) => {
     const isDeleted = false;
     var error;
 
-    if (calories > 1500 || calories < 1) error = "Please enter a valid number of calories"
+    if (calories > 1500 || calories < 1) error = 'Please enter a valid number of calories';
 
-    if (!error) { 
+    if (!error) {
         for (i = 0; i < shops.length; i++) {
             FoodItem.create({
                 name,
@@ -371,7 +387,7 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
     const isDeleted = false;
     var error;
 
-    if (calories > 1500 || calories < 1) error = "Please enter a valid number of calories"
+    if (calories > 1500 || calories < 1) error = 'Please enter a valid number of calories';
 
     if (!error) {
         FoodItem.update(
@@ -393,7 +409,6 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
         req.flash('error', error);
         res.redirect(`/admin/editFoodItem/${id}`);
     }
-
 });
 
 
@@ -416,6 +431,43 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     });
 });
 
+router.post('/searchFoodItems', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	FoodItem.findAll({ 
+		limit: 10, 
+		where: { 
+			name: { 
+				[Op.like] : '%' + search + '%'
+			} 
+		}
+	}).then((search_results) => { 
+		res.render( 'admin/queryFood', { 
+                result: search_results, 
+                user: req.user,
+			}
+		)
+	})
+})
+
+router.post('/searchShops', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	Shop.findAll({ 
+		limit: 10, 
+		where: { 
+			name: { 
+				[Op.like] : '%' + search + '%'
+			} 
+		}
+	}).then((search_results) => { 
+		res.render( 'admin/queryShops', { 
+                result: search_results,
+                user: req.user, 
+			}
+		)
+	})
+})
 
 
 module.exports = router;

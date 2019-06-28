@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-
 const isVendor = require('../helpers/isVendor');
 const Vendor = require('../models/User');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
 const getShopRatings = require('../helpers/getShopRating');
+const updateShopRating = require('../helpers/updateShopRating')
 const bcrypt = require('bcryptjs');
+const Sequelize = require('sequelize'); 
+const Op = Sequelize.Op; 
 
 router.get('/settings', isVendor, (req, res) => {
     res.render('vendors/vendorSettings', {
@@ -18,31 +20,8 @@ router.get('/settings', isVendor, (req, res) => {
 router.post('/settings', isVendor, (req, res) => {
 
     let email = req.body.email.toLowerCase();
-    if (email.length === 0) {
-        Vendor.findOne({
-            attributes: ['email'],
-            raw: true,
-            where: {
-                id: req.user.id,
-            },
 
-        }).then((mail) => {
-            return email = mail;
-        })
-    }
-    console.log(email);
     let password = req.body.password;
-    if (password.length === 0) {
-        password = Vendor.findOne({
-            attribute: ['password'],
-            where: {
-                id: req.user.id,
-            },
-            raw: true,
-        }).then((pass) => {
-            return password = pass;
-        })
-    }
 
     var error;
     bcrypt.genSalt(10, function (err, salt) {
@@ -128,28 +107,38 @@ router.get('/deleteShop/:id', isVendor, (req, res) => {
 
 
 router.get('/allFoodItems', isVendor, (req, res) => {
-    Shop.findOne({
+    // Shop.findOne({
+    //     where: {
+    //         VendorId: req.user.id,
+    //         isDeleted: false,
+    //     }
+    // }).then((shop) => {
+    
+    FoodItem.findAll({
         where: {
-            VendorId: req.user.id,
             isDeleted: false,
-        }
-    }).then((shop) => {
-        FoodItem.findAll({
-            where: {
-                isDeleted: false,
-                ShopId: shop.id,
-            }
-        }).then((food) => {
-            res.render('vendors/allFoodItems', {
-                user: req.user,
-                title: "Show Menu",
-                food: food,
-                shops: shop,
-
-            })
+        }, 
+        include: [{
+            model: Shop,
+            where: { 
+                VendorId: req.user.id,
+            },
+            required: true,
+        }],
+    }).then((food) => {
+        let query_list = []
+        for (i=0; i< food.length; i++) { 
+            query_list.push(food[i].name); 
+        } 
+        res.render('vendors/allFoodItems', {
+            user: req.user,
+            title: "Show Menu",
+            food: food,
+            tags: query_list
         })
     })
 })
+// })
 
 
 router.get('/addFoodItem', isVendor, (req, res) => {
@@ -305,25 +294,14 @@ router.post('/addFoodItem', isVendor, (req, res) => {
             isDeleted,
             imageLocation,
             ShopId: shops[i],
-        });
-
-        FoodItem.findAll({ where: { ShopId: shops[i], isDeleted: false } })
-            .then((foodItems) => {
-                var rating = getShopRatings(foodItems);
-                Shop.update(
-                    {
-                        rating,
-                        isRecommended: (rating >= 3) ? true : false,
-                    }, {
-                        where: { id: foodItems[0].ShopId }
-                    }
-                );
-            });
+        })
+            .then((foodItem) => { updateShopRating(foodItem.ShopId) });
     };
 
     req.flash('success', 'Food has been succcessfully added!');
-    res.redirect('/vendor/allShops');
-})
+    res.redirect('/admin/vendors');
+});
+
 
 
 router.post('/editFoodItem/:id', isVendor, (req, res) => {
@@ -362,14 +340,76 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
 })
 
 router.get('/delete/:id', isVendor, (req, res) => {
-    Vendor.destroy({
-        where: {
-            id: req.params.id,
-        }
-    }).then(() => { 
-        res.redirect('/login')
-    })
+    Shop.update({
+        isDeleted: 1,
+
+
+    },
+        {
+            where: { VendorId: req.params.id }
+        }).then((shop) => {
+            FoodItem.update({
+                isDeleted: 1
+            },
+
+                { where: { ShopId: shop.id } }
+            )
+        }).then(() => {
+            Vendor.destroy({
+                where: {
+                    id: req.params.id,
+                }
+            })
+        })
+
 })
+
+router.post('/searchFoodItems', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	FoodItem.findAll({ 
+		limit: 10, 
+		where: { 
+			name: { 
+				[Op.like] : '%' + search + '%'
+			} 
+        },
+        include: [{
+            model: Shop,
+            where: { 
+                VendorId: req.user.id,
+            },
+            required: true,
+        }],
+	}).then((search_results) => { 
+		res.render( 'vendors/queryFood', { 
+                result: search_results, 
+                user: req.user,
+			}
+		)
+	})
+})
+
+router.post('/searchShops', (req, res)=> { 
+	search = req.body.search; 
+	console.log(search);
+	Shop.findAll({ 
+		limit: 10, 
+		where: { 
+            VendorId: req.user.id,
+			name: { 
+				[Op.like] : '%' + search + '%'
+            }
+		}
+	}).then((search_results) => { 
+		res.render( 'vendors/queryShops', { 
+                result: search_results, 
+                user: req.user,
+			}
+		)
+	})
+})
+
 
 
 module.exports = router;

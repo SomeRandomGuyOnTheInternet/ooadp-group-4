@@ -8,7 +8,10 @@ const isloggedOut = require('../helpers/isloggedOut');
 const upload = require('../helpers/imageUpload');
 
 const User = require('../models/User');
-
+const FoodItem = require('../models/FoodItem');
+const Shop = require('../models/Shop');
+const Sequelize = require('sequelize'); 
+const Op = Sequelize.Op; 
 
 
 router.get('/register', isloggedOut, (req, res) => {
@@ -149,7 +152,5 @@ router.post('/upload', (req, res) => {
 		}
 	});
 })
-
-
 
 module.exports = router;

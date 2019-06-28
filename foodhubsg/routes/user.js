@@ -1,4 +1,5 @@
 const express = require('express');
+const Sequelize = require('sequelize');
 const router = express.Router();
 
 const isUser = require('../helpers/isUser');
@@ -52,28 +53,25 @@ router.get('/', isUser, (req, res) => {
             lunchAverageCalories: getAverageCalories(groupedFoodItems, "lunchCalories"),
             dinnerAverageCalories: getAverageCalories(groupedFoodItems, "dinnerCalories"),
             snacksAverageCalories: getAverageCalories(groupedFoodItems, "snacksCalories"),
-        })
-    })
+        });
+    });
 });
 
 
 router.get('/shops', isUser, (req, res) => {
     Shop.findAll({
-        where: {
-            location: req.user.location,
-            isDeleted: false,
-        },
+        where: { isDeleted: false },
         order: [
             ['rating', 'DESC'],
         ],
-    }).
-    then(function (shops) {
+    })
+    .then(function (shops) {
         res.render('user/shops', {
             user: req.user,
             title: "Shops",
             shops: shops,
-        })
-    })
+        });
+    });
 });
 
 
@@ -89,24 +87,28 @@ router.get('/shops/:id', isUser, (req, res) => {
                 ShopId: id, 
                 isDeleted: false, 
             }
-        })
+        }),
+        Shop.findAll({
+            where: { id: { [Sequelize.Op.not]: id } },
+        }),
     ])
     .then((data) => {
         User.findOne({
             where: { id: data[0].VendorId },
         })
         .then((vendor) => {
+            console.log(data[2])
             res.render('user/shop', {
                 title: data[0].name,
                 shop: data[0],
                 foodItems: data[1],
+                otherShops: data[2],
                 vendor,
                 user: req.user
             });
         })
     })
     .catch((err) => {
-        console.log(err);
         req.flash('error', "That vendor does not exist!");
         res.redirect('/user/');
     });
@@ -134,7 +136,7 @@ router.get('/foodJournal', isUser, (req, res) => {
             title: "Food Journal",
             groupedFoodItems: groupFoodItems(FoodItems, true),
             searchDate: false,
-        })
+        });
     });
 });
 
@@ -149,9 +151,8 @@ router.get('/faq', isUser, (req, res) => {
     .then((questions) => {
         res.render('user/faq', {
             user: req.user,
-			questions: questions
-    
-        })
+	    questions: questions
+        });
     });
 });
 
@@ -190,13 +191,8 @@ router.post('/foodJournal', isUser, (req, res) => {
             title: "Food Journal",
             groupedFoodItems: groupFoodItems(FoodItems, true),
             searchDate: searchDate,
-        })
-    })
-    .catch((err) => {
-        console.log(err)
-        req.flash('error', err);
-        res.redirect('/user/foodJournal');
-    })
+        });
+    });
 });
 
 
@@ -220,20 +216,12 @@ router.post('/addFood', isUser, (req, res) => {
             .then(() => {
                 req.flash('success', "That food has been successfully added!");
                 res.redirect('/user/foodJournal');
-            })
-            .catch((err) => {
-                req.flash('error', err);
-                res.redirect('/user/foodJournal');
-            })
+            });
         } else {
             req.flash('error', "This code does not exist!");
             res.redirect('/user/foodJournal');
         }
-    })
-    .catch((err) => {
-        req.flash('error', err);
-        res.redirect('/logout');
-    })
+    });
 });
 
 
@@ -251,19 +239,11 @@ router.post('/editFood/:id', isUser, (req, res) => {
             .then(() => {
                 req.flash('success', "You've successfully edited that food item!");
                 res.redirect('/user/foodJournal');
-            })
-            .catch((err) => {
-                console.log(err);
-                res.redirect('/user/foodJournal');
-            })
+            });
         } else {
             req.flash('error', "That code does not exist!");
             res.redirect('/user/foodJournal');
         }
-    })
-    .catch((err) => {
-        console.log(err)
-        res.redirect('/user/foodJournal');
     })
 });
 
@@ -275,10 +255,6 @@ router.post('/deleteFood/:id', isUser, (req, res) => {
     .then(() => {
         req.flash('success', "You've successfully deleted that food item from your log!");
         res.redirect('/user/foodJournal');
-    })
-    .catch((err) => {
-        req.flash('error', err);
-        res.redirect('/user/editFood/' + logId);
     })
 });
 
@@ -302,24 +278,48 @@ router.post('/faq', isUser, (req, res) => {
 
 router.post('/settings', isUser, (req, res) => {
 	const name = req.body.name;
-	const email = req.body.email.toLowerCase();
-	const password = req.body.password;
+	let email = req.body.email.toLowerCase();
+	let password = req.body.password;
 	const isAdmin = isBanned = isVendor = false;
-	const weight = req.body.weight;
-	const height = req.body.height;
-	
+	let weight = req.body.weight;
+	let height = req.body.height;	
 	var error;
 
-	User.update({		
-		 weight: req.body.weight,
-         height: req.body.height
-	},{
-		where: { id: req.user.id }
+    bcrypt.genSalt(function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+            User.update({
+                weight: req.body.weight,
+                height: req.body.height,
+                email: email,
+                password: hash,
+            }, {
+                where: { id: req.user.id }
+            })
+            .then(function (user) {
+                res.redirect('/user/settings');
+            })
+            .catch(err => console.log(err));
+
+        });
     })
-    .then(function (user) {		
-		res.redirect('/user/settings'); 
-        })
-    .catch(err => console.log(err));
+});
+
+
+router.post('/filterShops', (req, res) => {
+    var searchName = req.body.searchName;
+    console.log("search name: ", searchName)
+
+    Shop.findAll({
+        where: {
+            name: {
+                [Sequelize.Op.like]: '%' + searchName + '%'
+            }
+        },
+    })
+    .then(function (searchResults) {
+        console.log(searchResults)
+        res.send(searchResults);
+    })
 });
 
 

@@ -5,14 +5,6 @@ module.exports = {
         return moment(date).format(targetFormat);
     },
 
-    checkMealType: function (mealType, targetMealType, options) {
-        if (mealType == targetMealType) {
-            return options.fn(this);
-        } else {
-            return options.inverse(this);
-        }
-    },
-
     json: function (object) {
         return JSON.stringify(object);
     },

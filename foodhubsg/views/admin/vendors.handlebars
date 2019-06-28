@@ -23,9 +23,7 @@
                                 <td>{{0.email}}</td>
                                 <td>
                                     {{#each this}}
-                                    <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
-                                    {{else}}
-                                    <h6>No shops added!</h6>
+                                        <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
                                     {{/each}}
                                 </td>
                             </tr>

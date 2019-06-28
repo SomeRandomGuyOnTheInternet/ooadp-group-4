@@ -8,7 +8,7 @@ body {
   font-weight: 300;
   font-size: 16px;
   line-height: 2;
-  font-family: "Muli", Arial, sans-serif;
+  font-family: "Muli", sans-serif;
   color: #707070;
   background-color: #EEEEEE;
   height:100%;
@@ -1314,7 +1314,8 @@ input[type="text"] {
   background: white;
   color: #212529; 
   box-shadow: 0 5px 10px -2px rgba(0,0,0,0.2);
-  border: 1px solid #999999; }
+  border: 1px solid #999999; 
+  padding: 8px 8px; }
   .btn-google:hover, .btn-google:focus, .btn-google:active {
     background: white !important; }
   .btn-google.btn-outline {
@@ -1731,4 +1732,8 @@ select {
   max-width: 100%;
   width:auto;
   max-height: 270px;
+}
+
+.recommended-shops{
+  margin: 1.5em 0;
 }

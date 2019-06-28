@@ -102,6 +102,8 @@
     <script>
         var shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
         var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+        var otherShops = {{{ json otherShops }}};
+        var otherShopMarkers = [];
 
         function initMap() {
             var shopLocation = { lat: shopLatitude, lng: shopLongitude };
@@ -123,15 +125,43 @@
             var map = new google.maps.Map( document.getElementById('map'), { zoom: 16 } );
 
             var shopMarker = new google.maps.Marker({ 
-                                position: shopLocation, 
-                                map: map,
-                                label: "S",
-                            });
+                position: shopLocation, 
+                map: map,
+                label: "{{{ shop.name }}}".charAt(0),
+            });
+
+            for (var i = 0; i < otherShops.length; i++) {
+                var pos = new google.maps.LatLng(otherShops[i].latitude, otherShops[i].longitude);
+
+                otherShopMarkers[i] = new google.maps.Marker({
+                    id: i,
+                    position: pos,
+                    map: map,
+                    label: otherShops[i].name[0],
+                    description: otherShops[i].description,
+                    shopId: otherShops[i].id,
+                });
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: otherShops[i].name
+                });
+
+                infowindow.open(map, otherShopMarkers[i]);
+                google.maps.event.addListener(otherShopMarkers[i], 'click', function () {
+                    window.location.replace(`/user/shops/${otherShopMarkers[this.id].shopId}`);
+                })
+            }
+
             var userMarker = new google.maps.Marker({ 
-                                position: userLocation, 
-                                map: map, 
-                                icon: icon, 
-                            });
+                position: userLocation, 
+                map: map, 
+                icon: icon, 
+            });
+
+            var infowindow = new google.maps.InfoWindow({
+                content: '<h6 style="margin:0;">{{{ shop.name }}}</h6>'
+            });
+            infowindow.open(map, shopMarker);
 
             directionsService.route(request, function (response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
@@ -141,7 +171,7 @@
                     alert("Directions Request from your location to " + "{{{ shop.name }}}" + " failed: " + status);
                 }
             });
-
+            
             var bounds = new google.maps.LatLngBounds();
             bounds.extend(shopMarker.position);
             bounds.extend(userMarker.position);
@@ -161,7 +191,7 @@
             var shopMarker = new google.maps.Marker({ 
                                 position: shopLocation, 
                                 map: map,
-                                label: "S",
+                                label: "{{{ shop.name }}}".charAt(0),
                             });
 
             map.setCenter(shopMarker.getPosition());
