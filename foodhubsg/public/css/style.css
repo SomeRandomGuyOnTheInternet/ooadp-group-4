@@ -1734,6 +1734,17 @@ select {
   max-height: 270px;
 }
 
+.ui-widget {
+  font-weight: 300;
+  font-family: "Muli", sans-serif;
+  color: #707070;
+}
+
 .recommended-shops{
   margin: 1.5em 0;
+}
+
+#collapseFilter {
+  margin: 15px;
+  background-color: #EEEEEE;
 }

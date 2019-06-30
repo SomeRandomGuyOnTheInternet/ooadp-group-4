@@ -3,38 +3,46 @@
     <div class="container">
         <div class="box1">
             <div class="row row-pb-md">
-
                 <div class="col-md-12">
-                    <div class="accordion" id="filerAccordion">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h1 class="font_color"><b class="center_subtitle">All Shops Near You</b></h1>
-                            </div>
-                            <div class="col-md-4">
-                                <a data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter" style="float:right;">
-                                    <i class="fas fa-filter hyperlink"></i>&nbsp;<span class="hyperlink">Filter</span>
-                                </a>
-                            </div>
-                        </div>
-                    
-                        <div id="collapseFilter" class="collapse" aria-labelledby="filterHeading" data-parent="#filerAccordion">
-                            <form id="searchFoodForm" action="" style="width:100%">
-                                <div class="col-md-12 input-group" style="padding:0">
-                                <input type="text" name="searchShopInput" id="searchShopInput" class="form-control" required>
-                                <span class="input-group-btn">
-                                    <input type="submit" name="action" value="Search Shops" class="btn btn-primary btn-tall" style="margin-left: 0.5em;">
-                                </span>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <hr>
-                </div>
 
-                <div class="row" id="all-shops-container">
-                    <h4 id="filter-result-err" style="display:none"><b>Keep adding more food to generate a detailed summary on your food intake!</b></h4>
-                </div>
-      
+                    <form id="searchFoodForm" action="">
+                        <header id="summary-header">
+                            <div class="accordion" id="filerAccordion">
+                                <div class="row">
+
+                                    <div class="col-md-7">
+                                        <h1 class="font_color"><b class="center_subtitle">All Shops Near You</b></h1>
+                                        <a data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                                            <i class="fas fa-filter hyperlink"></i>&nbsp;<span class="hyperlink">Filter</span>
+                                        </a>
+                                    </div>
+                                
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <input type="text" name="searchShopInput" id="searchShopInput" class="form-control" placeholder="Eg: Grains" required>
+                                            <span class="input-group-btn">
+                                                <input type="submit" name="action" value="Search Shops" class="btn btn-primary" style="margin-left:0.5em; height:50px;">
+                                            </span>
+                                        </div>
+                                        <a id="resetSearchLink" href="/user/shops" style="float:right;display:none;">
+                                            <i class="fas fa-undo hyperlink"></i>&nbsp;<span class="hyperlink">Reset Search</span>
+                                        </a>
+                                    </div>
+
+                                    <div id="collapseFilter" class="collapse col-md-12" aria-labelledby="filterHeading" data-parent="#filerAccordion">
+                                        hfbpihbsfphfspbsf
+                                    </div>
+
+                                </div>
+                            </div>
+                            <hr>
+                        </header>
+                    </form>
+
+                    <div class="row" id="all-shops-container">
+                    </div>
+
+                </div>     
             </div>
         </div>
     </div>
@@ -42,7 +50,13 @@
 
 <script>
     var allShops = {{{ json shops }}};
-    createShopContainer(allShops);
+    var availableTags = [];
+    createShopTemplate(allShops);
+    for (i = 0; i < allShops.length; i++) availableTags.push(allShops[i].name);
+
+    $("#searchShopInput").autocomplete({
+      source: availableTags
+    });
 
     $("form#searchFoodForm").submit(function (event) {
         event.preventDefault();
@@ -50,33 +64,13 @@
 
         $.ajax({
             type: 'post',
-            url: `/user/filterShops`,
-            data: { searchName: searchName },
+            url: `/user/searchShops`,
+            data: { searchName },
             dataType: 'text'
         })
         .done(function (data) {
-            var searchResults = JSON.parse(data);
-            $("#all-shops-container").empty();
-            
-            if (searchResults) {
-                createShopContainer(searchResults);
-            } else {
-                $("#filter-result-err").css("display", "block");
-            }
-            
+            createShopTemplate(JSON.parse(data));
+            $("#resetSearchLink").css("display", "block");
         });
     });
-
-    function createShopContainer(allShops) {
-        for (i = 0; i < allShops.length; i++) {
-            $('#all-shops-container').append(
-                '<div class="col-md-6 recommended-shops"><div class="blog-entry"><div class="blog-img">' +
-                '<a class="action" href="/user/shops/' + allShops[i].id + '"><img src="' + allShops[i].imageLocation + '" class="img-responsive" alt="Image of shop"></a>' +
-                '</div><div class="desc all-shops">' +
-                '<b class="vendors"><b>' + allShops[i].name + '</b></b><br>' +
-                '<span class="food_location"><b>' + allShops[i].address + '</b></span><br>' +
-                '</div></div></div>'
-            );  
-        }
-    };
 </script>

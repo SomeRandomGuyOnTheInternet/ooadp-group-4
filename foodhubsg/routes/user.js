@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const router = express.Router();
 
 const isUser = require('../helpers/isUser');
+const arePointsNear = require('../helpers/arePointsNear');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const getAverageCalories = require('../helpers/getAverageCalories');
@@ -69,7 +70,7 @@ router.get('/shops', isUser, (req, res) => {
         res.render('user/shops', {
             user: req.user,
             title: "Shops",
-            shops: shops,
+            shops
         });
     });
 });
@@ -305,19 +306,22 @@ router.post('/settings', isUser, (req, res) => {
 });
 
 
-router.post('/filterShops', (req, res) => {
+router.post('/searchShops', (req, res) => {
     var searchName = req.body.searchName;
-    console.log("search name: ", searchName)
+    var userLocation = {lat: req.user.latitude, lng: req.user.longititude};
+    var shopLocation = {lat: 0, lng: 0};
 
     Shop.findAll({
         where: {
             name: {
                 [Sequelize.Op.like]: '%' + searchName + '%'
-            }
+            },
         },
+        order: [
+            ['rating', 'DESC'],
+        ],
     })
     .then(function (searchResults) {
-        console.log(searchResults)
         res.send(searchResults);
     })
 });
