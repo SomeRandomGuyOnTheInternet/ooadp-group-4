@@ -16,7 +16,7 @@ const Op = Sequelize.Op;
 
 router.get('/vendors', isAdmin, (req, res) => {
     User.findAll({
-        where: { isVendor: true },
+        where: { isVendor: true, isDeleted: false },
         include: [{
             model: Shop,
             where: { isDeleted: false },
@@ -26,12 +26,26 @@ router.get('/vendors', isAdmin, (req, res) => {
     })
     .then((vendors) => {
         var groupedVendors = groupVendors(vendors);
-        
-        res.render('admin/vendors', {
-            user: req.user,
-            title: "Vendors",
-            groupedVendors
+
+        User.findAll({
+            where: { isVendor: true, isDeleted: true },
+            include: [{
+                model: Shop,
+                where: { isDeleted: true },
+                required: false,
+            }],
+            raw: true,
         })
+        .then((deletedVendors) => {
+            var groupedDeletedVendors = groupVendors(deletedVendors);
+
+            res.render('admin/vendors', {
+                user: req.user,
+                title: "Vendors",
+                groupedVendors,
+                groupedDeletedVendors
+            })
+        });
     });
 });
 
@@ -184,7 +198,7 @@ router.post('/vendors', (req, res) => {
     const email = req.body.email.toLowerCase();
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    const isAdmin = isBanned = false;
+    const isAdmin = isBanned = isDeleted = false;
     const isVendor = true; 
     var error;
 
@@ -200,7 +214,7 @@ router.post('/vendors', (req, res) => {
 			bcrypt.genSalt(10, function (err, salt) {
 				bcrypt.hash(password, salt, function (err, hash) {
                     User.create({
-						name, email, password: hash, isVendor, isAdmin, isBanned,
+						name, email, password: hash, isDeleted, isVendor, isAdmin, isBanned,
                     })
                     .then(() => {  
                         req.flash('success', "You have successfully added a new vendor!");
@@ -228,6 +242,48 @@ router.post('/vendors', (req, res) => {
                 });
             });
 		};
+    });
+}); 
+
+
+router.post('/deleteVendor/:id', (req, res) => {
+    const id = req.params.id;
+    const isDeleted = true;
+
+    User.update(
+        { isDeleted },
+        { where: { id } }
+    )
+    .then(function () {
+        Shop.update(
+            { isDeleted },
+            { where: { VendorId: id } }
+        )
+        .then(function () {
+            req.flash('success', 'Shop has been succcessfully deleted!');
+            res.redirect('/admin/vendors');
+        });
+    });
+}); 
+
+
+router.post('/undeleteVendor/:id', (req, res) => {
+    const id = req.params.id;
+    const isDeleted = false;
+
+    User.update(
+        { isDeleted },
+        { where: { id } }
+    )
+    .then(function () {
+        Shop.update(
+            { isDeleted },
+            { where: { VendorId: id } }
+        )
+        .then(function () {
+            req.flash('success', 'Shop has been succcessfully undeleted!');
+            res.redirect('/admin/vendors');
+        });
     });
 }); 
 

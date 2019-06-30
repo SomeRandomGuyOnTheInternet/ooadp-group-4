@@ -27,6 +27,9 @@ const User = db.define('User', {
     longitude: {
         type: Sequelize.DECIMAL(10, 7)
     },
+    isDeleted: {
+        type: Sequelize.BOOLEAN
+    },
     isAdmin: {
         type: Sequelize.BOOLEAN
     },

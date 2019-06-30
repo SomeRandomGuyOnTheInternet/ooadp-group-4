@@ -150,25 +150,28 @@
                 shopWindow.open(map, shopMarker);
             });
 
+            var otherShopWindow = new google.maps.InfoWindow();
+
             for (var i = 0; i < otherShops.length; i++) {
-                var pos = new google.maps.LatLng(otherShops[i].latitude, otherShops[i].longitude);
+                var position = new google.maps.LatLng(otherShops[i].latitude, otherShops[i].longitude);
 
                 otherShopMarkers[i] = new google.maps.Marker({
                     id: i,
-                    position: pos,
-                    map: map,
+                    position,
+                    map,
                     label: otherShops[i].name[0],
                     address: otherShops[i].address,
-                    description: otherShops[i].description,
                     shopId: otherShops[i].id,
                 });
 
                 var infoWindow = new google.maps.InfoWindow({
-                    content: otherShops[i].name
+                    content: `<h6 style="margin:0;">${otherShops[i].name}</h6>` +
+                             `<p style="margin:0;">${otherShops[i].address}</h6>`
                 });
 
                 google.maps.event.addListener(otherShopMarkers[i], 'click', function () {
                     window.location.replace(`/user/shops/${otherShopMarkers[this.id].shopId}`);
+                    {{!-- infoWindow.open(map, otherShopMarkers[i]); --}}
                 });
             }
 

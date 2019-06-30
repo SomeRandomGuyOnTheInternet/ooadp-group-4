@@ -7,6 +7,7 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             password: '$2a$10$JgDMXgbEoiJdzIn8pk11Zusq2E0p8aq3ccCoqyv9dgInOK3xGGYJ6',
             height: 1.78, 
             weight: 74,
+            isDeleted: false,
             isAdmin: false, 
             isVendor: false, 
             isBanned: false 
@@ -17,6 +18,7 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             password: '$2a$10$wQZ8DoV.HcnEBsks4mrIZO5bauhynH.puDtMCbH1axpDV71htRQM2', 
             height: null, 
             weight: null,
+            isDeleted: false,
             isAdmin: true, 
             isVendor: false, 
             isBanned: false 
@@ -27,6 +29,7 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             password: '$2a$10$1ZxU3n6AqWrAlOeuFkxLYOsUpnMTcu4BAlu4AANCFSoyJJLi7kBo2', 
             height: null, 
             weight: null, 
+            isDeleted: false,
             isAdmin: false, 
             isVendor: true, 
             isBanned: false 
