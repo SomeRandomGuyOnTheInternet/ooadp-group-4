@@ -11,7 +11,7 @@
                                 <div class="row">
 
                                     <div class="col-md-7">
-                                        <h1 class="font_color"><b class="center_subtitle">All Shops Near You</b></h1>
+                                        <h1 class="font_color"><b class="center_subtitle">All Available Shops</b></h1>
                                         <a data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                                             <i class="fas fa-filter hyperlink"></i>&nbsp;<span class="hyperlink">Filter</span>
                                         </a>
@@ -54,9 +54,7 @@
     createShopTemplate(allShops);
     for (i = 0; i < allShops.length; i++) availableTags.push(allShops[i].name);
 
-    $("#searchShopInput").autocomplete({
-      source: availableTags
-    });
+    $("#searchShopInput").autocomplete({ source: availableTags });
 
     $("form#searchFoodForm").submit(function (event) {
         event.preventDefault();

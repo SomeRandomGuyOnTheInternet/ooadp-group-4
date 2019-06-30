@@ -431,43 +431,27 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     });
 });
 
-router.post('/searchFoodItems', (req, res)=> { 
-	search = req.body.search; 
-	console.log(search);
-	FoodItem.findAll({ 
-		limit: 10, 
-		where: { 
-			name: { 
-				[Op.like] : '%' + search + '%'
-			} 
-		}
-	}).then((search_results) => { 
-		res.render( 'admin/queryFood', { 
-                result: search_results, 
-                user: req.user,
-			}
-		)
-	})
-})
 
-router.post('/searchShops', (req, res)=> { 
-	search = req.body.search; 
-	console.log(search);
-	Shop.findAll({ 
-		limit: 10, 
-		where: { 
-			name: { 
-				[Op.like] : '%' + search + '%'
-			} 
-		}
-	}).then((search_results) => { 
-		res.render( 'admin/queryShops', { 
-                result: search_results,
-                user: req.user, 
-			}
-		)
-	})
-})
+router.post('/searchShops', (req, res) => {
+    var searchName = req.body.searchName;
+    var userLocation = {lat: req.user.latitude, lng: req.user.longititude};
+    var shopLocation = {lat: 0, lng: 0};
+
+    Shop.findAll({
+        where: {
+            name: {
+                [Sequelize.Op.like]: '%' + searchName + '%'
+            },
+        },
+        order: [
+            ['rating', 'DESC'],
+        ],
+    })
+    .then(function (searchResults) {
+        res.send(searchResults);
+    })
+});
+
 
 
 module.exports = router;
