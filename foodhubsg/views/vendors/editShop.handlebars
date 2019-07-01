@@ -56,7 +56,7 @@
 
                             <div class="col-md-12">
                                 <input type="submit" name="action" value="Edit Shop" class="btn btn-primary btn-tall"
-                                   id="updateShopButton" style="float:right;">       
+                                   id="updateShopButton" style="float:right;" disabled>       
                                 </form>
                                 <form method="POST" action="/vendor/deleteShop/{{shop.id}}" style="width:100%" onsubmit="return confirm('Are you sure you want to delete this shop?');">
                                     <input type="submit" name="action" value="Delete Shop" class="btn btn-danger btn-tall" id="editShopButton"
@@ -197,7 +197,7 @@
             }
         }
     }
-
+    var oldElem = [], newElem = [];
     $('.form-control').each(function () {
         elem = $(this);
         oldElem.push(elem.val());
