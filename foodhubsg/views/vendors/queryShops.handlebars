@@ -8,12 +8,13 @@
                     {{#if result}}
                     {{#each result}}
                     <a href="/vendor/editShop/{{this.id}}"><h3 class="font_color">{{this.name}}</h3></a>
+                    <a class="action" href="/vendor/editShop/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
                     <div></div>
                     {{/each}}
                        
                     
                     {{else}}  
-                    <h3><b class="font_color">No data found</b></h3>
+                    <h3><b class="font_color">No answer found</b></h3>
                     {{/if}}
                     <br>
                     <hr>
