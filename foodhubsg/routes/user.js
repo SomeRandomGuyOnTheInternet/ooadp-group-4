@@ -117,25 +117,35 @@ router.get('/shops/:id', isUser, (req, res) => {
 
 
 router.get('/foodJournal', isUser, (req, res) => {
-    Food.findAll({
-        include: [{
-            model: FoodLog,
-            where: { UserId: req.user.id },
-            required: true,
-        },{
-            model: Shop,
-            required: true,
-        }],
-        order: [
-            [FoodLog, 'createdAt', 'DESC'],
-        ],
-        raw: true
-    })
+    Promise.all([
+        Food.findAll({
+            include: [{
+                model: FoodLog,
+                where: { UserId: req.user.id },
+                required: true,
+            }, {
+                model: Shop,
+                required: true,
+            }],
+            order: [
+                [FoodLog, 'createdAt', 'DESC'],
+            ],
+            raw: true
+        }), 
+        Food.findAll({
+            include: [{
+                model: Shop,
+                required: true,
+            }],
+            raw: true
+        }),
+    ])
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
             title: "Food Journal",
-            groupedFoodItems: groupFoodItems(FoodItems, true),
+            groupedFoodItems: groupFoodItems(FoodItems[0], true),
+            allFoodItems: FoodItems[1],
             searchDate: false,
         });
     });
@@ -197,6 +207,23 @@ router.post('/foodJournal', isUser, (req, res) => {
 });
 
 
+router.post('/searchFood', (req, res) => {
+    var foodInput = req.body.searchQuery;
+
+    Promise.all([
+        Food.findAll({
+            where: { name: foodInput }
+        }),
+        Food.findAll({
+            where: { id: foodInput }
+        }), 
+    ])
+    .then(function (searchResults) {
+        res.send(searchResults);
+    })
+});
+
+
 router.post('/addFood', isUser, (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
 
@@ -219,7 +246,7 @@ router.post('/addFood', isUser, (req, res) => {
                 res.redirect('/user/foodJournal');
             });
         } else {
-            req.flash('error', "This code does not exist!");
+            req.flash('error', "This food item does not exist!");
             res.redirect('/user/foodJournal');
         }
     });

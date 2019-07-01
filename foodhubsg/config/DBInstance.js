@@ -121,30 +121,6 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
         { name: 'Chicken Pulao', calories: 682, imageLocation: "/images/food-image-5.jpg", ShopId: 3, isRecommended: false, isDeleted: false, },
         { name: 'Mixed Vegetable Rice', calories: 682, imageLocation: "/images/food-image-6.png", ShopId: 2, isRecommended: false, isDeleted: false, },
     ]);
-
-    FoodLogs.bulkCreate([
-        { mealType: 'Breakfast', createdAtDate: "2019-06-14", createdAt: "2019-06-14 01:45:46", UserId: 1, FoodId: 1, },
-        { mealType: 'Lunch', createdAtDate: "2019-06-14", createdAt: "2019-06-14 04:20:46", UserId: 1, FoodId: 2, },
-
-        { mealType: 'Breakfast', createdAtDate: "2019-06-15", createdAt: "2019-06-15 01:45:46", UserId: 1, FoodId: 2, },
-        { mealType: 'Lunch', createdAtDate: "2019-06-15", createdAt: "2019-06-15 04:20:46", UserId: 1, FoodId: 1, },
-        { mealType: 'Dinner', createdAtDate: "2019-06-15", createdAt: "2019-06-15 12:57:46", UserId: 1, FoodId: 3, },
-
-        { mealType: 'Breakfast', createdAtDate: "2019-06-16", createdAt: "2019-06-16 01:45:46", UserId: 1, FoodId: 1, },
-        { mealType: 'Dinner', createdAtDate: "2019-06-16", createdAt: "2019-06-16 12:57:46", UserId: 1, FoodId: 2, },
-
-        { mealType: 'Breakfast', createdAtDate: "2019-06-17", createdAt: "2019-06-17 01:45:46", UserId: 1, FoodId: 2, },
-        { mealType: 'Dinner', createdAtDate: "2019-06-17", createdAt: "2019-06-17 12:57:46", UserId: 1, FoodId: 1, },
-        { mealType: 'Snacks', createdAtDate: "2019-06-17", createdAt: "2019-06-17 07:35:46", UserId: 1, FoodId: 1, },
-
-        { mealType: 'Breakfast', createdAtDate: "2019-06-18", createdAt: "2019-06-18 01:45:46", UserId: 1, FoodId: 1, },
-        { mealType: 'Lunch', createdAtDate: "2019-06-18", createdAt: "2019-06-18 04:20:46", UserId: 1, FoodId: 2, },
-        { mealType: 'Dinner', createdAtDate: "2019-06-18", createdAt: "2019-06-18 12:57:46", UserId: 1, FoodId: 3, },
-
-        { mealType: 'Breakfast', createdAtDate: "2019-06-19", createdAt: "2019-06-19 01:45:46", UserId: 1, FoodId: 2, },
-        { mealType: 'Lunch', createdAtDate: "2019-06-19", createdAt: "2019-06-19 04:20:46", UserId: 1, FoodId: 1, },
-        { mealType: 'Snacks', createdAtDate: "2019-06-19", createdAt: "2019-06-19 07:35:46", UserId: 1, FoodId: 1, },
-    ]);
 };
 
 module.exports = createInstance;

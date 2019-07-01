@@ -80,7 +80,7 @@ router.post('/register', isloggedOut, (req, res) => {
 	const height = req.body.height;
 	const email = req.body.email.toLowerCase();
 	const password = req.body.password;
-	const isAdmin = isBanned = isVendor = false;
+	const isAdmin = isBanned = isVendor = isDeleted = false;
 	var error;
 
 	var form = {
