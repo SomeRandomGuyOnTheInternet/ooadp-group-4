@@ -7,10 +7,18 @@
 
                     {{#if result}}
                     {{#each result}}
-                    <a href="/vendor/editFoodItem/{{this.id}}"><h3 class="font_color">{{this.name}}</h3></a>
+
+                     <div class="col-md-6 recommended-shops">
+                        <div class="blog-entry">
+                            <div class="blog-img">
+                               <a href="/vendor/editFoodItem/{{this.id}}"><h3 class="font_color">{{this.name}}</h3></a>
                      <a class="action" href="/vendor/editFoodItem/{{this.id}}"><img
                                         src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
-                    <div></div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
                     {{/each}}
                        
                     
