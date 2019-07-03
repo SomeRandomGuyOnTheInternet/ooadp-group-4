@@ -4,32 +4,37 @@
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
-
+                         <form method="post" action="/vendor/searchShops"> 
+                         <input type="text"  class="typeahead tt-query" spellcheck="false" autocomplete="off" id="search" name="search" class="font_color" style="display:inline-block;" placeholder="search">
+                         <button><i class="fas fa-search"></i></button>
                     {{#if result}}
                     {{#each result}}
 
                     <div class="col-md-6 recommended-shops">
                         <div class="blog-entry">
                             <div class="blog-img">
-                                
-                                <a href="/vendor/editShop/{{this.id}}"><h3 class="font_color">{{this.name}}</h3></a>
-                    <a class="action" href="/vendor/editShop/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
-                                
+
+                                <a href="/vendor/editShop/{{this.id}}">
+                                    <h3 class="font_color">{{this.name}}</h3>
+                                </a>
+                                <a class="action" href="/vendor/editShop/{{this.id}}"><img src="{{this.imageLocation}}"
+                                        class="img-responsive" alt="Image of shop"></a>
+
                             </div>
                         </div>
                     </div>
-                    
+
                     <div></div>
                     {{/each}}
-                       
-                    
-                    {{else}}  
+
+
+                    {{else}}
                     <h3><b class="font_color">No answer found</b></h3>
                     {{/if}}
                     <br>
                     <hr>
 
-                   
+
 
                 </div>
             </div>
