@@ -56,7 +56,7 @@
 
                             <div class="col-md-12">
                                 <input type="submit" name="action" value="Edit Shop" class="btn btn-primary btn-tall"
-                                   id="updateShopButton" style="float:right;">       
+                                   id="updateShopButton" style="float:right;" disabled>       
                                 </form>
                                 <form method="POST" action="/vendor/deleteShop/{{shop.id}}" style="width:100%" onsubmit="return confirm('Are you sure you want to delete this shop?');">
                                     <input type="submit" name="action" value="Delete Shop" class="btn btn-danger btn-tall" id="editShopButton"
@@ -100,7 +100,7 @@
                     </div>
                     {{/each}}
                     <div style="" class="menuFood card p-3 text-center">
-                        <a href="/vendor/addFoodItem/{{shop.id}}"><i href="/admin/addFoodItem?shopId={{shop.id}}" class="fas fa-plus-square"
+                        <a href="/vendor/addFoodItem"><i href="/admin/addFoodItem?shopId={{shop.id}}" class="fas fa-plus-square"
                                 style="font-size: 70px;"></i>
                             <br>
                             <p style="display: inline"><b>Add Food Item</b></p>
@@ -197,7 +197,7 @@
             }
         }
     }
-
+    var oldElem = [], newElem = [];
     $('.form-control').each(function () {
         elem = $(this);
         oldElem.push(elem.val());
