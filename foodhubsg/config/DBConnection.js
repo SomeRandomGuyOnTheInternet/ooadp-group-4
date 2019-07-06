@@ -5,16 +5,20 @@ const User = require('../models/User');
 const FoodItem = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
+const Referral = require('../models/Referral');
 const Question = require('../models/Question'); 
 
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
     mySQLDB.authenticate()
         .then(() => {
-            console.log('FoodHubSG database is now connected!');
+            console.log('FoodHub.SG database is now connected!');
         })
         .then(() => {
             User.hasMany(FoodLog);
+
+            User.hasMany(Referral, { foreignKey: 'UserId' });
+            Referral.belongsTo(User, { foreignKey: 'UserId' })
             
             FoodItem.hasMany(FoodLog, { foreignKey: 'FoodId' });
             FoodLog.belongsTo(FoodItem, { foreignKey: 'FoodId' });

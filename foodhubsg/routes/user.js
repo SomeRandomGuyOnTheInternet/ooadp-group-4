@@ -22,7 +22,6 @@ router.get('/', isUser, (req, res) => {
         Shop.findAll({
             where: {
                 location: req.user.location,
-                isRecommended: true,
                 isDeleted: false,
             }
         }),
@@ -41,7 +40,6 @@ router.get('/', isUser, (req, res) => {
     .then(function (data) {
         var groupedFoodItems = groupFoodItems(data[1]);
         var shops = data[0];
-        shops.length = (shops.length > 0) ? 2 : 0;
         
         res.render('user/index', {
             user: req.user,
@@ -117,26 +115,35 @@ router.get('/shops/:id', isUser, (req, res) => {
 
 
 router.get('/foodJournal', isUser, (req, res) => {
-    Food.findAll({
-        include: [{
-            model: FoodLog,
-            where: { UserId: req.user.id },
-            required: true,
-        },{
-            model: Shop,
-            required: true,
-        }],
-        order: [
-            [FoodLog, 'createdAt', 'DESC'],
-        ],
-        raw: true
-    })
+    Promise.all([
+        Food.findAll({
+            include: [{
+                model: FoodLog,
+                where: { UserId: req.user.id },
+                required: true,
+            }, {
+                model: Shop,
+                required: true,
+            }],
+            order: [
+                [FoodLog, 'createdAt', 'DESC'],
+            ],
+            raw: true
+        }), 
+        Food.findAll({
+            include: [{
+                model: Shop,
+                required: true,
+            }],
+            raw: true
+        }),
+    ])
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
             title: "Food Journal",
-            groupedFoodItems: groupFoodItems(FoodItems, true),
-            searchDate: false,
+            groupedFoodItems: groupFoodItems(FoodItems[0], true),
+            allFoodItems: FoodItems[1]
         });
     });
 });
@@ -169,31 +176,58 @@ router.get('/settings', isUser, (req, res) => {
 router.post('/foodJournal', isUser, (req, res) => {
     var searchDate = req.body.searchDate;
 
-    Food.findAll({
-        include: [{
-            model: FoodLog,
-            where: { 
-                UserId: req.user.id,
-                createdAtDate: searchDate
-            },
-            required: true,
-        },{
-            model: Shop,
-            required: true,
-        }],
-        order: [
-            [FoodLog, 'createdAt', 'DESC'],
-        ],
-        raw: true
-    })
+    Promise.all([
+        Food.findAll({
+            include: [{
+                model: FoodLog,
+                where: {
+                    UserId: req.user.id,
+                    createdAtDate: searchDate
+                },
+                required: true,
+            }, {
+                model: Shop,
+                required: true,
+            }],
+            order: [
+                [FoodLog, 'createdAt', 'DESC'],
+            ],
+            raw: true
+        }),
+        Food.findAll({
+            include: [{
+                model: Shop,
+                required: true,
+            }],
+            raw: true
+        }),
+    ])
     .then((FoodItems) => {
         res.render('user/foodJournal', {
             user: req.user,
             title: "Food Journal",
-            groupedFoodItems: groupFoodItems(FoodItems, true),
-            searchDate: searchDate,
+            groupedFoodItems: groupFoodItems(FoodItems[0], true),
+            allFoodItems: FoodItems[1],
+            searchDate,
         });
     });
+});
+
+
+router.post('/searchFood', (req, res) => {
+    var foodInput = req.body.searchQuery;
+
+    Promise.all([
+        Food.findAll({
+            where: { name: foodInput }
+        }),
+        Food.findAll({
+            where: { id: foodInput }
+        }), 
+    ])
+    .then(function (searchResults) {
+        res.send(searchResults);
+    })
 });
 
 
@@ -219,7 +253,7 @@ router.post('/addFood', isUser, (req, res) => {
                 res.redirect('/user/foodJournal');
             });
         } else {
-            req.flash('error', "This code does not exist!");
+            req.flash('error', "This food item does not exist!");
             res.redirect('/user/foodJournal');
         }
     });
@@ -306,23 +340,26 @@ router.post('/settings', isUser, (req, res) => {
 });
 
 
-router.post('/searchShops', (req, res) => {
-    var searchName = req.body.searchName;
-    var userLocation = {lat: req.user.latitude, lng: req.user.longititude};
-    var shopLocation = {lat: 0, lng: 0};
+router.post('/addRefCode', isUser, (req, res) => {
+    const friendRefCode = req.body.friendRefCode;
+	var error;
 
-    Shop.findAll({
-        where: {
-            name: {
-                [Sequelize.Op.like]: '%' + searchName + '%'
-            },
-        },
-        order: [
-            ['rating', 'DESC'],
-        ],
-    })
-    .then(function (searchResults) {
-        res.send(searchResults);
+    bcrypt.genSalt(function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+            User.update({
+                weight: req.body.weight,
+                height: req.body.height,
+                email: email,
+                password: hash,
+            }, {
+                where: { id: req.user.id }
+            })
+            .then(function (user) {
+                res.redirect('/user/settings');
+            })
+            .catch(err => console.log(err));
+
+        });
     })
 });
 

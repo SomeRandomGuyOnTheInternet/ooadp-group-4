@@ -2,58 +2,44 @@
 <div id="colorlib-container">
     <div class="container">
         <div class="box1">
-            <div class="col-md-12">
-                <div class="row row-pb-md">
-                    <div class="col-md-12">
-                        <h1 class="font_color" style="display:inline-block;"><b>All Available Shops</b></h1>
-                        <a href="/admin/addShop"><button type="button" class="btn btn-success" style="float:right;">Add New Shop</button></a>
-                         <form method="post" action="/admin/searchShops"> 
-                         <input type="text"  class="typeahead tt-query" spellcheck="false" autocomplete="off" id="search" name="search" class="font_color" style="display:inline-block;" placeholder="search">
-                         <button><i class="fas fa-search"></i></button>
-                        </form>
-                        <hr>
-                    </div>
-                    
-                    {{#each shops}}
-                    <div class="col-md-6 recommended-shops">
-                        <div class="blog-entry">
-                            <div class="blog-img">
-                                <a class="action" href="/admin/editShop/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
-                            </div>
-                            <div class="desc">
-                                <p class="meta">
-                                    <b class="vendors"><b>{{this.name}}</b></b><br>
-                                    <span class="food_location"><b>{{ this.address }}</b></span><br>
-                                    <span class="food_rating">Rating:&nbsp;
-										{{#if this.rating}} 
-										<b class="recommended-{{ this.isRecommended }}">
-											{{#times this.rating}}
-												<i class="fas fa-star"></i>
-											{{/times}}
-											{{#times (math 5 "-" this.rating)}}
-												<i class="far fa-star"></i>
-											{{/times}}
-										</b>
-										{{else}} 
-											No rating available 
-										{{/if}}
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    {{/each}}
+            <div class="row row-pb-md">
+                <div class="col-md-12">
 
-                </div>
+                    <form id="searchFoodForm" action="">
+                        <header id="summary-header">
+                            <div class="accordion" id="filerAccordion">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h1 class="font_color"><b class="center_subtitle">Available Shops</b></h1>
+                                    </div>
+                                    {{!-- <div class="col-md-2">
+                                        <a href="/admin/addShop"><button type="button" class="btn btn-success btn-tall" style="width:100%;">Add
+                                                Shop</button></a>
+                                    </div> --}}
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <input type="text" name="searchShopInput" id="searchShopInput" class="form-control" placeholder="Search Shops" required>
+                                        </div>
+                                   </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </header>
+                    </form>
+
+                    <div class="row" id="all-shops-container">
+                    </div>
+
+                </div>     
             </div>
         </div>
 
-        {{#if deletedShops}}
+        {{#if deletedShops}}      
         <div class="box1">
             <div class="col-md-12">
                 <div class="row row-pb-md">
                     <div class="col-md-12">
-                        <h1 class="font_color" style="display:inline-block;"><b>All Deleted Shops</b></h1>\
+                        <h1 class="font_color" style="display:inline-block;"><b>Deleted Shops</b></h1>
                         <hr>
                     </div>
                     
@@ -99,3 +85,28 @@
 
     </div>
 </div>
+
+<script>
+    var allShops = {{{ json shops }}};
+    var availableTags = [];
+    createShopTemplate(allShops, '/admin/editShop/');
+    for (i = 0; i < allShops.length; i++) availableTags.push(allShops[i].name);
+
+    $("#searchShopInput").autocomplete({ source: availableTags });
+
+    $('#searchShopInput')
+    .bind("propertychange change keyup input", function (event) {
+        let searchName = $('#searchShopInput').val();
+
+        $.ajax({
+            type: 'post',
+            url: `/searchShops`,
+            data: { searchName },
+            dataType: 'text'
+        })
+        .done(function (data) {
+            createShopTemplate(JSON.parse(data), '/admin/editShop/');
+            $("#resetSearchLink").css("display", "block");
+        });
+    });
+</script>

@@ -49,10 +49,15 @@ router.get('/allShops', isVendor, (req, res) => {
             isDeleted: false,
         }
     }).then((shops) => {
+        let query_list = []
+        for (i=0; i< shops.length; i++) { 
+            query_list.push(shops[i].name); 
+        } 
         res.render('vendors/allShops', {
             title: "View Shops",
             shops: shops,
             user: req.user,
+            tags: query_list 
         });
     })
 })

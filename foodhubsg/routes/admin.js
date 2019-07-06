@@ -8,9 +8,7 @@ const updateShopRating = require('../helpers/updateShopRating');
 
 const Shop = require('../models/Shop');
 const FoodItem = require('../models/FoodItem')
-const User = require("../models/User"); 
-const Sequelize = require('sequelize'); 
-const Op = Sequelize.Op; 
+const User = require("../models/User");
 
 
 
@@ -38,6 +36,7 @@ router.get('/vendors', isAdmin, (req, res) => {
         })
         .then((deletedVendors) => {
             var groupedDeletedVendors = groupVendors(deletedVendors);
+            if (Object.entries(groupVendors(deletedVendors)).length === 0 && groupVendors(deletedVendors).constructor === Object) groupedDeletedVendors = null;
 
             res.render('admin/vendors', {
                 user: req.user,
@@ -58,7 +57,12 @@ router.get('/shops', isAdmin, (req, res) => {
     .then((shops) => {
         Shop.findAll({
             where: { isDeleted: true },
-            order: [ ['name', 'ASC'] ]
+            include: [{
+                model: User,
+                where: { isVendor: true, isDeleted: false },
+                required: true,
+            }],
+            raw: true,
         })
         .then((deletedShops) => {
             res.render('admin/shops', {
@@ -281,7 +285,7 @@ router.post('/undeleteVendor/:id', (req, res) => {
             { where: { VendorId: id } }
         )
         .then(function () {
-            req.flash('success', 'Shop has been succcessfully undeleted!');
+            req.flash('success', 'Vendor has been succcessfully reinstated!');
             res.redirect('/admin/vendors');
         });
     });
@@ -379,7 +383,7 @@ router.post('/deleteShop/:id', (req, res) => {
     });
 
     req.flash('success', 'Shop has been succcessfully deleted!');
-    res.redirect('/admin/vendors');
+    res.redirect('/admin/shops');
 });
 
 
@@ -396,7 +400,7 @@ router.post('/undeleteShop/:id', (req, res) => {
     });
     
     req.flash('success', 'Shop has been succcessfully reinstated!');
-    res.redirect('/admin/vendors');
+    res.redirect('/admin/shops');
 });
 
 
@@ -485,27 +489,6 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
         req.flash('success', 'Food has been succcessfully deleted!');
         res.redirect(`/admin/editShop/${foodItem.ShopId}`);
     });
-});
-
-
-router.post('/searchShops', (req, res) => {
-    var searchName = req.body.searchName;
-    var userLocation = {lat: req.user.latitude, lng: req.user.longititude};
-    var shopLocation = {lat: 0, lng: 0};
-
-    Shop.findAll({
-        where: {
-            name: {
-                [Sequelize.Op.like]: '%' + searchName + '%'
-            },
-        },
-        order: [
-            ['rating', 'DESC'],
-        ],
-    })
-    .then(function (searchResults) {
-        res.send(searchResults);
-    })
 });
 
 
