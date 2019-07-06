@@ -1,17 +1,17 @@
 const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
+const Sequelize = require('sequelize');
 const fs = require('fs');
 const router = express.Router();
 
 const isloggedOut = require('../helpers/isloggedOut');
+const generateCode = require('../helpers/generateCode');
 const upload = require('../helpers/imageUpload');
 
 const User = require('../models/User');
 const FoodItem = require('../models/FoodItem');
 const Shop = require('../models/Shop');
-const Sequelize = require('sequelize'); 
-const Op = Sequelize.Op; 
 
 
 router.get('/register', isloggedOut, (req, res) => {
@@ -81,6 +81,7 @@ router.post('/register', isloggedOut, (req, res) => {
 	const email = req.body.email.toLowerCase();
 	const password = req.body.password;
 	const isAdmin = isBanned = isVendor = isDeleted = false;
+	const refCode = generateCode();
 	var error;
 
 	var form = {
@@ -106,7 +107,7 @@ router.post('/register', isloggedOut, (req, res) => {
 			bcrypt.genSalt(10, function (err, salt) {
 				bcrypt.hash(password, salt, function (err, hash) {
 					User.create({
-						name, email, password: hash, weight, height, isAdmin, isBanned, isVendor
+						name, email, password: hash, weight, height, isAdmin, isBanned, isVendor, refCode
 					})
 					.then(function () {
 						req.flash('success', "Your email has been successfully registered!");
@@ -151,6 +152,28 @@ router.post('/upload', (req, res) => {
 			}
 		}
 	});
-})
+});
+
+
+router.post('/searchShops', (req, res) => {
+    var searchName = req.body.searchName;
+    var userLocation = {lat: req.user.latitude, lng: req.user.longititude};
+    var shopLocation = {lat: 0, lng: 0};
+
+    Shop.findAll({
+        where: {
+            name: { [Sequelize.Op.like]: '%' + searchName + '%' },
+            isDeleted: false
+        },
+        order: [
+            ['rating', 'DESC'],
+        ],
+    })
+    .then(function (searchResults) {
+        res.send(searchResults);
+    })
+});
+
+
 
 module.exports = router;

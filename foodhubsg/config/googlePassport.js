@@ -1,4 +1,5 @@
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const generateCode = require('../helpers/generateCode');
 const User = require('../models/User');
 
 function googleStrategy(passport) {
@@ -16,9 +17,10 @@ function googleStrategy(passport) {
             const name = profile.name.givenName;
             const email = profile.emails[0].value;
             const isAdmin = isBanned = isVendor = false;
+            const refCode = generateCode();
 
             if (!user) {
-                User.create({ name, email, isAdmin, isBanned, isVendor })
+                User.create({ name, email, isAdmin, isBanned, isVendor, refCode })
                 .then(user => done(null, user));
             } else {
                 done(null, user);

@@ -10,7 +10,8 @@ function createInstance(Shops, FoodItems, Users, FoodLogs) {
             isDeleted: false,
             isAdmin: false, 
             isVendor: false, 
-            isBanned: false 
+            isBanned: false,
+            refCode: "a00001"
         },
         { 
             name: 'Admin', 

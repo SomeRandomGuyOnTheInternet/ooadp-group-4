@@ -10,34 +10,35 @@
                             <div class="accordion" id="filerAccordion">
                                 <div class="row">
 
-                                    <div class="col-md-7">
-                                        <h1 class="font_color"><b class="center_subtitle">All Available Shops</b></h1>
-                                        <a data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                                    <div class="col-md-8">
+                                        <h1 class="font_color"><b class="center_subtitle">Available Shops</b></h1>
+                                        {{!-- <a data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                                             <i class="fas fa-filter hyperlink"></i>&nbsp;<span class="hyperlink">Filter</span>
-                                        </a>
+                                        </a> --}}
                                     </div>
                                 
-                                    <div class="col-md-5">
+                                    <div class="col-md-4">
                                         <div class="input-group">
-                                            <input type="text" name="searchShopInput" id="searchShopInput" class="form-control" placeholder="Eg: Grains" required>
-                                            <span class="input-group-btn">
+                                            <input type="text" name="searchShopInput" id="searchShopInput" class="form-control" placeholder="Search Shops" required>
+                                            {{!-- <span class="input-group-btn">
                                                 <input type="submit" name="action" value="Search Shops" class="btn btn-primary" style="margin-left:0.5em; height:50px;">
-                                            </span>
+                                            </span> --}}
                                         </div>
-                                        <a id="resetSearchLink" href="/user/shops" style="float:right;display:none;">
-                                            <i class="fas fa-undo hyperlink"></i>&nbsp;<span class="hyperlink">Reset Search</span>
-                                        </a>
                                     </div>
 
-                                    <div id="collapseFilter" class="collapse col-md-12" aria-labelledby="filterHeading" data-parent="#filerAccordion">
+                                    {{!-- <div id="collapseFilter" class="collapse col-md-12" aria-labelledby="filterHeading" data-parent="#filerAccordion">
                                         hfbpihbsfphfspbsf
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                             </div>
                             <hr>
                         </header>
                     </form>
+
+                    {{!-- <a id="resetSearchLink" href="/user/shops" style="float:right;display:none;">
+                        <i class="fas fa-undo hyperlink"></i>&nbsp;<span class="hyperlink">Reset Search</span>
+                    </a> --}}
 
                     <div class="row" id="all-shops-container">
                     </div>
@@ -56,13 +57,13 @@
 
     $("#searchShopInput").autocomplete({ source: availableTags });
 
-    $("form#searchFoodForm").submit(function (event) {
-        event.preventDefault();
+    $('#searchShopInput')
+    .bind("propertychange change keyup input", function (event) {
         let searchName = $('#searchShopInput').val();
 
         $.ajax({
             type: 'post',
-            url: `/user/searchShops`,
+            url: `/searchShops`,
             data: { searchName },
             dataType: 'text'
         })
