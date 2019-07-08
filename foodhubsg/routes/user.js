@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const router = express.Router();
 
 const isUser = require('../helpers/isUser');
+const getReferredUsers = require('../helpers/getReferredUsers');
 const arePointsNear = require('../helpers/arePointsNear');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
@@ -13,6 +14,7 @@ const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const User = require('../models/User');
+const Referral = require('../models/Referral');
 const Question = require('../models/Question');
 
 
@@ -166,10 +168,16 @@ router.get('/faq', isUser, (req, res) => {
 
 
 router.get('/settings', isUser, (req, res) => {
-    res.render('user/settings', {
-        user: req.user,
-        title: "Settings",
-    })
+    Referral.findAll({ where: { UserId: req.user.id }, raw: true })
+    .then((userReferrals) => {
+        var referredUsers = getReferredUsers(userReferrals);
+
+        res.render('user/settings', {
+            user: req.user,
+            title: "Settings",
+            referredUsers
+        })
+    });
 });
 
 
@@ -341,26 +349,36 @@ router.post('/settings', isUser, (req, res) => {
 
 
 router.post('/addRefCode', isUser, (req, res) => {
-    const friendRefCode = req.body.friendRefCode;
-	var error;
+    const refCode = req.body.refCode.toLowerCase();
+    var error;
 
-    bcrypt.genSalt(function (err, salt) {
-        bcrypt.hash(password, salt, function (err, hash) {
-            User.update({
-                weight: req.body.weight,
-                height: req.body.height,
-                email: email,
-                password: hash,
-            }, {
-                where: { id: req.user.id }
+    Promise.all([
+        User.findOne({ where: { refCode: refCode } }),
+        Referral.findAll({ where: { RefUserCode: refCode } })
+    ])
+    .then((data) => {
+        var referredUser = data[0];
+        var existingReferral = data[1];
+
+        if (!referredUser) error = "That referral code does not exist!";
+        if (existingReferral.length > 0) error = "You've already added that code!";
+        if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
+
+        if (!error) {
+            Referral.create({
+                UserId: req.user.id,
+                RefUserCode: referredUser.refCode,
+                RefUserId: referredUser.id,
             })
-            .then(function (user) {
+            .then(() => {
+                req.flash('success', "You have successfully added a referral code!");
                 res.redirect('/user/settings');
-            })
-            .catch(err => console.log(err));
-
-        });
-    })
+            });
+        } else {
+            req.flash('error', error);
+            res.redirect('/user/settings');
+        }
+    });
 });
 
 

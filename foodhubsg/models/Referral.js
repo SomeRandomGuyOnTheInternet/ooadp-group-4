@@ -4,9 +4,9 @@ const db = require('../config/DBConfig');
 
 
 const Referral = db.define('Referral', {
-    friendRefCode: {
+    RefUserCode: {
         type: Sequelize.STRING
-    },
+    },   
 });
 
 
