@@ -108,7 +108,7 @@ router.get('/shops/:id', isUser, (req, res) => {
         })
     })
     .catch((err) => {
-        req.flash('error', "That vendor does not exist!");
+        req.flash('error', "That shop does not exist!");
         res.redirect('/user/');
     });
 });
