@@ -92,7 +92,7 @@
                     {{#each referredUsers}}
                     <div class="row form-group">
                         <div class="col-md-12">
-                            <h5 style="margin-bottom: 20px;"><b>{{ name }}</b>&nbsp;(Code: {{refCode}})</h5>
+                            <a href="/user/userPage/{{this.id}}"><h5 style="margin-bottom: 20px;"><b>{{ name }}</b>&nbsp;(Code: {{refCode}})</h5> </a>
                             <b>{{ height }}</b> m
                             <b>{{ weight }}</b> kg
                         </div>

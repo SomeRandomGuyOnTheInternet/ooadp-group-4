@@ -381,6 +381,17 @@ router.post('/addRefCode', isUser, (req, res) => {
     });
 });
 
-
+router.get('/userPage/:id', (req, res) => { 
+    User.findOne({ 
+        where : { 
+            id : req.params.id, 
+        }
+    }).then((friend) => { 
+        res.render('user/friendsPage', { 
+            user: req.user, 
+            friend: friend, 
+        })
+    })
+})
 
 module.exports = router;
