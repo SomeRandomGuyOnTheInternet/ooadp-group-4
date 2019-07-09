@@ -7,8 +7,8 @@ const getReferredUsers = require('../helpers/getReferredUsers');
 const arePointsNear = require('../helpers/arePointsNear');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
-const getAverageCalories = require('../helpers/getAverageCalories');
 const groupFoodItems = require('../helpers/groupFoodItems');
+const updateUserInfo = require('../helpers/updateUserInfo');
 
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
@@ -48,12 +48,6 @@ router.get('/', isUser, (req, res) => {
             title: "Index",
             shops,
             groupedFoodItems,
-            numOfDays: Object.keys(groupedFoodItems).length,
-            dailyAverageCalories: getAverageCalories(groupedFoodItems),
-            breakfastAverageCalories: getAverageCalories(groupedFoodItems, "breakfastCalories"),
-            lunchAverageCalories: getAverageCalories(groupedFoodItems, "lunchCalories"),
-            dinnerAverageCalories: getAverageCalories(groupedFoodItems, "dinnerCalories"),
-            snacksAverageCalories: getAverageCalories(groupedFoodItems, "snacksCalories"),
         });
     });
 });
@@ -257,6 +251,7 @@ router.post('/addFood', isUser, (req, res) => {
                 createdAtDate: getCurrentDate(),
             })
             .then(() => {
+                updateUserInfo(user);
                 req.flash('success', "That food has been successfully added!");
                 res.redirect('/user/foodJournal');
             });
@@ -280,6 +275,7 @@ router.post('/editFood/:id', isUser, (req, res) => {
                 { where: { id: logId } },
             )
             .then(() => {
+                updateUserInfo(req.user);
                 req.flash('success', "You've successfully edited that food item!");
                 res.redirect('/user/foodJournal');
             });
@@ -296,6 +292,7 @@ router.post('/deleteFood/:id', isUser, (req, res) => {
 
     FoodLog.destroy({ where: { id: logId } })
     .then(() => {
+        updateUserInfo(req.user);
         req.flash('success', "You've successfully deleted that food item from your log!");
         res.redirect('/user/foodJournal');
     })

@@ -63,9 +63,9 @@
 					<div class="row">
 						<div class="col-md-8">
 							<h1 class="font_color"><b>Summary of your stats</b></h1>
-							<h5>(based on the previous {{numOfDays}} day{{#ifCond numOfDays '>' 1}}s{{/ifCond}} with entries in food journal)</h5>
+							<h5>(based on the previous {{user.daysActive}} day{{#ifCond user.daysActive '>' 1}}s{{/ifCond}} with entries in food journal)</h5>
 						</div>
-						{{#ifCond numOfDays '>=' 3}}
+						{{#ifCond user.daysActive '>=' 3}}
 		
 							<div class="col-md-4">
 								<br>
@@ -105,33 +105,33 @@
 								<tr>
 									<th scope="row">Breakfast (6am-10am)</th>
 									<td>~500 kcal</td>
-									<td>{{ breakfastAverageCalories }} kcal</td>
+									<td>{{ user.averageBreakfastCalories }} kcal</td>
 									<td>
-										{{math "500" "-" breakfastAverageCalories}} kcal              
+										{{math "500" "-" user.averageBreakfastCalories}} kcal              
 									</td>
 								</tr>
 								<tr>
 									<th scope="row">Lunch (12am-3pm)</th>
 									<td>~400 kcal</td>
-									<td>{{ lunchAverageCalories }} kcal</td>
+									<td>{{ user.averageLunchCalories }} kcal</td>
 									<td>
-										{{math "400" "-" lunchAverageCalories}} kcal
+										{{math "400" "-" user.averageLunchCalories}} kcal
 									</td>
 								</tr>
 								<tr>
 									<th scope="row">Dinner (6pm-10pm)</th>
 									<td>~450 kcal</td>
-									<td>{{ dinnerAverageCalories }} kcal</td>
+									<td>{{ user.averageDinnerCalories }} kcal</td>
 									<td>
-										{{math "450" "-" dinnerAverageCalories}} kcal
+										{{math "450" "-" user.averageDinnerCalories}} kcal
 									</td>
 								</tr>
 								<tr>
 									<th scope="row">Out-of-schedule snacks</th>
 									<td>&lt;150 kcal</td>
-									<td>{{ snacksAverageCalories }} kcal</td>
+									<td>{{ user.averageSnacksCalories }} kcal</td>
 									<td>
-										{{math "150" "-" snacksAverageCalories}} kcal
+										{{math "150" "-" user.averageSnacksCalories}} kcal
 									</td>
 								</tr>
 							</tbody>
@@ -139,9 +139,9 @@
 								<tr>
 									<th scope="row">Daily</th>
 									<td>~1500 kcal</td>
-									<td>{{ dailyAverageCalories }} kcal</td>
+									<td>{{ user.averageCalories }} kcal</td>
 									<td>
-										{{math "1500" "-" dailyAverageCalories}} kcal
+										{{math "1500" "-" user.averageCalories}} kcal
 									</td>
 								</tr>
 							</tfoot>
@@ -162,10 +162,10 @@
 	</div>
 </div>
 
-{{#ifCond numOfDays '>=' 3}}
+{{#ifCond user.daysActive '>=' 3}}
 <script>
 	var foodHistoryChart = document.getElementById('foodHistoryChart');
-	var foodItems = {{{ json groupedFoodItems }}}, dailyAverageCalories = {{{ dailyAverageCalories }}};
+	var foodItems = {{{ json groupedFoodItems }}}, dailyAverageCalories = {{{ user.averageCalories }}};
 	var labels = [], data = [], dailyData = [], breakfastData = [], lunchData = [], dinnerData = [], snacksData = [];
 	var red = '#E82020', green = '#4CAF50', grey = '#333333'
 
@@ -275,32 +275,32 @@
 			case 'Daily':
 				newData = dailyData;
 				idealCaloriesValue = 1500;
-				averageCaloriesValue = {{{ dailyAverageCalories }}};
+				averageCaloriesValue = {{{ user.averageCalories }}};
 				break;
 			case 'Breakfast':
 				newData = breakfastData;
 				idealCaloriesValue = 500;
-				averageCaloriesValue = {{{ breakfastAverageCalories }}};
+				averageCaloriesValue = {{{ user.averageBreakfastCalories }}};
 				break;
 			case 'Lunch':
 				newData = lunchData;
 				idealCaloriesValue = 400;
-				averageCaloriesValue = {{{ lunchAverageCalories }}};
+				averageCaloriesValue = {{{ user.averageLunchCalories }}};
 				break;
 			case 'Dinner':
 				newData = dinnerData;
 				idealCaloriesValue = 450;
-				averageCaloriesValue = {{{ dinnerAverageCalories }}};
+				averageCaloriesValue = {{{ user.averageDinnerCalories }}};
 				break;
 			case 'Snacks':
 				newData = snacksData;
 				idealCaloriesValue = 150;
-				averageCaloriesValue = {{{ snacksAverageCalories }}};
+				averageCaloriesValue = {{{ user.averageSnacksCalories }}};
 				break;
 			default:
 				newData = dailyData;
 				idealCaloriesValue = 1500;
-				averageCaloriesValue = {{{ dailyAverageCalories }}};
+				averageCaloriesValue = {{{ user.averageCalories }}};
 				break;
 		}
 

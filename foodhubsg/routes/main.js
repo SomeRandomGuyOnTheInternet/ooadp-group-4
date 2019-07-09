@@ -76,11 +76,12 @@ router.post('/', (req, res) => {
 
 router.post('/register', isloggedOut, (req, res) => {
 	const name = req.body.name;
-	const weight = req.body.weight;
-	const height = req.body.height;
 	const email = req.body.email.toLowerCase();
 	const password = req.body.password;
 	const isAdmin = isBanned = isVendor = isDeleted = false;
+	const weight = req.body.weight;
+	const height = req.body.height;
+	const bmi = (weight / (height * height)).toFixed(2);
 	const refCode = generateCode();
 	var error;
 
@@ -107,7 +108,16 @@ router.post('/register', isloggedOut, (req, res) => {
 			bcrypt.genSalt(10, function (err, salt) {
 				bcrypt.hash(password, salt, function (err, hash) {
 					User.create({
-						name, email, password: hash, weight, height, isAdmin, isBanned, isVendor, refCode
+						name, 
+						email, 
+						password: hash, 
+						isAdmin, 
+						isBanned, 
+						isVendor, 
+						weight, 
+						height,
+						bmi,
+						refCode
 					})
 					.then(function () {
 						req.flash('success', "Your email has been successfully registered!");

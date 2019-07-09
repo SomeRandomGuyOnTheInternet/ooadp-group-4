@@ -1,16 +1,18 @@
-function createInstance(Shops, FoodItems, Users, FoodLogs) {
+function createInstance(Users, Shops, FoodItems) {
     // The password for the following accounts is just 'password'
     Users.bulkCreate([
         { 
             name: 'User', 
             email: "user@mail.com", 
             password: '$2a$10$JgDMXgbEoiJdzIn8pk11Zusq2E0p8aq3ccCoqyv9dgInOK3xGGYJ6',
-            height: 1.78, 
-            weight: 74,
             isDeleted: false,
             isAdmin: false, 
             isVendor: false, 
             isBanned: false,
+            height: 1.76,
+            weight: 72,
+            bmi: 23.2,
+            gainedPoints: 100,
             refCode: "a00001"
         },
         { 
