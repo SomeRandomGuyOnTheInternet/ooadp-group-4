@@ -1,0 +1,45 @@
+{{> _msg }}
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+                    
+
+                    <div class="col-md-6 recommended-shops">
+                        <div class="blog-entry">
+
+                                    <h3 class="font_color">{{friend.name}} {{friend.email}} </h3>
+                                <p> User height: {{friend.height}} User Weight {{friend.weight}}</p>
+                            </div>
+                        </div>
+
+                    
+                    <form method="post" action="" id="comment-form">
+                        <label for="comment">Enter Your Comment Below</label>
+                        <textarea id="comment" name="comment" form="comment-form" class="form-control" rows="4" cols="50"
+                            required></textarea><br>
+                          <button type="submit" name="action" value="submitComment" id="submitComment" class="btn btn-primary"
+                                style="background-color: #4CAF50;" disabled>Submit</button>
+                    </form>
+                    </div>
+
+                   
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script> 
+
+    $('#comment')
+    .on("change", function(event) {
+        if ($('#comment').length == 0) {
+            $("#submitComment").attr("disabled", true);
+        } else {
+            $("#submitComment").attr("disabled", false);
+        }
+    });
+</script>
