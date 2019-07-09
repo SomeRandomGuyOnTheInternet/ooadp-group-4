@@ -15,11 +15,11 @@
                         </div>
 
                     
-                    <form method="post" action="" id="query-form">
+                    <form method="post" action="" id="comment-form">
                         <label for="comment">Enter Your Comment Below</label>
-                        <textarea id="comment" name="comment" form="query-form" class="form-control" rows="4" cols="50"
+                        <textarea id="comment" name="comment" form="comment-form" class="form-control" rows="4" cols="50"
                             required></textarea><br>
-                          <button type="submit" name="action" value="updateSettings" id="updateSettings" class="btn btn-primary"
+                          <button type="submit" name="action" value="submitComment" id="submitComment" class="btn btn-primary"
                                 style="background-color: #4CAF50;" disabled>Submit</button>
                     </form>
                     </div>
@@ -31,3 +31,15 @@
         </div>
     </div>
 </div>
+
+<script> 
+
+    $('#comment')
+    .on("change", function(event) {
+        if ($('#comment').length == 0) {
+            $("#submitComment").attr("disabled", true);
+        } else {
+            $("#submitComment").attr("disabled", false);
+        }
+    });
+</script>
