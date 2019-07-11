@@ -15,9 +15,9 @@
                         </div>
 
                     
-                    <form method="post" action="" id="comment-form">
+                    <form method="post" action="" id="compliment-form">
                         <label for="comment">Enter Your Compliment Below</label>
-                        <textarea id="comment" name="comment" form="comment-form" class="form-control" rows="4" cols="50"
+                        <textarea id="compliment" name="compliment" form="compliment-form" class="form-control" rows="4" cols="50"
                             required></textarea><br>
                           <button type="submit" name="action" value="submitComment" id="submitComment" class="btn btn-primary"
                                 style="background-color: #4CAF50;" disabled>Submit</button>
@@ -34,9 +34,9 @@
 
 <script> 
 
-    $('#comment')
+    $('#compliment')
     .on("change", function(event) {
-        if ($('#comment').length == 0) {
+        if ($('#compliment').length == 0) {
             $("#submitComment").attr("disabled", true);
         } else {
             $("#submitComment").attr("disabled", false);

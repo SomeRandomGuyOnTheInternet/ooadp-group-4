@@ -392,7 +392,18 @@ router.get('/userPage/:refCode', (req, res) => {
 })
 
 router.post('/userPage/:refCode', (req, res) => { 
-   
+   let compliment = req.body.compliment;
+   console.log(compliment);  
+   Referral.update({ 
+       compliment: compliment, 
+   }, { where: {
+    RefUserCode: req.params.refCode, 
+    UserId: req.user.id,
+}}).then((com) => {
+    console.log(com);
+    req.flash('success', 'Compoliment set'); 
+   res.redirect('/user/settings')
+    })
 })
 
 module.exports = router;
