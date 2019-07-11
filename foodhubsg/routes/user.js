@@ -378,10 +378,10 @@ router.post('/addRefCode', isUser, (req, res) => {
     });
 });
 
-router.get('/userPage/:id', (req, res) => { 
+router.get('/userPage/:refCode', (req, res) => { 
     User.findOne({ 
         where : { 
-            id : req.params.id, 
+            refCode: req.params.refCode, 
         }
     }).then((friend) => { 
         res.render('user/friendsPage', { 
@@ -389,6 +389,10 @@ router.get('/userPage/:id', (req, res) => {
             friend: friend, 
         })
     })
+})
+
+router.post('/userPage/:refCode', (req, res) => { 
+   
 })
 
 module.exports = router;
