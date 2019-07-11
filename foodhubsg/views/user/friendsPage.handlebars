@@ -13,6 +13,22 @@
                                 <p> User height: {{friend.height}} User Weight {{friend.weight}}</p>
                             </div>
                         </div>
+                    
+                     {{#each compliment}}
+
+
+                    <div class="col-md-6 recommended-shops">
+                        <div class="blog-entry">
+                            <div class="blog-img">
+
+                                    <h3 class="font_color">{{this.compliment}}</h3>
+                            
+                            </div>
+                        </div>
+                    </div>
+
+                    <div></div>
+                    {{/each}}
 
                     
                     <form method="post" action="" id="compliment-form">

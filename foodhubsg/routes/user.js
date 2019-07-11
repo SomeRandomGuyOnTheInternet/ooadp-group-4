@@ -39,17 +39,17 @@ router.get('/', isUser, (req, res) => {
             raw: true
         })
     ])
-    .then(function (data) {
-        var groupedFoodItems = groupFoodItems(data[1]);
-        var shops = data[0];
-        
-        res.render('user/index', {
-            user: req.user,
-            title: "Index",
-            shops,
-            groupedFoodItems,
+        .then(function (data) {
+            var groupedFoodItems = groupFoodItems(data[1]);
+            var shops = data[0];
+
+            res.render('user/index', {
+                user: req.user,
+                title: "Index",
+                shops,
+                groupedFoodItems,
+            });
         });
-    });
 });
 
 
@@ -60,13 +60,13 @@ router.get('/shops', isUser, (req, res) => {
             ['rating', 'DESC'],
         ],
     })
-    .then(function (shops) {
-        res.render('user/shops', {
-            user: req.user,
-            title: "Shops",
-            shops
+        .then(function (shops) {
+            res.render('user/shops', {
+                user: req.user,
+                title: "Shops",
+                shops
+            });
         });
-    });
 });
 
 
@@ -76,37 +76,37 @@ router.get('/shops/:id', isUser, (req, res) => {
     Promise.all([
         Shop.findOne({
             where: { id },
-        }), 
+        }),
         Food.findAll({
-            where: { 
-                ShopId: id, 
-                isDeleted: false, 
+            where: {
+                ShopId: id,
+                isDeleted: false,
             }
         }),
         Shop.findAll({
             where: { id: { [Sequelize.Op.not]: id } },
         }),
     ])
-    .then((data) => {
-        User.findOne({
-            where: { id: data[0].VendorId },
+        .then((data) => {
+            User.findOne({
+                where: { id: data[0].VendorId },
+            })
+                .then((vendor) => {
+                    console.log(data[2])
+                    res.render('user/shop', {
+                        title: data[0].name,
+                        shop: data[0],
+                        foodItems: data[1],
+                        otherShops: data[2],
+                        vendor,
+                        user: req.user
+                    });
+                })
         })
-        .then((vendor) => {
-            console.log(data[2])
-            res.render('user/shop', {
-                title: data[0].name,
-                shop: data[0],
-                foodItems: data[1],
-                otherShops: data[2],
-                vendor,
-                user: req.user
-            });
-        })
-    })
-    .catch((err) => {
-        req.flash('error', "That shop does not exist!");
-        res.redirect('/user/');
-    });
+        .catch((err) => {
+            req.flash('error', "That shop does not exist!");
+            res.redirect('/user/');
+        });
 });
 
 
@@ -125,7 +125,7 @@ router.get('/foodJournal', isUser, (req, res) => {
                 [FoodLog, 'createdAt', 'DESC'],
             ],
             raw: true
-        }), 
+        }),
         Food.findAll({
             include: [{
                 model: Shop,
@@ -134,14 +134,14 @@ router.get('/foodJournal', isUser, (req, res) => {
             raw: true
         }),
     ])
-    .then((FoodItems) => {
-        res.render('user/foodJournal', {
-            user: req.user,
-            title: "Food Journal",
-            groupedFoodItems: groupFoodItems(FoodItems[0], true),
-            allFoodItems: FoodItems[1]
+        .then((FoodItems) => {
+            res.render('user/foodJournal', {
+                user: req.user,
+                title: "Food Journal",
+                groupedFoodItems: groupFoodItems(FoodItems[0], true),
+                allFoodItems: FoodItems[1]
+            });
         });
-    });
 });
 
 
@@ -152,26 +152,26 @@ router.get('/faq', isUser, (req, res) => {
         ],
         raw: true
     })
-    .then((questions) => {
-        res.render('user/faq', {
-            user: req.user,
-	    questions: questions
+        .then((questions) => {
+            res.render('user/faq', {
+                user: req.user,
+                questions: questions
+            });
         });
-    });
 });
 
 
 router.get('/settings', isUser, (req, res) => {
     Referral.findAll({ where: { UserId: req.user.id }, raw: true })
-    .then((userReferrals) => {
-        var referredUsers = getReferredUsers(userReferrals);
+        .then((userReferrals) => {
+            var referredUsers = getReferredUsers(userReferrals);
 
-        res.render('user/settings', {
-            user: req.user,
-            title: "Settings",
-            referredUsers
-        })
-    });
+            res.render('user/settings', {
+                user: req.user,
+                title: "Settings",
+                referredUsers
+            })
+        });
 });
 
 
@@ -204,15 +204,15 @@ router.post('/foodJournal', isUser, (req, res) => {
             raw: true
         }),
     ])
-    .then((FoodItems) => {
-        res.render('user/foodJournal', {
-            user: req.user,
-            title: "Food Journal",
-            groupedFoodItems: groupFoodItems(FoodItems[0], true),
-            allFoodItems: FoodItems[1],
-            searchDate,
+        .then((FoodItems) => {
+            res.render('user/foodJournal', {
+                user: req.user,
+                title: "Food Journal",
+                groupedFoodItems: groupFoodItems(FoodItems[0], true),
+                allFoodItems: FoodItems[1],
+                searchDate,
+            });
         });
-    });
 });
 
 
@@ -225,11 +225,11 @@ router.post('/searchFood', (req, res) => {
         }),
         Food.findAll({
             where: { id: foodInput }
-        }), 
+        }),
     ])
-    .then(function (searchResults) {
-        res.send(searchResults);
-    })
+        .then(function (searchResults) {
+            res.send(searchResults);
+        })
 });
 
 
@@ -237,29 +237,29 @@ router.post('/addFood', isUser, (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
 
     Food.findOne({
-        where: { 
-            id: req.body.userFoodCode, 
-            isDeleted: false 
+        where: {
+            id: req.body.userFoodCode,
+            isDeleted: false
         }
     })
-    .then((foodItem) => {
-        if (foodItem) {
-            FoodLog.create({
-                UserId: user.id,
-                FoodId: selectedFoodId,
-                mealType: getMealType(),
-                createdAtDate: getCurrentDate(),
-            })
-            .then(() => {
-                updateUserInfo(user);
-                req.flash('success', "That food has been successfully added!");
+        .then((foodItem) => {
+            if (foodItem) {
+                FoodLog.create({
+                    UserId: user.id,
+                    FoodId: selectedFoodId,
+                    mealType: getMealType(),
+                    createdAtDate: getCurrentDate(),
+                })
+                    .then(() => {
+                        updateUserInfo(user);
+                        req.flash('success', "That food has been successfully added!");
+                        res.redirect('/user/foodJournal');
+                    });
+            } else {
+                req.flash('error', "This food item does not exist!");
                 res.redirect('/user/foodJournal');
-            });
-        } else {
-            req.flash('error', "This food item does not exist!");
-            res.redirect('/user/foodJournal');
-        }
-    });
+            }
+        });
 });
 
 
@@ -268,22 +268,22 @@ router.post('/editFood/:id', isUser, (req, res) => {
     const foodIdToUpdateTo = req.body.codeToChange;
 
     Food.findOne({ where: { id: foodIdToUpdateTo }, })
-    .then((foodItem) => {
-        if (foodItem) {
-            FoodLog.update(
-                { FoodId: foodIdToUpdateTo },
-                { where: { id: logId } },
-            )
-            .then(() => {
-                updateUserInfo(req.user);
-                req.flash('success', "You've successfully edited that food item!");
+        .then((foodItem) => {
+            if (foodItem) {
+                FoodLog.update(
+                    { FoodId: foodIdToUpdateTo },
+                    { where: { id: logId } },
+                )
+                    .then(() => {
+                        updateUserInfo(req.user);
+                        req.flash('success', "You've successfully edited that food item!");
+                        res.redirect('/user/foodJournal');
+                    });
+            } else {
+                req.flash('error', "That code does not exist!");
                 res.redirect('/user/foodJournal');
-            });
-        } else {
-            req.flash('error', "That code does not exist!");
-            res.redirect('/user/foodJournal');
-        }
-    })
+            }
+        })
 });
 
 
@@ -291,39 +291,39 @@ router.post('/deleteFood/:id', isUser, (req, res) => {
     var logId = req.params.id;
 
     FoodLog.destroy({ where: { id: logId } })
-    .then(() => {
-        updateUserInfo(req.user);
-        req.flash('success', "You've successfully deleted that food item from your log!");
-        res.redirect('/user/foodJournal');
-    })
+        .then(() => {
+            updateUserInfo(req.user);
+            req.flash('success', "You've successfully deleted that food item from your log!");
+            res.redirect('/user/foodJournal');
+        })
 });
 
 
 router.post('/faq', isUser, (req, res) => {
-	const isAdmin = isBanned = isVendor = false;
+    const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let question = req.body.question;
-	var error;
+    var error;
 
-	Question.create({	
-		UserId: req.user.id,
-		question: question,			
+    Question.create({
+        UserId: req.user.id,
+        question: question,
     })
-    .then((questions) => {        
-        req.flash('success', 'You have successfully created a question!');
-        res.redirect('/user/faq');
-    })
+        .then((questions) => {
+            req.flash('success', 'You have successfully created a question!');
+            res.redirect('/user/faq');
+        })
 });
 
 
 router.post('/settings', isUser, (req, res) => {
-	const name = req.body.name;
-	let email = req.body.email.toLowerCase();
-	let password = req.body.password;
-	const isAdmin = isBanned = isVendor = false;
-	let weight = req.body.weight;
-	let height = req.body.height;	
-	var error;
+    const name = req.body.name;
+    let email = req.body.email.toLowerCase();
+    let password = req.body.password;
+    const isAdmin = isBanned = isVendor = false;
+    let weight = req.body.weight;
+    let height = req.body.height;
+    var error;
 
     bcrypt.genSalt(function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
@@ -333,12 +333,12 @@ router.post('/settings', isUser, (req, res) => {
                 email: email,
                 password: hash,
             }, {
-                where: { id: req.user.id }
-            })
-            .then(function (user) {
-                res.redirect('/user/settings');
-            })
-            .catch(err => console.log(err));
+                    where: { id: req.user.id }
+                })
+                .then(function (user) {
+                    res.redirect('/user/settings');
+                })
+                .catch(err => console.log(err));
 
         });
     })
@@ -353,57 +353,66 @@ router.post('/addRefCode', isUser, (req, res) => {
         User.findOne({ where: { refCode: refCode } }),
         Referral.findAll({ where: { RefUserCode: refCode } })
     ])
-    .then((data) => {
-        var referredUser = data[0];
-        var existingReferral = data[1];
+        .then((data) => {
+            var referredUser = data[0];
+            var existingReferral = data[1];
 
-        if (!referredUser) error = "That referral code does not exist!";
-        if (existingReferral.length > 0) error = "You've already added that code!";
-        if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
+            if (!referredUser) error = "That referral code does not exist!";
+            if (existingReferral.length > 0) error = "You've already added that code!";
+            if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
 
-        if (!error) {
-            Referral.create({
-                UserId: req.user.id,
-                RefUserCode: referredUser.refCode,
-                RefUserId: referredUser.id,
-            })
-            .then(() => {
-                req.flash('success', "You have successfully added a referral code!");
+            if (!error) {
+                Referral.create({
+                    UserId: req.user.id,
+                    RefUserCode: referredUser.refCode,
+                    RefUserId: referredUser.id,
+                })
+                    .then(() => {
+                        req.flash('success', "You have successfully added a referral code!");
+                        res.redirect('/user/settings');
+                    });
+            } else {
+                req.flash('error', error);
                 res.redirect('/user/settings');
-            });
-        } else {
-            req.flash('error', error);
-            res.redirect('/user/settings');
-        }
-    });
+            }
+        });
 });
 
-router.get('/userPage/:refCode', (req, res) => { 
-    User.findOne({ 
-        where : { 
-            refCode: req.params.refCode, 
+router.get('/userPage/:refCode', (req, res) => {
+    Referral.findOne({
+        where: {
+            RefUserCode: req.params.refCode
         }
-    }).then((friend) => { 
-        res.render('user/friendsPage', { 
-            user: req.user, 
-            friend: friend, 
+    }).then((referral) => {
+        User.findOne({
+            where: {
+                refCode: req.params.refCode,
+            }
+        }).then((friend) => {
+            res.render('user/friendsPage', {
+                user: req.user,
+                friend: friend,
+                compliment: referral
+            })
         })
     })
+
 })
 
-router.post('/userPage/:refCode', (req, res) => { 
-   let compliment = req.body.compliment;
-   console.log(compliment);  
-   Referral.update({ 
-       compliment: compliment, 
-   }, { where: {
-    RefUserCode: req.params.refCode, 
-    UserId: req.user.id,
-}}).then((com) => {
-    console.log(com);
-    req.flash('success', 'Compoliment set'); 
-   res.redirect('/user/settings')
-    })
+router.post('/userPage/:refCode', (req, res) => {
+    let compliment = req.body.compliment;
+    console.log(compliment);
+    Referral.update({
+        compliment: compliment,
+    }, {
+            where: {
+                RefUserCode: req.params.refCode,
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compoliment set');
+            res.redirect('/user/settings')
+        })
 })
 
 module.exports = router;
