@@ -8,7 +8,7 @@
 	<div class="row" style="margin:0;">
 		<div class="col-md-12">
 			<div class="col-md-8">
-				<div class="align-items-center" id="welcome-msg">
+				<div class="d-flex align-items-center" id="welcome-msg">
 					<div class="splash-text-container">
 						<h2 class="welcome-header">Welcome to a healthier you.</h2>
 						<p class="welcome-body">We have everything you need to get your diet in control,
@@ -90,7 +90,7 @@
 
 <script>
 	$(window).on('resize load', function() {
-		if ($(window).width() > 1200) {
+		if ($(window).width() > 1400) {
 			$('#login-div').addClass('col-md-4');
 			$('#google-login-div').addClass('col-md-8');
 			$('#login-div').removeClass('col-md-12');

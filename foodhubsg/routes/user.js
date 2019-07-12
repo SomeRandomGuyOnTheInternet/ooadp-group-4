@@ -3,7 +3,6 @@ const Sequelize = require('sequelize');
 const router = express.Router();
 
 const isUser = require('../helpers/isUser');
-const getReferredUsers = require('../helpers/getReferredUsers');
 const arePointsNear = require('../helpers/arePointsNear');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
@@ -25,7 +24,10 @@ router.get('/', isUser, (req, res) => {
             where: {
                 location: req.user.location,
                 isDeleted: false,
-            }
+            },
+            order: [
+                ['rating', 'DESC'],
+            ],
         }),
         Food.findAll({
             include: [{
@@ -92,7 +94,6 @@ router.get('/shops/:id', isUser, (req, res) => {
             where: { id: data[0].VendorId },
         })
         .then((vendor) => {
-            console.log(data[2])
             res.render('user/shop', {
                 title: data[0].name,
                 shop: data[0],
@@ -135,11 +136,15 @@ router.get('/foodJournal', isUser, (req, res) => {
         }),
     ])
     .then((FoodItems) => {
+        var availableDates = []
+        for (i = 0; i < FoodItems[0].length; i++) availableDates.push(FoodItems[0][i]['FoodLogs.createdAtDate']);
+
         res.render('user/foodJournal', {
             user: req.user,
             title: "Food Journal",
             groupedFoodItems: groupFoodItems(FoodItems[0], true),
-            allFoodItems: FoodItems[1]
+            allFoodItems: FoodItems[1],
+            availableDates
         });
     });
 });
@@ -162,15 +167,21 @@ router.get('/faq', isUser, (req, res) => {
 
 
 router.get('/settings', isUser, (req, res) => {
-    Referral.findAll({ where: { UserId: req.user.id }, raw: true })
-    .then((userReferrals) => {
-        var referredUsers = getReferredUsers(userReferrals);
-
+    Referral.findAll({
+        where: { UserId: req.user.id },
+        include: {
+            model: User,
+            required: true,
+            where: { id: { [Sequelize.Op.not]: req.user.id } },
+        },
+        raw: true 
+    })
+    .then((referredUsers) => {
         res.render('user/settings', {
             user: req.user,
             title: "Settings",
             referredUsers
-        })
+        });
     });
 });
 
@@ -234,7 +245,7 @@ router.post('/searchFood', (req, res) => {
 
 
 router.post('/addFood', isUser, (req, res) => {
-    var user = req.user, selectedFoodId = req.body.userFoodCode;
+    var user = req.user, selectedFoodId = req.body.userFoodCode, gainedPoints = 0, pointsStatement = "";
 
     Food.findOne({
         where: { 
@@ -244,6 +255,11 @@ router.post('/addFood', isUser, (req, res) => {
     })
     .then((foodItem) => {
         if (foodItem) {
+            if (foodItem.isRecommended == true) {
+                gainedPoints = 100;
+                pointsStatement = " and you've gained 100 points from adding a recommended food item"
+            }
+
             FoodLog.create({
                 UserId: user.id,
                 FoodId: selectedFoodId,
@@ -251,8 +267,8 @@ router.post('/addFood', isUser, (req, res) => {
                 createdAtDate: getCurrentDate(),
             })
             .then(() => {
-                updateUserInfo(user);
-                req.flash('success', "That food has been successfully added!");
+                updateUserInfo(user, gainedPoints);
+                req.flash('success', "That food has been successfully added" + pointsStatement + "!");
                 res.redirect('/user/foodJournal');
             });
         } else {

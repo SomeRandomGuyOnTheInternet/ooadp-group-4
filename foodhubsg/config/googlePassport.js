@@ -16,11 +16,13 @@ function googleStrategy(passport) {
         .then(user => {
             const name = profile.name.givenName;
             const email = profile.emails[0].value;
-            const isAdmin = isBanned = isVendor = false;
+            const isDeleted = isAdmin = isBanned = isVendor = false;
+            const gainedPoints = 50;
+            const averageCalories = averageBreakfastCalories = averageLunchCalories = averageDinnerCalories = averageSnacksCalories = daysActive = 0;
             const refCode = generateCode();
 
             if (!user) {
-                User.create({ name, email, isAdmin, isBanned, isVendor, refCode })
+                User.create({ name, email, isDeleted, isAdmin, isBanned, isVendor, gainedPoints, averageCalories, averageBreakfastCalories, averageLunchCalories, averageDinnerCalories, averageSnacksCalories, daysActive, refCode })
                 .then(user => done(null, user));
             } else {
                 done(null, user);

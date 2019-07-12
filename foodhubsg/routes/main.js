@@ -82,6 +82,8 @@ router.post('/register', isloggedOut, (req, res) => {
 	const weight = req.body.weight;
 	const height = req.body.height;
 	const bmi = (weight / (height * height)).toFixed(2);
+	const gainedPoints = 50;
+	const averageCalories = averageBreakfastCalories = averageLunchCalories = averageDinnerCalories = averageSnacksCalories = daysActive = 0;
 	const refCode = generateCode();
 	var error;
 
@@ -117,6 +119,9 @@ router.post('/register', isloggedOut, (req, res) => {
 						weight, 
 						height,
 						bmi,
+						gainedPoints,
+						averageCalories, averageBreakfastCalories, averageLunchCalories, averageDinnerCalories, averageSnacksCalories,
+						daysActive,
 						refCode
 					})
 					.then(function () {

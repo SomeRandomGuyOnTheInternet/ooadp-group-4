@@ -125,7 +125,7 @@
                                 <hr align="left" width="5%">
                                 <div class="row" style="padding-bottom: 1em;">
 
-                                    <div class="col-3 meal-type">
+                                    <div class="col-sm-12 col-md-6 col-lg-3 meal-type">
                                         <h5 style="margin-bottom: 0; display: inline"><b>Breakfast</b> (6am - 10am)</h5>
                                         <article class="food-journal">
                                             <header>
@@ -158,7 +158,7 @@
                                         </article>
                                     </div>
 
-                                    <div class="col-3 meal-type">
+                                    <div class="col-sm-12 col-md-6 col-lg-3 meal-type">
                                         <h5 style="margin-bottom: 0; display: inline"><b>Lunch</b> (12pm - 3pm)</h5>
                                         <article class="food-journal">
                                             <header>
@@ -191,7 +191,7 @@
                                         </article>
                                     </div>
 
-                                    <div class="col-3 meal-type">
+                                    <div class="col-sm-12 col-md-6 col-lg-3 meal-type">
                                         <h5 style="margin-bottom: 0; display: inline"><b>Dinner</b> (6pm - 10pm)</h5>
                                         <article class="food-journal">
                                             <header>
@@ -224,7 +224,7 @@
                                         </article>
                                     </div>
 
-                                    <div class="col-3 meal-type">
+                                    <div class="col-sm-12 col-md-6 col-lg-3 meal-type" style="border-right: none;">
                                         <h5 style="margin-bottom: 0; display: inline"><b>Snacks</b></h5>
                                         <article class="food-journal">
                                             <header>
@@ -280,10 +280,12 @@
 
 <script>
     var allFoodItems = {{{ json allFoodItems }}}, availableTags = [];
-    for (i = 0; i < allFoodItems.length; i++) availableTags.push(allFoodItems[i].name);
+
+    for (i = 0; i < allFoodItems.length; i++) {
+        if (!availableTags.includes(allFoodItems[i].name)) availableTags.push(allFoodItems[i].name);
+    }
 
     $("#foodInput").autocomplete({ source: availableTags });
-
     $('#foodInput')
     .bind("propertychange change click keyup input paste", function (event) {
         event.preventDefault();

@@ -35,7 +35,7 @@ CREATE TABLE `FoodItems` (
   PRIMARY KEY (`id`),
   KEY `ShopId` (`ShopId`),
   CONSTRAINT `fooditems_ibfk_1` FOREIGN KEY (`ShopId`) REFERENCES `shops` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `FoodItems` (
 
 LOCK TABLES `FoodItems` WRITE;
 /*!40000 ALTER TABLE `FoodItems` DISABLE KEYS */;
-INSERT INTO `FoodItems` VALUES (1,'Aglio Olio','571',0,0,'/images/food-image-1.png','2019-07-03 07:55:36','2019-07-06 01:59:26',3),(2,'Cesear Salad','346',0,1,'/images/food-image-2.png','2019-07-03 07:55:36','2019-07-06 01:59:26',3),(3,'Cream of Mushroom Soup','207',0,1,'/images/food-image-8.jpg','2019-07-03 07:55:36','2019-07-06 01:59:26',3),(4,'Chicken Rice','436',0,1,'/images/food-image-4.jpg','2019-07-03 07:55:36','2019-07-06 01:59:26',3),(5,'Chicken Pulao','682',0,0,'/images/food-image-5.jpg','2019-07-03 07:55:36','2019-07-06 01:59:26',3),(6,'Mixed Vegetable Rice','683',0,0,'/images/food-image-6.png','2019-07-03 07:55:36','2019-07-06 02:12:22',2),(7,'Waffle Waffle Waffle','624',0,0,'/images/nice-waffle.jpg','2019-07-04 09:55:10','2019-07-06 01:59:35',6);
+INSERT INTO `FoodItems` VALUES (1,'Aglio Olio','571',0,0,'/images/food-image-1.png','2019-07-12 09:42:37','2019-07-12 09:42:37',3),(2,'Cesear Salad','346',0,1,'/images/food-image-2.png','2019-07-12 09:42:37','2019-07-12 09:42:37',3),(3,'Cream of Mushroom Soup','207',0,1,'/images/food-image-8.jpg','2019-07-12 09:42:37','2019-07-12 09:42:37',3),(4,'Chicken Rice','436',0,1,'/images/food-image-4.jpg','2019-07-12 09:42:37','2019-07-12 09:42:37',3),(5,'Chicken Pulao','682',0,0,'/images/food-image-5.jpg','2019-07-12 09:42:37','2019-07-12 09:42:37',3),(6,'Mixed Vegetable Rice','682',0,0,'/images/food-image-6.png','2019-07-12 09:42:37','2019-07-12 09:42:37',2),(7,'Chicken Fried Rice','768',1,0,'/uploads/2/2-1562924730755.png','2019-07-12 09:45:50','2019-07-12 09:47:02',1),(8,'Chicken Fried Rice','768',0,0,'/uploads/2/2-1562924730755.png','2019-07-12 09:45:50','2019-07-12 09:45:50',2),(9,'Chicken Fried Rice','768',0,0,'/uploads/2/2-1562924730755.png','2019-07-12 09:45:50','2019-07-12 09:45:50',4),(10,'Chicken Fried Rice','768',1,0,'/uploads/2/2-1562924730755.png','2019-07-12 09:45:50','2019-07-12 09:47:18',5),(11,'Chicken Fried Rice','768',0,0,'/uploads/2/2-1562924730755.png','2019-07-12 09:45:50','2019-07-12 09:45:50',6),(12,'Tandoori Chicken Salad','563',0,0,'/uploads/2/2-1562924783457.jpg','2019-07-12 09:46:31','2019-07-12 09:46:31',1),(13,'Tandoori Chicken Salad','563',0,0,'/uploads/2/2-1562924783457.jpg','2019-07-12 09:46:31','2019-07-12 09:46:31',2),(14,'Tandoori Chicken Salad','563',1,0,'/uploads/2/2-1562924783457.jpg','2019-07-12 09:46:31','2019-07-12 09:47:23',5),(15,'Tandoori Chicken Salad','563',1,0,'/uploads/2/2-1562924783457.jpg','2019-07-12 09:46:31','2019-07-12 09:46:55',4),(16,'Tandoori Chicken Salad','563',0,0,'/uploads/2/2-1562924783457.jpg','2019-07-12 09:46:31','2019-07-12 09:46:31',6);
 /*!40000 ALTER TABLE `FoodItems` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-06 10:20:22
+-- Dump completed on 2019-07-12 18:10:03
