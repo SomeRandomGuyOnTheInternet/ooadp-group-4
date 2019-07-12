@@ -268,8 +268,9 @@ router.post('/addFood', isUser, (req, res) => {
                 updateUserInfo(user, gainedPoints);
                 req.flash('success', "That food has been successfully added" + pointsStatement + "!");
                 res.redirect('/user/foodJournal');
-            }
-        });
+            });
+        };
+    });
 });
 
 
