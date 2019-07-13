@@ -14,41 +14,27 @@
                             </div>
                         </div>
                     
-                     {{#each compliment}}
-
-
-                    <div class="col-md-6 recommended-shops">
-                        <div class="blog-entry">
-
-                                    <p class="font_color">{{this.compliment}}</p>
-                            
-                        </div>
-                    </div>
-
-                    <div></div>
-                    {{/each}}
 
                     {{#if compliment}}
-                    
                     <form method="post" action="" id="compliment-form">
-                        <label for="comment">Enter Your Compliment Below</label>
-                        <textarea id="compliment" name="compliment" form="compliment-form" class="form-control" rows="4" cols="50"
-                            required></textarea><br>
-                          <button type="submit" name="action" value="submitComment" id="submitComment" class="btn btn-primary"
-                                style="background-color: #4CAF50;" disabled>Submit</button>
-                    </form>
-                    </div>
-
-                    {{else}}                   
-                     <form method="post" action="" id="compliment-form">
                         <label for="comment">Edit Your Compliment Below</label>
                         <textarea id="compliment" name="compliment" form="compliment-form" class="form-control" rows="4" cols="50"
-                            placeholder="compliment" required></textarea><br>
+                            placeholder="compliment" required>{{compliment.compliment}}</textarea><br>
+                          <button type="submit" name="action" value="submitComment" id="submitComment" class="btn btn-primary"
+                                style="background-color: #4CAF50;" disabled >Submit</button>
+                    </form>
+                    </div>
+                   
+
+                    {{else}}                   
+                      <form method="post" action="" id="compliment-form">
+                        <label for="comment">Enter Your Compliment Below</label>
+                        <textarea id="compliment" name="compliment" form="compliment-form" class="form-control" rows="4" cols="50"
+                            required></textarea>
                           <button type="submit" name="action" value="submitComment" id="submitComment" class="btn btn-primary"
                                 style="background-color: #4CAF50;" disabled>Submit</button>
                     </form>
                     </div>
-
                     {{/if}}
                 </div>
             </div>
