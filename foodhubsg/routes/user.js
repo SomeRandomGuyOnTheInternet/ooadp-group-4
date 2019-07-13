@@ -392,7 +392,7 @@ router.post('/addRefCode', isUser, (req, res) => {
 });
 
 
-router.get('/userPage/:refCode', (req, res) => {
+router.get('/userPage/:refCode', isUser, (req, res) => {
     Promise.all([
         Referral.findOne({
             where: {
@@ -406,6 +406,7 @@ router.get('/userPage/:refCode', (req, res) => {
         })
     ])
         .then((friend) => {
+            console.log(friend); 
             res.render('user/friendsPage', {
                 user: req.user,
                 friend: friend[1],
@@ -415,7 +416,7 @@ router.get('/userPage/:refCode', (req, res) => {
 })
 
 
-router.post('/userPage/:refCode', (req, res) => {
+router.post('/userPage/:refCode', isUser, (req, res) => {
     let compliment = req.body.compliment;
     console.log(compliment);
     Referral.update({
