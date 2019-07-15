@@ -10,6 +10,9 @@ const PointsHistory = db.define('PointsHistory', {
     pointsSource: {
         type: Sequelize.STRING
     },
+    hasViewed: {
+        type: Sequelize.BOOLEAN
+    }
 }); 
 
 

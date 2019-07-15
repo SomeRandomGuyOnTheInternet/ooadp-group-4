@@ -105,8 +105,12 @@ router.get('/shops/:id', isUser, (req, res) => {
         })
         .catch((err) => {
             req.flash('error', "That shop does not exist!");
-            res.redirect('/user/');
+            res.redirect('/user/shops');
         });
+    })
+    .catch((err) => {
+        req.flash('error', "That shop does not exist!");
+        res.redirect('/user/shops');
     });
 });
 
@@ -167,20 +171,40 @@ router.get('/faq', isUser, (req, res) => {
 
 
 router.get('/settings', isUser, (req, res) => {
-    Referral.findAll({
-        where: { UserId: req.user.id },
-        include: {
-            model: User,
-            required: true,
-            where: { id: { [Sequelize.Op.not]: req.user.id } },
-        },
-        raw: true 
-    })
-    .then((referredUsers) => {
+    Promise.all([
+        Referral.findAll({
+            where: { UserId: req.user.id },
+            include: {
+                model: User,
+                required: true,
+                where: { id: { [Sequelize.Op.not]: req.user.id } },
+            },
+            raw: true
+        }),
+        Referral.findAll({
+            where: { UserId: req.user.id },
+            include: {
+                model: User,
+                required: true,
+                where: { id: { [Sequelize.Op.not]: req.user.id } },
+                include: {
+                    model: FoodLog,
+                    include: [{ model: Food }],
+                    required: true,
+                }
+            },
+            // order: [
+            //     [FoodLog, 'createdAt', 'ASC'],
+            // ],
+            raw: true,
+        })
+    ])
+    .then((data) => {
+        console.log(data[1])
         res.render('user/settings', {
             user: req.user,
             title: "Settings",
-            referredUsers
+            referredUsers: data[0]
         });
     });
 });
@@ -271,7 +295,10 @@ router.post('/addFood', isUser, (req, res) => {
                 req.flash('success', "That food has been successfully added" + pointsStatement + "!");
                 res.redirect('/user/foodJournal');
             });
-        };
+        } else {
+            req.flash('error', "That food item does not exist!");
+            res.redirect('/user/foodJournal');
+        }
     });
 });
 
@@ -322,10 +349,10 @@ router.post('/faq', isUser, (req, res) => {
         UserId: req.user.id,
         question: question,
     })
-        .then((questions) => {
-            req.flash('success', 'You have successfully created a question!');
-            res.redirect('/user/faq');
-        })
+    .then((questions) => {
+        req.flash('success', 'You have successfully created a question!');
+        res.redirect('/user/faq');
+    })
 });
 
 
@@ -364,7 +391,7 @@ router.post('/addRefCode', isUser, (req, res) => {
 
     Promise.all([
         User.findOne({ where: { refCode: refCode } }),
-        Referral.findAll({ where: { RefUserCode: refCode } })
+        Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } })
     ])
     .then((data) => {
         var referredUser = data[0];
