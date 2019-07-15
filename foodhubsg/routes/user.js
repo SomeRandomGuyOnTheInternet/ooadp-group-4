@@ -167,7 +167,8 @@ router.get('/faq', isUser, (req, res) => {
 
 
 router.get('/settings', isUser, (req, res) => {
-    Referral.findAll({
+    Promise.all([
+           Referral.findAll({
         where: { UserId: req.user.id },
         include: {
             model: User,
@@ -175,12 +176,23 @@ router.get('/settings', isUser, (req, res) => {
             where: { id: { [Sequelize.Op.not]: req.user.id } },
         },
         raw: true
-    })
-        .then((referredUsers) => {
+    }),
+        Referral.findAll({ 
+            where: {RefUserId: req.user.id}, 
+            include: {
+                model: User,
+                required: true,
+                where: { id: req.user.id },
+            },
+            raw: true
+        })
+    ]).then((referredUsers) => {
+        console.log(referredUsers[1])
             res.render('user/settings', {
                 user: req.user,
                 title: "Settings",
-                referredUsers
+                referredUsers: referredUsers[0],
+                friendedUsers: referredUsers[1]
             });
         });
 });

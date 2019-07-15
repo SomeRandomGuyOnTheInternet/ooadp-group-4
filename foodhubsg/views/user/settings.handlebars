@@ -101,6 +101,19 @@
                     {{else}}
                     <h4><b>You have not referred any one yet!</b></h4>
                     {{/each}}
+
+                    {{#each friendedUsers}}
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <a href="/user/userPage/{{ 'User.refCode' }}"><h5 style="margin-bottom: 20px;"><b>{{ 'User.name' }}</b>&nbsp;(Code: {{ 'User.refCode' }})</h5> </a>
+                            <b>{{ 'User.height' }}</b> m
+                            <b>{{ 'User.weight' }}</b> kg
+                        </div>
+                    </div>
+                    <hr>
+                    {{else}}
+                    <h4><b>No one has added you yet</b></h4>
+                    {{/each}}
                 </div>
             </div>
         </div>
