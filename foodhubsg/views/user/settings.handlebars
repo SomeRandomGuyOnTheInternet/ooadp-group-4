@@ -120,11 +120,17 @@
                     {{#each friendedUsers}}
                     <div class="row form-group">
                         <div class="col-md-12">
+                            {{#if this.compliment}}
                             <b>{{this.compliment}}</b> <br>
                             <b> Date Added: </b>
                             <b>{{formatDate this.createdAt 'DD-MM-YYYY'}}</b> <br>
                             <b> Date Updated: </b>
                             <b>{{formatDate this.updatedAt 'DD-MM-YYYY'}}</b>
+                            {{else}}
+                            <h4><b>This message is deleted</b></h4>
+                            {{/if}}
+
+                           
                         </div>
                     </div>
                     <hr>

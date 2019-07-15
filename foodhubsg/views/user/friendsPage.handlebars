@@ -26,7 +26,9 @@
                                 style="background-color: #4CAF50;" disabled >Submit</button>
                     </form>
                     </div>
-                   
+                    <a href="/user/deleteCompliment/{{compliment.id}}">
+                    <button type="submit" name="action" value="submitComment" id="submitComment" class="btn btn-primary"
+                                style="background-color: #4CAF50;">Delete</button> </a>
 
                     {{else}}                   
                       <form method="post" action="" id="compliment-form">
