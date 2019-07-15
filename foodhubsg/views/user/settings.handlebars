@@ -17,8 +17,8 @@
                             <div class="row form-group">
                                 <div class="col-md-6">
                                     <label>Name</label>
-                                    <input name="name" id="name" type="text" class="form-control"
-                                        value="" placeholder="{{user.name}}" style="margin-bottom: 1em;">
+                                    <input name="name" id="name" type="text" class="form-control" value=""
+                                        placeholder="{{user.name}}" style="margin-bottom: 1em;">
                                 </div>
 
                                 <div class="col-md-3">
@@ -34,11 +34,11 @@
                                 </div>
 
                                 {{#if user.password}}
-                                    <div class="col-md-12 new-password">
-                                        <label>Password</label>
-                                        <input name="password" id="password" type="password" class="form-control delprefix"
-                                            placeholder="(unchanged)">
-                                    </div>
+                                <div class="col-md-12 new-password">
+                                    <label>Password</label>
+                                    <input name="password" id="password" type="password" class="form-control delprefix"
+                                        placeholder="(unchanged)">
+                                </div>
                                 {{/if}}
                             </div>
                             <br>
@@ -67,8 +67,8 @@
                         <div class="row form-group">
                             <div class="col-md-12">
                                 <label>Add Referral Code</label>
-                                <input name="refCode" id="refCode" type="text" class="form-control"
-                                    value="" placeholder="Eg: a00001">
+                                <input name="refCode" id="refCode" type="text" class="form-control" value=""
+                                    placeholder="Eg: a00001">
                             </div>
                         </div>
 
@@ -92,7 +92,10 @@
                     {{#each referredUsers}}
                     <div class="row form-group">
                         <div class="col-md-12">
-                            <a href="/user/userPage/{{ 'User.refCode' }}"><h5 style="margin-bottom: 20px;"><b>{{ 'User.name' }}</b>&nbsp;(Code: {{ 'User.refCode' }})</h5> </a>
+                            <a href="/user/userPage/{{ 'User.refCode' }}">
+                                <h5 style="margin-bottom: 20px;"><b>{{ 'User.name' }}</b>&nbsp;(Code:
+                                    {{ 'User.refCode' }})</h5>
+                            </a>
                             <b>{{ 'User.height' }}</b> m
                             <b>{{ 'User.weight' }}</b> kg
                         </div>
@@ -101,23 +104,33 @@
                     {{else}}
                     <h4><b>You have not referred any one yet!</b></h4>
                     {{/each}}
-
-                    {{#each friendedUsers}}
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <a href="/user/userPage/{{ 'User.refCode' }}"><h5 style="margin-bottom: 20px;"><b>{{ 'User.name' }}</b>&nbsp;(Code: {{ 'User.refCode' }})</h5> </a>
-                            <b>{{ 'User.height' }}</b> m
-                            <b>{{ 'User.weight' }}</b> kg
-                        </div>
-                    </div>
-                    <hr>
-                    {{else}}
-                    <h4><b>No one has added you yet</b></h4>
-                    {{/each}}
                 </div>
             </div>
         </div>
 
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+
+                    <header>
+                        <h1 class="font_color"><b>Your Messages</b></h1>
+                        <hr>
+                    </header>
+
+                    {{#each friendedUsers}}
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <b>{{this.compliment}}</b> m
+                        </div>
+                    </div>
+                    <hr>
+                    {{else}}
+                    <h4><b>No one has left a message for you yet</b></h4>
+                    {{/each}}
+
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

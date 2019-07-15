@@ -187,7 +187,6 @@ router.get('/settings', isUser, (req, res) => {
             raw: true
         })
     ]).then((referredUsers) => {
-        console.log(referredUsers[1])
             res.render('user/settings', {
                 user: req.user,
                 title: "Settings",
