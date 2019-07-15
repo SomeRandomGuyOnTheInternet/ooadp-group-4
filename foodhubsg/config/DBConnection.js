@@ -17,7 +17,8 @@ const setUpDB = (drop) => {
     })
     .then(() => {
         PointsHistory.belongsTo(User, { foreignKey: 'UserId' });
-        User.hasMany(FoodLog);
+        User.hasMany(FoodLog, { foreignKey: 'UserId' });
+        FoodLog.belongsTo(User, { foreignKey: 'UserId' });
 
         User.hasMany(Referral, { foreignKey: 'UserId' });
         User.hasMany(Referral, { foreignKey: 'RefUserId' });
@@ -39,7 +40,7 @@ const setUpDB = (drop) => {
         mySQLDB.sync({ force: drop })
         .then(() => {
             console.log('Create tables if none exists'); 
-            if (drop == true) createInstance(User, Shop, FoodItem);
+            // if (drop == true) createInstance(User, Shop, FoodItem);
         })
         .catch(err => console.log(err))
     })

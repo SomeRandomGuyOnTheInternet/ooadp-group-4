@@ -2,6 +2,7 @@ var _ = require('lodash');
 const moment = require('moment'); 
 
 function groupFoodItems(foodItems, setDates = false) {
+    
     datesWithFood = _.groupBy(foodItems, 'FoodLogs.createdAtDate');
 
     for (var [key, value] of Object.entries(datesWithFood)) {
