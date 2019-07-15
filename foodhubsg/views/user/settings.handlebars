@@ -120,7 +120,9 @@
                     {{#each friendedUsers}}
                     <div class="row form-group">
                         <div class="col-md-12">
-                            <b>{{this.compliment}}</b> m
+                            <b>{{this.compliment}}</b> <br>
+                            <b> Date Added: </b>
+                            <b>{{formatDate this.createdAt 'DD-MM-YYYY'}}</b>
                         </div>
                     </div>
                     <hr>
