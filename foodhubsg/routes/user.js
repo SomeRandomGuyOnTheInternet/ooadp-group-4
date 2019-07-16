@@ -469,6 +469,37 @@ router.get('/deleteCompliment/:id', isUser, (req, res) => {
         })
 })
 
+router.get('/editCompliment/:id', isUser, (req, res) => {
+    Referral.findOne({
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then((com) => {
+            console.log(com); 
+            res.render('user/editCompliment', { 
+                compliment: com, 
+                user: req.user 
+            })
+    })
+})
+
+
+router.post('/editCompliment/:id', isUser, (req, res) => {
+    let compliment = req.body.compliment; 
+    Referral.update({
+        compliment: compliment,
+    }, {
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment edited');
+            res.redirect('/user/settings')
+        })
+})
+
 
 
 module.exports = router;
