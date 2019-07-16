@@ -76,17 +76,14 @@ function generateRatingIcons(shop) {
 };
 
 function generateFoodLogChart(foodLog, userInfo) {
-    console.log(foodLog);
-    console.log(userInfo);
-
     var foodHistoryChart = document.getElementById('foodHistoryChart' + userInfo.id);
     var foodItems = foodLog;
-    var averageCalories = userInfo.averageCalories;
+	var averageCalories = userInfo.averageCalories;
 ;
 	var labels = [], data = [], dailyData = [], breakfastData = [], lunchData = [], dinnerData = [], snacksData = [];
-	var red = '#E82020', green = '#4CAF50', grey = '#333333'
+	var red = '#E82020', green = '#4CAF50', grey = '#333333';
 
-	for (var [key] of Object.entries(foodItems)) {
+	for (var [key, value] of Object.entries(foodItems)) {
 		labels.push(key);
 		data.push(parseInt(foodItems[key].dailyCalories));
 		dailyData.push(parseInt(foodItems[key].dailyCalories));
@@ -94,7 +91,7 @@ function generateFoodLogChart(foodLog, userInfo) {
 		lunchData.push(parseInt(foodItems[key].lunchCalories));
 		dinnerData.push(parseInt(foodItems[key].dinnerCalories));
 		snacksData.push(parseInt(foodItems[key].snacksCalories));
-    }
+	}
 
 	var myFoodHistoryChart = new Chart(foodHistoryChart, {
 		type: 'line',
@@ -158,7 +155,7 @@ function generateFoodLogChart(foodLog, userInfo) {
 					borderWidth: 1,
 					label: {
 						enabled: true,
-						content: 'Your Average Calorie Intake',
+						content: 'Average Calorie Intake',
 						backgroundColor: 'white',
 						fontColor: red,
 					}
@@ -167,15 +164,18 @@ function generateFoodLogChart(foodLog, userInfo) {
 		},
 		plugins: [{
 			beforeDraw: function (c) {
-				var data = c.data.datasets[0].data;
-				for (let i in data) {
-					let line = c.data.datasets[0]._meta[0].data[i]._model;
-					if (data[i] < c.annotation.elements['ideal-calories-line'].options.value) {
-						line.backgroundColor = green;
-						line.borderColor = green;
-					} else {
-						line.backgroundColor = red;
-						line.borderColor = red;
+				let data = c.data.datasets;
+
+				for (var i = 0; i < data.length; i++) {
+					for (var key in data._meta) {
+						let line = data._meta[key].data[i]._model;
+						if (data[i] < c.annotation.elements['ideal-calories-line'].options.value) {
+							line.backgroundColor = green;
+							line.borderColor = green;
+						} else {
+							line.backgroundColor = red;
+							line.borderColor = red;
+						}
 					}
 				}
 			}

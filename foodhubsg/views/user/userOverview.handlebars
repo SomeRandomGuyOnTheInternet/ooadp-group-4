@@ -54,25 +54,25 @@
                         </header>
 
                         <div class="row form-group">
-                            <div class="col-md-4 text-left">
+                            <div class="col-md-3 text-left">
                                 <h6 style="margin-bottom: 0;">Referral Code</h6>
                                 <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
                                 <h6 style="margin-bottom: 5px;">Badges</h6>
-                                {{#each userBadges}}
                                 <div class="row justify-content-center">
-                                    <div class="col-md-4 text-center badge">
-                                        <h5 style="margin: 0"><b>{{'Badge.name'}}</b></h5>
-                                        <img src="{{'Badge.imageLocation'}}" width="45px" height="50px" class="d-inline-block align-top" alt="Badge"
+                                {{#each userBadges}}
+                                    <div class="col-md-3 text-center badge">
+                                        <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
+                                        <img src="{{'Badge.imageLocation'}}" width="50px" height="50px" class="d-inline-block align-top" alt="Badge"
                                             data-toggle="tooltip" data-placement="bottom" title="{{'Badge.description'}}">
                                     </div>
-                                </div>
                                 {{else}}
                                 You have not earned any badges yet!
                                 {{/each}}
+                                </div>
                             </div>
-                            <div class="col-md-4 text-right">
+                            <div class="col-md-3 text-right">
                                 <h6 style="margin-bottom: 0;">Points</h6>
                                 <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
                                 <br>
@@ -170,33 +170,38 @@
 
                         {{#each referredUsers}}
                         <div class="row form-group">
-                            <div class="col-md-4">
-                                <a href="/user/userPage/{{ 'User.refCode' }}">
+                            <div class="col-md-3 text-left">
+                                <a href="/user/userPage/{{ refCode }}">
                                     <h4 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h4>
                                     <h6 style="margin-bottom: 20px;">({{ email }})</h6>
                                 </a>
+                                <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation" data-title="Confirm delete?">
+                                    <i class="far fa-trash-alt"></i> Delete
+                                </a>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-6 text-center">
                                 <h6 style="margin-bottom: 5px;">Badges</h6>
                                 <div class="row justify-content-center">
-                                    <div class="col-md-4 text-center badge">
-                                        <h5 style="margin: 0"><b>{{'UserBadges.Badge.name'}}</b></h5>
-                                        <img src="{{'UserBadges.Badge.imageLocation'}}" width="45px" height="50px" class="d-inline-block align-top" alt="Badge"
-                                            data-toggle="tooltip" data-placement="bottom" title="{{'UserBadges.Badge.description'}}">
+                                    {{#each badges}}
+                                    <div class="col-md-3 text-center badge">
+                                        <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
+                                        <img src="{{'Badge.imageLocation'}}" width="50px" height="50px" class="d-inline-block align-top" alt="Badge"
+                                            data-toggle="tooltip" data-placement="bottom" title="{{'Badge.description'}}">
                                     </div>
+                                    {{/each}}
                                 </div>
                             </div>
-                            <div class="col-md-4 text-right">
+                            <div class="col-md-3 text-right">
                                 <h6 style="margin-bottom: 0;">Points</h6>
                                 <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                                 <br>
                                 <a href="#">View Your Points History</a>
-                                <br>
                             </div>
-                            {{#ifCond daysActive '>=' 3}}
-                                <canvas id="foodHistoryChart{{ id }}" width="400" height="180"></canvas>
-                            {{/ifCond}}
                         </div>
+                        {{#ifCond daysActive '>=' 3}}
+                        <br>
+                        <canvas id="foodHistoryChart{{ id }}" width="400" height="180"></canvas>
+                        {{/ifCond}}
                         <hr>
                         {{else}}
                         <h4><b>You have not referred anyone yet!</b></h4>
@@ -272,7 +277,8 @@
     
     for (i = 0; i < referredUsers.length; i++) {
         for (var [userId, foodLog] of Object.entries(refUserFoodLog)) {
-            if (referredUsers[i].id == userId) generateFoodLogChart(foodLog, referredUsers[i])
+            console.log(foodLog)
+            if (referredUsers[i].id == userId && referredUsers[i].daysActive >= 3) generateFoodLogChart(foodLog, referredUsers[i])
         }
     }
 </script>
