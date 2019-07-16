@@ -140,15 +140,15 @@ router.get('/foodJournal', isUser, (req, res) => {
         }),
     ])
     .then((FoodItems) => {
-        var availableDates = []
-        for (i = 0; i < FoodItems[0].length; i++) availableDates.push(FoodItems[0][i]['FoodLogs.createdAtDate']);
+        // var availableDates = []
+        // for (i = 0; i < FoodItems[0].length; i++) availableDates.push(FoodItems[0][i]['FoodLogs.createdAtDate']);
+        var groupedFoodItems = groupFoodItems(FoodItems[0], true)
 
         res.render('user/foodJournal', {
             user: req.user,
             title: "Food Journal",
-            groupedFoodItems: groupFoodItems(FoodItems[0], true),
+            groupedFoodItems: groupedFoodItems[req.user.id],
             allFoodItems: FoodItems[1],
-            availableDates
         });
     });
 });
@@ -172,39 +172,43 @@ router.get('/faq', isUser, (req, res) => {
 
 router.get('/settings', isUser, (req, res) => {
     Promise.all([
-        Referral.findAll({
-            where: { UserId: req.user.id },
+        User.findAll({
+            where: { id: { [Sequelize.Op.not]: req.user.id } },
             include: {
-                model: User,
+                model: Referral,
                 required: true,
-                where: { id: { [Sequelize.Op.not]: req.user.id } },
+                where: { UserId: req.user.id },
             },
             raw: true
         }),
-        Referral.findAll({
-            where: { UserId: req.user.id },
-            include: {
-                model: User,
-                required: true,
-                where: { id: { [Sequelize.Op.not]: req.user.id } },
+        Food.findAll({
+            include: [{
+                model: FoodLog,
                 include: {
-                    model: FoodLog,
-                    include: [{ model: Food }],
+                    model: User,
+                    where: { id: { [Sequelize.Op.not]: req.user.id } },
+                    include: {
+                        model: Referral,
+                        where: { UserId: req.user.id },
+                    },
+                    attributes: ['id'],
                     required: true,
-                }
-            },
-            // order: [
-            //     [FoodLog, 'createdAt', 'ASC'],
-            // ],
-            raw: true,
-        })
+                },
+                required: true,
+                raw: true
+            }],
+            order: [
+                [FoodLog, 'createdAt', 'ASC'],
+            ],
+            raw: true
+        }),
     ])
     .then((data) => {
-        console.log(data[1])
         res.render('user/settings', {
             user: req.user,
             title: "Settings",
-            referredUsers: data[0]
+            referredUsers: data[0],
+            refUserFoodLog: groupFoodItems(data[1]),
         });
     });
 });

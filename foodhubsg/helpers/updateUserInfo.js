@@ -18,16 +18,16 @@ function updateUserInfo(user, newGainedPoints = 0) {
         raw: true
     })
     .then((foodItems) => {
-        var groupedFoodItems = groupFoodItems(foodItems);       
+        var groupedFoodItems = groupFoodItems(foodItems);
 
         User.update(
             {
-                averageCalories: getAverageCalories(groupedFoodItems),
-                averageBreakfastCalories: getAverageCalories(groupedFoodItems, "breakfastCalories"),
-                averageLunchCalories: getAverageCalories(groupedFoodItems, "lunchCalories"),
-                averageDinnerCalories: getAverageCalories(groupedFoodItems, "dinnerCalories"),
-                averageSnacksCalories: getAverageCalories(groupedFoodItems, "snacksCalories"),
-                daysActive: Object.keys(groupedFoodItems).length,
+                averageCalories: getAverageCalories(groupedFoodItems[user.id]),
+                averageBreakfastCalories: getAverageCalories(groupedFoodItems[user.id], "breakfastCalories"),
+                averageLunchCalories: getAverageCalories(groupedFoodItems[user.id], "lunchCalories"),
+                averageDinnerCalories: getAverageCalories(groupedFoodItems[user.id], "dinnerCalories"),
+                averageSnacksCalories: getAverageCalories(groupedFoodItems[user.id], "snacksCalories"),
+                daysActive: Object.keys(groupedFoodItems[user.id]).length,
                 gainedPoints: Sequelize.literal(`gainedPoints + ${newGainedPoints}`),
             },
             { where: { id: user.id } }

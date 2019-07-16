@@ -70,3 +70,161 @@ function generateRatingIcons(shop) {
 
     return ratingHTMLstring;
 };
+
+function generateFoodLogChart(foodLog, userInfo) {
+    console.log(foodLog);
+    console.log(userInfo);
+
+    var foodHistoryChart = document.getElementById('foodHistoryChart' + userInfo.id);
+    var foodItems = foodLog;
+    var averageCalories = userInfo.averageCalories;
+;
+	var labels = [], data = [], dailyData = [], breakfastData = [], lunchData = [], dinnerData = [], snacksData = [];
+	var red = '#E82020', green = '#4CAF50', grey = '#333333'
+
+	for (var [key] of Object.entries(foodItems)) {
+		labels.push(key);
+		data.push(parseInt(foodItems[key].dailyCalories));
+		dailyData.push(parseInt(foodItems[key].dailyCalories));
+		breakfastData.push(parseInt(foodItems[key].breakfastCalories));
+		lunchData.push(parseInt(foodItems[key].lunchCalories));
+		dinnerData.push(parseInt(foodItems[key].dinnerCalories));
+		snacksData.push(parseInt(foodItems[key].snacksCalories));
+    }
+
+	var myFoodHistoryChart = new Chart(foodHistoryChart, {
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: [{
+				data: data,
+				label: 'Calories (kcal)',
+				backgroundColor: [
+					'rgba(255, 99, 132, 0)',
+				],
+				borderColor: [
+					'#bababa',
+				],
+				borderWidth: 2,
+				fill: false,
+			}]
+		},
+		options: {
+			responsive: true,
+			title: { display: false },
+			scales: {
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Calories (kcal)'
+					},
+					ticks: {
+						beginAtZero: true
+					}
+				}],
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Dates'
+					}
+				}],
+			},
+			annotation: {
+				annotations: [{
+					id: 'ideal-calories-line',
+					type: 'line',
+					mode: 'horizontal',
+					scaleID: 'y-axis-0',
+					value: 1500,
+					borderColor: green,
+					borderWidth: 1,
+					label: {
+						enabled: true,
+						content: 'Ideal Calorie Intake',
+						backgroundColor: 'white',
+						fontColor: green,
+					}
+				}, {
+					id: 'average-calories-line',
+					type: 'line',
+					mode: 'horizontal',
+					scaleID: 'y-axis-0',
+					value: averageCalories,
+					borderColor: red,
+					borderWidth: 1,
+					label: {
+						enabled: true,
+						content: 'Your Average Calorie Intake',
+						backgroundColor: 'white',
+						fontColor: red,
+					}
+				}]
+			},
+		},
+		plugins: [{
+			beforeDraw: function (c) {
+				var data = c.data.datasets[0].data;
+				for (let i in data) {
+					let line = c.data.datasets[0]._meta[0].data[i]._model;
+					if (data[i] < c.annotation.elements['ideal-calories-line'].options.value) {
+						line.backgroundColor = green;
+						line.borderColor = green;
+					} else {
+						line.backgroundColor = red;
+						line.borderColor = red;
+					}
+				}
+			}
+		}],
+	});
+
+	$('.selectCalorieFilter').change(function () {
+		var sel = $(this).val();
+		var foodHistoryData = myFoodHistoryChart.config.data.datasets[0].data;
+		var idealCaloriesValue = 0, averageCaloriesValue = 0;
+		var newData = [];
+
+		switch (sel) {
+			case 'Daily':
+				newData = dailyData;
+				idealCaloriesValue = 1500;
+                averageCaloriesValue = userInfo.averageCalories;
+				break;
+			case 'Breakfast':
+				newData = breakfastData;
+				idealCaloriesValue = 500;
+                averageCaloriesValue = userInfo.averageBreakfastCalories;
+				break;
+			case 'Lunch':
+				newData = lunchData;
+				idealCaloriesValue = 400;
+                averageCaloriesValue = userInfo.averageLunchCalories;
+				break;
+			case 'Dinner':
+				newData = dinnerData;
+				idealCaloriesValue = 450;
+                averageCaloriesValue = userInfo.averageDinnerCalories;
+				break;
+			case 'Snacks':
+				newData = snacksData;
+				idealCaloriesValue = 150;
+                averageCaloriesValue = userInfo.averageSnacksCalories;
+				break;
+			default:
+				newData = dailyData;
+				idealCaloriesValue = 1500;
+                averageCaloriesValue = userInfo.averageCalories;
+				break;
+		}
+
+		foodHistoryData.length = 0;
+		foodHistoryData.push.apply(
+			foodHistoryData, newData
+		);
+
+		myFoodHistoryChart.annotation.elements['ideal-calories-line'].options.value = idealCaloriesValue;
+		myFoodHistoryChart.annotation.elements['average-calories-line'].options.value = averageCaloriesValue;
+
+		myFoodHistoryChart.update();
+	});
+};

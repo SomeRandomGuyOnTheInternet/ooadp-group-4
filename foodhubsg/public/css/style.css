@@ -1582,10 +1582,25 @@ input[type="text"] {
   padding: 0 10px 0 10px;
 }
 
+.foodHistoryChart {
+    min-width: 300px;
+    min-height: 150px;
+    overflow-x: scroll;
+}
+
 @media (max-width: 1200px) {
   h1 {
-    font-size: 35px;
+    font-size: 30px;
   }
+
+  .btn-tall {
+    height: 45px;
+  }
+
+  input[type="text"], input[type="date"] {
+    height: 45px; 
+  }
+
   .nav-item {
     padding: 0 !important;
     margin: 0 !important;
