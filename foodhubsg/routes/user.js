@@ -446,7 +446,6 @@ router.get('/userPage/:refCode', (req, res) => {
 
 router.post('/userPage/:refCode', (req, res) => {
     let compliment = req.body.compliment;
-    console.log(compliment);
     Referral.update({
         compliment: compliment,
     }, {
@@ -455,7 +454,52 @@ router.post('/userPage/:refCode', (req, res) => {
                 UserId: req.user.id,
             }
         }).then(() => {
-            req.flash('success', 'Compoliment set');
+            req.flash('success', 'Compliment set');
+            res.redirect('/user/settings')
+        })
+})
+
+router.get('/deleteCompliment/:id', isUser, (req, res) => {
+    Referral.update({
+        compliment: null,
+    }, {
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment deleted');
+            res.redirect('/user/settings')
+        })
+})
+
+router.get('/editCompliment/:id', isUser, (req, res) => {
+    Referral.findOne({
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then((com) => {
+            console.log(com); 
+            res.render('user/editCompliment', { 
+                compliment: com, 
+                user: req.user 
+            })
+    })
+})
+
+
+router.post('/editCompliment/:id', isUser, (req, res) => {
+    let compliment = req.body.compliment; 
+    Referral.update({
+        compliment: compliment,
+    }, {
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment edited');
             res.redirect('/user/settings')
         })
 })
