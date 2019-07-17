@@ -2,6 +2,38 @@
 <div id="colorlib-container">
     <div class="container">
 
+        <div class="modal fade" id="previewFoodModal" tabindex="-1" role="dialog" aria-labelledby="previewFoodModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title font_color" id="previewFoodModalLabel"><b>Preview Food Item</b></h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+        
+                    <form method="post" action="/user/addFood" class="addFoodForm">
+                        <div class="modal-body">
+                            <div class="blog-img" style="overflow:hidden;">
+                                <img id="previewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="" alt="Food Image">
+                            </div>
+                            <div class="text-center">
+                                <h2 style="margin:0;"><b id="previewFoodName">Food Name</b></h2>
+                                (code: <span id="previewFoodId">0</span>)
+                                <h5><b id="previewFoodCalories">0</b> kcal</h5>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <input name="userFoodCode" id="userFoodCode" class="form-control invisible" value="0" type="number" required="">
+                            <input type="submit" id="add-button" class="btn btn-success add-button" href=""
+                                value="Add Food Item" name="addAction" style="width:100%;">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="viewFoodModal" tabindex="-1" role="dialog" aria-labelledby="viewFoodModalLabel"
             aria-hidden="true">
@@ -64,24 +96,30 @@
             </div>
         </div>
 
-
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
                     <header id="summary-header">
-                        <h1 class="font_color"><b>Add Food Item</b></h1>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h1 class="font_color"><b>Add Food Item</b></h1>
+                            </div>                                                    
+                            <div class="col-md-4 text-right ajaxErrBlock" style="color:#d9534f;display:none;">
+                                <i class="fas fa-exclamation-triangle"></i>&nbsp; <span class="ajaxErrMsg">That food item does not exist!</span>
+                            </div>                                               
+                        </div>
                         <hr>
                     </header>
 
-                    <form method="post" action="/user/addFood" class="addFoodForm">
+                    <form method="post" action="/user/searchFood" class="previewFoodForm">
                         <div class="input-group">
                             <input name="foodInput" id="foodInput" class="form-control" value="" type="text" placeholder="Eg: Aglio Olio, 000012, 8..."
                                 required="">
-                            <input name="userFoodCode" id="userFoodCode" class="form-control invisible" value="0" type="number" required="">
                             <span class="input-group-btn">
                                 <input type="submit" name="addFood" value="Add Food" class="btn btn-primary btn-tall addFoodButton"
                                     style="margin-left: 0.5em;">
                             </span>
+                            <br>
                         </div>
                     </form>
                 </div>
@@ -98,8 +136,7 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <h1 class="font_color"><b>Food History</b></h1>
-                                </div>
-                            
+                                </div>                          
                                 <div class="col-md-4">
                                     <div class="input-group">
                                         <input type="date" name="searchDate" id="searchDate" class="form-control" value="{{searchDate}}" min="2005-01-01" max="2030-12-31" required>
@@ -108,7 +145,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                             </div>
                             <hr>
                         </header>
@@ -286,8 +322,8 @@
     }
 
     $("#foodInput").autocomplete({ source: availableTags });
-    $('#foodInput')
-    .bind("propertychange change click keyup input paste", function (event) {
+
+    $('.previewFoodForm').submit(function (event) {
         event.preventDefault();
         let searchQuery = $('#foodInput').val();
 
@@ -298,12 +334,21 @@
             dataType: 'text'
         })
         .done(function (data) {
-            var searchResultsName = JSON.parse(data)[0];
-            var searchResultsId = JSON.parse(data)[1];
+            if (data.length) {
+                var foodItem = JSON.parse(data);
+                $('.ajaxErrBlock').css("display", "none");
 
-            if (searchResultsName.length) $('#userFoodCode').val(searchResultsName[0].id);
-            else if (searchResultsId.length) $('#userFoodCode').val(searchResultsId[0].id);
-            else $('#userFoodCode').val(0);
+                $('#previewFoodName').text(foodItem.name);
+                $('#previewFoodImage').attr("src", foodItem.imageLocation);
+                $('#previewFoodId').text(foodItem.id);
+                $('#previewFoodCalories').html(foodItem.calories);
+                $('#userFoodCode').val(foodItem.id)
+
+                $('#previewFoodModal').modal('show');
+            } else {
+                $('#userFoodCode').val(0);
+                $('.ajaxErrBlock').css("display", "block");
+            }
         });
     });
 

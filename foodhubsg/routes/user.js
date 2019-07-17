@@ -244,10 +244,12 @@ router.post('/foodJournal', isUser, (req, res) => {
         }),
     ])
     .then((FoodItems) => {
+        var groupedFoodItems = groupFoodItems(FoodItems[0], true);
+
         res.render('user/foodJournal', {
             user: req.user,
             title: "Food Journal",
-            groupedFoodItems: groupFoodItems(FoodItems[0], true),
+            groupedFoodItems: groupedFoodItems[req.user.id],
             allFoodItems: FoodItems[1],
             searchDate,
         });
@@ -258,14 +260,13 @@ router.post('/foodJournal', isUser, (req, res) => {
 router.post('/searchFood', (req, res) => {
     var foodInput = req.body.searchQuery;
 
-    Promise.all([
-        Food.findAll({
-            where: { name: foodInput }
-        }),
-        Food.findAll({
-            where: { id: foodInput }
-        }),
-    ])
+
+    Food.findOne({
+        where: Sequelize.or(
+            { id: foodInput },
+            { name: foodInput },
+        ),
+    })
     .then(function (searchResults) {
         res.send(searchResults);
     })
@@ -277,7 +278,7 @@ router.post('/addFood', isUser, (req, res) => {
 
     Food.findOne({
         where: {
-            id: req.body.userFoodCode,
+            id: selectedFoodId,
             isDeleted: false
         }
     })
