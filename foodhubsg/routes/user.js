@@ -195,13 +195,34 @@ router.get('/faq', isUser, (req, res) => {
 
 router.get('/userOverview', isUser, (req, res) => {
     Promise.all([
+        UserBadge.findAll({
+            where: { UserId: req.user.id },
+            include: {
+                model: Badge,
+                required: true,
+            },
+            raw: true
+        }),
+        Food.findAll({
+            include: [{
+                model: FoodLog,
+                where: { UserId: req.user.id },
+                required: true,
+            }],
+            order: [
+                [FoodLog, 'createdAt', 'ASC'],
+            ],
+            raw: true
+        }),
         User.findAll({
-            where: { id: { [Sequelize.Op.not]: req.user.id } },
             include: {
                 model: Referral,
                 required: true,
                 where: { UserId: req.user.id },
             },
+            order: [
+                ['gainedPoints', 'DESC'],
+            ],
             raw: true
         }),
         UserBadge.findAll({
@@ -239,25 +260,6 @@ router.get('/userOverview', isUser, (req, res) => {
             ],
             raw: true
         }),
-        Food.findAll({
-            include: [{
-                model: FoodLog,
-                where: { UserId: req.user.id },
-                required: true,
-            }],
-            order: [
-                [FoodLog, 'createdAt', 'ASC'],
-            ],
-            raw: true
-        }),
-        UserBadge.findAll({
-            where: { UserId: req.user.id },
-            include: {
-                model: Badge,
-                required: true,
-            },
-            raw: true
-        }),
     ])
     .then((data) => {
         getUnviewedNotifications(req.user)
@@ -265,10 +267,10 @@ router.get('/userOverview', isUser, (req, res) => {
             res.render('user/userOverview', {
                 user: req.user,
                 title: req.user.name + "'s Overview",
-                referredUsers: groupReferredUsers(data[0], data[1]),
-                refUserFoodLog: groupFoodItems(data[2]),
-                userFoodLog: groupFoodItems(data[3]),
-                userBadges: data[4],
+                userBadges: data[0],
+                userFoodLog: groupFoodItems(data[1]),
+                referredUsers: groupReferredUsers(data[2], data[3]),
+                refUserFoodLog: groupFoodItems(data[4]),
                 unviewedNotifications
             });
         });
@@ -449,11 +451,13 @@ router.post('/addRefCode', isUser, (req, res) => {
         User.findOne({ where: { refCode: refCode } }),
         Referral.findAll({ where: { UserId: req.user.id } }),
         Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } }),
+        UserBadge.findAll({ where: { BadgeId: 2, UserId: req.user.id } }),
     ])
     .then((data) => {
         var referredUser = data[0];
         var existingReferrals = data[1];
         var existingReferral = data[2];
+        var existingBadge = data[3];
 
         if (!referredUser) error = "That referral code does not exist!";
         if (existingReferral.length > 0) error = "You've already added that code!";
@@ -492,7 +496,7 @@ router.post('/addRefCode', isUser, (req, res) => {
                 }),
             ])
             .then(() => {
-                if (!existingReferrals.length) {
+                if (!existingReferrals.length && !existingBadge.length) {
                     Promise.all([
                         UserAction.create({
                             UserId: req.user.id,
