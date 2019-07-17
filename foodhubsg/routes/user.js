@@ -170,7 +170,7 @@ router.get('/faq', isUser, (req, res) => {
 });
 
 
-router.get('/settings', isUser, (req, res) => {
+router.get('/userOverview', isUser, (req, res) => {
     Promise.all([
         User.findAll({
             where: { id: { [Sequelize.Op.not]: req.user.id } },
@@ -202,14 +202,34 @@ router.get('/settings', isUser, (req, res) => {
             ],
             raw: true
         }),
+        Food.findAll({
+            include: [{
+                model: FoodLog,
+                where: { UserId: req.user.id },
+                required: true,
+            }],
+            order: [
+                [FoodLog, 'createdAt', 'ASC'],
+            ],
+            raw: true
+        }),
     ])
     .then((data) => {
-        res.render('user/settings', {
+        res.render('user/userOverview', {
             user: req.user,
-            title: "Settings",
+            title: req.user.name + "'s Overview",
             referredUsers: data[0],
             refUserFoodLog: groupFoodItems(data[1]),
+            userFoodLog: groupFoodItems(data[2])
         });
+    });
+});
+
+
+router.get('/settings', isUser, (req, res) => {
+    res.render('user/settings', {
+        user: req.user,
+        title: "Settings",
     });
 });
 
@@ -259,7 +279,6 @@ router.post('/foodJournal', isUser, (req, res) => {
 
 router.post('/searchFood', (req, res) => {
     var foodInput = req.body.searchQuery;
-
 
     Food.findOne({
         where: Sequelize.or(
@@ -344,6 +363,120 @@ router.post('/deleteFood/:id', isUser, (req, res) => {
 });
 
 
+router.post('/addRefCode', isUser, (req, res) => {
+    const refCode = req.body.selRefCode.toLowerCase();
+    var error;
+
+    Promise.all([
+        User.findOne({ where: { refCode: refCode } }),
+        Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } })
+    ])
+    .then((data) => {
+        var referredUser = data[0];
+        var existingReferral = data[1];
+
+        if (!referredUser) error = "That referral code does not exist!";
+        if (existingReferral.length > 0) error = "You've already added that code!";
+        if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
+
+        if (!error) {
+            Referral.create({
+                UserId: req.user.id,
+                RefUserCode: referredUser.refCode,
+                RefUserId: referredUser.id,
+            })
+            .then(() => {
+                req.flash('success', "You have successfully added a referral code!");
+            });
+        }
+
+        res.send({ error });
+    });
+});
+
+
+router.get('/userPage/:refCode', (req, res) => {
+    Referral.findOne({
+        where: {
+            RefUserCode: req.params.refCode
+        }
+    }).then((referral) => {
+        User.findOne({
+            where: {
+                refCode: req.params.refCode,
+            }
+        }).then((friend) => {
+            res.render('user/friendPage', {
+                user: req.user,
+                friend: friend,
+                compliment: referral
+            })
+        })
+    })
+})
+
+
+router.post('/userPage/:refCode', (req, res) => {
+    let compliment = req.body.compliment;
+    Referral.update({
+        compliment: compliment,
+    }, {
+            where: {
+                RefUserCode: req.params.refCode,
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment set');
+            res.redirect('/user/userOverview')
+        })
+})
+
+router.get('/deleteCompliment/:id', isUser, (req, res) => {
+    Referral.update({
+        compliment: null,
+    }, {
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment deleted');
+            res.redirect('/user/userOverview')
+        })
+})
+
+router.get('/editCompliment/:id', isUser, (req, res) => {
+    Referral.findOne({
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then((com) => {
+            console.log(com); 
+            res.render('user/editCompliment', { 
+                compliment: com, 
+                user: req.user 
+            })
+    })
+})
+
+
+router.post('/editCompliment/:id', isUser, (req, res) => {
+    let compliment = req.body.compliment; 
+    Referral.update({
+        compliment: compliment,
+    }, {
+            where: {
+                id: req.params.id, 
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment edited');
+            res.redirect('/user/userOverview')
+        })
+})
+
+
 router.post('/faq', isUser, (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
@@ -388,122 +521,6 @@ router.post('/settings', isUser, (req, res) => {
         });
     })
 });
-
-
-router.post('/addRefCode', isUser, (req, res) => {
-    const refCode = req.body.refCode.toLowerCase();
-    var error;
-
-    Promise.all([
-        User.findOne({ where: { refCode: refCode } }),
-        Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } })
-    ])
-    .then((data) => {
-        var referredUser = data[0];
-        var existingReferral = data[1];
-
-        if (!referredUser) error = "That referral code does not exist!";
-        if (existingReferral.length > 0) error = "You've already added that code!";
-        if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
-
-        if (!error) {
-            Referral.create({
-                UserId: req.user.id,
-                RefUserCode: referredUser.refCode,
-                RefUserId: referredUser.id,
-            })
-                .then(() => {
-                    req.flash('success', "You have successfully added a referral code!");
-                    res.redirect('/user/settings');
-                });
-        } else {
-            req.flash('error', error);
-            res.redirect('/user/settings');
-        }
-    });
-});
-
-
-router.get('/userPage/:refCode', (req, res) => {
-    Referral.findOne({
-        where: {
-            RefUserCode: req.params.refCode
-        }
-    }).then((referral) => {
-        User.findOne({
-            where: {
-                refCode: req.params.refCode,
-            }
-        }).then((friend) => {
-            res.render('user/friendsPage', {
-                user: req.user,
-                friend: friend,
-                compliment: referral
-            })
-        })
-    })
-})
-
-
-router.post('/userPage/:refCode', (req, res) => {
-    let compliment = req.body.compliment;
-    Referral.update({
-        compliment: compliment,
-    }, {
-            where: {
-                RefUserCode: req.params.refCode,
-                UserId: req.user.id,
-            }
-        }).then(() => {
-            req.flash('success', 'Compliment set');
-            res.redirect('/user/settings')
-        })
-})
-
-router.get('/deleteCompliment/:id', isUser, (req, res) => {
-    Referral.update({
-        compliment: null,
-    }, {
-            where: {
-                id: req.params.id, 
-                UserId: req.user.id,
-            }
-        }).then(() => {
-            req.flash('success', 'Compliment deleted');
-            res.redirect('/user/settings')
-        })
-})
-
-router.get('/editCompliment/:id', isUser, (req, res) => {
-    Referral.findOne({
-            where: {
-                id: req.params.id, 
-                UserId: req.user.id,
-            }
-        }).then((com) => {
-            console.log(com); 
-            res.render('user/editCompliment', { 
-                compliment: com, 
-                user: req.user 
-            })
-    })
-})
-
-
-router.post('/editCompliment/:id', isUser, (req, res) => {
-    let compliment = req.body.compliment; 
-    Referral.update({
-        compliment: compliment,
-    }, {
-            where: {
-                id: req.params.id, 
-                UserId: req.user.id,
-            }
-        }).then(() => {
-            req.flash('success', 'Compliment edited');
-            res.redirect('/user/settings')
-        })
-})
 
 
 

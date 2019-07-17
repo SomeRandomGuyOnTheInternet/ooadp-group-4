@@ -2,184 +2,55 @@
 <div id="colorlib-container">
     <div class="container">
         <div class="col-md-12">
-            <div class="box1">
-                <div class="row row-pb-md">
-                    <div class="col-md-12">
-
-                        <div class="modal fade" id="addRefModal" tabindex="-1" role="dialog" aria-labelledby="addRefModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title font_color" id="addRefModalLabel"><b>Add Referral Code</b></h3>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                    <form method="post" action="/user/addRefCode">
-                                        <div class="modal-body">
-                                            <div class="row form-group">
-                                                <div class="col-md-12">
-                                                    <input name="refCode" id="refCode" type="text" class="form-control" value="" placeholder="Eg: a00001">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <input type="submit" name="action" value="Enter Code" class="btn btn-primary"
-                                                style="background-color: #4CAF50;">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <header>
-                            <h1 class="font_color"><b>User Settings</b></h1>
-                            <h5>({{user.email}})</h5>
-                            <hr>
-                        </header>
-
-                        <form method="post">
-
-                            <div class="row form-group">
-                                <div class="col-md-6">
-                                    <label>Name</label>
-                                    <input name="name" id="name" type="text" class="form-control" value=""
-                                        placeholder="{{user.name}}" style="margin-bottom: 1em;">
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label>Height (m)</label>
-                                    <input name="height" id="height" type="number" step="0.01" class="form-control"
-                                        value="" placeholder="{{user.height}} m">
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label>Weight (kg)</label>
-                                    <input name="weight" id="weight" type="number" step="0.01" class="form-control"
-                                        value="" placeholder="{{user.weight}} kg">
-                                </div>
-
-                                {{#if user.password}}
-                                <div class="col-md-12 new-password">
-                                    <label>Password</label>
-                                    <input name="password" id="password" type="password" class="form-control delprefix"
-                                        placeholder="(unchanged)">
-                                </div>
-                                {{/if}}
-                            </div>
-                            <br>
-                            <input type="submit" name="action" value="Update Settings" class="btn btn-primary"
-                                style="background-color: #4CAF50;">
-                            <input type="submit" name="action" value="Delete Account" onclick="remove_confirm()"
-                                class="btn btn-primary" id="remove-account" style="background-color: #d9534f;">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
 
                     <header>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h1 class="font_color"><b>Friend Activity</b></h1>
-                                <h5>Your Code: {{user.refCode}}</h5>
-                            </div>           
-                            <div class="col-md-4">
-                                <a class="modal-action" data-toggle="modal" data-target="#addRefModal" style="float:right;">
-                                    <input type="submit" name="action" value="Add Friend" class="btn btn-primary"
-                                        style="background-color: #4CAF50;">
-                                </a>
-                            </div>  
-                        </div>
+                        <h1 class="font_color"><b>User Settings</b></h1>
+                        <h5>({{user.email}})</h5>
                         <hr>
                     </header>
 
-                    {{#each referredUsers}}
-                    <div class="row form-group">
-                        <div class="col-md-4">
-                            <a href="/user/userPage/{{ 'User.refCode' }}">
-                                <h4 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h4>
-                                <h6 style="margin-bottom: 20px;">({{ email }})</h6>
-                            </a>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <h6 style="margin-bottom: 0;">Points</h6>
-                            <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
+                    <form method="post">
 
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                                <input name="name" id="name" type="text" class="form-control" value=""
+                                    placeholder="{{user.name}}" style="margin-bottom: 1em;">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Height (m)</label>
+                                <input name="height" id="height" type="number" step="0.01" class="form-control"
+                                    value="" placeholder="{{user.height}} m">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Weight (kg)</label>
+                                <input name="weight" id="weight" type="number" step="0.01" class="form-control"
+                                    value="" placeholder="{{user.weight}} kg">
+                            </div>
                         </div>
-                        <div class="col-md-4 text-right">
-                            <h6 style="margin-bottom: 5px;">Stats</h6>
-                            <span style="font-weight:900">{{ height }}</span> m
-                            <span style="font-weight:900">{{ weight }}</span> kg
-                            <br>
-                            <span style="font-weight:900">{{ bmi }}</span> BMI
+
+                        {{#if user.password}}
+                        <div class="col-md-12 new-password">
+                            <label>Password</label>
+                            <input name="password" id="password" type="password" class="form-control delprefix"
+                                placeholder="(unchanged)">
                         </div>
-                        {{#ifCond daysActive '>=' 3}}
-                            <canvas id="foodHistoryChart{{ id }}" width="400" height="180"></canvas>
-                        {{/ifCond}}
-                    </div>
-                    <hr>
-                    {{else}}
-                    <h4><b>You have not referred anyone yet!</b></h4>
-                    {{/each}}
-                    
+                        {{/if}}
+                        <br>
+                        <br>
+                        <input type="submit" name="action" value="Update Settings" class="btn btn-primary"
+                            style="background-color: #4CAF50;">
+                        <input type="submit" name="action" value="Delete Account" onclick="remove_confirm()"
+                            class="btn btn-primary" id="remove-account" style="background-color: #d9534f;">
+                    </form>
                 </div>
             </div>
         </div>
-
-        <div class="box1">
-            <div class="row row-pb-md">
-                <div class="col-md-12">
-
-                    <header>
-                        <h1 class="font_color"><b>Your Messages</b></h1>
-                        <hr>
-                    </header>
-
-                    {{#each friendedUsers}}
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            {{#if this.compliment}}
-                            <b>{{this.compliment}}</b> <br>
-                            <b> Date Added: </b>
-                            <b>{{formatDate this.createdAt 'DD-MM-YYYY'}}</b> <br>
-                            <b> Date Updated: </b>
-                            <b>{{formatDate this.updatedAt 'DD-MM-YYYY'}}</b>
-                            {{else}}
-                            <h4><b>This message is deleted</b></h4>
-                            {{/if}}
-
-                           
-                        </div>
-                    </div>
-                    <hr>
-                    {{else}}
-                    <h4><b>No one has left a message for you yet</b></h4>
-                    {{/each}}
-
-                </div>
-            </div>
         </div>
-
     </div>
 </div>
-
-
-<script>
-    $('.toast').toast('show')
-    refUserFoodLog = {{{ json refUserFoodLog }}};
-    referredUsers = {{{ json referredUsers }}};
-
-    
-    for (i = 0; i < referredUsers.length; i++) {
-        for (var [userId, foodLog] of Object.entries(refUserFoodLog)) {
-            if (referredUsers[i].id == userId) generateFoodLogChart(foodLog, referredUsers[i])
-        }
-    }
-</script>

@@ -90,68 +90,6 @@
 							<canvas class="foodHistoryChart" id="foodHistoryChart{{user.id}}" width="400" height="180"></canvas>
 						</div>
 					</div>
-					
-					<div class="col-md-12">
-						<br><br>
-						<h4><b>Breakdown on meal-by-meal basis</b></h4>
-						<hr align="left" width="5%">
-						<div class="table-responsive">
-						<table class="table" style="width: 1020px;">
-							<thead class="thead-green">
-								<tr>
-									<th scope="col">Meal Type</th>
-									<th scope="col">Ideal Calorie Intake</th>
-									<th scope="col">Average Calorie Intake</th>
-									<th scope="col">Est. Calories To Lose/Gain</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">Breakfast (6am-10am)</th>
-									<td>~500 kcal</td>
-									<td>{{ user.averageBreakfastCalories }} kcal</td>
-									<td>
-										{{math "500" "-" user.averageBreakfastCalories}} kcal              
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">Lunch (12am-3pm)</th>
-									<td>~400 kcal</td>
-									<td>{{ user.averageLunchCalories }} kcal</td>
-									<td>
-										{{math "400" "-" user.averageLunchCalories}} kcal
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">Dinner (6pm-10pm)</th>
-									<td>~450 kcal</td>
-									<td>{{ user.averageDinnerCalories }} kcal</td>
-									<td>
-										{{math "450" "-" user.averageDinnerCalories}} kcal
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">Out-of-schedule snacks</th>
-									<td>&lt;150 kcal</td>
-									<td>{{ user.averageSnacksCalories }} kcal</td>
-									<td>
-										{{math "150" "-" user.averageSnacksCalories}} kcal
-									</td>
-								</tr>
-							</tbody>
-							<tfoot>
-								<tr>
-									<th scope="row">Daily</th>
-									<td>~1500 kcal</td>
-									<td>{{ user.averageCalories }} kcal</td>
-									<td>
-										{{math "1500" "-" user.averageCalories}} kcal
-									</td>
-								</tr>
-							</tfoot>
-						</table>
-						</div>
-					</div>
 		
 				{{else}}
 					</div>
