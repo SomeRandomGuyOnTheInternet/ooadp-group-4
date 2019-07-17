@@ -29,9 +29,6 @@ const setUpDB = (drop) => {
         User.hasMany(FoodLog, { foreignKey: 'UserId' });
         FoodLog.belongsTo(User, { foreignKey: 'UserId' });
 
-        User.hasMany(Badge, { foreignKey: 'UserId' });
-        Badge.belongsTo(User, { foreignKey: 'UserId' });
-
         User.hasMany(Referral, { foreignKey: 'UserId' });
         User.hasMany(Referral, { foreignKey: 'RefUserId' });
         Referral.belongsTo(User, { foreignKey: 'UserId' });

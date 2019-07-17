@@ -215,7 +215,6 @@ router.get('/userOverview', isUser, (req, res) => {
                     required: true,
                     where: { UserId: req.user.id },
                 },
-                required: true,
             }],
             raw: true
         }),
