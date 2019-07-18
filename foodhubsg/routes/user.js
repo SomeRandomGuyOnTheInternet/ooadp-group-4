@@ -234,6 +234,26 @@ router.get('/settings', isUser, (req, res) => {
 });
 
 
+router.post('/addBmi', isUser, (req, res) => {
+    const weight = req.body.weight;
+    const height = req.body.height;
+    const bmi = (weight / (height * height)).toFixed(2);
+    var error;
+
+    if (height > 3 || weight < 0.5) error = 'Please enter a valid height value';
+    if (weight > 200 || weight < 20) error = 'Please enter a valid weight value';
+
+    if (!error) {
+        User.update(
+            { weight, height, bmi },
+            { where: { id: req.user.id } },
+        )
+    }
+
+    res.send({ error });
+});
+
+
 router.post('/foodJournal', isUser, (req, res) => {
     var searchDate = req.body.searchDate;
 

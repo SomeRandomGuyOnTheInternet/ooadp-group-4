@@ -2,6 +2,42 @@
 <div id="colorlib-container">
 	<div class="container">
 
+		<div class="modal fade" id="bmiModal" tabindex="-1" role="dialog" aria-labelledby="bmiModalLabel" data-keyboard="false" aria-hidden="true" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title font_color" id="bmiModalLabel"><b>Enter Your Info</b></h3>
+						<br>
+					</div>
+		
+					<form method="post" action="/user/addBmi" id="bmiForm">
+						<div class="modal-body">				
+							<div class="row form-group">
+								<div class="col-md-12"><h6>Before we continue, please enter your height and weight so we can optimize your experience.</h6></div>
+								<div class="col-md-6">
+									<label>Height (m)</label>
+									<input name="height" id="height" type="number" step="0.01" class="form-control" value=""
+										placeholder="0 m" required>
+								</div>
+								
+								<div class="col-md-6">
+									<label>Weight (kg)</label>
+									<input name="weight" id="weight" type="number" step="0.01" class="form-control" value=""
+										placeholder="0 kg" required>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer ajaxErrBlock">
+							<i class="fas fa-exclamation-triangle"></i>&nbsp; <span class="ajaxErrMsg"></span>
+						</div>
+						<div class="modal-footer">
+							<input type="submit" value="Enter Code" id="bmiSend" class="btn btn-primary" style="width:100%">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
 		<div class="box1">
 			<div class="row row-pb-md">
 				<div class="col-md-12">
@@ -105,11 +141,34 @@
 	</div>
 </div>
 
-{{#ifCond user.daysActive '>=' 3}}
+
 <script>
 	userFoodLog = {{{ json groupedFoodItems }}};
     user = {{{ json user }}};
 
-	generateFoodLogChart(userFoodLog[user.id], user);
+	if (user.daysActive >= 3) generateFoodLogChart(userFoodLog[user.id], user);
+	if (!user.bmi) $('#bmiModal').modal('show');
+
+	$('#bmiForm').submit(function (event) {
+        event.preventDefault();
+        let height = $('#height').val();
+		let weight = $('#weight').val();
+
+        $.ajax({
+            type: 'post',
+            url: `/user/addBmi`,
+            data: { height, weight },
+            dataType: 'text'
+        })
+        .done(function (rawData) {
+            var data = JSON.parse(rawData);
+
+            if (data.error) {
+                $('.ajaxErrBlock').css("display", "block");
+                $('.ajaxErrMsg').text(data.error);
+            } else {
+                $('#bmiModal').modal('hide');
+            }
+        });
+    });
 </script>
-{{/ifCond}}

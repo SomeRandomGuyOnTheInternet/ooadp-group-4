@@ -1,7 +1,7 @@
 {{> _msg }}
 <div id="colorlib-container">
     <div class="container">
-        <div class="col-md-12">
+
             <div class="modal fade" id="addRefModal" tabindex="-1" role="dialog" aria-labelledby="addRefModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -22,214 +22,212 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal-footer ajaxErrBlock">
+                                <i class="fas fa-exclamation-triangle"></i>&nbsp; <span class="ajaxErrMsg"></span>
+                            </div>
                             <div class="modal-footer">
-                                <div class="ajaxErrBlock mr-auto">
-                                    <i class="fas fa-exclamation-triangle"></i>&nbsp; <span class="ajaxErrMsg">That food item does
-                                        not exist!</span>
-                                </div>
-                                <input type="submit" value="Enter Code" id="refCodeSend" class="btn btn-primary text-right">
+                                <input type="submit" value="Enter Code" id="refCodeSend" class="btn btn-primary" style="width:100%">
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
-        <div class="box1">
-            <div class="row row-pb-md">
-                <div class="col-md-12">
-
-                    <header>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h1 class="font_color"><b>{{user.name}}'s Overview</b></h1>
-                                <h5>({{user.email}})</h5>
-                            </div>           
-                            <div class="col-md-4">
-                                <a class="settings-action" href="/user/settings" style="float:right;">
-                                    <input type="submit" name="action" value="Edit Info" class="btn btn-primary"
-                                        style="background-color: #4CAF50;">
-                                </a>
-                            </div>  
-                        </div>
-                        <hr>
-                    </header>
-
-                    <div class="row form-group">
-                        <div class="col-md-4 text-left">
-                            <h6 style="margin-bottom: 0;">Points Till Next Badge</h6>
-                            <span style="font-weight:900; font-size: 30px;">650</span>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <h6 style="margin-bottom: 0;">Points</h6>
-                            <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
-                            <img src="/images/generic-badge.png" width="45px" height="60px" class="d-inline-block align-top" alt="Badge">
-                            <br>
-                            <a href="#">View Your Points History</a>
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <h6 style="margin-bottom: 5px;">Stats</h6>
-                            <span style="font-weight:900">{{ user.height }}</span> m
-                            <span style="font-weight:900">{{ user.weight }}</span> kg
-                            <br>
-                            <span style="font-weight:900">{{ user.bmi }}</span> BMI
-                        </div>
-                    </div>
-
-                    <div class="row">
+            <div class="box1">
+                <div class="row row-pb-md">
                     <div class="col-md-12">
-						<br><br>
-						<h4><b>Breakdown on meal-by-meal basis</b></h4>
-						<hr align="left" width="5%">
-						<div class="table-responsive">
-						<table class="table" style="width: 1020px;">
-							<thead class="thead-green">
-								<tr>
-									<th scope="col">Meal Type</th>
-									<th scope="col">Ideal Calorie Intake</th>
-									<th scope="col">Average Calorie Intake</th>
-									<th scope="col">Est. Calories To Lose/Gain</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">Breakfast (6am-10am)</th>
-									<td>~500 kcal</td>
-									<td>{{ user.averageBreakfastCalories }} kcal</td>
-									<td>
-										{{math "500" "-" user.averageBreakfastCalories}} kcal              
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">Lunch (12am-3pm)</th>
-									<td>~400 kcal</td>
-									<td>{{ user.averageLunchCalories }} kcal</td>
-									<td>
-										{{math "400" "-" user.averageLunchCalories}} kcal
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">Dinner (6pm-10pm)</th>
-									<td>~450 kcal</td>
-									<td>{{ user.averageDinnerCalories }} kcal</td>
-									<td>
-										{{math "450" "-" user.averageDinnerCalories}} kcal
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">Out-of-schedule snacks</th>
-									<td>&lt;150 kcal</td>
-									<td>{{ user.averageSnacksCalories }} kcal</td>
-									<td>
-										{{math "150" "-" user.averageSnacksCalories}} kcal
-									</td>
-								</tr>
-							</tbody>
-							<tfoot>
-								<tr>
-									<th scope="row">Daily</th>
-									<td>~1500 kcal</td>
-									<td>{{ user.averageCalories }} kcal</td>
-									<td>
-										{{math "1500" "-" user.averageCalories}} kcal
-									</td>
-								</tr>
-							</tfoot>
-						</table>
-						</div>
-					</div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
 
-        <div class="box1">
-            <div class="row row-pb-md">
-                <div class="col-md-12">
+                        <header>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h1 class="font_color"><b>{{user.name}}'s Overview</b></h1>
+                                    <h5>({{user.email}})</h5>
+                                </div>           
+                                <div class="col-md-4">
+                                    <a class="settings-action" href="/user/settings" style="float:right;">
+                                        <input type="submit" name="action" value="Edit Info" class="btn btn-primary"
+                                            style="background-color: #4CAF50;">
+                                    </a>
+                                </div>  
+                            </div>
+                            <hr>
+                        </header>
 
-                    <header>
+                        <div class="row form-group">
+                            <div class="col-md-4 text-left">
+                                <h6 style="margin-bottom: 0;">Referral Code</h6>
+                                <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h6 style="margin-bottom: 0;">Points</h6>
+                                <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
+                                <img src="/images/generic-badge.png" width="45px" height="60px" class="d-inline-block align-top" alt="Badge">
+                                <br>
+                                <a href="#">View Your Points History</a>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <h6 style="margin-bottom: 5px;">Stats</h6>
+                                <span style="font-weight:900">{{ user.height }}</span> m
+                                <span style="font-weight:900">{{ user.weight }}</span> kg
+                                <br>
+                                <span style="font-weight:900">{{ user.bmi }}</span> BMI
+                            </div>
+                        </div>
+
                         <div class="row">
-                            <div class="col-md-8">
-                                <h1 class="font_color"><b>Friend Activity</b></h1>
-                                <h5>Your Code: {{user.refCode}}</h5>
-                            </div>           
-                            <div class="col-md-4">
-                                <a class="modal-action" data-toggle="modal" data-target="#addRefModal" style="float:right;">
-                                    <input type="submit" name="action" value="Add Friend" class="btn btn-primary"
-                                        style="background-color: #4CAF50;">
-                                </a>
-                            </div>  
-                        </div>
-                        <hr>
-                    </header>
-
-                    {{#each referredUsers}}
-                    <div class="row form-group">
-                        <div class="col-md-4">
-                            <a href="/user/userPage/{{ 'User.refCode' }}">
-                                <h4 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h4>
-                                <h6 style="margin-bottom: 20px;">({{ email }})</h6>
-                            </a>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <h6 style="margin-bottom: 0;">Points</h6>
-                            <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
-                            <img src="/images/generic-badge.png" width="45px" height="60px" class="d-inline-block align-top" alt="Badge">
-
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <h6 style="margin-bottom: 5px;">Stats</h6>
-                            <span style="font-weight:900">{{ height }}</span> m
-                            <span style="font-weight:900">{{ weight }}</span> kg
-                            <br>
-                            <span style="font-weight:900">{{ bmi }}</span> BMI
-                        </div>
-                        {{#ifCond daysActive '>=' 3}}
-                            <canvas id="foodHistoryChart{{ id }}" width="400" height="180"></canvas>
-                        {{/ifCond}}
-                    </div>
-                    <hr>
-                    {{else}}
-                    <h4><b>You have not referred anyone yet!</b></h4>
-                    {{/each}}
-                    
-                </div>
-            </div>
-        </div>
-
-        <div class="box1">
-            <div class="row row-pb-md">
-                <div class="col-md-12">
-
-                    <header>
-                        <h1 class="font_color"><b>Your Messages</b></h1>
-                        <hr>
-                    </header>
-
-                    {{#each friendedUsers}}
-                    <div class="row form-group">
                         <div class="col-md-12">
-                            {{#if this.compliment}}
-                            <b>{{this.compliment}}</b> <br>
-                            <b> Date Added: </b>
-                            <b>{{formatDate this.createdAt 'DD-MM-YYYY'}}</b> <br>
-                            <b> Date Updated: </b>
-                            <b>{{formatDate this.updatedAt 'DD-MM-YYYY'}}</b>
-                            {{else}}
-                            <h4><b>This message is deleted</b></h4>
-                            {{/if}}
-
-                           
+                            <br><br>
+                            <h4><b>Breakdown on meal-by-meal basis</b></h4>
+                            <hr align="left" width="5%">
+                            <div class="table-responsive">
+                            <table class="table" style="width: 1020px;">
+                                <thead class="thead-green">
+                                    <tr>
+                                        <th scope="col">Meal Type</th>
+                                        <th scope="col">Ideal Calorie Intake</th>
+                                        <th scope="col">Average Calorie Intake</th>
+                                        <th scope="col">Est. Calories To Lose/Gain</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Breakfast (6am-10am)</th>
+                                        <td>~500 kcal</td>
+                                        <td>{{ user.averageBreakfastCalories }} kcal</td>
+                                        <td>
+                                            {{math "500" "-" user.averageBreakfastCalories}} kcal              
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Lunch (12am-3pm)</th>
+                                        <td>~400 kcal</td>
+                                        <td>{{ user.averageLunchCalories }} kcal</td>
+                                        <td>
+                                            {{math "400" "-" user.averageLunchCalories}} kcal
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Dinner (6pm-10pm)</th>
+                                        <td>~450 kcal</td>
+                                        <td>{{ user.averageDinnerCalories }} kcal</td>
+                                        <td>
+                                            {{math "450" "-" user.averageDinnerCalories}} kcal
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Out-of-schedule snacks</th>
+                                        <td>&lt;150 kcal</td>
+                                        <td>{{ user.averageSnacksCalories }} kcal</td>
+                                        <td>
+                                            {{math "150" "-" user.averageSnacksCalories}} kcal
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th scope="row">Daily</th>
+                                        <td>~1500 kcal</td>
+                                        <td>{{ user.averageCalories }} kcal</td>
+                                        <td>
+                                            {{math "1500" "-" user.averageCalories}} kcal
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            </div>
                         </div>
+                        </div>
+                        
                     </div>
-                    <hr>
-                    {{else}}
-                    <h4><b>No one has left a message for you yet</b></h4>
-                    {{/each}}
-
                 </div>
             </div>
-        </div>
+
+            <div class="box1">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+
+                        <header>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h1 class="font_color"><b>Friend Activity</b></h1>
+                                </div>           
+                                <div class="col-md-4">
+                                    <a class="modal-action" data-toggle="modal" data-target="#addRefModal" style="float:right;">
+                                        <input type="submit" name="action" value="Add Friend" class="btn btn-primary"
+                                            style="background-color: #4CAF50;">
+                                    </a>
+                                </div>  
+                            </div>
+                            <hr>
+                        </header>
+
+                        {{#each referredUsers}}
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <a href="/user/userPage/{{ 'User.refCode' }}">
+                                    <h4 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h4>
+                                    <h6 style="margin-bottom: 20px;">({{ email }})</h6>
+                                </a>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h6 style="margin-bottom: 0;">Points</h6>
+                                <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
+                                <img src="/images/generic-badge.png" width="45px" height="60px" class="d-inline-block align-top" alt="Badge">
+
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <h6 style="margin-bottom: 5px;">Stats</h6>
+                                <span style="font-weight:900">{{ height }}</span> m
+                                <span style="font-weight:900">{{ weight }}</span> kg
+                                <br>
+                                <span style="font-weight:900">{{ bmi }}</span> BMI
+                            </div>
+                            {{#ifCond daysActive '>=' 3}}
+                                <canvas id="foodHistoryChart{{ id }}" width="400" height="180"></canvas>
+                            {{/ifCond}}
+                        </div>
+                        <hr>
+                        {{else}}
+                        <h4><b>You have not referred anyone yet!</b></h4>
+                        {{/each}}
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="box1">
+                <div class="row row-pb-md">
+                    <div class="col-md-12">
+
+                        <header>
+                            <h1 class="font_color"><b>Your Messages</b></h1>
+                            <hr>
+                        </header>
+
+                        {{#each friendedUsers}}
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                {{#if this.compliment}}
+                                <b>{{this.compliment}}</b> <br>
+                                <b> Date Added: </b>
+                                <b>{{formatDate this.createdAt 'DD-MM-YYYY'}}</b> <br>
+                                <b> Date Updated: </b>
+                                <b>{{formatDate this.updatedAt 'DD-MM-YYYY'}}</b>
+                                {{else}}
+                                <h4><b>This message is deleted</b></h4>
+                                {{/if}}
+
+                            
+                            </div>
+                        </div>
+                        <hr>
+                        {{else}}
+                        <h4><b>No one has left a message for you yet</b></h4>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+
 
     </div>
 </div>
