@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const router = express.Router();
 
 const isUser = require('../helpers/isUser');
-const arePointsNear = require('../helpers/arePointsNear');
+const getUnviewedNotifications = require('../helpers/getUnviewedNotifications');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const groupFoodItems = require('../helpers/groupFoodItems');
@@ -13,6 +13,7 @@ const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const User = require('../models/User');
+const UserAction = require('../models/UserAction');
 const Referral = require('../models/Referral');
 const Question = require('../models/Question');
 
@@ -45,11 +46,15 @@ router.get('/', isUser, (req, res) => {
         var groupedFoodItems = groupFoodItems(data[1]);
         var shops = data[0];
 
-        res.render('user/index', {
-            user: req.user,
-            title: "Index",
-            shops,
-            groupedFoodItems,
+        getUnviewedNotifications(req.user)
+        .then((unviewedNotifications) => {
+            res.render('user/index', {
+                user: req.user,
+                title: "Index",
+                shops,
+                groupedFoodItems,
+                unviewedNotifications
+            });
         });
     });
 });
@@ -63,10 +68,14 @@ router.get('/shops', isUser, (req, res) => {
         ],
     })
     .then(function (shops) {
-        res.render('user/shops', {
-            user: req.user,
-            title: "Shops",
-            shops
+        getUnviewedNotifications(req.user)
+        .then((unviewedNotifications) => {
+            res.render('user/shops', {
+                user: req.user,
+                title: "Shops",
+                shops, 
+                unviewedNotifications
+            });
         });
     });
 });
@@ -94,13 +103,17 @@ router.get('/shops/:id', isUser, (req, res) => {
             where: { id: data[0].VendorId },
         })
         .then((vendor) => {
-            res.render('user/shop', {
-                title: data[0].name,
-                shop: data[0],
-                foodItems: data[1],
-                otherShops: data[2],
-                vendor,
-                user: req.user
+            getUnviewedNotifications(req.user)
+            .then((unviewedNotifications) => {
+                res.render('user/shop', {
+                    title: data[0].name,
+                    shop: data[0],
+                    foodItems: data[1],
+                    otherShops: data[2],
+                    vendor,
+                    user: req.user,
+                    unviewedNotifications
+                });
             });
         })
         .catch((err) => {
@@ -142,13 +155,17 @@ router.get('/foodJournal', isUser, (req, res) => {
     .then((FoodItems) => {
         // var availableDates = []
         // for (i = 0; i < FoodItems[0].length; i++) availableDates.push(FoodItems[0][i]['FoodLogs.createdAtDate']);
-        var groupedFoodItems = groupFoodItems(FoodItems[0], true)
+        var groupedFoodItems = groupFoodItems(FoodItems[0], true);
 
-        res.render('user/foodJournal', {
-            user: req.user,
-            title: "Food Journal",
-            groupedFoodItems: groupedFoodItems[req.user.id],
-            allFoodItems: FoodItems[1],
+        getUnviewedNotifications(req.user)
+        .then((unviewedNotifications) => {
+            res.render('user/foodJournal', {
+                user: req.user,
+                title: "Food Journal",
+                groupedFoodItems: groupedFoodItems[req.user.id],
+                allFoodItems: FoodItems[1],
+                unviewedNotifications,
+            });
         });
     });
 });
@@ -162,9 +179,13 @@ router.get('/faq', isUser, (req, res) => {
         raw: true
     })
     .then((questions) => {
-        res.render('user/faq', {
-            user: req.user,
-            questions: questions
+        getUnviewedNotifications(req.user)
+        .then((unviewedNotifications) => {
+            res.render('user/faq', {
+                user: req.user,
+                questions: questions,
+                unviewedNotifications
+            });
         });
     });
 });
@@ -215,21 +236,29 @@ router.get('/userOverview', isUser, (req, res) => {
         }),
     ])
     .then((data) => {
-        res.render('user/userOverview', {
-            user: req.user,
-            title: req.user.name + "'s Overview",
-            referredUsers: data[0],
-            refUserFoodLog: groupFoodItems(data[1]),
-            userFoodLog: groupFoodItems(data[2])
+        getUnviewedNotifications(req.user)
+        .then((unviewedNotifications) => {
+            res.render('user/userOverview', {
+                user: req.user,
+                title: req.user.name + "'s Overview",
+                referredUsers: data[0],
+                refUserFoodLog: groupFoodItems(data[1]),
+                userFoodLog: groupFoodItems(data[2]),
+                unviewedNotifications
+            });
         });
     });
 });
 
 
 router.get('/settings', isUser, (req, res) => {
-    res.render('user/settings', {
-        user: req.user,
-        title: "Settings",
+    getUnviewedNotifications(req.user)
+    .then((unviewedNotifications) => {
+        res.render('user/settings', {
+            user: req.user,
+            title: "Settings",
+            unviewedNotifications
+        });
     });
 });
 
@@ -313,7 +342,8 @@ router.post('/searchFood', (req, res) => {
 
 
 router.post('/addFood', isUser, (req, res) => {
-    var user = req.user, selectedFoodId = req.body.userFoodCode, gainedPoints = 0, pointsStatement = "";
+    var user = req.user, selectedFoodId = req.body.userFoodCode;
+    var pointsGained = 0, pointsStatement = "", pointsSource = "", hasViewed = false;
 
     Food.findOne({
         where: {
@@ -324,19 +354,27 @@ router.post('/addFood', isUser, (req, res) => {
     .then((foodItem) => {
         if (foodItem) {
             if (foodItem.isRecommended == true) {
-                gainedPoints = 100;
-                pointsStatement = " and you've gained 100 points from adding a recommended food item"
+                pointsGained = 100;
+
+                UserAction.create({
+                    UserId: user.id,
+                    action: "gained 100 points",
+                    source: "adding a recommended food item",
+                    type: "positive",
+                    additionalMessage: "Keep it up!",
+                    hasViewed: false
+                })
             }
 
             FoodLog.create({
-                UserId: user.id,
-                FoodId: selectedFoodId,
-                mealType: getMealType(),
-                createdAtDate: getCurrentDate(),
+                // UserId: user.id,
+                // FoodId: selectedFoodId,
+                // mealType: getMealType(),
+                // createdAtDate: getCurrentDate(),
             })
             .then(() => {
-                updateUserInfo(user, gainedPoints);
-                req.flash('success', "That food has been successfully added" + pointsStatement + "!");
+                updateUserInfo(user, pointsGained);
+                req.flash('success', "That food has been successfully added!");
                 res.redirect('/user/foodJournal');
             });
         } else {

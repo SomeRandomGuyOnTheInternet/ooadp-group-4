@@ -1768,3 +1768,7 @@ select {
   color:#d9534f;
   display:none;
 }
+
+.positive-action { color: #4CAF50; }
+
+.negative-action { color: #d9534f; }

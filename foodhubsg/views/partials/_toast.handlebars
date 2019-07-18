@@ -1,42 +1,28 @@
-<div class="container">
-    <div aria-live="polite" aria-atomic="true" style="z-index:1; position:relative;">
-        <!-- Position it -->
-        <div style="position: absolute; top: 50px; right: 15px;">
 
-            <!-- Then put toasts within -->
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <img src="..." class="rounded mr-2" alt="...">
-                    <strong class="mr-auto">Bootstrap</strong>
-                    <small class="text-muted">just now</small>
-                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="toast-body">
-                    See? Just like this.
-                </div>
+<div aria-live="polite" aria-atomic="true" style="z-index:1; position:relative;">
+    <!-- Position it -->
+    <div style="position: absolute; top: 30px; right: 15px;">
+        {{#each unviewedNotifications}}
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="10000">
+            <div class="toast-header">
+                <img src="/images/healthhub-logo.png" width="20px" height="20px" alt="FoodHub.SG Logo">
+                &nbsp;
+                <strong class="mr-auto"><b>FoodHub.SG</b></strong>
+                <small class="text-muted">just now</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <img src="..." class="rounded mr-2" alt="...">
-                    <strong class="mr-auto">Bootstrap</strong>
-                    <small class="text-muted">2 seconds ago</small>
-                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="toast-body">
-                    Heads up, toasts will stack automatically
-                </div>
+            <div class="toast-body">
+                You've <span class="{{this.type}}-action" style="font-weight:800;">{{this.action}}</span> from {{this.source}}! {{this.additionalMessage}}
             </div>
         </div>
+        {{/each}}
     </div>
 </div>
 
-{{!-- <script>
+<script>
     $(document).ready(function () {
         $('.toast').toast('show');
     });
-</script> --}}
+</script>

@@ -2,7 +2,7 @@ const mySQLDB = require('./DBConfig');
 const createInstance = require('./DBInstance');
 
 const User = require('../models/User');
-const PointsHistory = require('../models/PointsHistory');
+const UserAction = require('../models/UserAction');
 const FoodItem = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
@@ -16,7 +16,9 @@ const setUpDB = (drop) => {
         console.log('FoodHub.SG database is now connected!');
     })
     .then(() => {
-        PointsHistory.belongsTo(User, { foreignKey: 'UserId' });
+        User.hasMany(UserAction, { foreignKey: 'UserId' });
+        UserAction.belongsTo(User, { foreignKey: 'UserId' });
+
         User.hasMany(FoodLog, { foreignKey: 'UserId' });
         FoodLog.belongsTo(User, { foreignKey: 'UserId' });
 
