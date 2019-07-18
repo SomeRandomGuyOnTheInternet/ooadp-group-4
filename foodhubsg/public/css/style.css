@@ -1769,6 +1769,10 @@ select {
   display:none;
 }
 
+.toast {
+  border-radius: 0;
+}
+
 .positive-action { color: #4CAF50; }
 
 .negative-action { color: #d9534f; }

@@ -153,8 +153,6 @@ router.get('/foodJournal', isUser, (req, res) => {
         }),
     ])
     .then((FoodItems) => {
-        // var availableDates = []
-        // for (i = 0; i < FoodItems[0].length; i++) availableDates.push(FoodItems[0][i]['FoodLogs.createdAtDate']);
         var groupedFoodItems = groupFoodItems(FoodItems[0], true);
 
         getUnviewedNotifications(req.user)
@@ -183,7 +181,7 @@ router.get('/faq', isUser, (req, res) => {
         .then((unviewedNotifications) => {
             res.render('user/faq', {
                 user: req.user,
-                questions: questions,
+                questions,
                 unviewedNotifications
             });
         });
@@ -367,10 +365,10 @@ router.post('/addFood', isUser, (req, res) => {
             }
 
             FoodLog.create({
-                // UserId: user.id,
-                // FoodId: selectedFoodId,
-                // mealType: getMealType(),
-                // createdAtDate: getCurrentDate(),
+                UserId: user.id,
+                FoodId: selectedFoodId,
+                mealType: getMealType(),
+                createdAtDate: getCurrentDate(),
             })
             .then(() => {
                 updateUserInfo(user, pointsGained);
