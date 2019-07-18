@@ -59,18 +59,25 @@
                                 <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
                             </div>
                             <div class="col-md-4 text-center">
-                                <h6 style="margin-bottom: 0;">Points</h6>
-                                <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
-                                <img src="/images/generic-badge.png" width="45px" height="60px" class="d-inline-block align-top" alt="Badge">
-                                <br>
-                                <a href="#">View Your Points History</a>
+                                <h6 style="margin-bottom: 5px;">Badges</h6>
+                                {{#each userBadges}}
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4 text-center badge">
+                                        <h5 style="margin: 0"><b>{{'Badge.name'}}</b></h5>
+                                        <img src="{{'Badge.imageLocation'}}" width="45px" height="50px" class="d-inline-block align-top" alt="Badge"
+                                            data-toggle="tooltip" data-placement="bottom" title="{{'Badge.description'}}">
+                                    </div>
+                                </div>
+                                {{else}}
+                                You have not earned any badges yet!
+                                {{/each}}
                             </div>
                             <div class="col-md-4 text-right">
-                                <h6 style="margin-bottom: 5px;">Stats</h6>
-                                <span style="font-weight:900">{{ user.height }}</span> m
-                                <span style="font-weight:900">{{ user.weight }}</span> kg
+                                <h6 style="margin-bottom: 0;">Points</h6>
+                                <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
                                 <br>
-                                <span style="font-weight:900">{{ user.bmi }}</span> BMI
+                                <a href="#">View Your Points History</a>
+                                <br>
                             </div>
                         </div>
 
@@ -170,17 +177,21 @@
                                 </a>
                             </div>
                             <div class="col-md-4 text-center">
-                                <h6 style="margin-bottom: 0;">Points</h6>
-                                <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
-                                <img src="/images/generic-badge.png" width="45px" height="60px" class="d-inline-block align-top" alt="Badge">
-
+                                <h6 style="margin-bottom: 5px;">Badges</h6>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4 text-center badge">
+                                        <h5 style="margin: 0"><b>{{'UserBadges.Badge.name'}}</b></h5>
+                                        <img src="{{'UserBadges.Badge.imageLocation'}}" width="45px" height="50px" class="d-inline-block align-top" alt="Badge"
+                                            data-toggle="tooltip" data-placement="bottom" title="{{'UserBadges.Badge.description'}}">
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-4 text-right">
-                                <h6 style="margin-bottom: 5px;">Stats</h6>
-                                <span style="font-weight:900">{{ height }}</span> m
-                                <span style="font-weight:900">{{ weight }}</span> kg
+                                <h6 style="margin-bottom: 0;">Points</h6>
+                                <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                                 <br>
-                                <span style="font-weight:900">{{ bmi }}</span> BMI
+                                <a href="#">View Your Points History</a>
+                                <br>
                             </div>
                             {{#ifCond daysActive '>=' 3}}
                                 <canvas id="foodHistoryChart{{ id }}" width="400" height="180"></canvas>

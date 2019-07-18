@@ -1,8 +1,10 @@
 const mySQLDB = require('./DBConfig');
 const createInstance = require('./DBInstance');
 
+const Badge = require('../models/Badge');
 const User = require('../models/User');
 const UserAction = require('../models/UserAction');
+const UserBadge = require('../models/UserBadge');
 const FoodItem = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
@@ -18,6 +20,11 @@ const setUpDB = (drop) => {
     .then(() => {
         User.hasMany(UserAction, { foreignKey: 'UserId' });
         UserAction.belongsTo(User, { foreignKey: 'UserId' });
+
+        Badge.hasMany(UserBadge, { foreignKey: 'BadgeId' });
+        User.hasMany(UserBadge, { foreignKey: 'UserId' });
+        UserBadge.belongsTo(Badge, { foreignKey: 'BadgeId' });
+        UserBadge.belongsTo(User, { foreignKey: 'UserId' });
 
         User.hasMany(FoodLog, { foreignKey: 'UserId' });
         FoodLog.belongsTo(User, { foreignKey: 'UserId' });
@@ -42,7 +49,7 @@ const setUpDB = (drop) => {
         mySQLDB.sync({ force: drop })
         .then(() => {
             console.log('Create tables if none exists'); 
-            // if (drop == true) createInstance(User, Shop, FoodItem);
+            if (drop == true) createInstance(Badge);
         })
         .catch(err => console.log(err))
     })

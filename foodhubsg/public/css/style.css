@@ -1776,3 +1776,10 @@ select {
 .positive-action { color: #4CAF50; }
 
 .negative-action { color: #d9534f; }
+
+.badge {
+  background-color:#F1EFEE; 
+  margin-top: 12px;
+  padding: 20px 0; 
+  border-radius: 7px;
+}

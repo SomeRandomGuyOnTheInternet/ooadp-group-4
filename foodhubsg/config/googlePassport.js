@@ -2,6 +2,8 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const generateCode = require('../helpers/generateCode');
 const toTitleCase = require('../helpers/toTitleCase');
 const User = require('../models/User');
+const UserBadge = require('../models/UserBadge');
+const UserAction = require('../models/UserAction');
 
 function googleStrategy(passport) {
     passport.use(new GoogleStrategy({
@@ -24,7 +26,31 @@ function googleStrategy(passport) {
 
             if (!user) {
                 User.create({ name: toTitleCase(name), email, isDeleted, isAdmin, isBanned, isVendor, gainedPoints, averageCalories, averageBreakfastCalories, averageLunchCalories, averageDinnerCalories, averageSnacksCalories, daysActive, refCode })
-                .then(user => done(null, user));
+                .then(user => {
+                    Promise.all([
+                        UserAction.create({
+                            UserId: user.id,
+                            action: "earned your first badge",
+                            source: "starting your journey with us",
+                            type: "positive",
+                            additionalMessage: "Welcome!",
+                            hasViewed: false
+                        }),
+                        UserAction.create({
+                            UserId: user.id,
+                            action: "gained 50 points",
+                            source: "starting your journey with us",
+                            type: "positive",
+                            additionalMessage: "",
+                            hasViewed: false
+                        }),
+                        UserBadge.create({
+                            UserId: user.id,
+                            BadgeId: 1,
+                        }),
+                    ])
+                    .then(() => done(null, user));
+                });
             } else {
                 done(null, user);
             }
