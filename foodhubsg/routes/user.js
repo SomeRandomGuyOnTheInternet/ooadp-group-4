@@ -361,7 +361,7 @@ router.post('/addFood', isUser, (req, res) => {
                     type: "positive",
                     additionalMessage: "Keep it up!",
                     hasViewed: false
-                })
+                });
             }
 
             FoodLog.create({
