@@ -10,7 +10,6 @@ const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const Referral = require('../models/Referral');
 const Question = require('../models/Question');
-const Badge = require('../models/Badge'); 
 
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {

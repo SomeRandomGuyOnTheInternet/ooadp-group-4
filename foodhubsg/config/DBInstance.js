@@ -5,6 +5,41 @@ function createInstance(Badge) {
             description: 'A badge to start off your journey with us.',
             imageLocation: '/images/seedling-badge.png'
         },
+
+        {
+            name: 'Baby Steps', 
+            description: 'You have entered your first healthy food',
+            imageLocation: '/images/seedling-badge.png'
+        }, 
+
+        {
+            name: 'Five Times', 
+            description: 'You are on a roll, the further you go the better it will get',
+            imageLocation: '/images/seedling-badge.png'
+        }, 
+
+        {
+            name: 'Ten Times', 
+            description: 'Ten times of eating reconmended food, the weight loss will come easier',
+            imageLocation: '/images/seedling-badge.png'
+        }, 
+
+        {
+            name: 'First Friend', 
+            description: 'You added your first friend, helps to keep things going',
+            imageLocation: '/images/seedling-badge.png'
+        }, 
+
+        {
+            name: 'Five Friends', 
+            description: 'Enough to fill a house',
+            imageLocation: '/images/seedling-badge.png'
+        }, 
+        {
+            name: 'Ten Friends', 
+            description: 'First in a long time',
+            imageLocation: '/images/seedling-badge.png'
+        }
     ]);
 
     // The password for the following accounts is just 'password'
