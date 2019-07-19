@@ -1,3 +1,7 @@
+$(document).ready(function () {
+	$("body").tooltip({ selector: '[data-toggle=tooltip]' });
+});
+
 $(".select option").val(function (idx, val) {
     $(this).siblings('[value="' + val + '"]').remove();
 });

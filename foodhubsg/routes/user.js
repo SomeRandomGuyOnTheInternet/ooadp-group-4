@@ -14,6 +14,8 @@ const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const User = require('../models/User');
 const UserAction = require('../models/UserAction');
+const UserBadge = require('../models/UserBadge');
+const Badge = require('../models/Badge');
 const Referral = require('../models/Referral');
 const Question = require('../models/Question');
 
@@ -193,11 +195,17 @@ router.get('/userOverview', isUser, (req, res) => {
     Promise.all([
         User.findAll({
             where: { id: { [Sequelize.Op.not]: req.user.id } },
-            include: {
+            include: [{
                 model: Referral,
                 required: true,
                 where: { UserId: req.user.id },
-            },
+            },{
+                model: UserBadge,
+                include: {
+                    model: Badge,
+                    required: true,
+                }
+            }],
             raw: true
         }),
         Food.findAll({
@@ -232,16 +240,26 @@ router.get('/userOverview', isUser, (req, res) => {
             ],
             raw: true
         }),
+        UserBadge.findAll({
+            where: { UserId: req.user.id },
+            include: {
+                model: Badge,
+                required: true,
+            },
+            raw: true
+        }),
     ])
     .then((data) => {
         getUnviewedNotifications(req.user)
         .then((unviewedNotifications) => {
+            console.log(data[0])
             res.render('user/userOverview', {
                 user: req.user,
                 title: req.user.name + "'s Overview",
                 referredUsers: data[0],
                 refUserFoodLog: groupFoodItems(data[1]),
                 userFoodLog: groupFoodItems(data[2]),
+                userBadges: data[3],
                 unviewedNotifications
             });
         });
@@ -341,7 +359,7 @@ router.post('/searchFood', (req, res) => {
 
 router.post('/addFood', isUser, (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
-    var pointsGained = 0, pointsStatement = "", pointsSource = "", hasViewed = false;
+    var pointsGained = 0;
 
     Food.findOne({
         where: {
@@ -350,35 +368,30 @@ router.post('/addFood', isUser, (req, res) => {
         }
     })
     .then((foodItem) => {
-        if (foodItem) {
-            if (foodItem.isRecommended == true) {
-                pointsGained = 100;
+        if (foodItem.isRecommended == true) {
+            pointsGained = 100;
 
-                UserAction.create({
-                    UserId: user.id,
-                    action: "gained 100 points",
-                    source: "adding a recommended food item",
-                    type: "positive",
-                    additionalMessage: "Keep it up!",
-                    hasViewed: false
-                });
-            }
-
-            FoodLog.create({
+            UserAction.create({
                 UserId: user.id,
-                FoodId: selectedFoodId,
-                mealType: getMealType(),
-                createdAtDate: getCurrentDate(),
-            })
-            .then(() => {
-                updateUserInfo(user, pointsGained);
-                req.flash('success', "That food has been successfully added!");
-                res.redirect('/user/foodJournal');
+                action: "gained 100 points",
+                source: "adding a recommended food item",
+                type: "positive",
+                additionalMessage: "Keep it up!",
+                hasViewed: false
             });
-        } else {
-            req.flash('error', "That food item does not exist!");
-            res.redirect('/user/foodJournal');
         }
+
+        FoodLog.create({
+            UserId: user.id,
+            FoodId: selectedFoodId,
+            mealType: getMealType(),
+            createdAtDate: getCurrentDate(),
+        })
+        .then(() => {
+            updateUserInfo(user, pointsGained);
+            req.flash('success', "That food has been successfully added!");
+            res.redirect('/user/foodJournal');
+        });
     });
 });
 

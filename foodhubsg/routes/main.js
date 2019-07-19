@@ -10,7 +10,8 @@ const generateCode = require('../helpers/generateCode');
 const upload = require('../helpers/imageUpload');
 
 const User = require('../models/User');
-const FoodItem = require('../models/FoodItem');
+const UserAction = require('../models/UserAction');
+const UserBadge = require('../models/UserBadge');
 const Shop = require('../models/Shop');
 
 
@@ -124,9 +125,33 @@ router.post('/register', isloggedOut, (req, res) => {
 						daysActive,
 						refCode
 					})
-					.then(function () {
-						req.flash('success', "Your email has been successfully registered!");
-						res.redirect('./login');
+					.then(function (user) {
+						Promise.all([
+							UserAction.create({
+								UserId: user.id,
+								action: "earned your first badge",
+								source: "starting your journey with us",
+								type: "positive",
+								additionalMessage: "Welcome!",
+								hasViewed: false
+							}),
+							UserAction.create({
+								UserId: user.id,
+								action: "gained 50 points",
+								source: "starting your journey with us",
+								type: "positive",
+								additionalMessage: "",
+								hasViewed: false
+							}),
+							UserBadge.create({
+								UserId: user.id,
+								BadgeId: 1,
+							}),
+						])
+						.then(function () {
+							req.flash('success', "Your email has been successfully registered!");
+							res.redirect('./login');
+						});
 					})
 				});
 			});

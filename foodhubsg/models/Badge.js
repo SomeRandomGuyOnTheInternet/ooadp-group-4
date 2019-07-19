@@ -1,16 +1,21 @@
 const Sequelize = require('sequelize');
 const db = require('../config/DBConfig');
 
-const Badge = db.define('Badge', { 
+
+
+const Badge = db.define('Badge', {
     name: {
         type: Sequelize.STRING
     },
-    isDeleted: { 
-        type: Sequelize.BOOLEAN
-    }, 
-    imageLocation: { 
+    description: {
+        type: Sequelize.STRING
+    },
+    imageLocation: {
         type: Sequelize.STRING, 
-    }
-})
+    },
+    
+});
 
-module.exports = Badge; 
+
+
+module.exports = Badge;
