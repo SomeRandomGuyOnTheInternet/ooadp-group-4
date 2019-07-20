@@ -176,7 +176,7 @@
                                     <h6 style="margin-bottom: 20px;">({{ email }})</h6>
                                 </a>
                                 <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation" data-title="Confirm delete?">
-                                    <i class="fas fa-trash-alt"></i> Delete
+                                    <i class="fas fa-trash-alt"></i>&nbsp;Delete
                                 </a>
                             </div>
                             <div class="col-md-6 text-center">
@@ -195,13 +195,13 @@
                                 <h6 style="margin-bottom: 0;">Points</h6>
                                 <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                                 <br>
-                                <a href="#">View Your Points History</a>
+                                <i class="fas fa-eye hyperlink"></i>&nbsp;<span class="hyperlink">Food History</span>
                             </div>
                         </div>
                         {{#ifCond daysActive '>=' 3}}
                         <div class="accordion" id="chartAccordion{{id}}">
                             <div class="card-header" id="chart{{id}}">
-                                <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapse{{id}}"
+                                <button class="btn-none hyperlink" type="button" data-toggle="collapse" data-target="#collapse{{id}}"
                                     aria-expanded="false" aria-controls="collapse{{id}}">
                                     More Info&nbsp;<i class="fas fa-chevron-down"></i>
                                 </button>

@@ -379,7 +379,9 @@ router.post('/addFood', isUser, (req, res) => {
         }
     })
     .then((foodItem) => {
-        if (foodItem.isRecommended == true) { pointsGained = 100; }
+        if (foodItem.isRecommended == true) { 
+            updateUserPoints(user, 100, "gained", "adding a recommended food item to your log", "Keep it up!"); 
+        }
 
         FoodLog.create({
             UserId: user.id,
@@ -389,7 +391,6 @@ router.post('/addFood', isUser, (req, res) => {
         })
         .then(() => {
             updateUserCalories(user);
-            updateUserPoints(user, pointsGained, "gained", "adding a recommended food item to your log", "Keep it up!");
 
             req.flash('success', "That food has been successfully added!");
             res.redirect('/user/foodJournal');
