@@ -8,8 +8,8 @@ const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const groupFoodItems = require('../helpers/groupFoodItems');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
-const addUserPoints = require('../helpers/addUserPoints');
-const updateUserInfo = require('../helpers/updateUserInfo');
+const updateUserPoints = require('../helpers/updateUserPoints');
+const updateUserCalories = require('../helpers/updateUserCalories');
 
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
@@ -379,18 +379,7 @@ router.post('/addFood', isUser, (req, res) => {
         }
     })
     .then((foodItem) => {
-        if (foodItem.isRecommended == true) {
-            pointsGained = 100;
-
-            UserAction.create({
-                UserId: user.id,
-                action: "gained 100 points",
-                source: "adding a recommended food item",
-                type: "positive",
-                additionalMessage: "Keep it up!",
-                hasViewed: false
-            });
-        }
+        if (foodItem.isRecommended == true) { pointsGained = 100; }
 
         FoodLog.create({
             UserId: user.id,
@@ -399,7 +388,9 @@ router.post('/addFood', isUser, (req, res) => {
             createdAtDate: getCurrentDate(),
         })
         .then(() => {
-            updateUserInfo(user, pointsGained);
+            updateUserCalories(user);
+            updateUserPoints(user, pointsGained, "gained", "adding a recommended food item to your log", "Keep it up!");
+
             req.flash('success', "That food has been successfully added!");
             res.redirect('/user/foodJournal');
         });
@@ -419,7 +410,7 @@ router.post('/editFood/:id', isUser, (req, res) => {
                 { where: { id: logId } },
             )
             .then(() => {
-                updateUserInfo(req.user);
+                updateUserCalories(req.user);
                 req.flash('success', "You've successfully edited that food item!");
                 res.redirect('/user/foodJournal');
             });
@@ -436,7 +427,7 @@ router.post('/deleteFood/:id', isUser, (req, res) => {
 
     FoodLog.destroy({ where: { id: logId } })
     .then(() => {
-        updateUserInfo(req.user);
+        updateUserCalories(req.user);
         req.flash('success', "You've successfully deleted that food item from your log!");
         res.redirect('/user/foodJournal');
     })
@@ -464,37 +455,14 @@ router.post('/addRefCode', isUser, (req, res) => {
         if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
 
         if (!error) {
-            Promise.all([
-                Referral.create({
-                    UserId: req.user.id,
-                    RefUserCode: referredUser.refCode,
-                    RefUserId: referredUser.id,
-                }),
-                User.update(
-                    { gainedPoints: Sequelize.literal(`gainedPoints + 75`) },
-                    { where: { id: req.user.id } }
-                ),
-                UserAction.create({
-                    UserId: req.user.id,
-                    action: "gained 75 points",
-                    source: "adding a friend to your profile",
-                    type: "positive",
-                    additionalMessage: "You can now see their stats from your overview page.",
-                    hasViewed: false
-                }),
-                User.update(
-                    { gainedPoints: Sequelize.literal(`gainedPoints + 25`) },
-                    { where: { id: referredUser.id } }
-                ),
-                UserAction.create({
-                    UserId: referredUser.id,
-                    action: "gained 25 points",
-                    source: `from ${req.user.name} adding you to their friend group through your referral code`,
-                    type: "positive",
-                    additionalMessage: "",
-                    hasViewed: false
-                }),
-            ])
+            updateUserPoints(req.user, 75, "gained", "adding a friend to your profile", "You can now see their stats from your overview page.");
+            updateUserPoints(referredUser, 25, "gained", `${req.user.name} adding you to their friend group through your referral code`, "");
+
+            Referral.create({
+                UserId: req.user.id,
+                RefUserCode: referredUser.refCode,
+                RefUserId: referredUser.id,
+            })
             .then(() => {
                 if (!existingReferrals.length && !existingBadge.length) {
                     Promise.all([
@@ -522,27 +490,14 @@ router.post('/addRefCode', isUser, (req, res) => {
 
 router.get('/delRefCode/:id', isUser, (req, res) => {
     var id = req.params.id;
+
     Referral.destroy({ where: { id } })
     .then((referral) => {
         if (referral !== null) {
-            Promise.all([
-                User.update(
-                    { gainedPoints: Sequelize.literal(`gainedPoints - 75`) },
-                    { where: { id: req.user.id } }
-                ),
-                UserAction.create({
-                    UserId: req.user.id,
-                    action: "lost 75 points",
-                    source: `removing someone from your friend group`,
-                    type: "negative",
-                    additionalMessage: "",
-                    hasViewed: false
-                }),
-            ])
-            .then(() => {
-                req.flash('success', "You have successfully deleted a referral code!");
-                res.redirect('/user/userOverview');
-            });
+            updateUserPoints(req.user, -75, "lost", "removing someone from your friend group", "");
+
+            req.flash('success', "You have successfully deleted a referral code!");
+            res.redirect('/user/userOverview');
         }
     })
 });

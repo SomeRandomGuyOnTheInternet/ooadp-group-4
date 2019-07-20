@@ -1,5 +1,3 @@
-const Sequelize = require('sequelize');
-
 const User = require('../models/User');
 const FoodLog = require('../models/FoodLog');
 const Food = require('../models/FoodItem');
@@ -8,7 +6,7 @@ const groupFoodItems = require('./groupFoodItems');
 const getAverageCalories = require('./getAverageCalories');
 
 
-function updateUserInfo(user, newGainedPoints = 0) {
+function updateUserCalories(user) {
     Food.findAll({
         include: [{
             model: FoodLog,
@@ -28,12 +26,11 @@ function updateUserInfo(user, newGainedPoints = 0) {
                 averageDinnerCalories: getAverageCalories(groupedFoodItems[user.id], "dinnerCalories"),
                 averageSnacksCalories: getAverageCalories(groupedFoodItems[user.id], "snacksCalories"),
                 daysActive: Object.keys(groupedFoodItems[user.id]).length,
-                gainedPoints: Sequelize.literal(`gainedPoints + ${newGainedPoints}`),
             },
             { where: { id: user.id } }
-        );
+        )
     });
 };
 
 
-module.exports = updateUserInfo;
+module.exports = updateUserCalories;
