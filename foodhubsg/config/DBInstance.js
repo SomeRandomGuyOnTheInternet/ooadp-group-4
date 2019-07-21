@@ -6,19 +6,19 @@ function createInstance(Badge) {
             imageLocation: '/images/seedling-badge.png'
         },
         {
-            name: 'Baby Steps', 
-            description: 'You have entered your first healthy food',
-            imageLocation: '/images/seedling-badge.png'
-        },
-        {
             name: 'First Contact', 
             description: 'Added your first referral to your friend group',
-            imageLocation: '/images/seedling-badge.png'
+            imageLocation: '/images/first-contact-badge.png'
         },
         {
             name: 'High Roller',
             description: 'Obtained a 1000 health points',
             imageLocation: '/images/high-roller-badge.png'
+        },
+        {
+            name: 'Baby Steps',
+            description: 'You have entered your first healthy food',
+            imageLocation: '/images/seedling-badge.png'
         },
     ]);
 

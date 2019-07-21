@@ -36,7 +36,7 @@ CREATE TABLE `UserActions` (
   PRIMARY KEY (`id`),
   KEY `UserId` (`UserId`),
   CONSTRAINT `useractions_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `UserActions` (
 
 LOCK TABLES `UserActions` WRITE;
 /*!40000 ALTER TABLE `UserActions` DISABLE KEYS */;
-INSERT INTO `UserActions` VALUES (1,'earned your first badge','starting your journey with us','positive','Welcome!',NULL,1,'2019-07-18 14:32:16','2019-07-18 14:32:21',1),(2,'earned your first badge','starting your journey with us','positive','Welcome!',NULL,1,'2019-07-18 15:16:50','2019-07-18 15:16:55',2),(3,'gained 50 points','starting your journey with us','positive','',NULL,1,'2019-07-18 15:16:50','2019-07-18 15:16:55',2),(4,'earned your first badge','starting your journey with us','positive','Welcome!',NULL,1,'2019-07-18 15:25:29','2019-07-18 15:25:44',7),(5,'gained 50 points','starting your journey with us','positive','',NULL,1,'2019-07-18 15:25:29','2019-07-18 15:25:44',7),(6,'earned your first badge','starting your journey with us','positive','Welcome!',NULL,1,'2019-07-18 15:34:22','2019-07-18 15:34:22',8),(7,'gained 50 points','starting your journey with us','positive','',NULL,1,'2019-07-18 15:34:22','2019-07-18 15:34:22',8),(8,'gained 100 points','adding a recommended food item','positive','Keep it up!',NULL,1,'2019-07-18 15:37:37','2019-07-18 15:37:37',1);
+INSERT INTO `UserActions` VALUES (1,'gained 100 points','adding a recommended food item to your log','positive','Keep it up!',NULL,1,'2019-07-21 04:32:35','2019-07-21 04:32:36',10);
 /*!40000 ALTER TABLE `UserActions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-18 23:48:31
+-- Dump completed on 2019-07-21 12:37:03

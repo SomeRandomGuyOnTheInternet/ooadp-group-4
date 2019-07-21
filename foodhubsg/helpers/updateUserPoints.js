@@ -23,7 +23,7 @@ function updateUserPoints(user, points = 0, actionDiff = "gained", source, addit
             hasViewed: false
         })
         .then(() => {
-            if (user.gainedPoints > 1000) {
+            if (user.gainedPoints >= 1000) {
                 UserBadge.findAll({
                     where: { UserId: user.id, BadgeId: 3 },
                     raw: true

@@ -18,12 +18,12 @@
                                 <div class="row form-group">
                                     <div class="col-md-12">
                                         <input name="refCode" id="refCode" type="text" class="form-control" value=""
-                                            placeholder="Eg: a00001">
+                                            placeholder="Eg: a00001" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer ajaxErrBlock">
-                                <i class="fas fa-exclamation-triangle"></i>&nbsp; <span class="ajaxErrMsg"></span>
+                                <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg"></span>
                             </div>
                             <div class="modal-footer">
                                 <input type="submit" value="Enter Code" id="refCodeSend" class="btn btn-primary" style="width:100%">
@@ -76,7 +76,7 @@
                                 <h6 style="margin-bottom: 0;">Points</h6>
                                 <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
                                 <br>
-                                <a href="#">View Your Points History</a>
+                                <a href="#">Points History</a>
                                 <br>
                             </div>
                         </div>
@@ -196,19 +196,19 @@
                                 <h6 style="margin-bottom: 0;">Points</h6>
                                 <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                                 <br>
-                                <i class="fas fa-eye hyperlink"></i>&nbsp;<span class="hyperlink">Food History</span>
+                                <a href="#">Points History</a>
                             </div>
                         </div>
                         {{#ifCond daysActive '>=' 3}}
                         <div class="accordion" id="chartAccordion{{id}}">
-                            <div class="card-header" id="chart{{id}}">
+                            <div class="card-header text-center" id="chart{{id}}">
                                 <button class="btn-none hyperlink" type="button" data-toggle="collapse" data-target="#collapse{{id}}"
                                     aria-expanded="false" aria-controls="collapse{{id}}">
                                     More Details&nbsp;<i class="fas fa-chevron-down"></i>
                                 </button>
                         
                             </div>
-                        
+                            aqyb75
                             <div id="collapse{{id}}" class="collapse" aria-labelledby="chart{{id}}" data-parent="#chartAccordion{{id}}">
                                 <div class="card-body">
                                     <h4><b>Food Intake Graph</b></h4>
@@ -266,6 +266,16 @@
 
 
 <script>
+    refUserFoodLog = {{{ json refUserFoodLog }}};
+    referredUsers = {{{ json referredUsers }}};
+    
+    for (i = 0; i < referredUsers.length; i++) {
+        for (var [userId, foodLog] of Object.entries(refUserFoodLog)) {
+            console.log(foodLog)
+            if (referredUsers[i].id == userId && referredUsers[i].daysActive >= 3) generateFoodLogChart(foodLog, referredUsers[i])
+        }
+    }
+
     $('#refCodeSend').click(function (event) {
         event.preventDefault();
         let selRefCode = $('#refCode').val();
@@ -287,14 +297,4 @@
             }
         });
     });
-
-    refUserFoodLog = {{{ json refUserFoodLog }}};
-    referredUsers = {{{ json referredUsers }}};
-    
-    for (i = 0; i < referredUsers.length; i++) {
-        for (var [userId, foodLog] of Object.entries(refUserFoodLog)) {
-            console.log(foodLog)
-            if (referredUsers[i].id == userId && referredUsers[i].daysActive >= 3) generateFoodLogChart(foodLog, referredUsers[i])
-        }
-    }
 </script>
