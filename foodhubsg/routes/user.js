@@ -360,7 +360,7 @@ router.post('/searchFood', (req, res) => {
         where: Sequelize.or(
             { id: foodInput },
             { name: foodInput },
-        ),
+        )
     })
     .then(function (searchResults) {
         res.send(searchResults);
@@ -370,7 +370,6 @@ router.post('/searchFood', (req, res) => {
 
 router.post('/addFood', isUser, (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
-    var pointsGained = 0;
 
     Food.findOne({
         where: {
@@ -380,7 +379,7 @@ router.post('/addFood', isUser, (req, res) => {
     })
     .then((foodItem) => {
         if (foodItem.isRecommended == true) { 
-            updateUserPoints(user, 100, "gained", "adding a recommended food item to your log", "Keep it up!"); 
+            updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!"); 
         }
 
         FoodLog.create({
@@ -456,8 +455,8 @@ router.post('/addRefCode', isUser, (req, res) => {
         if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
 
         if (!error) {
-            updateUserPoints(req.user, 75, "gained", "adding a friend to your profile", "You can now see their stats from your overview page.");
-            updateUserPoints(referredUser, 25, "gained", `${req.user.name} adding you to their friend group through your referral code`, "");
+            updateUserPoints(req.user, 75, "adding a friend to your profile", "You can now see their stats from your overview page.");
+            updateUserPoints(referredUser, 25, `${req.user.name} adding you to their friend group through your referral code`);
 
             Referral.create({
                 UserId: req.user.id,
@@ -495,7 +494,7 @@ router.get('/delRefCode/:id', isUser, (req, res) => {
     Referral.destroy({ where: { id } })
     .then((referral) => {
         if (referral !== null) {
-            updateUserPoints(req.user, -75, "lost", "removing someone from your friend group", "");
+            updateUserPoints(req.user, -75, "removing someone from your friend group");
 
             req.flash('success', "You have successfully deleted a referral code!");
             res.redirect('/user/userOverview');

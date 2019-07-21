@@ -5,9 +5,13 @@ const UserAction = require('../models/UserAction');
 const UserBadge = require('../models/UserBadge');
 
 
-function updateUserPoints(user, points = 0, actionDiff = "gained", source, additionalMessage) {
-    if (actionDiff == "gained") type = "positive"
-    else type = "negative"
+function updateUserPoints(user, points, source, additionalMessage = "") {
+    var type = "positive", pointsAction = "gained";
+    
+    if (points < 0) {
+        type = "negative";
+        pointsAction = "lost";
+    }
 
     User.update(
         { gainedPoints: Sequelize.literal(`gainedPoints + ${points}`) },
@@ -16,7 +20,7 @@ function updateUserPoints(user, points = 0, actionDiff = "gained", source, addit
     .then(() => {
         UserAction.create({
             UserId: user.id,
-            action: `${actionDiff} ${points} points`,
+            action: `${pointsAction} ${Math.abs(points)} points`,
             source,
             type,
             additionalMessage,
