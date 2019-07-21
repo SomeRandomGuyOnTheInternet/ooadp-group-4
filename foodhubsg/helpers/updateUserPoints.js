@@ -17,7 +17,7 @@ function updateUserPoints(user, points, source, additionalMessage = "") {
             type = "negative";
             pointsAction = "lost";
         }
-    
+
         User.update(
             { gainedPoints: Sequelize.literal(`gainedPoints + ${points}`) },
             { 
@@ -62,9 +62,10 @@ function updateUserPoints(user, points, source, additionalMessage = "") {
                                 additionalMessage: "If you have any enquiries, please contact us at admin@foodhubsg.com",
                                 hasViewed: false
                             })
+                            .then(() => {});
                         });
                     };
-                
+
                     if (data[0].gainedPoints >= 1000) {
                         UserBadge.findAll({
                             where: { UserId: user.id, BadgeId: 3 },
@@ -86,6 +87,7 @@ function updateUserPoints(user, points, source, additionalMessage = "") {
                                         BadgeId: 3,
                                     }),
                                 ])
+                                .then(() => {});
                             };
                         });
                     };
