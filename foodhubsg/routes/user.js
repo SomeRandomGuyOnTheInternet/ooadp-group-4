@@ -385,6 +385,21 @@ router.post('/addFood', isUser, (req, res) => {
     .then((foodItem) => {
         if (foodItem.isRecommended == true) { 
             updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!"); 
+
+            FoodLog.findAll({ 
+                where: {
+                    UserId: req.user.id
+                }, 
+                include: {
+                    model: Food,
+                    where: { isRecommended: true },
+                    required: true,
+                },
+            })
+            .then((recFoodLog) => { 
+                if (recFoodLog.length >= 1) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
+                else if (recFoodLog.length >= 10) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
+            })
         }
 
         FoodLog.create({
@@ -395,20 +410,7 @@ router.post('/addFood', isUser, (req, res) => {
         })
         .then(() => {
             updateUserCalories(user);
-            FoodLog.findAll({ 
-                where: {
-                    UserId: req.user.id
-                }, 
-                include: [{
-                    model: Food,
-                    where: { 
-                        isRecommended: true,
-                    },
-                    required: true,
-                }],
-            }).then((food) => { 
-                checkFoodItems(food, req.user); 
-            })
+
             req.flash('success', "That food has been successfully added!");
             res.redirect('/user/foodJournal');
         });
