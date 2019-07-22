@@ -13,6 +13,7 @@ const updateUserCalories = require('../helpers/updateUserCalories');
 const checkFoodItems = require('../helpers/checkFoodItems'); 
 const checkFriends = require('../helpers/checkFriends'); 
 const checkUserActivity = require('../helpers/checkUserActivity'); 
+const addBadges = require('../helpers/addBadges'); 
 
 
 const Food = require('../models/FoodItem');
@@ -406,7 +407,6 @@ router.post('/addFood', isUser, (req, res) => {
                     required: true,
                 }],
             }).then((food) => { 
-                console.log(food); 
                 checkFoodItems(food, req.user); 
             })
             req.flash('success', "That food has been successfully added!");
