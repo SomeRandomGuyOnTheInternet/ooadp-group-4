@@ -16,14 +16,9 @@ function checkFoodItems(foodItems) {
         addBadges('Baby Steps'); 
         break;
     }
-
-    else if (count > 5) { 
-        addBadges('Five Times')
-        break; 
-    }
     
     else if (count > 10) { 
-        addBadges('Ten Times')
+        addBadges('On Your Way Up')
         break; 
     }
 }

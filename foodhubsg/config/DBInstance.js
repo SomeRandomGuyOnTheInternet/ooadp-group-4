@@ -1,13 +1,13 @@
 function createInstance(Badge) {
     Badge.bulkCreate([
-        { 
-            name: 'Seedling', 
+        {
+            name: 'Seedling',
             description: 'A badge to start off your journey with us',
             imageLocation: '/images/seedling-badge.png'
         },
         {
-            name: 'First Contact', 
-            description: 'Added your first referral to your friend group',
+            name: 'First Friend',
+            description: 'Added your first friend',
             imageLocation: '/images/first-contact-badge.png'
         },
         {
@@ -16,10 +16,29 @@ function createInstance(Badge) {
             imageLocation: '/images/high-roller-badge.png'
         },
         {
-         name: 'Baby Steps',
+            name: 'Baby Steps',
             description: 'You have entered your first healthy food',
             imageLocation: '/images/seedling-badge.png'
         },
+
+        {
+            name: 'On Your Way Up',
+            description: 'You have entered 10 healthy food items, that is a long way to go',
+            imageLocation: '/images/seedling-badge.png'
+        },
+
+        {
+            name: 'Full House',
+            description: 'Ten Friends, that is more than enough to fully fill a house',
+            imageLocation: '/images/seedling-badge.png'
+        },
+
+        {
+            name: 'A Week Of Health',
+            description: 'On your way to being a healthy eater, keep it up',
+            imageLocation: '/images/seedling-badge.png'
+        }, 
+
     ]);
 
     // The password for the following accounts is just 'password'

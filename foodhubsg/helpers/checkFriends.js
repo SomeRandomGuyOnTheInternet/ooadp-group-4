@@ -10,14 +10,8 @@ function checkFriends(referrals) {
         addBadges('First Friend'); 
         break; 
     }
-
-    else if (count > 5) { 
-        addBadges('Five Friends'); 
-        break; 
-    }
-    
     else if (count > 10) { 
-        addBadges('Ten Friends'); 
+        addBadges('Full House'); 
         break; 
     }
 }; 
