@@ -10,6 +10,10 @@ const groupFoodItems = require('../helpers/groupFoodItems');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
 const updateUserPoints = require('../helpers/updateUserPoints');
 const updateUserCalories = require('../helpers/updateUserCalories');
+const checkFoodItems = require('../helpers/checkFoodItems'); 
+const checkFriends = require('../helpers/checkFriends'); 
+const checkUserActivity = require('../helpers/checkUserActivity'); 
+
 
 const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
@@ -390,7 +394,21 @@ router.post('/addFood', isUser, (req, res) => {
         })
         .then(() => {
             updateUserCalories(user);
-
+            FoodLog.findAll({ 
+                where: {
+                    UserId: req.user.id
+                }, 
+                include: [{
+                    model: Food,
+                    where: { 
+                        isRecommended: true,
+                    },
+                    required: true,
+                }],
+            }).then((food) => { 
+                console.log(food); 
+                checkFoodItems(food, req.user); 
+            })
             req.flash('success', "That food has been successfully added!");
             res.redirect('/user/foodJournal');
         });

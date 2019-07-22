@@ -9,12 +9,12 @@ function addBadges(name, user) {
     }).then((exName) => {
         UserBadge.findAll({
             where: {
-                userId: user.id,
+                UserId: user.id,
                 BadgeId: exName.id
             }
         }).then((exBadge) => {
             if (exBadge.length > 0) {
-                break;
+                
             }
 
             else {
@@ -24,8 +24,8 @@ function addBadges(name, user) {
                     }
                 }).then((badge) => {
                     UserBadge.create({
-                        userId: user.id,
-                        badgeId: badge.id
+                        UserId: user.id,
+                        BadgeId: badge.id
                     }).then(() => {
                         UserAction.create({
                             UserId: user.id,

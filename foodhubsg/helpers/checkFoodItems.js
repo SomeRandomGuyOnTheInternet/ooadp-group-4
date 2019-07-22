@@ -1,25 +1,14 @@
-const addBadges = require(addBadges); 
+const addBadges = require('./addBadges'); 
 
-function checkFoodItems(foodItems) { 
-    let count = 0;
-    for (i = 0; i < foodItems.length; i ++) { 
-        if (foodItems[i].isReconmended == 1) { 
-            count += 1 
-        }
-
-        else { 
-            continue; 
-        }
-    }
+function checkFoodItems(foodItems, user) { 
+    let count = foodItems.length; 
 
     if (count > 0) { 
-        addBadges('Baby Steps'); 
-        break;
+        addBadges('Baby Steps', user); 
     }
     
     else if (count > 10) { 
-        addBadges('On Your Way Up');
-        break; 
+        addBadges('On Your Way Up', user); 
     }
 }
 
