@@ -1,6 +1,6 @@
 function checkUserActivity(user) { 
-    if (user.daysActive == 7) { 
-        
+    if (user.daysActive == 7 && user.averageCalories <= 2500) { 
+        addBadges('A Week of Health'); 
     }
 }
 

@@ -18,7 +18,7 @@ function checkFoodItems(foodItems) {
     }
     
     else if (count > 10) { 
-        addBadges('On Your Way Up')
+        addBadges('On Your Way Up');
         break; 
     }
 }
