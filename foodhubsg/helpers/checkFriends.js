@@ -1,3 +1,5 @@
+const addBadges = require(addBadges); 
+
 function checkFriends(referrals) { 
     let count = 0;
     for (i = 0; i < referrals.length; i ++) { 
@@ -19,3 +21,5 @@ function checkFriends(referrals) {
         break; 
     }
 }; 
+
+module.exports = checkFriends; 

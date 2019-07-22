@@ -16,7 +16,7 @@ function createInstance(Badge) {
             imageLocation: '/images/high-roller-badge.png'
         },
         {
-            name: 'Baby Steps',
+         name: 'Baby Steps',
             description: 'You have entered your first healthy food',
             imageLocation: '/images/seedling-badge.png'
         },

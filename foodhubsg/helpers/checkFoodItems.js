@@ -1,3 +1,5 @@
+const addBadges = require(addBadges); 
+
 function checkFoodItems(foodItems) { 
     let count = 0;
     for (i = 0; i < foodItems.length; i ++) { 
@@ -26,3 +28,4 @@ function checkFoodItems(foodItems) {
     }
 }
 
+module.exports = checkFoodItems; 
