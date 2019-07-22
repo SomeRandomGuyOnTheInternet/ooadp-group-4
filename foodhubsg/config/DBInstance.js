@@ -29,7 +29,7 @@ function createInstance(Badge) {
 
         {
             name: 'Full House',
-            description: 'Ten Friends, that is more than enough to fully fill a house',
+            description: 'Ten friends, that is more than enough to fully fill a house',
             imageLocation: '/images/seedling-badge.png'
         },
 

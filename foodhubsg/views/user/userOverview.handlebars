@@ -292,7 +292,7 @@
                 $('.ajaxErrBlock').css("display", "block");
                 $('.ajaxErrMsg').text(data.error);
             } else {
-                location.reload();
+                setTimeout(location.reload.bind(location), 1500);
             }
         });
     });

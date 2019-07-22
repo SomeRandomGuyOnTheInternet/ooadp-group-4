@@ -10,8 +10,7 @@ const groupFoodItems = require('../helpers/groupFoodItems');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
 const updateUserPoints = require('../helpers/updateUserPoints');
 const updateUserCalories = require('../helpers/updateUserCalories');
-const checkFoodItems = require('../helpers/checkFoodItems'); 
-const checkFriends = require('../helpers/checkFriends'); 
+const checkFoodItems = require('../helpers/checkFoodItems');
 const checkUserActivity = require('../helpers/checkUserActivity'); 
 const addBadges = require('../helpers/addBadges'); 
 
@@ -480,30 +479,13 @@ router.post('/addRefCode', isUser, (req, res) => {
                 RefUserCode: referredUser.refCode,
                 RefUserId: referredUser.id,
             })
-            .then(() => {
-                Referral.findAll({ 
-                    where: { 
-                        UserId: req.user.id
-                    }
-                }).then((peer) => {
-                    checkFriends(peer, req.user)
+            .then((createdReferral) => {
+                Referral.findAll({ where: {  UserId: req.user.id } })
+                .then((referrals) => {
+                    // checkFriends(peer, req.user)
+                    if (referrals.length >= 1) { addBadges('First Friend', req.user, "adding your first referral"); } 
+                    else if (referrals.length >= 10) { addBadges('Full House', req.user, "adding ten referrals"); }
                 })
-                // if (!existingReferrals.length) {
-                //     Promise.all([
-                //         UserAction.create({
-                //             UserId: req.user.id,
-                //             action: "earned the First Contact badge",
-                //             source: "adding your first referral",
-                //             type: "positive",
-                //             additionalMessage: "",
-                //             hasViewed: false
-                //         }),
-                //         UserBadge.create({
-                //             UserId: req.user.id,
-                //             BadgeId: 2,
-                //         }),
-                //     ])
-                // }
                 req.flash('success', "You have successfully added a referral code!");
             });
         }
