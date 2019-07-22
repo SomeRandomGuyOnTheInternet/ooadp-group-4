@@ -460,13 +460,11 @@ router.post('/addRefCode', isUser, (req, res) => {
         User.findOne({ where: { refCode: refCode } }),
         Referral.findAll({ where: { UserId: req.user.id } }),
         Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } }),
-        UserBadge.findAll({ where: { BadgeId: 2, UserId: req.user.id } }),
     ])
     .then((data) => {
         var referredUser = data[0];
         var existingReferrals = data[1];
         var existingReferral = data[2];
-        var existingBadge = data[3];
 
         if (!referredUser) error = "That referral code does not exist!";
         if (existingReferral.length > 0) error = "You've already added that code!";
@@ -482,22 +480,29 @@ router.post('/addRefCode', isUser, (req, res) => {
                 RefUserId: referredUser.id,
             })
             .then(() => {
-                if (!existingReferrals.length && !existingBadge.length) {
-                    Promise.all([
-                        UserAction.create({
-                            UserId: req.user.id,
-                            action: "earned the First Contact badge",
-                            source: "adding your first referral",
-                            type: "positive",
-                            additionalMessage: "",
-                            hasViewed: false
-                        }),
-                        UserBadge.create({
-                            UserId: req.user.id,
-                            BadgeId: 2,
-                        }),
-                    ])
-                }
+                Referral.findAll({ 
+                    where: { 
+                        UserId: req.user.id
+                    }
+                }).then((peer) => {
+                    checkFriends(peer, req.user)
+                })
+                // if (!existingReferrals.length) {
+                //     Promise.all([
+                //         UserAction.create({
+                //             UserId: req.user.id,
+                //             action: "earned the First Contact badge",
+                //             source: "adding your first referral",
+                //             type: "positive",
+                //             additionalMessage: "",
+                //             hasViewed: false
+                //         }),
+                //         UserBadge.create({
+                //             UserId: req.user.id,
+                //             BadgeId: 2,
+                //         }),
+                //     ])
+                // }
                 req.flash('success', "You have successfully added a referral code!");
             });
         }

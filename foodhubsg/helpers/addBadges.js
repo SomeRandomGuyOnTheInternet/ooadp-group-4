@@ -2,7 +2,7 @@ const Badge = require('../models/Badge');
 const UserBadge = require('../models/UserBadge');
 const UserAction = require('../models/UserAction'); 
 
-function addBadges(name, user) {
+function addBadges(name, user, source) {
     Badge.findOne({
         where: {
             name: name
@@ -31,7 +31,7 @@ function addBadges(name, user) {
                         UserAction.create({
                             UserId: user.id,
                             action: "earned a new badge",
-                            source: "doing something to be rewarded",
+                            source: source,
                             type: "positive",
                             additionalMessage: "Congrats, you have a new badge on your page",
                             hasViewed: false
