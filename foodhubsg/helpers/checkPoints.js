@@ -1,4 +1,0 @@
-function checkPoints(points, badge) { 
-
-}
-
