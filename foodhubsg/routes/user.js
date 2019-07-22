@@ -269,6 +269,7 @@ router.get('/userOverview', isUser, (req, res) => {
     .then((data) => {
         getUnviewedNotifications(req.user)
         .then((unviewedNotifications) => {
+            checkUserActivity(req.user); 
             res.render('user/userOverview', {
                 user: req.user,
                 title: req.user.name + "'s Overview",
