@@ -385,6 +385,7 @@ router.post('/addFood', isUser, (req, res) => {
     .then((foodItem) => {
         if (foodItem.isRecommended == true) { 
             updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!"); 
+            // checkFoodItems(foodItems, user)
 
             FoodLog.findAll({ 
                 where: {
