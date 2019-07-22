@@ -1,0 +1,4 @@
+function checkPoints(points, badge) { 
+
+}
+
