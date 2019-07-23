@@ -33,11 +33,11 @@ function createInstance(Badge) {
             imageLocation: '/images/seedling-badge.png'
         },
 
-        {
-            name: 'A Week Of Health',
-            description: 'On your way to being a healthy eater, keep it up',
-            imageLocation: '/images/seedling-badge.png'
-        }, 
+        // {
+        //     name: 'A Week Of Health',
+        //     description: 'On your way to being a healthy eater, keep it up',
+        //     imageLocation: '/images/seedling-badge.png'
+        // }, 
 
     ]);
 
