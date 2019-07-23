@@ -52,10 +52,8 @@
                             <div class="row form-group">
                                 <div class="col-md-12">
                                     <span class="usernameMessage"></span>
-                                    <input name="messageForm" id="messageForm" type="text" class="form-control" value=""
-                                        placeholder="" required>
-                                    <button type="submit" id="sendButton" name="sendButton" value="Add Friend" class="btn btn-primary"
-                                style="background-color: #4CAF50;">Send A Message</button>
+                                    <input name="friendMessage" id="friendMessage" type="text" class="form-control" value=""
+                                        placeholder="" required> 
                                 </div>
                             </div>
                         </div>
@@ -63,7 +61,7 @@
                             <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg"></span>
                         </div>
                         <div class="modal-footer">
-                            <input type="submit" value="Enter Code" id="sendMessage" class="btn btn-primary"
+                            <input type="submit" value="Send A Message" id="sendButton" class="btn btn-primary"
                                 style="width:100%">
                         </div>
                     </form>
@@ -351,32 +349,28 @@
         event.preventDefault();
 
         $('#messageModal').modal('show');
-        $('.ajaxErrBlock').css("display", "block");
 
     });
 
-    $('.modal-action')
-        .bind("click keyup", function (event) {
-            const foodSubsection = $(this).parent().closest('div');
+    $('#sendButton').click(function (event) {
+        event.preventDefault();
+        let selRefCode = $('#friendMessage').val();
 
-            var logId = jQuery(foodSubsection).attr("logId");
-            var logCreatedAt = jQuery(foodSubsection).attr("logCreatedAt");
-            var foodName = jQuery(foodSubsection).attr("foodName");
-            var foodItemId = jQuery(foodSubsection).attr("foodItemId");
-            var foodCalories = jQuery(foodSubsection).attr("foodCalories");
-            var foodImageLocation = jQuery(foodSubsection).attr("foodImage");
-            var shopId = jQuery(foodSubsection).attr("shopId");
-            var shopName = jQuery(foodSubsection).attr("shopName");
+        $.ajax({
+            type: 'post',
+            url: `/userPage/:addRefCode`,
+            data: { selRefCode },
+            dataType: 'text'
+        })
+        .done(function (rawData) {
+            var data = JSON.parse(rawData);
 
-            $('#viewFoodName').text(foodName);
-            $('#viewFoodImage').attr("src", foodImageLocation);
-            $('#viewFoodId').text(foodItemId);
-            $('#viewFoodCalories').html(foodCalories);
-            $('#viewFoodShop').text(shopName);
-            $('#viewFoodShop').attr("href", `/user/shops/${shopId}`);
-
-            $('#codeToChange').attr("placeholder", `Previous Entry - ${foodName} (code: ${foodItemId})`);
-            $('#edit-food-form').attr("action", `/user/editFood/${logId}`);
-            $('#delete-food-form').attr("action", `/user/deleteFood/${logId}`);
+            if (data.error) {
+                $('.ajaxErrBlock').css("display", "block");
+                $('.ajaxErrMsg').text(data.error);
+            } else {
+                setTimeout(location.reload.bind(location), 1500);
+            }
         });
+    });
 </script>
