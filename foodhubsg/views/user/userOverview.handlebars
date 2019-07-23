@@ -306,6 +306,16 @@
                     location.reload();
                 }
             });
+        .done(function (rawData) {
+            var data = JSON.parse(rawData);
+
+            if (data.error) {
+                $('.ajaxErrBlock').css("display", "block");
+                $('.ajaxErrMsg').text(data.error);
+            } else {
+                setTimeout(location.reload.bind(location), 1500);
+            }
+        });
     });
 
     $('#messageButton').click(function (event) {
