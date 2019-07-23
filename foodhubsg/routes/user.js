@@ -10,8 +10,7 @@ const groupFoodItems = require('../helpers/groupFoodItems');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
 const updateUserPoints = require('../helpers/updateUserPoints');
 const updateUserCalories = require('../helpers/updateUserCalories');
-const checkFoodItems = require('../helpers/checkFoodItems'); 
-const checkFriends = require('../helpers/checkFriends'); 
+const checkFoodItems = require('../helpers/checkFoodItems');
 const checkUserActivity = require('../helpers/checkUserActivity'); 
 const addBadges = require('../helpers/addBadges'); 
 
@@ -386,6 +385,22 @@ router.post('/addFood', isUser, (req, res) => {
     .then((foodItem) => {
         if (foodItem.isRecommended == true) { 
             updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!"); 
+            // checkFoodItems(foodItems, user)
+
+            FoodLog.findAll({ 
+                where: {
+                    UserId: req.user.id
+                }, 
+                include: {
+                    model: Food,
+                    where: { isRecommended: true },
+                    required: true,
+                },
+            })
+            .then((recFoodLog) => { 
+                if (recFoodLog.length >= 1) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
+                else if (recFoodLog.length >= 10) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
+            })
         }
 
         FoodLog.create({
@@ -396,20 +411,7 @@ router.post('/addFood', isUser, (req, res) => {
         })
         .then(() => {
             updateUserCalories(user);
-            FoodLog.findAll({ 
-                where: {
-                    UserId: req.user.id
-                }, 
-                include: [{
-                    model: Food,
-                    where: { 
-                        isRecommended: true,
-                    },
-                    required: true,
-                }],
-            }).then((food) => { 
-                checkFoodItems(food, req.user); 
-            })
+
             req.flash('success', "That food has been successfully added!");
             res.redirect('/user/foodJournal');
         });
@@ -480,30 +482,13 @@ router.post('/addRefCode', isUser, (req, res) => {
                 RefUserCode: referredUser.refCode,
                 RefUserId: referredUser.id,
             })
-            .then(() => {
-                Referral.findAll({ 
-                    where: { 
-                        UserId: req.user.id
-                    }
-                }).then((peer) => {
-                    checkFriends(peer, req.user)
+            .then((createdReferral) => {
+                Referral.findAll({ where: {  UserId: req.user.id } })
+                .then((referrals) => {
+                    // checkFriends(peer, req.user)
+                    if (referrals.length >= 1) { addBadges('First Friend', req.user, "adding your first referral"); } 
+                    else if (referrals.length >= 10) { addBadges('Full House', req.user, "adding ten referrals"); }
                 })
-                // if (!existingReferrals.length) {
-                //     Promise.all([
-                //         UserAction.create({
-                //             UserId: req.user.id,
-                //             action: "earned the First Contact badge",
-                //             source: "adding your first referral",
-                //             type: "positive",
-                //             additionalMessage: "",
-                //             hasViewed: false
-                //         }),
-                //         UserBadge.create({
-                //             UserId: req.user.id,
-                //             BadgeId: 2,
-                //         }),
-                //     ])
-                // }
                 req.flash('success', "You have successfully added a referral code!");
             });
         }

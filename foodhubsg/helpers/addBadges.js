@@ -2,48 +2,37 @@ const Badge = require('../models/Badge');
 const UserBadge = require('../models/UserBadge');
 const UserAction = require('../models/UserAction'); 
 
+
 function addBadges(name, user, source) {
-    Badge.findOne({
-        where: {
-            name: name
-        }
-    }).then((exName) => {
+    Badge.findOne({ where: { name } })
+    .then((badge) => {
         UserBadge.findAll({
             where: {
                 UserId: user.id,
-                BadgeId: exName.id
+                BadgeId: badge.id
             }
-        }).then((exBadge) => {
-            if (exBadge.length > 0) {
-                
-            }
-
-            else {
-                Badge.findOne({
-                    where: {
-                        name: name
-                    }
-                }).then((badge) => {
+        })
+        .then((existingBadge) => {
+            if (!existingBadge.length) {
+                Promise.all([
                     UserBadge.create({
                         UserId: user.id,
                         BadgeId: badge.id
-                    }).then(() => {
-                        UserAction.create({
-                            UserId: user.id,
-                            action: "earned a new badge",
-                            source: source,
-                            type: "positive",
-                            additionalMessage: "Congrats, you have a new badge on your page",
-                            hasViewed: false
-                        })
-                            .then(() => { });
-                    })
-                })
+                    }),
+                    UserAction.create({
+                        UserId: user.id,
+                        action: `earned the ${badge.name} badge`,
+                        source,
+                        type: "positive",
+                        additionalMessage: "You can view this bade on your page.",
+                        hasViewed: false
+                    }),
+                ])
+                .then(setTimeout(function (data) { }, 2500));
             }
         })
     })
-
-
 }
+
 
 module.exports = addBadges; 

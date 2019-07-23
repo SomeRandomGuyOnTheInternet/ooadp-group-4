@@ -18,7 +18,7 @@ function createInstance(Badge) {
         {
             name: 'Baby Steps',
             description: 'You have entered your first healthy food',
-            imageLocation: '/images/seedling-badge.png'
+            imageLocation: '/images/baby-steps-badge.png'
         },
 
         {
@@ -29,7 +29,7 @@ function createInstance(Badge) {
 
         {
             name: 'Full House',
-            description: 'Ten Friends, that is more than enough to fully fill a house',
+            description: 'Ten friends, that is more than enough to fully fill a house',
             imageLocation: '/images/seedling-badge.png'
         },
 
