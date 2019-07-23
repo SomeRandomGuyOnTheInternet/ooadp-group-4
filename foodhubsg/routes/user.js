@@ -123,10 +123,6 @@ router.get('/shops/:id', isUser, (req, res) => {
                     unviewedNotifications
                 });
             });
-        })
-        .catch((err) => {
-            req.flash('error', "That shop does not exist!");
-            res.redirect('/user/shops');
         });
     })
     .catch((err) => {
@@ -327,7 +323,7 @@ router.post('/foodJournal', isUser, (req, res) => {
                     createdAtDate: searchDate
                 },
                 required: true,
-            }, {
+            },{
                 model: Shop,
                 required: true,
             }],
@@ -439,7 +435,7 @@ router.post('/editFood/:id', isUser, (req, res) => {
             req.flash('error', "That code does not exist!");
             res.redirect('/user/foodJournal');
         }
-    })
+    });
 });
 
 
