@@ -30,6 +30,45 @@
                                 style="width:100%">
                         </div>
                     </form>
+
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModal"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title font_color" id="addRefModalLabel"><b>Send A Message</b></h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form method="post" action="" id="messageForm">
+                        <div class="modal-body">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <span class="usernameMessage"></span>
+                                    <input name="messageForm" id="messageForm" type="text" class="form-control" value=""
+                                        placeholder="" required>
+                                    <button type="submit" id="sendButton" name="sendButton" value="Add Friend" class="btn btn-primary"
+                                style="background-color: #4CAF50;">Send A Message</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer ajaxErrBlock">
+                            <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Enter Code" id="sendMessage" class="btn btn-primary"
+                                style="width:100%">
+                        </div>
+                    </form>
+
+                   
                 </div>
             </div>
         </div>
@@ -203,8 +242,8 @@
                             <br>
                             <a href="#">Points History</a>
                         </div>
-                        <div class="col-md-2 text-right">
-                            <button type="submit" name="messageButton" value="Add Friend" class="btn btn-primary"
+                        <div class="col-md-2 text-right" userId = "{{id}}" username = "{{name}}">
+                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Send A Message</button>
 
                         </div>
@@ -276,8 +315,8 @@
 
 
 <script>
-    refUserFoodLog = {{ { json refUserFoodLog } }};
-    referredUsers = {{ { json referredUsers } }};
+    refUserFoodLog = {{{ json refUserFoodLog }}};
+    referredUsers = {{{ json referredUsers }}};
 
     for (i = 0; i < referredUsers.length; i++) {
         for (var [userId, foodLog] of Object.entries(refUserFoodLog)) {
@@ -296,16 +335,6 @@
             data: { selRefCode },
             dataType: 'text'
         })
-            .done(function (rawData) {
-                var data = JSON.parse(rawData);
-
-                if (data.error) {
-                    $('.ajaxErrBlock').css("display", "block");
-                    $('.ajaxErrMsg').text(data.error);
-                } else {
-                    location.reload();
-                }
-            });
         .done(function (rawData) {
             var data = JSON.parse(rawData);
 
@@ -321,15 +350,7 @@
     $('#messageButton').click(function (event) {
         event.preventDefault();
 
-        $('#previewFoodName').text(foodItem.name);
-        $('#previewFoodImage').attr("src", foodItem.imageLocation);
-        $('#previewFoodId').text(foodItem.id);
-        $('#previewFoodCalories').html(foodItem.calories);
-        $('#userFoodCode').val(foodItem.id)
-
-        $('#previewFoodModal').modal('show');
-
-        $('#userFoodCode').val(0);
+        $('#messageModal').modal('show');
         $('.ajaxErrBlock').css("display", "block");
 
     });
