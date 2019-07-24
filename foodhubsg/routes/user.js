@@ -530,14 +530,15 @@ router.get('/delRefCode/:id', isUser, (req, res) => {
 
 
 router.post('/userPage', (req, res) => {
-    let compliment = req.body.compliment;
-    let id = req.body.friendName; 
+    let compliment = req.body.sendMessage;
+    let id = req.body.friendId; 
+    console.log(compliment, id); 
     var error; 
     Referral.update({
         compliment: compliment,
     }, {
             where: {
-                id: req.params.id,
+                id: id,
                 UserId: req.user.id,
             }
         }).then(() => {
