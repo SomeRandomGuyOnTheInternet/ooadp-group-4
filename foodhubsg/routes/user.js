@@ -508,29 +508,30 @@ router.get('/delRefCode/:id', isUser, (req, res) => {
 });
 
 
-router.get('/userPage/:refCode', (req, res) => {
-    Referral.findOne({
-        where: {
-            RefUserCode: req.params.refCode
-        }
-    }).then((referral) => {
-        User.findOne({
-            where: {
-                refCode: req.params.refCode,
-            }
-        }).then((friend) => {
-            res.render('user/friendPage', {
-                user: req.user,
-                friend: friend,
-                compliment: referral
-            })
-        })
-    })
-})
+// router.get('/userPage/:refCode', (req, res) => {
+//     Referral.findOne({
+//         where: {
+//             RefUserCode: req.params.refCode
+//         }
+//     }).then((referral) => {
+//         User.findOne({
+//             where: {
+//                 refCode: req.params.refCode,
+//             }
+//         }).then((friend) => {
+//             res.render('user/friendPage', {
+//                 user: req.user,
+//                 friend: friend,
+//                 compliment: referral
+//             })
+//         })
+//     })
+// })
 
 
-router.post('/userPage/:id', (req, res) => {
+router.post('/userPage', (req, res) => {
     let compliment = req.body.compliment;
+    let id = req.body.friendName; 
     var error; 
     Referral.update({
         compliment: compliment,
