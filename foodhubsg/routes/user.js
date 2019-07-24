@@ -260,6 +260,11 @@ router.get('/userOverview', isUser, (req, res) => {
             ],
             raw: true
         }),
+        Referral.findAll({ 
+            where: { 
+                RefUserId: req.user.id 
+            }
+        })
     ])
     .then((data) => {
         getUnviewedNotifications(req.user)
@@ -272,6 +277,7 @@ router.get('/userOverview', isUser, (req, res) => {
                 userFoodLog: groupFoodItems(data[1]),
                 referredUsers: groupReferredUsers(data[2], data[3]),
                 refUserFoodLog: groupFoodItems(data[4]),
+                friendedUsers: data[5],
                 unviewedNotifications
             });
         });
@@ -531,8 +537,7 @@ router.get('/delRefCode/:id', isUser, (req, res) => {
 
 router.post('/userPage', (req, res) => {
     let compliment = req.body.sendMessage;
-    let id = req.body.friendId; 
-    console.log(compliment, id); 
+    let id = req.body.friendId; ``
     var error; 
     Referral.update({
         compliment: compliment,
@@ -543,7 +548,7 @@ router.post('/userPage', (req, res) => {
             }
         }).then(() => {
             req.flash('success', 'Compliment set');
-            res.redirect('/user/userOverview')
+            res.redirect('/user/userOverview'); 
             
         })
         res.send({ error });
