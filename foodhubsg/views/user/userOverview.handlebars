@@ -242,9 +242,16 @@
                             <br>
                             <a href="#">Points History</a>
                         </div>
-                        <div class="col-md-2 text-right" refId = "{{'Referrals.id'}}">
+                        <div class="col-md-2 text-right" refId = "{{'Referrals.id'}}"> 
+                            {{#if compliment}}
+                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
+                                style="background-color: #4CAF50;">Edit Your Message</button>
+                               
+                            {{else}}
                             <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Send A Message</button>
+
+                            {{/if}}
 
                         </div>
                     </div>
