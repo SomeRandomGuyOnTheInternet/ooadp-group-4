@@ -146,7 +146,7 @@ router.post('/register', isloggedOut, (req, res) => {
 								BadgeId: 1,
 							}),
 						])
-						.then(function () {
+						.then(function (data) {
 							req.flash('success', "Your email has been successfully registered!");
 							res.redirect('./login');
 						});

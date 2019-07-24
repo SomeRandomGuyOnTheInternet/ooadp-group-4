@@ -24,7 +24,7 @@ function addBadges(name, user, source) {
                         action: `earned the ${badge.name} badge`,
                         source,
                         type: "positive",
-                        additionalMessage: "You can view this bade on your page.",
+                        additionalMessage: "You can view this badge on your page.",
                         hasViewed: false
                     }),
                 ])
