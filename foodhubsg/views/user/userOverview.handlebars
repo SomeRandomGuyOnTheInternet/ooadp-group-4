@@ -1,7 +1,6 @@
 {{> _msg }}
 <div id="colorlib-container">
     <div class="container">
-
         <div class="modal fade" id="addRefModal" tabindex="-1" role="dialog" aria-labelledby="addRefModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -79,11 +78,11 @@
 
                     <header>
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-8 col-md-8">
                                 <h1 class="font_color"><b>{{user.name}}'s Overview</b></h1>
                                 <h5>({{user.email}})</h5>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-4 col-md-4">
                                 <a class="settings-action" href="/user/settings" style="float:right;">
                                     <input type="submit" name="action" value="Edit Info" class="btn btn-primary"
                                         style="background-color: #4CAF50;">
@@ -94,15 +93,15 @@
                     </header>
 
                     <div class="row form-group">
-                        <div class="col-md-3 text-left">
+                        <div class="col-12 col-md-3 text-left ref-code-container">
                             <h6 style="margin-bottom: 0;">Referral Code</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-12 col-md-6 text-center badge-container">
                             <h6 style="margin-bottom: 5px;">Badges</h6>
                             <div class="row justify-content-center">
                                 {{#each userBadges}}
-                                <div class="col-md-3 text-center badge">
+                                <div class="col-3 col-md-3 text-center badge">
                                     <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
                                     <img src="{{'Badge.imageLocation'}}" width="50px" height="50px"
                                         class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
@@ -113,7 +112,7 @@
                                 {{/each}}
                             </div>
                         </div>
-                        <div class="col-md-3 text-right">
+                        <div class="col-12 col-md-3 text-right points-container">
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
                             <br>
@@ -196,10 +195,10 @@
 
                     <header>
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-8 col-md-8">
                                 <h1 class="font_color"><b>Friend Activity</b></h1>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-4 col-md-4">
                                 <a class="modal-action" data-toggle="modal" data-target="#addRefModal"
                                     style="float:right;">
                                     <input type="submit" name="action" value="Add Friend" class="btn btn-primary"
@@ -212,7 +211,7 @@
 
                     {{#each referredUsers}}
                     <div class="row form-group">
-                        <div class="col-md-3 text-left" refId="{{'Referrals.id'}}">
+                        <div class="col-12 col-md-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
                             <a href="/user/userPage/{{ refCode }}">
                                 <h6 style="margin-bottom: 15px;">User Info</h6>
                                 <h5 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
@@ -235,7 +234,7 @@
                             <h6 style="margin-bottom: 5px;">Badges</h6>
                             <div class="row justify-content-center">
                                 {{#each badges}}
-                                <div class="col-md-2 text-center badge">
+                                <div class="col-3 col-md-3 text-center badge">
                                     <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
                                     <img src="{{'Badge.imageLocation'}}" width="50px" height="50px"
                                         class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
@@ -244,7 +243,7 @@
                                 {{/each}}
                             </div>
                         </div>
-                        <div class="col-md-3 text-right">
+                        <div class="col-12 col-md-3 text-right points-container">
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                             <br>

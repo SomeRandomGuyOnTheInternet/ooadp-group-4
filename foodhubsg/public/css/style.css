@@ -1594,9 +1594,25 @@ input[type="text"] {
     overflow-x: scroll;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   h1 {
     font-size: 30px;
+  }
+
+  h2 {
+    font-size: 25px;
+  }
+
+  h3 {
+    font-size: 23px;
+  }
+
+  h4 {
+    font-size: 20px;
+  }
+
+  h5 {
+    font-size: 18px;
   }
 
   .btn-tall {
@@ -1623,6 +1639,11 @@ input[type="text"] {
   
   .container {
     padding:0;
+  }
+
+  .points-container, .ref-code-container {
+    text-align: center !important;
+    margin: 25px 0;
   }
 
   .meal-type {
