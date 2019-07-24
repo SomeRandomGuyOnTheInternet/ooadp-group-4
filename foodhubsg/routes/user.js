@@ -529,19 +529,22 @@ router.get('/userPage/:refCode', (req, res) => {
 })
 
 
-router.post('/userPage/:refCode', (req, res) => {
+router.post('/userPage/:id', (req, res) => {
     let compliment = req.body.compliment;
+    var error; 
     Referral.update({
         compliment: compliment,
     }, {
             where: {
-                RefUserCode: req.params.refCode,
+                id: req.params.id,
                 UserId: req.user.id,
             }
         }).then(() => {
             req.flash('success', 'Compliment set');
             res.redirect('/user/userOverview')
+            
         })
+        res.send({ error });
 })
 
 router.get('/deleteCompliment/:id', isUser, (req, res) => {

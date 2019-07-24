@@ -54,6 +54,8 @@
                                     <span class="usernameMessage"></span>
                                     <input name="friendMessage" id="friendMessage" type="text" class="form-control" value=""
                                         placeholder="" required> 
+                                     <input name="friendName" id="friendName" type="text" class="form-control invisible" value=""
+                                        required> 
                                 </div>
                             </div>
                         </div>
@@ -240,7 +242,7 @@
                             <br>
                             <a href="#">Points History</a>
                         </div>
-                        <div class="col-md-2 text-right" userId = "{{id}}" username = "{{name}}">
+                        <div class="col-md-2 text-right" refId = "{{'Referrals.id'}}">
                             <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Send A Message</button>
 
@@ -347,19 +349,21 @@
 
     $('#messageButton').click(function (event) {
         event.preventDefault();
-
+        const referrals = $(this).parent().closest('div');
         $('#messageModal').modal('show');
+        let friendId = jQuery(referrals).attr("refId");
+        $('#friendName').val(friendId); 
 
     });
 
     $('#sendButton').click(function (event) {
         event.preventDefault();
-        let selRefCode = $('#friendMessage').val();
-
+        let sendMessage = $('#friendMessage').val();
+        console.log(sendMessage)
         $.ajax({
             type: 'post',
-            url: `/userPage/:addRefCode`,
-            data: { selRefCode },
+            url: `/user/userPage/`,
+            data: { sendMessage },
             dataType: 'text'
         })
         .done(function (rawData) {
