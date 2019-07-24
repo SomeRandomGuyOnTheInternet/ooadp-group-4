@@ -212,12 +212,20 @@
 
                     {{#each referredUsers}}
                     <div class="row form-group">
-                        <div class="col-md-2 text-left">
+                        <div class="col-md-3 text-left" refId="{{'Referrals.id'}}">
                             <a href="/user/userPage/{{ refCode }}">
                                 <h6 style="margin-bottom: 15px;">User Info</h6>
                                 <h5 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
                                 <h6 style="margin-bottom: 20px;">({{ email }})</h6>
                             </a>
+                            {{#if compliment}}
+                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
+                                style="background-color: #4CAF50;">Edit Compliment</button>
+                            {{else}}
+                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
+                                style="background-color: #4CAF50;">Send Compliment</button>
+                            {{/if}}
+                            <br>
                             <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                 data-title="Confirm delete?">
                                 <i class="fas fa-trash-alt"></i>&nbsp;Delete
@@ -236,23 +244,11 @@
                                 {{/each}}
                             </div>
                         </div>
-                        <div class="col-md-2 text-center">
+                        <div class="col-md-3 text-right">
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                             <br>
                             <a href="#">Points History</a>
-                        </div>
-                        <div class="col-md-2 text-right" refId = "{{'Referrals.id'}}"> 
-                            {{#if compliment}}
-                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
-                                style="background-color: #4CAF50;">Edit Your Message</button>
-                               
-                            {{else}}
-                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
-                                style="background-color: #4CAF50;">Send A Message</button>
-
-                            {{/if}}
-
                         </div>
                     </div>
                     {{#ifCond daysActive '>=' 3}}
