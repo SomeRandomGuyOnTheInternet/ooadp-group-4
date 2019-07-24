@@ -359,11 +359,11 @@
     $('#sendButton').click(function (event) {
         event.preventDefault();
         let sendMessage = $('#friendMessage').val();
-        console.log(sendMessage)
+        let friendId = $('#friendName').val();
         $.ajax({
             type: 'post',
-            url: `/user/userPage/`,
-            data: { sendMessage },
+            url: `/user/userPage`,
+            data: { friendId, sendMessage },
             dataType: 'text'
         })
         .done(function (rawData) {
