@@ -270,6 +270,7 @@ router.get('/userOverview', isUser, (req, res) => {
         getUnviewedNotifications(req.user)
         .then((unviewedNotifications) => {
             checkUserActivity(req.user); 
+            console.log(groupReferredUsers(data[2], data[3])); 
             res.render('user/userOverview', {
                 user: req.user,
                 title: req.user.name + "'s Overview",
