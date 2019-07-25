@@ -222,9 +222,17 @@
                                 style="background-color: #4CAF50;">Edit Compliment</button>
                                by8uyugugubuugbu
                             {{else}} --}}
+                            {{#if mutual}}
                             <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
-                                style="background-color: #4CAF50;">Send Compliment</button>
+                                style="background-color: #4CAF50;">Send Message</button>
+
+                            {{else}}
+                            <h6 style="margin-bottom: 15px;">You can't send a Message, you need to both accept it.</h6>
+                             {{!-- <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
+                                style="background-color: #4CAF50;"></button> --}}
                             {{!-- {{/if}} --}}
+
+                            {{/if}}
                             <br>
                             <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                 data-title="Confirm delete?">
@@ -284,29 +292,22 @@
                 <div class="col-md-12">
 
                     <header>
-                        <h1 class="font_color"><b>Your Messages</b></h1>
+                        <h1 class="font_color"><b>People who referred you </b></h1>
                         <hr>
                     </header>
 
                     {{#each friendedUsers}}
                     <div class="row form-group">
-                        <div class="col-md-12">
-                            {{#if this.compliment}}
-                            <b>{{this.compliment}}</b> <br>
-                            <b> Date Added: </b>
-                            <b>{{formatDate this.createdAt 'DD-MM-YYYY'}}</b> <br>
-                            <b> Date Updated: </b>
-                            <b>{{formatDate this.updatedAt 'DD-MM-YYYY'}}</b>
-                            {{else}}
-                            <h4><b>This message is deleted</b></h4>
-                            {{/if}}
-
-
+                        <div class="col-md-9">
+                            <b>{{this.name}} </b> <br>
+                            <b>{{this.email}} </b>
+                        
+                        </div>
+                         <div class="col-md-3">
+                            <button type="submit"> Accept Their Request </button>
                         </div>
                     </div>
                     <hr>
-                    {{else}}
-                    <h4><b>No one has left a message for you yet</b></h4>
                     {{/each}}
                 </div>
             </div>
