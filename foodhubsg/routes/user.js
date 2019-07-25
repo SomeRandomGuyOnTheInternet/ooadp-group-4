@@ -1,5 +1,6 @@
 const express = require('express');
 const Sequelize = require('sequelize');
+const moment = require('moment');
 const router = express.Router();
 
 const isUser = require('../helpers/isUser');
@@ -139,7 +140,7 @@ router.get('/foodJournal', isUser, (req, res) => {
                 model: FoodLog,
                 where: { UserId: req.user.id },
                 required: true,
-            }, {
+            },{
                 model: Shop,
                 required: true,
             }],
@@ -166,6 +167,7 @@ router.get('/foodJournal', isUser, (req, res) => {
                 title: "Food Journal",
                 groupedFoodItems: groupedFoodItems[req.user.id],
                 allFoodItems: FoodItems[1],
+                today: moment(new Date()).format("YYYY-MM-DD"),
                 unviewedNotifications,
             });
         });
@@ -269,7 +271,7 @@ router.get('/userOverview', isUser, (req, res) => {
     .then((data) => {
         getUnviewedNotifications(req.user)
         .then((unviewedNotifications) => {
-            checkUserActivity(req.user);
+            // checkUserActivity(req.user);
             res.render('user/userOverview', {
                 user: req.user,
                 title: req.user.name + "'s Overview",
@@ -354,6 +356,7 @@ router.post('/foodJournal', isUser, (req, res) => {
             title: "Food Journal",
             groupedFoodItems: groupedFoodItems[req.user.id],
             allFoodItems: FoodItems[1],
+            today: moment(new Date()).format("YYYY-MM-DD"),
             searchDate,
         });
     });
@@ -463,13 +466,11 @@ router.post('/addRefCode', isUser, (req, res) => {
 
     Promise.all([
         User.findOne({ where: { refCode: refCode } }),
-        Referral.findAll({ where: { UserId: req.user.id } }),
         Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } }),
     ])
     .then((data) => {
         var referredUser = data[0];
-        var existingReferrals = data[1];
-        var existingReferral = data[2];
+        var existingReferral = data[1];
 
         if (!referredUser) error = "That referral code does not exist!";
         if (existingReferral.length > 0) error = "You've already added that code!";
@@ -487,7 +488,7 @@ router.post('/addRefCode', isUser, (req, res) => {
             .then((createdReferral) => {
                 Referral.findAll({ where: {  UserId: req.user.id } })
                 .then((referrals) => {
-                    // checkFriends(peer, req.user)
+                    // checkFriends(peer, req.user);
                     if (referrals.length >= 1) { addBadges('First Friend', req.user, "adding your first referral"); } 
                     else if (referrals.length >= 10) { addBadges('Full House', req.user, "adding ten referrals"); }
                 })
