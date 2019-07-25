@@ -48,7 +48,6 @@ function updateUserPoints(user, points, source, additionalMessage = "") {
                     }),
                 ])
                 .then((data) => {
-                    // console.log(data[1], data[1].length)
                     if (data[1].length >= 10) { 
                         User.update(
                             { isBanned: true },
@@ -60,10 +59,9 @@ function updateUserPoints(user, points, source, additionalMessage = "") {
                                 action: "been banned from earning points",
                                 source: "getting too many points in a short timespan",
                                 type: "negative",
-                                additionalMessage: "If you have any enquiries, please contact us at admin@foodhubsg.com",
+                                additionalMessage: "If you have any enquiries, please contact us at admin@foodhubsg.com.",
                                 hasViewed: false
-                            })
-                            .then(() => {});
+                            });
                         });
                     };
 
