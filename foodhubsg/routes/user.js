@@ -161,17 +161,19 @@ router.get('/foodJournal', isUser, (req, res) => {
         .then((FoodItems) => {
             var groupedFoodItems = groupFoodItems(FoodItems[0], true);
 
-        getUnviewedNotifications(req.user)
-        .then((unviewedNotifications) => {
-            res.render('user/foodJournal', {
-                user: req.user,
-                title: "Food Journal",
-                groupedFoodItems: groupedFoodItems[req.user.id],
-                allFoodItems: FoodItems[1],
-                today: moment(new Date()).format("YYYY-MM-DD"),
-                unviewedNotifications,
-            });
+            getUnviewedNotifications(req.user)
+                .then((unviewedNotifications) => {
+                    res.render('user/foodJournal', {
+                        user: req.user,
+                        title: "Food Journal",
+                        groupedFoodItems: groupedFoodItems[req.user.id],
+                        allFoodItems: FoodItems[1],
+                        today: moment(new Date()).format("YYYY-MM-DD"),
+                        unviewedNotifications,
+                    });
+                });
         });
+
 });
 
 
@@ -501,166 +503,168 @@ router.post('/foodJournal', (req, res) => {
             });
     });
 
-
-    router.get('/delRefCode/:id', isUser, (req, res) => {
-        var id = req.params.id;
-
-        Referral.destroy({ where: { id } })
-            .then((referral) => {
-                if (referral !== null) {
-                    updateUserPoints(req.user, -75, "removing someone from your friend group");
-
-                    req.flash('success', "You have successfully deleted a referral code!");
-                    res.redirect('/user/userOverview');
-                }
-            })
-    });
+});
 
 
-    // router.get('/userPage/:refCode', (req, res) => {
-    //     Referral.findOne({
-    //         where: {
-    //             RefUserCode: req.params.refCode
-    //         }
-    //     }).then((referral) => {
-    //         User.findOne({
-    //             where: {
-    //                 refCode: req.params.refCode,
-    //             }
-    //         }).then((friend) => {
-    //             res.render('user/friendPage', {
-    //                 user: req.user,
-    //                 friend: friend,
-    //                 compliment: referral
-    //             })
-    //         })
-    //     })
-    // })
+router.get('/delRefCode/:id', isUser, (req, res) => {
+    var id = req.params.id;
 
+    Referral.destroy({ where: { id } })
+        .then((referral) => {
+            if (referral !== null) {
+                updateUserPoints(req.user, -75, "removing someone from your friend group");
 
-    router.post('/userPage', (req, res) => {
-        let compliment = req.body.sendMessage;
-        let id = req.body.friendId; ``
-        var error;
-        Referral.update({
-            compliment: compliment,
-        }, {
-                where: {
-                    id: id,
-                    UserId: req.user.id,
-                }
-            }).then(() => {
-                req.flash('success', 'Compliment set');
+                req.flash('success', "You have successfully deleted a referral code!");
                 res.redirect('/user/userOverview');
-
-            })
-        res.send({ error });
-    })
-
-    router.get('/deleteCompliment/:id', isUser, (req, res) => {
-        Referral.update({
-            compliment: null,
-        }, {
-                where: {
-                    id: req.params.id,
-                    UserId: req.user.id,
-                }
-            }).then(() => {
-                req.flash('success', 'Compliment deleted');
-                res.redirect('/user/userOverview')
-            })
-    })
-
-    router.get('/sendMessage', isUser, (req, res) => {
-        Referral.findAll({
-            where: {
-                userId: req.user.id
             }
-        }).then((friend) => {
-            res.render('user/sendMessages', {
-                friend: friend,
-                user: req.user
-            })
         })
-    })
+});
 
-    router.get('/editCompliment/:id', isUser, (req, res) => {
-        Referral.findOne({
+
+// router.get('/userPage/:refCode', (req, res) => {
+//     Referral.findOne({
+//         where: {
+//             RefUserCode: req.params.refCode
+//         }
+//     }).then((referral) => {
+//         User.findOne({
+//             where: {
+//                 refCode: req.params.refCode,
+//             }
+//         }).then((friend) => {
+//             res.render('user/friendPage', {
+//                 user: req.user,
+//                 friend: friend,
+//                 compliment: referral
+//             })
+//         })
+//     })
+// })
+
+
+router.post('/userPage', (req, res) => {
+    let compliment = req.body.sendMessage;
+    let id = req.body.friendId; ``
+    var error;
+    Referral.update({
+        compliment: compliment,
+    }, {
+            where: {
+                id: id,
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment set');
+            res.redirect('/user/userOverview');
+
+        })
+    res.send({ error });
+})
+
+router.get('/deleteCompliment/:id', isUser, (req, res) => {
+    Referral.update({
+        compliment: null,
+    }, {
             where: {
                 id: req.params.id,
                 UserId: req.user.id,
             }
-        }).then((com) => {
-            res.render('user/editCompliment', {
-                compliment: com,
-                user: req.user
-            })
+        }).then(() => {
+            req.flash('success', 'Compliment deleted');
+            res.redirect('/user/userOverview')
+        })
+})
+
+router.get('/sendMessage', isUser, (req, res) => {
+    Referral.findAll({
+        where: {
+            userId: req.user.id
+        }
+    }).then((friend) => {
+        res.render('user/sendMessages', {
+            friend: friend,
+            user: req.user
         })
     })
+})
 
-
-    router.post('/editCompliment/:id', isUser, (req, res) => {
-        let compliment = req.body.compliment;
-        Referral.update({
-            compliment: compliment,
-        }, {
-                where: {
-                    id: req.params.id,
-                    UserId: req.user.id,
-                }
-            }).then(() => {
-                req.flash('success', 'Compliment edited');
-                res.redirect('/user/userOverview')
-            })
-    })
-
-
-
-    router.post('/faq', isUser, (req, res) => {
-        const isAdmin = isBanned = isVendor = false;
-        const isAnswered = false;
-        let question = req.body.question;
-        var error;
-
-        Question.create({
+router.get('/editCompliment/:id', isUser, (req, res) => {
+    Referral.findOne({
+        where: {
+            id: req.params.id,
             UserId: req.user.id,
-            question: question,
+        }
+    }).then((com) => {
+        res.render('user/editCompliment', {
+            compliment: com,
+            user: req.user
         })
-            .then((questions) => {
-                req.flash('success', 'You have successfully created a question!');
-                res.redirect('/user/faq');
-            })
-    });
+    })
+})
 
 
-    router.post('/settings', isUser, (req, res) => {
-        const name = req.body.name;
-        let email = req.body.email.toLowerCase();
-        let password = req.body.password;
-        const isAdmin = isBanned = isVendor = false;
-        let weight = req.body.weight;
-        let height = req.body.height;
-        var error;
-
-        bcrypt.genSalt(function (err, salt) {
-            bcrypt.hash(password, salt, function (err, hash) {
-                User.update({
-                    weight: req.body.weight,
-                    height: req.body.height,
-                    email: email,
-                    password: hash,
-                }, {
-                        where: { id: req.user.id }
-                    })
-                    .then(function (user) {
-                        res.redirect('/user/settings');
-                    })
-                    .catch(err => console.log(err));
-
-            });
+router.post('/editCompliment/:id', isUser, (req, res) => {
+    let compliment = req.body.compliment;
+    Referral.update({
+        compliment: compliment,
+    }, {
+            where: {
+                id: req.params.id,
+                UserId: req.user.id,
+            }
+        }).then(() => {
+            req.flash('success', 'Compliment edited');
+            res.redirect('/user/userOverview')
         })
-    });
+})
 
 
 
-    module.exports = router;
+router.post('/faq', isUser, (req, res) => {
+    const isAdmin = isBanned = isVendor = false;
+    const isAnswered = false;
+    let question = req.body.question;
+    var error;
+
+    Question.create({
+        UserId: req.user.id,
+        question: question,
+    })
+        .then((questions) => {
+            req.flash('success', 'You have successfully created a question!');
+            res.redirect('/user/faq');
+        })
+});
+
+
+router.post('/settings', isUser, (req, res) => {
+    const name = req.body.name;
+    let email = req.body.email.toLowerCase();
+    let password = req.body.password;
+    const isAdmin = isBanned = isVendor = false;
+    let weight = req.body.weight;
+    let height = req.body.height;
+    var error;
+
+    bcrypt.genSalt(function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+            User.update({
+                weight: req.body.weight,
+                height: req.body.height,
+                email: email,
+                password: hash,
+            }, {
+                    where: { id: req.user.id }
+                })
+                .then(function (user) {
+                    res.redirect('/user/settings');
+                })
+                .catch(err => console.log(err));
+
+        });
+    })
+});
+
+
+
+module.exports = router;
