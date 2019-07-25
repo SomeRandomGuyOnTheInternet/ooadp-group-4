@@ -34,9 +34,10 @@ router.post('/settings', isVendor, (req, res) => {
                 })
 
         });
-    })
-    res.redirect('/vendor/settings');
+    }) 
     req.flash('success', 'Settings have been updated successfully');
+    res.redirect('/vendor/settings');
+   
 });
 
 

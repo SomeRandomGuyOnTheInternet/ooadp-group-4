@@ -211,19 +211,20 @@
 
                     {{#each referredUsers}}
                     <div class="row form-group">
-                        <div class="col-12 col-md-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
-                            <a href="/user/userPage/{{ refCode }}">
+                        <div class="col-md-3 text-left" refId="{{'Referrals.id'}}">
+                            {{!-- <a href="/user/userPage/{{ refCode }}"> --}}
                                 <h6 style="margin-bottom: 15px;">User Info</h6>
                                 <h5 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
                                 <h6 style="margin-bottom: 20px;">({{ email }})</h6>
-                            </a>
-                            {{#if compliment}}
-                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
+                            {{!-- </a> --}}
+                            {{!-- {{#if Referrals.compliment}}
+                            <button type="submit" id="editMessageButton" name="editMessageButton" value="Add Friend" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Edit Compliment</button>
-                            {{else}}
-                            <button type="submit" id="messageButton" name="messageButton" value="Add Friend" class="btn btn-primary"
+                               by8uyugugubuugbu
+                            {{else}} --}}
+                            <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
                                 style="background-color: #4CAF50;">Send Compliment</button>
-                            {{/if}}
+                            {{!-- {{/if}} --}}
                             <br>
                             <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                 data-title="Confirm delete?">
@@ -349,7 +350,7 @@
         });
     });
 
-    $('#messageButton').click(function (event) {
+    $('.messageButton').click(function (event) {
         event.preventDefault();
         const referrals = $(this).parent().closest('div');
         $('#messageModal').modal('show');
