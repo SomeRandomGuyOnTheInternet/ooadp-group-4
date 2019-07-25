@@ -299,7 +299,7 @@ router.get('/settings', isUser, (req, res) => {
 });
 
 
-router.post('/addBmi', isUser, (req, res) => {
+router.post('/addBmi', (req, res) => {
     const weight = req.body.weight;
     const height = req.body.height;
     const bmi = (weight / (height * height)).toFixed(2);
@@ -319,7 +319,7 @@ router.post('/addBmi', isUser, (req, res) => {
 });
 
 
-router.post('/foodJournal', isUser, (req, res) => {
+router.post('/foodJournal', (req, res) => {
     var searchDate = req.body.searchDate;
 
     Promise.all([
@@ -378,7 +378,7 @@ router.post('/searchFood', (req, res) => {
 });
 
 
-router.post('/addFood', isUser, (req, res) => {
+router.post('/addFood', (req, res) => {
     var user = req.user, selectedFoodId = req.body.userFoodCode;
 
     Food.findOne({
@@ -424,7 +424,7 @@ router.post('/addFood', isUser, (req, res) => {
 });
 
 
-router.post('/editFood/:id', isUser, (req, res) => {
+router.post('/editFood/:id', (req, res) => {
     const logId = req.params.id;
     const foodIdToUpdateTo = req.body.codeToChange;
 
@@ -448,7 +448,7 @@ router.post('/editFood/:id', isUser, (req, res) => {
 });
 
 
-router.post('/deleteFood/:id', isUser, (req, res) => {
+router.post('/deleteFood/:id', (req, res) => {
     var logId = req.params.id;
 
     FoodLog.destroy({ where: { id: logId } })
@@ -460,7 +460,7 @@ router.post('/deleteFood/:id', isUser, (req, res) => {
 });
 
 
-router.post('/addRefCode', isUser, (req, res) => {
+router.post('/addRefCode', (req, res) => {
     const refCode = req.body.selRefCode.toLowerCase();
     var error;
 
