@@ -1594,6 +1594,33 @@ input[type="text"] {
     overflow-x: scroll;
 }
 
+@media (max-width:1200px) {
+  .nav-item {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline;
+  }
+
+  .navbar-nav{
+    text-align: center !important;
+  }
+
+  .settings, .btn-food-code {
+    margin: 1em 0 1em 0 !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .points-container, .ref-code-container {
+    text-align: center !important;
+    margin: 25px 0;
+  }
+
+  .friend-user-info {
+    font-size: 26px;
+  }
+}
+
 @media (max-width: 768px) {
   h1 {
     font-size: 30px;
@@ -1621,20 +1648,6 @@ input[type="text"] {
 
   input[type="text"], input[type="date"] {
     height: 45px; 
-  }
-
-  .nav-item {
-    padding: 0 !important;
-    margin: 0 !important;
-    display: inline;
-  }
-
-  .navbar-nav{
-    text-align: center !important;
-  }
-
-  .settings, .btn-food-code {
-    margin: 1em 0 1em 0 !important;
   }
   
   .container {
@@ -1818,5 +1831,10 @@ select {
     padding: 0.75rem 0.5rem;
     margin-bottom: 0;
     background-color: rgba(0, 0, 0, 0.03);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.card-body {
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-top: 0;  
 }

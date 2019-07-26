@@ -101,7 +101,7 @@
                             <h6 style="margin-bottom: 5px;">Badges</h6>
                             <div class="row justify-content-center">
                                 {{#each userBadges}}
-                                <div class="col-3 col-md-3 text-center badge">
+                                <div class="col-3 col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center badge">
                                     <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
                                     <img src="{{'Badge.imageLocation'}}" width="50px" height="50px"
                                         class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
@@ -211,10 +211,10 @@
 
                     {{#each referredUsers}}
                     <div class="row form-group">
-                        <div class="col-md-3 text-left" refId="{{'Referrals.id'}}">
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
                             {{!-- <a href="/user/userPage/{{ refCode }}"> --}}
                                 <h6 style="margin-bottom: 15px;">User Info</h6>
-                                <h5 style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
+                                <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
                                 <h6 style="margin-bottom: 20px;">({{ email }})</h6>
                             {{!-- </a> --}}
                             {{!-- {{#if Referrals.compliment}}
@@ -222,20 +222,19 @@
                                 style="background-color: #4CAF50;">Edit Compliment</button>
                                by8uyugugubuugbu
                             {{else}} --}}
-                            <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
-                                style="background-color: #4CAF50;">Send Compliment</button>
+                            {{!-- <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
+                                style="background-color: #4CAF50;">Send Compliment</button> --}}
                             {{!-- {{/if}} --}}
-                            <br>
                             <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                 data-title="Confirm delete?">
                                 <i class="fas fa-trash-alt"></i>&nbsp;Delete
                             </a>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-sm-12 col-md-12 col-lg-6 text-center">
                             <h6 style="margin-bottom: 5px;">Badges</h6>
                             <div class="row justify-content-center">
                                 {{#each badges}}
-                                <div class="col-3 col-md-3 text-center badge">
+                                <div class="col-3 col-sm-3 col-md-2 col-lg-3 col-xl-3 text-center badge">
                                     <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
                                     <img src="{{'Badge.imageLocation'}}" width="50px" height="50px"
                                         class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
@@ -244,7 +243,7 @@
                                 {{/each}}
                             </div>
                         </div>
-                        <div class="col-12 col-md-3 text-right points-container">
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-right points-container">
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                             <br>
@@ -270,6 +269,7 @@
                         </div>
                     </div>
                     {{/ifCond}}
+                    <hr width="20%">
                     <hr width="20%">
                     {{else}}
                     <h4><b>You have not referred anyone yet!</b></h4>
