@@ -622,7 +622,7 @@ router.post('/editCompliment/:id', isUser, (req, res) => {
         })
 });
 
-router.post('/acceptRequest/:id', isUser, (req, res) => {
+router.get('/acceptRequest/:id', isUser, (req, res) => {
     Referral.update({
         isMutual: true
     }, {
@@ -630,8 +630,10 @@ router.post('/acceptRequest/:id', isUser, (req, res) => {
                 RefUserId: req.user.id,
                 UserId: req.params.id
             }
-        }
-    )
+        }).then(() => { 
+            req.flash('success', 'Requested Accepted, you can now chat');
+            res.redirect('/user/userOverview');
+        })
 });
 
 
