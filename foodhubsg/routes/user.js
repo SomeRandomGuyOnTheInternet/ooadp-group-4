@@ -281,27 +281,44 @@ router.get('/userOverview', isUser, (req, res) => {
         .then((data) => {
             getUnviewedNotifications(req.user)
                 .then((unviewedNotifications) => {
+
                     let length = data[5].length;
-                    let user_list = data[5]
-                    for (i = 0; i <= length; i++) {
-                        User.findAll({
-                            where: {
-                                id: user_list[i].UserId
-                            }
-                        }).then((friend) => {
-                            // console.log(data); 
-                            res.render('user/userOverview', {
-                                user: req.user,
-                                title: req.user.name + "'s Overview",
-                                userBadges: data[0],
-                                userFoodLog: groupFoodItems(data[1]),
-                                referredUsers: groupReferredUsers(data[2], data[3]),
-                                refUserFoodLog: groupFoodItems(data[4]),
-                                friendedUsers: friend,
-                                unviewedNotifications
+                    if (length > 0) {
+                        let user_list = data[5];
+
+                        for (i = 0; i <= length; i++) {
+                            User.findAll({
+                                where: {
+                                    id: user_list[i].UserId
+                                }
+                            }).then((friend) => {
+                                // console.log(data); 
+                                res.render('user/userOverview', {
+                                    user: req.user,
+                                    title: req.user.name + "'s Overview",
+                                    userBadges: data[0],
+                                    userFoodLog: groupFoodItems(data[1]),
+                                    referredUsers: groupReferredUsers(data[2], data[3]),
+                                    refUserFoodLog: groupFoodItems(data[4]),
+                                    friendedUsers: friend,
+                                    unviewedNotifications
+                                });
                             });
+                        }
+                    }
+
+                    else { 
+                        res.render('user/userOverview', {
+                            user: req.user,
+                            title: req.user.name + "'s Overview",
+                            userBadges: data[0],
+                            userFoodLog: groupFoodItems(data[1]),
+                            referredUsers: groupReferredUsers(data[2], data[3]),
+                            refUserFoodLog: groupFoodItems(data[4]),
+                            unviewedNotifications
                         });
                     }
+
 
                     // checkUserActivity(req.user);
 
@@ -630,7 +647,7 @@ router.get('/acceptRequest/:id', isUser, (req, res) => {
                 RefUserId: req.user.id,
                 UserId: req.params.id
             }
-        }).then(() => { 
+        }).then(() => {
             req.flash('success', 'Requested Accepted, you can now chat');
             res.redirect('/user/userOverview');
         })
