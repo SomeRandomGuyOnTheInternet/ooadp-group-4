@@ -230,7 +230,10 @@ router.get('/userOverview', isUser, (req, res) => {
             include: {
                 model: Referral,
                 required: true,
-                where: { UserId: req.user.id },
+                where: { 
+                    UserId: req.user.id,
+                    isMutual: false,
+                },
             },
             order: [
                 ['gainedPoints', 'DESC'],
@@ -272,57 +275,40 @@ router.get('/userOverview', isUser, (req, res) => {
             ],
             raw: true
         }),
-        Referral.findAll({
-            where: {
-                RefUserId: req.user.id
-            }
-        })
+        User.findAll({
+            include: {
+                model: Referral,
+                required: true,
+                where: Sequelize.and(
+                    { isMutual: true },
+                    Sequelize.or(
+                        { UserId: req.user.id },
+                        { RefUserId: req.user.id },
+                    ), 
+                ),
+            },
+            order: [
+                ['gainedPoints', 'DESC'],
+            ],
+            raw: true
+        }),
     ])
-        .then((data) => {
-            getUnviewedNotifications(req.user)
-                .then((unviewedNotifications) => {
-
-                    let length = data[5].length;
-                    if (length > 0) {
-                        let user_list = data[5];
-
-                        for (i = 0; i <= length; i++) {
-                            User.findAll({
-                                where: {
-                                    id: user_list[i].UserId
-                                }
-                            }).then((friend) => {
-                                // console.log(data); 
-                                res.render('user/userOverview', {
-                                    user: req.user,
-                                    title: req.user.name + "'s Overview",
-                                    userBadges: data[0],
-                                    userFoodLog: groupFoodItems(data[1]),
-                                    referredUsers: groupReferredUsers(data[2], data[3]),
-                                    refUserFoodLog: groupFoodItems(data[4]),
-                                    friendedUsers: friend,
-                                    unviewedNotifications
-                                });
-                            });
-                        }
-                    }
-
-                    else { 
-                        res.render('user/userOverview', {
-                            user: req.user,
-                            title: req.user.name + "'s Overview",
-                            userBadges: data[0],
-                            userFoodLog: groupFoodItems(data[1]),
-                            referredUsers: groupReferredUsers(data[2], data[3]),
-                            refUserFoodLog: groupFoodItems(data[4]),
-                            unviewedNotifications
-                        });
-                    }
-
-
-                    // checkUserActivity(req.user);
-
+    .then((data) => {
+        getUnviewedNotifications(req.user)
+        .then((unviewedNotifications) => {
+            console.log(groupReferredUsers(data[2], data[3]));
+                res.render('user/userOverview', {
+                    user: req.user,
+                    title: req.user.name + "'s Overview",
+                    userBadges: data[0],
+                    userFoodLog: groupFoodItems(data[1]),
+                    referredUsers: groupReferredUsers(data[2], data[3]),
+                    mutualUsers: groupReferredUsers(data[5], data[3]),
+                    refUserFoodLog: groupFoodItems(data[4]),
+                    unviewedNotifications
                 });
+
+            });
         });
 });
 
@@ -524,6 +510,7 @@ router.post('/addRefCode', (req, res) => {
                     UserId: req.user.id,
                     RefUserCode: referredUser.refCode,
                     RefUserId: referredUser.id,
+                    isMutual: false, 
                 })
                     .then((createdReferral) => {
                         Referral.findAll({ where: { UserId: req.user.id } })
@@ -644,8 +631,7 @@ router.get('/acceptRequest/:id', isUser, (req, res) => {
         isMutual: true
     }, {
             where: {
-                RefUserId: req.user.id,
-                UserId: req.params.id
+               id: req.params.id, 
             }
         }).then(() => {
             req.flash('success', 'Requested Accepted, you can now chat');

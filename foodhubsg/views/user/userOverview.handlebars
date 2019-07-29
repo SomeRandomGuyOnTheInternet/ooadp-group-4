@@ -30,7 +30,7 @@
                         </div>
                     </form>
 
-                   
+
                 </div>
             </div>
         </div>
@@ -51,10 +51,10 @@
                             <div class="row form-group">
                                 <div class="col-md-12">
                                     <span class="usernameMessage"></span>
-                                    <input name="friendMessage" id="friendMessage" type="text" class="form-control" value=""
-                                        placeholder="" required> 
-                                     <input name="friendName" id="friendName" type="text" class="form-control invisible" value=""
-                                        required> 
+                                    <input name="friendMessage" id="friendMessage" type="text" class="form-control"
+                                        value="" placeholder="" required>
+                                    <input name="friendName" id="friendName" type="text" class="form-control invisible"
+                                        value="" required>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                         </div>
                     </form>
 
-                   
+
                 </div>
             </div>
         </div>
@@ -211,21 +211,27 @@
 
                     {{#each referredUsers}}
                     <div class="row form-group">
-                        <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container"
+                            refId="{{'Referrals.id'}}">
                             {{!-- <a href="/user/userPage/{{ refCode }}"> --}}
-                                <h6 style="margin-bottom: 15px;">User Info</h6>
-                                <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
-                                <h6 style="margin-bottom: 20px;">({{ email }})</h6>
+                            <h6 style="margin-bottom: 15px;">User Info</h6>
+                            <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;-
+                                {{ refCode }}</h5>
+                            <h6 style="margin-bottom: 20px;">({{ email }})</h6>
                             {{!-- </a> --}}
                             {{!-- {{#if Referrals.compliment}}
                             <button type="submit" id="editMessageButton" name="editMessageButton" value="Add Friend" class="btn btn-primary"
                                 style="background-color: #4CAF50;">Edit Compliment</button>
                                by8uyugugubuugbu
                             {{else}} --}}
-                            {{#if this.isMutual}}
-                            <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
-                                style="background-color: #4CAF50;">Send Message</button>
-                            {{/if}}
+
+                            <div class="col-md-3">
+                                <a href="/user/acceptRequest/{{'Referrals.id'}}">
+                                    <button type="submit" class="btn btn-primary acceptRequest"> Accept Their Request
+                                    </button>
+                                </a>
+                            </div>
+
                             <br>
                             <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                 data-title="Confirm delete?">
@@ -290,17 +296,16 @@
                         <hr>
                     </header>
 
-                    {{#each friendedUsers}}
+                    {{#each mutualUsers}}
                     <div class="row form-group">
                         <div class="col-md-9">
                             <b>{{this.name}} </b> <br>
                             <b>{{this.email}} </b>
-                        
+
                         </div>
-                         <div class="col-md-3">
-                             <a href="/user/acceptRequest/{{this.id}}">
-                             <button type="submit" class="btn btn-primary acceptRequest"> Accept Their Request </button>
-                             </a>
+                        <div class="col-md-3">
+                            <button type="submit" class="messageButton btn btn-primary" name="messageButton"
+                                value="Add Friend" style="background-color: #4CAF50;">Send Message</button>
                         </div>
                     </div>
                     <hr>
@@ -335,16 +340,16 @@
             data: { selRefCode },
             dataType: 'text'
         })
-        .done(function (rawData) {
-            var data = JSON.parse(rawData);
+            .done(function (rawData) {
+                var data = JSON.parse(rawData);
 
-            if (data.error) {
-                $('.ajaxErrBlock').css("display", "block");
-                $('.ajaxErrMsg').text(data.error);
-            } else {
-                setTimeout(location.reload.bind(location), 1500);
-            }
-        });
+                if (data.error) {
+                    $('.ajaxErrBlock').css("display", "block");
+                    $('.ajaxErrMsg').text(data.error);
+                } else {
+                    setTimeout(location.reload.bind(location), 1500);
+                }
+            });
     });
 
     $('.messageButton').click(function (event) {
@@ -352,7 +357,7 @@
         const referrals = $(this).parent().closest('div');
         $('#messageModal').modal('show');
         let friendId = jQuery(referrals).attr("refId");
-        $('#friendName').val(friendId); 
+        $('#friendName').val(friendId);
 
     });
 
@@ -366,17 +371,17 @@
             data: { friendId, sendMessage },
             dataType: 'text'
         })
-        .done(function (rawData) {
-            var data = JSON.parse(rawData);
+            .done(function (rawData) {
+                var data = JSON.parse(rawData);
 
-            if (data.error) {
-                $('.ajaxErrBlock').css("display", "block");
-                $('.ajaxErrMsg').text(data.error);
-            } else {
-                setTimeout(location.reload.bind(location), 1500);
-            }
-        });
+                if (data.error) {
+                    $('.ajaxErrBlock').css("display", "block");
+                    $('.ajaxErrMsg').text(data.error);
+                } else {
+                    setTimeout(location.reload.bind(location), 1500);
+                }
+            });
     });
 
-    
+
 </script>
