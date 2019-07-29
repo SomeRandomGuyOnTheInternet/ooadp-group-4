@@ -296,7 +296,6 @@ router.get('/userOverview', isUser, (req, res) => {
     .then((data) => {
         getUnviewedNotifications(req.user)
         .then((unviewedNotifications) => {
-            console.log(groupReferredUsers(data[2], data[3]));
                 res.render('user/userOverview', {
                     user: req.user,
                     title: req.user.name + "'s Overview",
@@ -583,7 +582,7 @@ router.post('/userPage', (req, res) => {
 })
 
 router.get('/deleteCompliment/:id', isUser, (req, res) => {
-    Referral.update({
+    Referral.findOne({
         compliment: null,
     }, {
             where: {
@@ -594,7 +593,18 @@ router.get('/deleteCompliment/:id', isUser, (req, res) => {
             req.flash('success', 'Compliment deleted');
             res.redirect('/user/userOverview')
         })
-})
+}); 
+
+router.get('/sendMessage/:id', isUser, (req, res) => {
+    Referral.findOne({
+            where: {
+                id: req.params.id,
+            }
+        }).then(() => {
+            res.render('user/sendMessages', 
+            {user: req.user})
+        })
+}); 
 
 router.get('/editCompliment/:id', isUser, (req, res) => {
     Referral.findOne({

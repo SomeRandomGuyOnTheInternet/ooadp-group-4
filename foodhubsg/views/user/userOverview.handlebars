@@ -304,8 +304,10 @@
 
                         </div>
                         <div class="col-md-3">
+                            <a href="/user/sendMessage/{{'Referrals.id'}}">
                             <button type="submit" class="messageButton btn btn-primary" name="messageButton"
                                 value="Add Friend" style="background-color: #4CAF50;">Send Message</button>
+                            </a>
                         </div>
                     </div>
                     <hr>
@@ -352,7 +354,7 @@
             });
     });
 
-    $('.messageButton').click(function (event) {
+    {{!-- $('.messageButton').click(function (event) {
         event.preventDefault();
         const referrals = $(this).parent().closest('div');
         $('#messageModal').modal('show');
@@ -381,7 +383,7 @@
                     setTimeout(location.reload.bind(location), 1500);
                 }
             });
-    });
+    }); --}}
 
 
 </script>
