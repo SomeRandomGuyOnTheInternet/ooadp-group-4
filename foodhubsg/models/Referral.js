@@ -7,9 +7,9 @@ const Referral = db.define('Referral', {
     RefUserCode: {
         type: Sequelize.STRING
     },
-    compliment: { 
-        type: Sequelize.STRING(2000)
-    }, 
+    isMutual: {
+        type: Sequelize.BOOLEAN
+    },
 });
 
 
