@@ -340,6 +340,7 @@
                 $('.ajaxErrBlock').css("display", "block");
                 $('.ajaxErrMsg').text(data.error);
             } else {
+                $('#refCodeSend').val("Loading...");
                 setTimeout(location.reload.bind(location), 1500);
             }
         });

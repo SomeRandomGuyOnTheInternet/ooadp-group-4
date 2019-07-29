@@ -347,6 +347,22 @@
         });
     });
 
+    $('.addFoodForm').submit(function (event) {
+        event.preventDefault();
+        let foodId = $('#userFoodCode').val();
+
+        $.ajax({
+            type: 'post',
+            url: `/user/addFood`,
+            data: { foodId },
+            dataType: 'text'
+        })
+        .done(function (data) {
+            $('#add-button').val("Loading...");
+            setTimeout(location.reload.bind(location), 1500);
+        });
+    });
+
     $('.modal-action')
     .bind("click keyup", function (event) {
         const foodSubsection = $(this).parent().closest('div');

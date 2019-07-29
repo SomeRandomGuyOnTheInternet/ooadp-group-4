@@ -389,7 +389,7 @@ router.post('/searchFood', (req, res) => {
 
 
 router.post('/addFood', (req, res) => {
-    var user = req.user, selectedFoodId = req.body.userFoodCode;
+    var user = req.user, selectedFoodId = req.body.foodId;
 
     Food.findOne({
         where: {
@@ -400,7 +400,6 @@ router.post('/addFood', (req, res) => {
     .then((foodItem) => {
         if (foodItem.isRecommended == true) { 
             updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!"); 
-            // checkFoodItems(foodItems, user)
 
             FoodLog.findAll({ 
                 where: {
@@ -426,11 +425,10 @@ router.post('/addFood', (req, res) => {
         })
         .then(() => {
             updateUserCalories(user);
-
             req.flash('success', "That food has been successfully added!");
-            res.redirect('/user/foodJournal');
         });
     });
+    res.send({ user });
 });
 
 
