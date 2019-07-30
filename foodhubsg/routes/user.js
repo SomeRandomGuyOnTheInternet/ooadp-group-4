@@ -9,10 +9,9 @@ const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const groupFoodItems = require('../helpers/groupFoodItems');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
+const createUserReferral = require('../helpers/createUserReferral');
 const updateUserPoints = require('../helpers/updateUserPoints');
 const updateUserCalories = require('../helpers/updateUserCalories');
-const checkFoodItems = require('../helpers/checkFoodItems');
-const checkUserActivity = require('../helpers/checkUserActivity');
 const addBadges = require('../helpers/addBadges');
 
 
@@ -20,7 +19,6 @@ const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const User = require('../models/User');
-const UserAction = require('../models/UserAction');
 const UserBadge = require('../models/UserBadge');
 const Badge = require('../models/Badge');
 const Referral = require('../models/Referral');
@@ -28,8 +26,10 @@ const Question = require('../models/Question');
 
 
 
-router.get('/', isUser, (req, res) => {
-    Promise.all([
+router.get('/', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let shops = await
         Shop.findAll({
             where: {
                 location: req.user.location,
@@ -38,7 +38,9 @@ router.get('/', isUser, (req, res) => {
             order: [
                 ['rating', 'DESC'],
             ],
-        }),
+        });
+
+    let foodItems = await
         Food.findAll({
             include: [{
                 model: FoodLog,
@@ -49,7 +51,9 @@ router.get('/', isUser, (req, res) => {
                 [FoodLog, 'createdAt', 'ASC'],
             ],
             raw: true
-        }),
+        });
+
+    let userBadges = await
         UserBadge.findAll({
             where: { UserId: req.user.id },
             include: {
@@ -57,94 +61,75 @@ router.get('/', isUser, (req, res) => {
                 required: true,
             },
             raw: true
-        }),
-    ])
-        .then(function (data) {
-            var groupedFoodItems = groupFoodItems(data[1]);
-            var shops = data[0];
-            var userBadges = data[2];
-
-            getUnviewedNotifications(req.user)
-                .then((unviewedNotifications) => {
-                    res.render('user/index', {
-                        user: req.user,
-                        title: "Index",
-                        shops,
-                        groupedFoodItems,
-                        userBadges,
-                        unviewedNotifications
-                    });
-                });
         });
+        
+    res.render('user/index', {
+        user: req.user,
+        title: "Index",
+        shops,
+        groupedFoodItems: groupFoodItems(foodItems),
+        userBadges,
+        unviewedNotifications
+    });
 });
 
 
-router.get('/shops', isUser, (req, res) => {
-    Shop.findAll({
-        where: { isDeleted: false },
-        order: [
-            ['rating', 'DESC'],
-        ],
-    })
-        .then(function (shops) {
-            getUnviewedNotifications(req.user)
-                .then((unviewedNotifications) => {
-                    res.render('user/shops', {
-                        user: req.user,
-                        title: "Shops",
-                        shops,
-                        unviewedNotifications
-                    });
-                });
-        });
-});
+router.get('/shops', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
 
-
-router.get('/shops/:id', isUser, (req, res) => {
-    var id = req.params.id;
-
-    Promise.all([
-        Shop.findOne({
-            where: { id },
-        }),
-        Food.findAll({
-            where: {
-                ShopId: id,
-                isDeleted: false,
-            }
-        }),
+    let shops = await
         Shop.findAll({
-            where: { id: { [Sequelize.Op.not]: id } },
-        }),
-    ])
-        .then((data) => {
-            User.findOne({
-                where: { id: data[0].VendorId },
-            })
-                .then((vendor) => {
-                    getUnviewedNotifications(req.user)
-                        .then((unviewedNotifications) => {
-                            res.render('user/shop', {
-                                title: data[0].name,
-                                shop: data[0],
-                                foodItems: data[1],
-                                otherShops: data[2],
-                                vendor,
-                                user: req.user,
-                                unviewedNotifications
-                            });
-                        });
-                });
-        })
-        .catch((err) => {
-            req.flash('error', "That shop does not exist!");
-            res.redirect('/user/shops');
+            where: { isDeleted: false },
+            order: [
+                ['rating', 'DESC'],
+            ],
         });
+
+    res.render('user/shops', {
+        user: req.user,
+        title: "Shops",
+        shops,
+        unviewedNotifications
+    });
 });
 
 
-router.get('/foodJournal', isUser, (req, res) => {
-    Promise.all([
+router.get('/shops/:id', isUser, async (req, res) => {
+    let id = req.params.id;
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    try {
+        let shop = await Shop.findOne({ where: { id } });
+        let vendor = await User.findOne({ where: { id: shop.VendorId } });
+        let otherShops = await Shop.findAll({ where: { id: { [Sequelize.Op.not]: id } } });
+        let foodItems = await
+            Food.findAll({
+                where: {
+                    ShopId: id,
+                    isDeleted: false,
+                }
+            });
+
+        res.render('user/shop', {
+            title: shop.name,
+            shop,
+            foodItems,
+            otherShops,
+            vendor,
+            user: req.user,
+            unviewedNotifications
+        });
+    } catch (err) {
+        req.flash('error', "That shop does not exist!");
+        res.redirect('/user/shops');
+    };
+});
+
+
+router.get('/foodJournal', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let foodItems = await
         Food.findAll({
             include: [{
                 model: FoodLog,
@@ -158,69 +143,71 @@ router.get('/foodJournal', isUser, (req, res) => {
                 [FoodLog, 'createdAt', 'DESC'],
             ],
             raw: true
-        }),
+        });
+
+    let allFoodItems = await
         Food.findAll({
             include: [{
                 model: Shop,
                 required: true,
             }],
             raw: true
-        }),
-    ])
-        .then((FoodItems) => {
-            var groupedFoodItems = groupFoodItems(FoodItems[0], true);
-
-            getUnviewedNotifications(req.user)
-                .then((unviewedNotifications) => {
-                    res.render('user/foodJournal', {
-                        user: req.user,
-                        title: "Food Journal",
-                        groupedFoodItems: groupedFoodItems[req.user.id],
-                        allFoodItems: FoodItems[1],
-                        today: moment(new Date()).format("YYYY-MM-DD"),
-                        unviewedNotifications,
-                    });
-                });
         });
+        
+    let groupedFoodItems = groupFoodItems(foodItems, true);
+
+    res.render('user/foodJournal', {
+        user: req.user,
+        title: "Food Journal",
+        groupedFoodItems: groupedFoodItems[req.user.id],
+        allFoodItems,
+        today: moment(new Date()).format("YYYY-MM-DD"),
+        unviewedNotifications,
+    });
 });
 
 
-router.get('/faq', isUser, (req, res) => {
-    Question.findAll({
-        order: [
-            ['createdAt', 'ASC'],
-        ],
-        raw: true
-    })
-        .then((questions) => {
-            getUnviewedNotifications(req.user)
-                .then((unviewedNotifications) => {
-                    res.render('user/faq', {
-                        user: req.user,
-                        questions,
-                        unviewedNotifications
-                    });
-                });
+router.get('/faq', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let questions  = await
+        Question.findAll({
+            order: [
+                ['createdAt', 'ASC'],
+            ],
+            raw: true
         });
+
+    res.render('user/faq', {
+        user: req.user,
+        questions,
+        unviewedNotifications
+    });
 });
 
 
-router.get('/userOverview', isUser, (req, res) => {
-    Promise.all([
+router.get('/userOverview', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let referredUsers = await
         User.findAll({
             include: {
                 model: Referral,
                 required: true,
-                where: {
-                    UserId: req.user.id,
-                    isMutual: false,
-                },
+                where:
+                    Sequelize.or(
+                        { UserId: req.user.id },
+                        { RefUserId: req.user.id },
+                    ),
             },
+            where: { id: { [Sequelize.Op.not]: req.user.id } },
             order: [
                 ['gainedPoints', 'DESC'],
             ],
             raw: true
-        }),
+        });
+
+    let refUserBadges = await
         UserBadge.findAll({
             include: [{
                 model: Badge,
@@ -234,7 +221,9 @@ router.get('/userOverview', isUser, (req, res) => {
                 },
             }],
             raw: true
-        }),
+        });
+
+    let refUserFoodLog = await
         Food.findAll({
             include: [{
                 model: FoodLog,
@@ -255,81 +244,60 @@ router.get('/userOverview', isUser, (req, res) => {
                 [FoodLog, 'createdAt', 'ASC'],
             ],
             raw: true
-        }),
-        User.findAll({
-            include: {
-                model: Referral,
-                required: true,
-                where: Sequelize.and(
-                    { isMutual: true },
-                    Sequelize.or(
-                        { UserId: req.user.id },
-                        { RefUserId: req.user.id },
-                    ),
-                ),
-            },
-            order: [
-                ['gainedPoints', 'DESC'],
-            ],
-            raw: true
-        }),
-    ])
-        .then((data) => {
-            getUnviewedNotifications(req.user)
-                .then((unviewedNotifications) => {
-                    res.render('user/userOverview', {
-                        user: req.user,
-                        title: req.user.name + "'s Overview",
-                        referredUsers: groupReferredUsers(data[0], data[1]),
-                        mutualUsers: groupReferredUsers(data[3], data[1]),
-                        refUserFoodLog: groupFoodItems(data[2]),
-                        unviewedNotifications
-                    });
-                });
         });
+        
+    res.render('user/userOverview', {
+        user: req.user,
+        title: req.user.name + "'s Overview",
+        referredUsers: groupReferredUsers(referredUsers, refUserBadges),
+        refUserFoodLog: groupFoodItems(refUserFoodLog),
+        unviewedNotifications
+    });
 });
 
 
-router.get('/settings', isUser, (req, res) => {
-    getUnviewedNotifications(req.user)
-        .then((unviewedNotifications) => {
-            res.render('user/settings', {
-                user: req.user,
-                title: "Settings",
-                unviewedNotifications
-            });
-        });
+router.get('/settings', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    res.render('user/settings', {
+        user: req.user,
+        title: "Settings",
+        unviewedNotifications
+    });
 });
 
 
-router.post('/addBmi', (req, res) => {
+router.post('/addBmi', async (req, res) => {
     const weight = req.body.weight;
     const height = req.body.height;
     const bmi = (weight / (height * height)).toFixed(2);
-    var error;
+    let error;
 
     if (height > 3 || weight < 0.5) error = 'Please enter a valid height value';
     if (weight > 200 || weight < 20) error = 'Please enter a valid weight value';
 
     if (!error) {
-        User.update(
-            { weight, height, bmi },
-            { where: { id: req.user.id } },
-        )
-    }
+        await
+            User.update(
+                { weight, height, bmi },
+                { where: { id: req.user.id } },
+            );
+    };
 
     res.send({ error });
 });
 
 
-router.post('/foodJournal', (req, res) => {
-    var searchDate = req.body.searchDate;
+router.post('/foodJournal', async (req, res) => {
+    let searchDate = req.body.searchDate;
 
-    Promise.all([
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let foodItems = await
         Food.findAll({
             include: [{
                 model: FoodLog,
-                where: {
+                where: { 
                     UserId: req.user.id,
                     createdAtDate: searchDate
                 },
@@ -342,231 +310,224 @@ router.post('/foodJournal', (req, res) => {
                 [FoodLog, 'createdAt', 'DESC'],
             ],
             raw: true
-        }),
+        });
+
+    let allFoodItems = await
         Food.findAll({
             include: [{
                 model: Shop,
                 required: true,
             }],
             raw: true
-        }),
-    ])
-        .then((FoodItems) => {
-            var groupedFoodItems = groupFoodItems(FoodItems[0], true);
+        });
 
-            res.render('user/foodJournal', {
-                user: req.user,
-                title: "Food Journal",
-                groupedFoodItems: groupedFoodItems[req.user.id],
-                allFoodItems: FoodItems[1],
-                today: moment(new Date()).format("YYYY-MM-DD"),
-                searchDate,
+    let groupedFoodItems = groupFoodItems(foodItems, true);
+
+    res.render('user/foodJournal', {
+        user: req.user,
+        title: "Food Journal",
+        groupedFoodItems: groupedFoodItems[req.user.id],
+        allFoodItems,
+        today: moment(new Date()).format("YYYY-MM-DD"),
+        searchDate,
+        unviewedNotifications,
+    });
+});
+
+
+router.post('/searchFood', async (req, res) => {
+    let foodInput = req.body.searchQuery;
+
+    let searchResults = await
+        Food.findOne({
+            where: Sequelize.or(
+                { id: foodInput },
+                { name: foodInput },
+            )
+        });
+
+    res.send(searchResults);
+});
+
+
+router.post('/addFood', async (req, res) => {
+    let user = req.user, selectedFoodId = req.body.foodId;
+
+    let foodItem = await
+        Food.findOne({
+            where: {
+                id: selectedFoodId,
+                isDeleted: false
+            }
+        });
+
+    await
+        FoodLog.create({
+            UserId: user.id,
+            FoodId: selectedFoodId,
+            mealType: getMealType(),
+            createdAtDate: getCurrentDate(),
+        });
+
+    if (foodItem.isRecommended) {
+        updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!");
+
+        let recFoodLog = await
+            FoodLog.findAll({
+                where: {
+                    UserId: req.user.id
+                },
+                include: {
+                    model: Food,
+                    where: { isRecommended: true },
+                    required: true,
+                }
             });
-        });
-});
 
+        if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
+        else if (recFoodLog.length > 9) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
+    };
 
-router.post('/searchFood', (req, res) => {
-    var foodInput = req.body.searchQuery;
+    updateUserCalories(user);
 
-    Food.findOne({
-        where: Sequelize.or(
-            { id: foodInput },
-            { name: foodInput },
-        )
-    })
-        .then(function (searchResults) {
-            res.send(searchResults);
-        })
-});
-
-
-router.post('/addFood', (req, res) => {
-    var user = req.user, selectedFoodId = req.body.foodId;
-
-    Food.findOne({
-        where: {
-            id: selectedFoodId,
-            isDeleted: false
-        }
-    })
-        .then((foodItem) => {
-            if (foodItem.isRecommended == true) {
-                updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!");
-                // checkFoodItems(foodItems, user)
-
-                FoodLog.findAll({
-                    where: {
-                        UserId: req.user.id
-                    },
-                    include: {
-                        model: Food,
-                        where: { isRecommended: true },
-                        required: true,
-                    },
-                })
-                    .then((recFoodLog) => {
-                        if (recFoodLog.length >= 1) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
-                        else if (recFoodLog.length >= 10) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
-                    })
-            };
-
-            FoodLog.create({
-                UserId: user.id,
-                FoodId: selectedFoodId,
-                mealType: getMealType(),
-                createdAtDate: getCurrentDate(),
-            })
-                .then(() => {
-                    updateUserCalories(user);
-                    req.flash('success', "That food has been successfully added!");
-                });
-        });
-
+    req.flash('success', "That food has been successfully added!");
     res.send({ user });
 
 });
 
 
-router.post('/editFood/:id', (req, res) => {
+router.post('/editFood/:id', async (req, res) => {
     const logId = req.params.id;
-    const foodIdToUpdateTo = req.body.codeToChange;
+    const foodId = req.body.codeToChange;
+    const foodItem = await Food.findOne({ where: { id: foodId } });
 
-    Food.findOne({ where: { id: foodIdToUpdateTo } })
-        .then((foodItem) => {
-            if (foodItem) {
-                FoodLog.update(
-                    { FoodId: foodIdToUpdateTo },
-                    { where: { id: logId } },
-                )
-                    .then(() => {
-                        updateUserCalories(req.user);
-                        req.flash('success', "You've successfully edited that food item!");
-                        res.redirect('/user/foodJournal');
-                    });
-            } else {
-                req.flash('error', "That code does not exist!");
-                res.redirect('/user/foodJournal');
-            }
-        });
+    if (foodItem) {
+        await
+            FoodLog.update(
+                { FoodId: foodId },
+                { where: { id: logId } },
+            );
+        updateUserCalories(req.user);
+
+        req.flash('success', "You've successfully edited that food item!");
+        res.redirect('/user/foodJournal');
+    } else {
+        req.flash('error', "That code does not exist!");
+        res.redirect('/user/foodJournal');
+    }
 });
 
 
-router.post('/deleteFood/:id', (req, res) => {
-    var logId = req.params.id;
+router.post('/deleteFood/:id', async (req, res) => {
+    const logId = req.params.id;
 
-    FoodLog.destroy({ where: { id: logId } })
-        .then(() => {
-            updateUserCalories(req.user);
-            req.flash('success', "You've successfully deleted that food item from your log!");
-            res.redirect('/user/foodJournal');
-        })
+    await FoodLog.destroy({ where: { id: logId } });
+    updateUserCalories(req.user);
+
+    req.flash('success', "You've successfully deleted that food item from your log!");
+    res.redirect('/user/foodJournal');
 });
 
 
-router.post('/addRefCode', (req, res) => {
+router.post('/acceptInvitation/:id', async (req, res) => {
+    const refUserId = req.params.id;
+    
+    let referredUser = await User.findOne({ where: { id: refUserId } });
+    let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
+
+    if (!existingReferral) { 
+        createUserReferral(req.user, referredUser, null, `You're now mutual friends with ${referredUser.name}.`);
+
+        req.flash('success', "You have successfully added a friend!");
+        res.redirect('/user/userOverview');
+    } else {
+        req.flash('error', "You've already added this user as a friend!");
+        res.redirect('/user/');
+    };
+});
+
+
+router.post('/addRefCode', async (req, res) => {
     const refCode = req.body.selRefCode.toLowerCase();
-    var error;
+    let error;
 
-    Promise.all([
-        User.findOne({ where: { refCode: refCode } }),
-        Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } }),
-    ])
-        .then((data) => {
-            var referredUser = data[0];
-            var existingReferral = data[1];
+    let referredUser = await User.findOne({ where: { refCode }});
+    let existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
 
-            if (!referredUser) error = "That referral code does not exist!";
-            if (existingReferral.length > 0) error = "You've already added that code!";
-            if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
+    if (!referredUser) error = "That referral code does not exist!";
+    if (existingReferral) error = "You've already used that code as a referral!";
+    if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
 
-            if (!error) {
-                updateUserPoints(req.user, 75, "adding a friend to your profile", "You can now see their stats from your overview page.");
-                updateUserPoints(referredUser, 25, `${req.user.name} adding you to their friend group through your referral code`);
+    if (!error) {
+        let mutualExisitngReferral = await Referral.findOne({ where: { UserId: referredUser.id, RefUserId: req.user.id } });
+        let isMutual = (mutualExisitngReferral) ? true : false;
+        let additionalMessage, callToAction, callToActionLink;
 
-                Referral.create({
-                    UserId: req.user.id,
-                    RefUserCode: referredUser.refCode,
-                    RefUserId: referredUser.id,
-                    isMutual: false,
-                })
-                    .then((createdReferral) => {
-                        Referral.findAll({ where: { UserId: req.user.id } })
-                            .then((referrals) => {
-                                if (referrals.length >= 1) { addBadges('First Friend', req.user, "adding your first referral"); }
-                                else if (referrals.length >= 10) { addBadges('Full House', req.user, "adding ten referrals"); }
-                            })
-                        req.flash('success', "You have successfully added a referral code!");
-                    });
-            }
-            res.send({ error });
-        });
-});
-
-
-router.get('/delRefCode/:id', isUser, (req, res) => {
-    var id = req.params.id;
-
-    Referral.destroy({ where: { id } })
-        .then((referral) => {
-            if (referral !== null) {
-                updateUserPoints(req.user, -75, "removing someone from your friend group");
-
-                req.flash('success', "You have successfully deleted a referral code!");
-                res.redirect('/user/userOverview');
-            }
-        })
-});
-
-
-// router.get('/userPage/:refCode', (req, res) => {
-//     Referral.findOne({
-//         where: {
-//             RefUserCode: req.params.refCode
-//         }
-//     }).then((referral) => {
-//         User.findOne({
-//             where: {
-//                 refCode: req.params.refCode,
-//             }
-//         }).then((friend) => {
-//             res.render('user/friendPage', {
-//                 user: req.user,
-//                 friend: friend,
-//                 compliment: referral
-//             })
-//         })
-//     })
-// })
-
-
-router.post('/userPage', (req, res) => {
-    let compliment = req.body.sendMessage;
-    let id = req.body.friendId; ``
-    var error;
-
-    Referral.update(
-        { compliment },
-        {
-            where: {
-                id,
-                UserId: req.user.id,
-            }
+        if (!isMutual) {
+            additionalMessage = `An invitation to add you back as a friend has been sent to ${referredUser.name}.`;
+            callToAction = `Do you want to add ${req.user.name} as a friend?`;
+            callToActionLink = `/user/acceptInvitation/${req.user.id}`;
         }
-    )
-        .then(() => {
-            req.flash('success', 'Compliment set');
-            res.redirect('/user/userOverview');
-        });
+        else {
+            additionalMessage = `You're now mutual friends with ${referredUser.name}.`;
+        }
+
+        createUserReferral(req.user, referredUser, isMutual, additionalMessage, callToAction, callToActionLink);
+        req.flash('success', "You have successfully added a friend!"); 
+    };
 
     res.send({ error });
+});
 
-})
 
-router.get('/deleteCompliment/:id', isUser, (req, res) => {
-    Referral.findOne({
-        compliment: null,
-    }, {
+router.get('/delRefCode/:id', isUser, async (req, res) => {
+    let id = req.params.id;
+
+    try {
+        let existingReferral = await Referral.findOne({ where: { id } });
+        await Referral.destroy({ where: { id } });
+        await
+            Referral.update(
+                { isMutual: false },
+                { where: { UserId: existingReferral.RefUserId, RefUserId: req.user.id } }
+            );
+
+        updateUserPoints(req.user, -75, "removing someone from your friend group");
+
+        req.flash('success', "You have successfully deleted a referral code!");
+        res.redirect('/user/userOverview');
+
+    } catch (err) {
+        if (err) console.log('error', err);
+    };
+});
+
+
+router.post('/userPage', async (req, res) => {
+    let compliment = req.body.sendMessage;
+    let id = req.body.friendId; ``
+    let error;
+
+    await
+        Referral.update(
+            { compliment },
+            {
+                where: {
+                    id,
+                    UserId: req.user.id,
+                }
+            }
+        );
+
+    req.flash('success', 'Compliment set');
+    res.redirect('/user/userOverview');
+});
+
+router.get('/deleteCompliment/:id', isUser, async (req, res) => {
+    await
+        Referral.findOne({
+            compliment: null,
+        },{
             where: {
                 id: req.params.id,
                 UserId: req.user.id,
@@ -578,53 +539,58 @@ router.get('/deleteCompliment/:id', isUser, (req, res) => {
         });
 });
 
-router.get('/sendMessage/:id', isUser, (req, res) => {
-    Promise.all([
-        Referral.findOne({
-            where: { id: req.params.id }
-        }), 
-        User.findOne({ 
-            include: [{ 
-                model: Referral, 
-                where: { RefUserId: req.user.id },
-                required: true,
-            }]
-        })
-    ]).then((data) => {
-            res.render('user/sendMessages',
-                { user: req.user })
-        });
-});
+// router.get('/sendMessage/:id', isUser, (req, res) => {
+//     Promise.all([
+//         Referral.findOne({
+//             where: { id: req.params.id }
+//         }), 
+//         User.findOne({ 
+//             include: [{ 
+//                 model: Referral, 
+//                 where: { RefUserId: req.user.id },
+//                 required: true,
+//             }]
+//         })
+//     ]).then((data) => {
+//             res.render('user/sendMessages',
+//                 { user: req.user })
+//         });
+// });
+// router.get('/sendMessage/:id', isUser, async (req, res) => {
+//     await Referral.findOne({ where: { id: req.params.id } });
 
-router.get('/editCompliment/:id', isUser, (req, res) => {
-    Referral.findOne({
-        where: {
-            id: req.params.id,
-            UserId: req.user.id,
-        }
-    }).then((com) => {
-        res.render('user/editCompliment', {
-            compliment: com,
-            user: req.user
-        })
-    })
-})
+//     res.render('user/sendMessages', 
+//     {user: req.user});
+// }); 
+
+// router.get('/editCompliment/:id', isUser, async (req, res) => {
+//     let com = await
+//         Referral.findOne({
+//             where: {
+//                 id: req.params.id,
+//                 UserId: req.user.id,
+//             }
+//         });
+
+//     res.render('user/editCompliment', {
+//         compliment: com,
+//         user: req.user
+//     });
+// })
 
 
-router.post('/editCompliment/:id', isUser, (req, res) => {
-    let compliment = req.body.compliment;
-    Referral.update({
-        compliment: compliment,
-    }, {
-            where: {
-                id: req.params.id,
-                UserId: req.user.id,
-            }
-        }).then(() => {
-            req.flash('success', 'Compliment edited');
-            res.redirect('/user/userOverview')
-        })
-});
+// router.post('/editCompliment/:id', isUser, async (req, res) => {
+//     let compliment = req.body.compliment;
+
+//     await
+//         Referral.update({
+//             compliment: compliment,
+//         },{
+//             where: {
+//                 id: req.params.id,
+//                 UserId: req.user.id,
+//             }
+//         });
 
 router.get('/acceptRequest/:id', isUser, (req, res) => {
     Referral.update({
@@ -640,48 +606,49 @@ router.get('/acceptRequest/:id', isUser, (req, res) => {
 });
 
 
-router.post('/faq', isUser, (req, res) => {
+router.post('/faq', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let question = req.body.question;
-    var error;
+    let error;
 
-    Question.create({
-        UserId: req.user.id,
-        question: question,
-    })
-        .then((questions) => {
-            req.flash('success', 'You have successfully created a question!');
-            res.redirect('/user/faq');
-        })
+    let questions = await
+        Question.create({
+            UserId: req.user.id,
+            question: question,
+        });
+
+    req.flash('success', 'You have successfully created a question!');
+    res.redirect('/user/faq');
 });
 
 
 
-router.post('/settings', isUser, (req, res) => {
+router.post('/settings', isUser, async (req, res) => {
     const name = req.body.name;
-    let email = req.body.email.toLowerCase();
-    let password = req.body.password;
+    const email = req.body.email.toLowerCase();
+    const password = req.body.password;
     const isAdmin = isBanned = isVendor = false;
     let weight = req.body.weight;
     let height = req.body.height;
-    var error;
+    let error;
 
     bcrypt.genSalt(function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
-            User.update({
-                weight: req.body.weight,
-                height: req.body.height,
-                email: email,
-                password: hash,
-            }, {
-                    where: { id: req.user.id }
-                })
-                .then(function (user) {
-                    res.redirect('/user/settings');
-                })
-                .catch(err => console.log(err));
+            await
+                User.update(
+                    {
+                        weight: req.body.weight,
+                        height: req.body.height,
+                        email: email,
+                        password: hash,
+                    }, 
+                    {
+                        where: { id: req.user.id }
+                    }
+                );
 
+            res.redirect('/user/settings');
         });
     })
 });

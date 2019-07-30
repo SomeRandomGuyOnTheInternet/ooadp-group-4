@@ -55,9 +55,9 @@ router.get('/', (req, res) => {
 
 
 router.post('/', (req, res) => {
-	var location = (req.body.location != "null") ? req.body.location : null;
-	var latitude = (req.body.latitude) ? parseFloat(req.body.latitude) : null; 
-	var longitude = (req.body.longitude) ? parseFloat(req.body.longitude) : null;
+	let location = (req.body.location != "null") ? req.body.location : null;
+	let latitude = (req.body.latitude) ? parseFloat(req.body.latitude) : null; 
+	let longitude = (req.body.longitude) ? parseFloat(req.body.longitude) : null;
 	
 	if (!req.user) {
 		res.redirect('/logout')
@@ -86,9 +86,9 @@ router.post('/register', isloggedOut, (req, res) => {
 	const gainedPoints = 50;
 	const averageCalories = averageBreakfastCalories = averageLunchCalories = averageDinnerCalories = averageSnacksCalories = daysActive = 0;
 	const refCode = generateCode();
-	var error;
+	let error;
 
-	var form = {
+	let form = {
 		name: name,
 		weight: weight,
 		height: height,
@@ -194,9 +194,9 @@ router.post('/upload', (req, res) => {
 
 
 router.post('/searchShops', (req, res) => {
-    var searchName = req.body.searchName;
-    var userLocation = {lat: req.user.latitude, lng: req.user.longititude};
-    var shopLocation = {lat: 0, lng: 0};
+    let searchName = req.body.searchName;
+    let userLocation = {lat: req.user.latitude, lng: req.user.longititude};
+    let shopLocation = {lat: 0, lng: 0};
 
     Shop.findAll({
         where: {

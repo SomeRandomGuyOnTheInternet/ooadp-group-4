@@ -310,7 +310,7 @@
 </div>
 
 <script>
-    var allFoodItems = {{{ json allFoodItems }}}, availableTags = [];
+    let allFoodItems = {{{ json allFoodItems }}}, availableTags = [];
 
     for (i = 0; i < allFoodItems.length; i++) {
         if (!availableTags.includes(allFoodItems[i].name)) availableTags.push(allFoodItems[i].name);
@@ -330,7 +330,7 @@
         })
         .done(function (data) {
             if (data.length) {
-                var foodItem = JSON.parse(data);
+                let foodItem = JSON.parse(data);
                 $('.ajaxErrBlock').css("display", "none");
 
                 $('#previewFoodName').text(foodItem.name);
@@ -367,14 +367,14 @@
     .bind("click keyup", function (event) {
         const foodSubsection = $(this).parent().closest('div');
 
-        var logId = jQuery(foodSubsection).attr("logId");
-        var logCreatedAt = jQuery(foodSubsection).attr("logCreatedAt");
-        var foodName = jQuery(foodSubsection).attr("foodName");
-        var foodItemId = jQuery(foodSubsection).attr("foodItemId");
-        var foodCalories = jQuery(foodSubsection).attr("foodCalories");
-        var foodImageLocation = jQuery(foodSubsection).attr("foodImage");
-        var shopId = jQuery(foodSubsection).attr("shopId");
-        var shopName = jQuery(foodSubsection).attr("shopName");
+        let logId = jQuery(foodSubsection).attr("logId");
+        let logCreatedAt = jQuery(foodSubsection).attr("logCreatedAt");
+        let foodName = jQuery(foodSubsection).attr("foodName");
+        let foodItemId = jQuery(foodSubsection).attr("foodItemId");
+        let foodCalories = jQuery(foodSubsection).attr("foodCalories");
+        let foodImageLocation = jQuery(foodSubsection).attr("foodImage");
+        let shopId = jQuery(foodSubsection).attr("shopId");
+        let shopName = jQuery(foodSubsection).attr("shopName");
 
         $('#viewFoodName').text(foodName);
         $('#viewFoodImage').attr("src", foodImageLocation);

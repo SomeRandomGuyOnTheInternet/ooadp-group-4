@@ -60,7 +60,7 @@ app.use(session({
 
 app.use(flash());
 
-var sessionFlash = function (req, res, next) {
+let sessionFlash = function (req, res, next) {
 	res.locals.currentUser = req.user;
 	res.locals.error = req.flash('error');
 	res.locals.success = req.flash('success');

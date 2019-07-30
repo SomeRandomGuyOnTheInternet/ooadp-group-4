@@ -1,4 +1,4 @@
-var _ = require('lodash');
+let _ = require('lodash');
 
 function groupVendors(vendors) {
     groupedVendors = _.groupBy(vendors, 'name');

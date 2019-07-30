@@ -34,7 +34,7 @@ Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213)
 	const latitudeInput = document.querySelector("#latitude");
 	const longitudeInput = document.querySelector("#longitude");
 	const geolocationForm = document.querySelector("#geolocationForm");
-	var currentCity = null;
+	let currentCity = null;
 
 	function success(position) {
 		latitudeInput.setAttribute("value", position.coords.latitude);
@@ -44,9 +44,9 @@ Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213)
 		new google.maps.Geocoder().geocode({ 'latLng': latlng }, function (results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
 				if (results[1]) {
-					var c, lc, component;
-					for (var r = 0, rl = results.length; r < rl; r += 1) {
-						var result = results[r];
+					let c, lc, component;
+					for (let r = 0, rl = results.length; r < rl; r += 1) {
+						let result = results[r];
 
 						if (!currentCity && result.types[0] === 'neighborhood') {
 							for (c = 0, lc = result.address_components.length; c < lc; c += 1) {

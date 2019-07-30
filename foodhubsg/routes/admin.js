@@ -23,7 +23,7 @@ router.get('/vendors', isAdmin, (req, res) => {
         raw: true,
     })
     .then((vendors) => {
-        var groupedVendors = groupVendors(vendors);
+        let groupedVendors = groupVendors(vendors);
 
         User.findAll({
             where: { isVendor: true, isDeleted: true },
@@ -35,7 +35,7 @@ router.get('/vendors', isAdmin, (req, res) => {
             raw: true,
         })
         .then((deletedVendors) => {
-            var groupedDeletedVendors = groupVendors(deletedVendors);
+            let groupedDeletedVendors = groupVendors(deletedVendors);
             if (Object.entries(groupVendors(deletedVendors)).length === 0 && groupVendors(deletedVendors).constructor === Object) groupedDeletedVendors = null;
 
             res.render('admin/vendors', {
@@ -77,7 +77,7 @@ router.get('/shops', isAdmin, (req, res) => {
 
 
 router.get('/editShop/:id', isAdmin, (req, res) => {
-    var id = req.params.id;
+    let id = req.params.id;
 
     Promise.all([
         Shop.findOne({
@@ -143,7 +143,7 @@ router.get('/addFoodItem/:currentShopId?', isAdmin, (req, res) => {
         raw: true,
     })
     .then((vendors) => {
-        var groupedVendors = groupVendors(vendors);
+        let groupedVendors = groupVendors(vendors);
         
         res.render('admin/addFoodItem', {
             user: req.user,
@@ -204,9 +204,9 @@ router.post('/vendors', (req, res) => {
     const confirmPassword = req.body.confirmPassword;
     const isAdmin = isBanned = isDeleted = false;
     const isVendor = true; 
-    var error;
+    let error;
 
-    var form = { name, email };
+    let form = { name, email };
 
 	User.findOne({ where: { email } })
     .then(function (user) {
@@ -235,7 +235,7 @@ router.post('/vendors', (req, res) => {
                 raw: true
             })
             .then((vendors) => {
-                var groupedVendors = groupVendors(vendors);
+                let groupedVendors = groupVendors(vendors);
 
                 res.locals.error = error;
                 res.render('admin/vendors', {
@@ -411,7 +411,7 @@ router.post('/addFoodItem/:id?', isAdmin, (req, res) => {
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
-    var error;
+    let error;
 
     if (calories > 1500 || calories < 1) error = 'Please enter a valid number of calories';
 
@@ -445,7 +445,7 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
     const imageLocation = req.body.imageURL;
     const isRecommended = (calories <= 500) ? true : false;
     const isDeleted = false;
-    var error;
+    let error;
 
     if (calories > 1500 || calories < 1) error = 'Please enter a valid number of calories';
 
@@ -478,8 +478,6 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
 
     FoodItem.findOne({ where: { id } })
     .then((foodItem) => {
-        var foodItem = foodItem;
-
         FoodItem.update(
             { isDeleted },
             { where: { id } }

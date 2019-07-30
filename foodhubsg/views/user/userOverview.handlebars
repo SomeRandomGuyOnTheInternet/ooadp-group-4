@@ -30,7 +30,6 @@
                         </div>
                     </form>
 
-
                 </div>
             </div>
         </div>
@@ -71,7 +70,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
@@ -94,27 +92,11 @@
 
                     {{#each referredUsers}}
                     <div class="row form-group">
-                        <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container"
-                            refId="{{'Referrals.id'}}">
-                            {{!-- <a href="/user/userPage/{{ refCode }}"> --}}
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
                             <h6 style="margin-bottom: 15px;">User Info</h6>
                             <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;-
                                 {{ refCode }}</h5>
                             <h6 style="margin-bottom: 20px;">({{ email }})</h6>
-                            {{!-- </a> --}}
-                            {{!-- {{#if Referrals.compliment}}
-                            <button type="submit" id="editMessageButton" name="editMessageButton" value="Add Friend" class="btn btn-primary"
-                                style="background-color: #4CAF50;">Edit Compliment</button>
-                               by8uyugugubuugbu
-                            {{else}} --}}
-
-                            <div class="col-md-3">
-                                <a href="/user/acceptRequest/{{'Referrals.id'}}">
-                                    <button type="submit" class="btn btn-primary acceptRequest"> Accept Their Request
-                                    </button>
-                                </a>
-                            </div>
-
                             <br>
                             <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                 data-title="Confirm delete?">
@@ -165,7 +147,6 @@
                     {{else}}
                     <h4><b>You have not referred anyone yet!</b></h4>
                     {{/each}}
-
                 </div>
             </div>
         </div>
@@ -209,7 +190,7 @@
     referredUsers = {{{ json referredUsers }}};
 
     for (i = 0; i < referredUsers.length; i++) {
-        for (var [userId, foodLog] of Object.entries(refUserFoodLog)) {
+        for (let [userId, foodLog] of Object.entries(refUserFoodLog)) {
             console.log(foodLog)
             if (referredUsers[i].id == userId && referredUsers[i].daysActive >= 3) generateFoodLogChart(foodLog, referredUsers[i])
         }
@@ -226,7 +207,7 @@
             dataType: 'text'
         })
         .done(function (rawData) {
-            var data = JSON.parse(rawData);
+            let data = JSON.parse(rawData);
 
             if (data.error) {
                 $('.ajaxErrBlock').css("display", "block");
@@ -258,7 +239,7 @@
             dataType: 'text'
         })
             .done(function (rawData) {
-                var data = JSON.parse(rawData);
+                let data = JSON.parse(rawData);
 
                 if (data.error) {
                     $('.ajaxErrBlock').css("display", "block");

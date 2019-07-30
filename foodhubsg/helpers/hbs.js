@@ -50,14 +50,14 @@ module.exports = {
     },
 
     times: function (n, block) {
-        var accum = '';
-        for (var i = 0; i < n; ++i)
+        let accum = '';
+        for (let i = 0; i < n; ++i)
             accum += block.fn(i);
         return accum;
     },
 
     ifIsNthItem: function (options) {
-        var index = options.data.index + 1,
+        let index = options.data.index + 1,
             nth = options.hash.nth;
 
         if (index % nth === 0)

@@ -6,18 +6,20 @@ const groupFoodItems = require('./groupFoodItems');
 const getAverageCalories = require('./getAverageCalories');
 
 
-function updateUserCalories(user) {
-    Food.findAll({
-        include: [{
-            model: FoodLog,
-            where: { UserId: user.id },
-            required: true,
-        }],
-        raw: true
-    })
-    .then((foodItems) => {
-        var groupedFoodItems = groupFoodItems(foodItems);
+async function updateUserCalories(user) {
+    let foodItems = await 
+        Food.findAll({
+            include: [{
+                model: FoodLog,
+                where: { UserId: user.id },
+                required: true,
+            }],
+            raw: true
+        });
 
+    let groupedFoodItems = groupFoodItems(foodItems);
+
+    await
         User.update(
             {
                 averageCalories: getAverageCalories(groupedFoodItems[user.id]),
@@ -28,8 +30,7 @@ function updateUserCalories(user) {
                 daysActive: Object.keys(groupedFoodItems[user.id]).length,
             },
             { where: { id: user.id } }
-        )
-    });
+        );
 };
 
 

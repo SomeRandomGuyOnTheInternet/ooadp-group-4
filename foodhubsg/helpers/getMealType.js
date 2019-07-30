@@ -1,5 +1,5 @@
 function getMealType() {
-    var today = new Date();
+    let today = new Date();
 
     if (today.getHours() >= 6 && today.getHours() <= 9) {
         mealType = "Breakfast";

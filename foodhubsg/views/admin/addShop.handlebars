@@ -70,23 +70,23 @@
 
 {{#if user.location}}
     <script>
-        var userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+        let userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
 
         function initMap() {
-            var userLocation = { lat: userLatitude, lng: userLongitude };
+            let userLocation = { lat: userLatitude, lng: userLongitude };
 
             $("#location").val("{{{ user.location }}}");
             $("#latitude").val(userLatitude);
             $("#longitude").val(userLongitude);
 
-            var map = new google.maps.Map(document.getElementById('map'));
+            let map = new google.maps.Map(document.getElementById('map'));
 
-            var shopIcon = {
+            let shopIcon = {
                 url: "/images/shop-marker.png",
                 scaledSize: new google.maps.Size(27, 45),
             };
 
-            var marker = new google.maps.Marker({
+            let marker = new google.maps.Marker({
                 map,
                 draggable: true,
                 animation: google.maps.Animation.DROP,
@@ -118,15 +118,15 @@
                 )
             }
 
-            var bounds = fitToMarker(marker);
+            let bounds = fitToMarker(marker);
             map.fitBounds(bounds);
         }
 
         function getCity(results) {
             if (results[1]) {
-                var c, lc, component;
-                for (var r = 0, rl = results.length; r < rl; r += 1) {
-                    var result = results[r];
+                let c, lc, component;
+                for (let r = 0, rl = results.length; r < rl; r += 1) {
+                    let result = results[r];
 
                     if (result.types[0] === 'neighborhood') {
                         for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
@@ -142,14 +142,14 @@
         }
 
         function fitToMarker(marker) {
-            var bounds = new google.maps.LatLngBounds();
+            let bounds = new google.maps.LatLngBounds();
 
-            var latlng = marker.getPosition();
+            let latlng = marker.getPosition();
             bounds.extend(latlng);
 
             if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
-                var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
-                var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
+                let extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
+                let extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
                 bounds.extend(extendPoint1);
                 bounds.extend(extendPoint2);
             }
@@ -159,23 +159,23 @@
     </script>
 {{else}}
     <script>
-        var userLatitude = 1.380096, userLongitude = 103.848895;
+        let userLatitude = 1.380096, userLongitude = 103.848895;
 
         function initMap() {
-            var userLocation = { lat: userLatitude, lng: userLongitude };
+            let userLocation = { lat: userLatitude, lng: userLongitude };
 
             $("#location").val("Ang Mio Kio");
             $("#latitude").val(userLatitude);
             $("#longitude").val(userLongitude);
 
-            var map = new google.maps.Map(document.getElementById('map'));
+            let map = new google.maps.Map(document.getElementById('map'));
 
-            var shopIcon = {
+            let shopIcon = {
                 url: "/images/shop-marker.png",
                 scaledSize: new google.maps.Size(27, 45),
             };
 
-            var marker = new google.maps.Marker(
+            let marker = new google.maps.Marker(
                 {
                     map: map,
                     draggable: true,
@@ -209,15 +209,15 @@
                 )
             }
 
-            var bounds = fitToMarker(marker);
+            let bounds = fitToMarker(marker);
             map.fitBounds(bounds);
         }
 
         function getCity(results) {
             if (results[1]) {
-                var c, lc, component;
-                for (var r = 0, rl = results.length; r < rl; r += 1) {
-                    var result = results[r];
+                let c, lc, component;
+                for (let r = 0, rl = results.length; r < rl; r += 1) {
+                    let result = results[r];
 
                     if (result.types[0] === 'neighborhood') {
                         for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
@@ -233,14 +233,14 @@
         }
 
         function fitToMarker(marker) {
-            var bounds = new google.maps.LatLngBounds();
+            let bounds = new google.maps.LatLngBounds();
 
-            var latlng = marker.getPosition();
+            let latlng = marker.getPosition();
             bounds.extend(latlng);
 
             if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
-                var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
-                var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
+                let extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.001, bounds.getNorthEast().lng() + 0.001);
+                let extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.001, bounds.getNorthEast().lng() - 0.001);
                 bounds.extend(extendPoint1);
                 bounds.extend(extendPoint2);
             }

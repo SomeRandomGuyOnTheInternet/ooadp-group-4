@@ -2,18 +2,21 @@ const Notification = require('../models/UserAction');
 
 
 function getUnviewedNotifications(user) {
-    var hasViewed = true;
+    return new Promise(async (resolve, reject) => {
+        try {
+            let unviewedNotifications = await Notification.findAll({ where: { hasViewed: false, UserId: user.id } });
 
-    return Notification.findAll({ where: { hasViewed: false, UserId: user.id } })
-    .then((unviewedNotifications) => {
-        Notification.update(
-            { hasViewed },
-            { where: { hasViewed: false, UserId: user.id } },
-            { raw: true }
-        );
+            await
+                Notification.update(
+                    { hasViewed: true },
+                    { where: { hasViewed: false, UserId: user.id } },
+                    { raw: true }
+                );
 
-        return unviewedNotifications;
-
+            resolve(unviewedNotifications);
+        } catch (error) {
+            reject(error);
+        }
     });
 };
 
