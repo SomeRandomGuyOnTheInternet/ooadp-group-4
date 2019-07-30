@@ -9,6 +9,7 @@ const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const groupFoodItems = require('../helpers/groupFoodItems');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
+const createUserReferral = require('../helpers/createUserReferral');
 const updateUserPoints = require('../helpers/updateUserPoints');
 const updateUserCalories = require('../helpers/updateUserCalories');
 const checkFoodItems = require('../helpers/checkFoodItems');
@@ -447,105 +448,84 @@ router.post('/deleteFood/:id', (req, res) => {
     })
 });
 
+router.post('/acceptInvitation/:id', async (req, res) => {
+    const refUserId = req.params.id;
+    
+    try {
+        let referredUser = await User.findOne({ where: { id: refUserId } });
+        let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
+
+        if (!existingReferral) { 
+            createUserReferral(req.user, referredUser);
+            req.flash('success', "You have successfully added a friend!");
+        } else {
+            req.flash('error', "You've already added this user as a friend!");
+            res.redirect('/user/');
+        };
+    } catch (err) {
+        if (err) console.log('error', err);
+    };
+});
+
 
 router.post('/addRefCode', async (req, res) => {
     const refCode = req.body.selRefCode.toLowerCase();
     let error;
 
     try {
-        var referredUser = await User.findOne({ where: { refCode }});
-        var existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
+        let referredUser = await User.findOne({ where: { refCode }});
+        let existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
 
         if (!referredUser) error = "That referral code does not exist!";
         if (existingReferral) error = "You've already used that code as a referral!";
         if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
 
         if (!error) {
-            var mutualExisitngReferral = await Referral.findOne({ where: { UserId: referredUser.id, RefUserId: req.user.id } });
-            var isMutual = (mutualExisitngReferral) ? true : false;
-            var additionalMessage, callToAction, callToActionLink;
+            let mutualExisitngReferral = await Referral.findOne({ where: { UserId: referredUser.id, RefUserId: req.user.id } });
+            let isMutual = (mutualExisitngReferral) ? true : false;
+            let additionalMessage, callToAction, callToActionLink;
 
             if (!isMutual) {
                 additionalMessage = `An invitation to add you back as friend has been sent to ${referredUser.name}.`;
                 callToAction = `Do you want to add ${req.user.name} as a friend?`;
                 callToActionLink = `/user/acceptInvitation/${req.user.id}`;
             };
-            
-            await
-                Referral.create({
-                    UserId: req.user.id,
-                    RefUserCode: referredUser.refCode,
-                    RefUserId: referredUser.id,
-                    isMutual,
-                });
 
-            await
-                Referral.update(
-                    { isMutual: true },
-                    { where: { UserId: referredUser.id, RefUserId: req.user.id } }
-                );
-
-            updateUserPoints(req.user, 75, "adding a friend to your profile", additionalMessage);
-            updateUserPoints(referredUser, 25, `${req.user.name} adding you to their friend group through your referral code`, null, callToAction, callToActionLink);
-
-            var userReferrals = await Referral.findAll({ where: { UserId: req.user.id } });
-
-            if (userReferrals.length >= 1) { addBadges('First Friend', req.user, "adding your first referral"); }
-            else if (userReferrals.length >= 10) { addBadges('Full House', req.user, "adding ten referrals"); }
-
-            req.flash('success', "You have successfully added a referral code!"); 
+            createUserReferral(req.user, referredUser, isMutual, additionalMessage, callToAction, callToActionLink);
+            req.flash('success', "You have successfully added a friend!"); 
         };
 
         res.send({ error });
+
     } catch (err) {
         if (err) console.log('error', err);
     }
 });
 
 
-router.get('/delRefCode/:id', isUser, (req, res) => {
+router.get('/delRefCode/:id', isUser, async (req, res) => {
     var id = req.params.id;
 
-    Referral.findOne({ where: { id } })
-    .then((referral) => {
-        Referral.destroy({ where: { id } })
-        .then((destroyedRef) => {
-            if (referral !== null) {
-                Referral.update(
-                    { isMutual: false },
-                    { where: { UserId: referral.RefUserId, RefUserId: req.user.id } }
-                )
-                .then(() => {
-                    updateUserPoints(req.user, -75, "removing someone from your friend group");
+    try {
+        let existingReferral = await Referral.findOne({ where: { id } });
+        
+        await Referral.destroy({ where: { id } });
 
-                    req.flash('success', "You have successfully deleted a referral code!");
-                    res.redirect('/user/userOverview');
-                });
-            };
-        });
-    })
+        await
+            Referral.update(
+                { isMutual: false },
+                { where: { UserId: existingReferral.RefUserId, RefUserId: req.user.id } }
+            );
+
+        updateUserPoints(req.user, -75, "removing someone from your friend group");
+
+        req.flash('success', "You have successfully deleted a referral code!");
+        res.redirect('/user/userOverview');
+
+    } catch (err) {
+        if (err) console.log('error', err);
+    };
 });
-
-
-// router.get('/userPage/:refCode', (req, res) => {
-//     Referral.findOne({
-//         where: {
-//             RefUserCode: req.params.refCode
-//         }
-//     }).then((referral) => {
-//         User.findOne({
-//             where: {
-//                 refCode: req.params.refCode,
-//             }
-//         }).then((friend) => {
-//             res.render('user/friendPage', {
-//                 user: req.user,
-//                 friend: friend,
-//                 compliment: referral
-//             })
-//         })
-//     })
-// })
 
 
 router.post('/userPage', (req, res) => {
