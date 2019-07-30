@@ -215,6 +215,7 @@
                 $('.ajaxErrMsg').text(data.error);
             } else {
                 $('#refCodeSend').val("Loading...");
+                $('#refCodeSend').attr("disabled", true);
                 setTimeout(location.reload.bind(location), 1500);
             }
         });

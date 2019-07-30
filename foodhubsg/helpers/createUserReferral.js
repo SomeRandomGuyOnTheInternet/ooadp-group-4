@@ -5,7 +5,6 @@ const addBadges = require('../helpers/addBadges');
 
 
 async function createUserReferral(user, referredUser, isMutual = true, additionalMessage = null, callToAction = null, callToActionLink = null) {
-    console.log(additionalMessage)
     await
         Referral.create({
             UserId: user.id,
