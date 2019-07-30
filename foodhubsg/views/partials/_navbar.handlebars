@@ -68,19 +68,22 @@
 			{{else}}
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link nav-plain-link" href="/user/foodJournal">Food Journal</a>
+					<a class="nav-link nav-plain-link nav-plain-user-link" href="/user/foodJournal">Food Journal</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link nav-plain-link" href="/user/shops">Shops</a>
+					<a class="nav-link nav-plain-link nav-plain-user-link" href="/user/shops">Shops</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link nav-plain-link" href="/user/faq">FAQ</a>
+					<a class="nav-link nav-plain-link nav-plain-user-link" href="/user/faq">FAQ</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link nav-plain-link nav-plain-user-link" href="/user/friendActivity">Friends</a>
 				</li>
 				<li class="nav-item">
 					<a href="/user/foodJournal"><button type="button" class="btn btn-success btn-food-code">Enter Food Item</button></a>
 				</li>
 				<li class="nav-item settings nav-link">
-					<a class="nav-link" id="settings-link" href="/user/userOverview">
+					<a class="nav-link" id="settings-link" href="/user/settings">
 						<span id="nav-name">{{ user.name }}</span>
 					</a>
 					<a class="nav-link" id="logout-link" href="/logout">

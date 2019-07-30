@@ -188,7 +188,7 @@ router.get('/faq', isUser, async (req, res) => {
 });
 
 
-router.get('/userOverview', isUser, async (req, res) => {
+router.get('/friendActivity', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
     let referredUsers = await
@@ -237,9 +237,9 @@ router.get('/userOverview', isUser, async (req, res) => {
             raw: true
         });
         
-    res.render('user/userOverview', {
+    res.render('user/friendActivity', {
         user: req.user,
-        title: req.user.name + "'s Overview",
+        title: req.user.name + "Friend Activity",
         referredUsers: groupReferredUsers(referredUsers, refUserBadges),
         refUserFoodLog: groupFoodItems(refUserFoodLog),
         unviewedNotifications
@@ -430,7 +430,7 @@ router.post('/acceptInvitation/:id', async (req, res) => {
         createUserReferral(req.user, referredUser, true, `You're now mutual friends with ${referredUser.name}.`);
 
         req.flash('success', "You have successfully added a friend!");
-        res.redirect('/user/userOverview');
+        res.redirect('/user/friendActivity');
     } else {
         req.flash('error', "You've already added this user as a friend!");
         res.redirect('/user/');
@@ -486,7 +486,7 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
         updateUserPoints(req.user, -75, "removing someone from your friend group");
 
         req.flash('success', "You have successfully deleted a referral code!");
-        res.redirect('/user/userOverview');
+        res.redirect('/user/friendActivity');
 
     } catch (err) {
         if (err) console.log('error', err);
@@ -506,7 +506,7 @@ router.post('/userPage', async (req, res) => {
         );
 
     req.flash('success', 'Compliment set');
-    res.redirect('/user/userOverview');
+    res.redirect('/user/friendActivity');
 });
 
 router.get('/deleteCompliment/:id', isUser, async (req, res) => {
@@ -521,7 +521,7 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
         })
         .then(() => {
             req.flash('success', 'Compliment deleted');
-            res.redirect('/user/userOverview')
+            res.redirect('/user/friendActivity')
         });
 });
 
@@ -567,7 +567,7 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
     })
 
     req.flash('success', 'Message Sent'); 
-    res.redirect('/user/userOverview'); 
+    res.redirect('/user/friendActivity'); 
 }); 
 
 
@@ -609,7 +609,7 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
 //             }
 //         }).then(() => {
 //             req.flash('success', 'Requested Accepted, you can now chat');
-//             res.redirect('/user/userOverview');
+//             res.redirect('/user/friendActivity');
 //         })
 // });
 
