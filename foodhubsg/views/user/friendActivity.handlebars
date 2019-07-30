@@ -100,7 +100,7 @@
                                 <i class="fas fa-paper-plane"></i>&nbsp;Send Message
                             </a>
                             {{/if}}
-                            <hr align="left" width="5%">
+                            <hr align="left" width="20%">
                             {{#ifCond id '!=' ../user.id}}
                                 <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                     data-title="Confirm delete?">
@@ -125,11 +125,11 @@
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                             <br>
+                            (at #<span style="font-weight:900;">{{math @index '+' 1 }}</span> position)
+                            <hr align="right" width="20%">
                             <a href="#">
                                 <i class="fas fa-history"></i>&nbsp;Points History
                             </a>
-                            <hr align="right" width="5%">
-                            (at #<span style="font-weight:900;">{{math @index '+' 1 }}</span> position)
                         </div>
                     </div>
                     {{#ifCond daysActive '>=' 3}}
@@ -209,8 +209,7 @@
                         </div>
                     </div>
                     {{/ifCond}}
-                    <hr width="20%">
-                    <hr width="20%">
+                    <hr width="25%">
                     {{#ifCond ../referredUsers.length '==' 1}}
                         <h4 class="text-center" style="padding: 30px"><b>You have not referred anyone else yet!</b></h4>
                     {{/ifCond}}
