@@ -5,7 +5,7 @@ const UserAction = require('../models/UserAction');
 const UserBadge = require('../models/UserBadge');
 
 
-async function updateUserPoints(user, points, source, additionalMessage = "", callToAction = null, callToActionLink = null) {
+async function updateUserPoints(user, points, source, additionalMessage = null, callToAction = null, callToActionLink = null) {
     var startDt = new Date();
     var endDt = new Date(startDt);
     endDt.setMinutes(startDt.getMinutes() - 5);
@@ -51,6 +51,18 @@ async function updateUserPoints(user, points, source, additionalMessage = "", ca
                 raw: true
             });
 
+        if (recentPointAdditions.length > 5) {
+            await
+                UserAction.create({
+                    UserId: user.id,
+                    action: "been detected cheating the points system",
+                    source: "getting too many points in a short timespan",
+                    type: "negative",
+                    additionalMessage: "You will be banned from earning points if you continue cheating.",
+                    hasViewed: false
+                });
+        };
+
         if (recentPointAdditions.length >= 10) {
             await
                 User.update(
@@ -71,7 +83,7 @@ async function updateUserPoints(user, points, source, additionalMessage = "", ca
 
         if (updatedUser.gainedPoints >= 1000) {
             let existingBadge = await UserBadge.findOne({ where: { UserId: user.id, BadgeId: 3 } });
-            
+
             if (!existingBadge) {
                 await
                     UserAction.create({

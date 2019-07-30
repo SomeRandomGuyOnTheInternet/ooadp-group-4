@@ -12,8 +12,6 @@ const groupReferredUsers = require('../helpers/groupReferredUsers');
 const createUserReferral = require('../helpers/createUserReferral');
 const updateUserPoints = require('../helpers/updateUserPoints');
 const updateUserCalories = require('../helpers/updateUserCalories');
-const checkFoodItems = require('../helpers/checkFoodItems');
-const checkUserActivity = require('../helpers/checkUserActivity');
 const addBadges = require('../helpers/addBadges');
 
 
@@ -21,7 +19,6 @@ const Food = require('../models/FoodItem');
 const FoodLog = require('../models/FoodLog');
 const Shop = require('../models/Shop');
 const User = require('../models/User');
-const UserAction = require('../models/UserAction');
 const UserBadge = require('../models/UserBadge');
 const Badge = require('../models/Badge');
 const Referral = require('../models/Referral');
@@ -29,8 +26,10 @@ const Question = require('../models/Question');
 
 
 
-router.get('/', isUser, (req, res) => {
-    Promise.all([
+router.get('/', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let shops = await
         Shop.findAll({
             where: {
                 location: req.user.location,
@@ -39,7 +38,9 @@ router.get('/', isUser, (req, res) => {
             order: [
                 ['rating', 'DESC'],
             ],
-        }),
+        });
+
+    let foodItems = await
         Food.findAll({
             include: [{
                 model: FoodLog,
@@ -50,7 +51,9 @@ router.get('/', isUser, (req, res) => {
                 [FoodLog, 'createdAt', 'ASC'],
             ],
             raw: true
-        }),
+        });
+
+    let userBadges = await
         UserBadge.findAll({
             where: { UserId: req.user.id },
             include: {
@@ -58,94 +61,75 @@ router.get('/', isUser, (req, res) => {
                 required: true,
             },
             raw: true
-        }),
-    ])
-    .then(function (data) {
-        let groupedFoodItems = groupFoodItems(data[1]);
-        let shops = data[0];
-        let userBadges = data[2];
-
-        getUnviewedNotifications(req.user)
-        .then((unviewedNotifications) => {
-            res.render('user/index', {
-                user: req.user,
-                title: "Index",
-                shops,
-                groupedFoodItems,
-                userBadges,
-                unviewedNotifications
-            });
         });
+        
+    res.render('user/index', {
+        user: req.user,
+        title: "Index",
+        shops,
+        groupedFoodItems: groupFoodItems(foodItems),
+        userBadges,
+        unviewedNotifications
     });
 });
 
 
-router.get('/shops', isUser, (req, res) => {
-    Shop.findAll({
-        where: { isDeleted: false },
-        order: [
-            ['rating', 'DESC'],
-        ],
-    })
-    .then(function (shops) {
-        getUnviewedNotifications(req.user)
-        .then((unviewedNotifications) => {
-            res.render('user/shops', {
-                user: req.user,
-                title: "Shops",
-                shops,
-                unviewedNotifications
-            });
-        });
-    });
-});
+router.get('/shops', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
 
-
-router.get('/shops/:id', isUser, (req, res) => {
-    let id = req.params.id;
-
-    Promise.all([
-        Shop.findOne({
-            where: { id },
-        }),
-        Food.findAll({
-            where: {
-                ShopId: id,
-                isDeleted: false,
-            }
-        }),
+    let shops = await
         Shop.findAll({
-            where: { id: { [Sequelize.Op.not]: id } },
-        }),
-    ])
-    .then((data) => {
-        User.findOne({
-            where: { id: data[0].VendorId },
-        })
-        .then((vendor) => {
-            getUnviewedNotifications(req.user)
-            .then((unviewedNotifications) => {
-                res.render('user/shop', {
-                    title: data[0].name,
-                    shop: data[0],
-                    foodItems: data[1],
-                    otherShops: data[2],
-                    vendor,
-                    user: req.user,
-                    unviewedNotifications
-                });
-            });
+            where: { isDeleted: false },
+            order: [
+                ['rating', 'DESC'],
+            ],
         });
-    })
-    .catch((err) => {
+
+    res.render('user/shops', {
+        user: req.user,
+        title: "Shops",
+        shops,
+        unviewedNotifications
+    });
+});
+
+
+router.get('/shops/:id', isUser, async (req, res) => {
+    let id = req.params.id;
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    try {
+        let shop = await Shop.findOne({ where: { id } });
+        let vendor = await User.findOne({ where: { id: shop.VendorId } });
+        let otherShops = await Shop.findAll({ where: { id: { [Sequelize.Op.not]: id } } });
+        let foodItems = await
+            Food.findAll({
+                where: {
+                    ShopId: id,
+                    isDeleted: false,
+                }
+            });
+
+        res.render('user/shop', {
+            title: shop.name,
+            shop,
+            foodItems,
+            otherShops,
+            vendor,
+            user: req.user,
+            unviewedNotifications
+        });
+    } catch (err) {
         req.flash('error', "That shop does not exist!");
         res.redirect('/user/shops');
-    });
+    };
 });
 
 
-router.get('/foodJournal', isUser, (req, res) => {
-    Promise.all([
+router.get('/foodJournal', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let foodItems = await
         Food.findAll({
             include: [{
                 model: FoodLog,
@@ -159,55 +143,53 @@ router.get('/foodJournal', isUser, (req, res) => {
                 [FoodLog, 'createdAt', 'DESC'],
             ],
             raw: true
-        }),
+        });
+
+    let allFoodItems = await
         Food.findAll({
             include: [{
                 model: Shop,
                 required: true,
             }],
             raw: true
-        }),
-    ])
-    .then((FoodItems) => {
-        let groupedFoodItems = groupFoodItems(FoodItems[0], true);
-
-        getUnviewedNotifications(req.user)
-        .then((unviewedNotifications) => {
-            res.render('user/foodJournal', {
-                user: req.user,
-                title: "Food Journal",
-                groupedFoodItems: groupedFoodItems[req.user.id],
-                allFoodItems: FoodItems[1],
-                today: moment(new Date()).format("YYYY-MM-DD"),
-                unviewedNotifications,
-            });
         });
+        
+    let groupedFoodItems = groupFoodItems(foodItems, true);
+
+    res.render('user/foodJournal', {
+        user: req.user,
+        title: "Food Journal",
+        groupedFoodItems: groupedFoodItems[req.user.id],
+        allFoodItems,
+        today: moment(new Date()).format("YYYY-MM-DD"),
+        unviewedNotifications,
     });
 });
 
 
-router.get('/faq', isUser, (req, res) => {
-    Question.findAll({
-        order: [
-            ['createdAt', 'ASC'],
-        ],
-        raw: true
-    })
-    .then((questions) => {
-        getUnviewedNotifications(req.user)
-        .then((unviewedNotifications) => {
-            res.render('user/faq', {
-                user: req.user,
-                questions,
-                unviewedNotifications
-            });
+router.get('/faq', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let questions  = await
+        Question.findAll({
+            order: [
+                ['createdAt', 'ASC'],
+            ],
+            raw: true
         });
+
+    res.render('user/faq', {
+        user: req.user,
+        questions,
+        unviewedNotifications
     });
 });
 
 
-router.get('/userOverview', isUser, (req, res) => {
-    Promise.all([
+router.get('/userOverview', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let referredUsers = await
         User.findAll({
             include: {
                 model: Referral,
@@ -223,7 +205,9 @@ router.get('/userOverview', isUser, (req, res) => {
                 ['gainedPoints', 'DESC'],
             ],
             raw: true
-        }),
+        });
+
+    let refUserBadges = await
         UserBadge.findAll({
             include: [{
                 model: Badge,
@@ -237,7 +221,9 @@ router.get('/userOverview', isUser, (req, res) => {
                 },
             }],
             raw: true
-        }),
+        });
+
+    let refUserFoodLog = await
         Food.findAll({
             include: [{
                 model: FoodLog,
@@ -258,36 +244,30 @@ router.get('/userOverview', isUser, (req, res) => {
                 [FoodLog, 'createdAt', 'ASC'],
             ],
             raw: true
-        }),
-    ])
-    .then((data) => {
-        getUnviewedNotifications(req.user)
-        .then((unviewedNotifications) => {
-            res.render('user/userOverview', {
-                user: req.user,
-                title: req.user.name + "'s Overview",
-                referredUsers: groupReferredUsers(data[0], data[1]),
-                refUserFoodLog: groupFoodItems(data[2]),
-                unviewedNotifications
-            });
         });
+        
+    res.render('user/userOverview', {
+        user: req.user,
+        title: req.user.name + "'s Overview",
+        referredUsers: groupReferredUsers(referredUsers, refUserBadges),
+        refUserFoodLog: groupFoodItems(refUserFoodLog),
+        unviewedNotifications
     });
 });
 
 
-router.get('/settings', isUser, (req, res) => {
-    getUnviewedNotifications(req.user)
-    .then((unviewedNotifications) => {
-        res.render('user/settings', {
-            user: req.user,
-            title: "Settings",
-            unviewedNotifications
-        });
+router.get('/settings', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    res.render('user/settings', {
+        user: req.user,
+        title: "Settings",
+        unviewedNotifications
     });
 });
 
 
-router.post('/addBmi', (req, res) => {
+router.post('/addBmi', async (req, res) => {
     const weight = req.body.weight;
     const height = req.body.height;
     const bmi = (weight / (height * height)).toFixed(2);
@@ -297,24 +277,27 @@ router.post('/addBmi', (req, res) => {
     if (weight > 200 || weight < 20) error = 'Please enter a valid weight value';
 
     if (!error) {
-        User.update(
-            { weight, height, bmi },
-            { where: { id: req.user.id } },
-        )
-    }
+        await
+            User.update(
+                { weight, height, bmi },
+                { where: { id: req.user.id } },
+            );
+    };
 
     res.send({ error });
 });
 
 
-router.post('/foodJournal', (req, res) => {
+router.post('/foodJournal', async (req, res) => {
     let searchDate = req.body.searchDate;
 
-    Promise.all([
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let foodItems = await
         Food.findAll({
             include: [{
                 model: FoodLog,
-                where: {
+                where: { 
                     UserId: req.user.id,
                     createdAtDate: searchDate
                 },
@@ -327,59 +310,69 @@ router.post('/foodJournal', (req, res) => {
                 [FoodLog, 'createdAt', 'DESC'],
             ],
             raw: true
-        }),
+        });
+
+    let allFoodItems = await
         Food.findAll({
             include: [{
                 model: Shop,
                 required: true,
             }],
             raw: true
-        }),
-    ])
-    .then((FoodItems) => {
-        let groupedFoodItems = groupFoodItems(FoodItems[0], true);
-
-        res.render('user/foodJournal', {
-            user: req.user,
-            title: "Food Journal",
-            groupedFoodItems: groupedFoodItems[req.user.id],
-            allFoodItems: FoodItems[1],
-            today: moment(new Date()).format("YYYY-MM-DD"),
-            searchDate,
         });
+
+    let groupedFoodItems = groupFoodItems(foodItems, true);
+
+    res.render('user/foodJournal', {
+        user: req.user,
+        title: "Food Journal",
+        groupedFoodItems: groupedFoodItems[req.user.id],
+        allFoodItems,
+        today: moment(new Date()).format("YYYY-MM-DD"),
+        searchDate,
+        unviewedNotifications,
     });
 });
 
 
-router.post('/searchFood', (req, res) => {
+router.post('/searchFood', async (req, res) => {
     let foodInput = req.body.searchQuery;
 
-    Food.findOne({
-        where: Sequelize.or(
-            { id: foodInput },
-            { name: foodInput },
-        )
-    })
-    .then(function (searchResults) {
-        res.send(searchResults);
-    })
+    let searchResults = await
+        Food.findOne({
+            where: Sequelize.or(
+                { id: foodInput },
+                { name: foodInput },
+            )
+        });
+
+    res.send(searchResults);
 });
 
 
-router.post('/addFood', (req, res) => {
+router.post('/addFood', async (req, res) => {
     let user = req.user, selectedFoodId = req.body.foodId;
 
-    Food.findOne({
-        where: {
-            id: selectedFoodId,
-            isDeleted: false
-        }
-    })
-    .then((foodItem) => {
-        if (foodItem.isRecommended == true) {
-            updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!");
-            // checkFoodItems(foodItems, user)
+    let foodItem = await
+        Food.findOne({
+            where: {
+                id: selectedFoodId,
+                isDeleted: false
+            }
+        });
 
+    await
+        FoodLog.create({
+            UserId: user.id,
+            FoodId: selectedFoodId,
+            mealType: getMealType(),
+            createdAtDate: getCurrentDate(),
+        });
+
+    if (foodItem.isRecommended) {
+        updateUserPoints(user, 100, "adding a recommended food item to your log", "Keep it up!");
+
+        let recFoodLog = await
             FoodLog.findAll({
                 where: {
                     UserId: req.user.id
@@ -388,82 +381,68 @@ router.post('/addFood', (req, res) => {
                     model: Food,
                     where: { isRecommended: true },
                     required: true,
-                },
-            })
-            .then((recFoodLog) => {
-                if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
-                else if (recFoodLog.length > 9) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
-            })
-        };
+                }
+            });
 
-        FoodLog.create({
-            UserId: user.id,
-            FoodId: selectedFoodId,
-            mealType: getMealType(),
-            createdAtDate: getCurrentDate(),
-        })
-        .then(() => {
-            updateUserCalories(user);
-            req.flash('success', "That food has been successfully added!");
-        });
-    });
+        if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
+        else if (recFoodLog.length > 9) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
+    };
 
+    updateUserCalories(user);
+
+    req.flash('success', "That food has been successfully added!");
     res.send({ user });
 
 });
 
 
-router.post('/editFood/:id', (req, res) => {
+router.post('/editFood/:id', async (req, res) => {
     const logId = req.params.id;
-    const foodIdToUpdateTo = req.body.codeToChange;
+    const foodId = req.body.codeToChange;
+    const foodItem = await Food.findOne({ where: { id: foodId } });
 
-    Food.findOne({ where: { id: foodIdToUpdateTo } })
-    .then((foodItem) => {
-        if (foodItem) {
+    if (foodItem) {
+        await
             FoodLog.update(
-                { FoodId: foodIdToUpdateTo },
+                { FoodId: foodId },
                 { where: { id: logId } },
-            )
-            .then(() => {
-                updateUserCalories(req.user);
-                req.flash('success', "You've successfully edited that food item!");
-                res.redirect('/user/foodJournal');
-            });
-        } else {
-            req.flash('error', "That code does not exist!");
-            res.redirect('/user/foodJournal');
-        }
-    });
+            );
+        updateUserCalories(req.user);
+
+        req.flash('success', "You've successfully edited that food item!");
+        res.redirect('/user/foodJournal');
+    } else {
+        req.flash('error', "That code does not exist!");
+        res.redirect('/user/foodJournal');
+    }
 });
 
 
-router.post('/deleteFood/:id', (req, res) => {
+router.post('/deleteFood/:id', async (req, res) => {
     const logId = req.params.id;
 
-    FoodLog.destroy({ where: { id: logId } })
-    .then(() => {
-        updateUserCalories(req.user);
-        req.flash('success', "You've successfully deleted that food item from your log!");
-        res.redirect('/user/foodJournal');
-    })
+    await FoodLog.destroy({ where: { id: logId } });
+    updateUserCalories(req.user);
+
+    req.flash('success', "You've successfully deleted that food item from your log!");
+    res.redirect('/user/foodJournal');
 });
+
 
 router.post('/acceptInvitation/:id', async (req, res) => {
     const refUserId = req.params.id;
     
-    try {
-        let referredUser = await User.findOne({ where: { id: refUserId } });
-        let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
+    let referredUser = await User.findOne({ where: { id: refUserId } });
+    let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
 
-        if (!existingReferral) { 
-            createUserReferral(req.user, referredUser, null, `You've now become mutual friends with ${referredUser.name}.`);
-            req.flash('success', "You have successfully added a friend!");
-        } else {
-            req.flash('error', "You've already added this user as a friend!");
-            res.redirect('/user/');
-        };
-    } catch (err) {
-        if (err) console.log('error', err);
+    if (!existingReferral) { 
+        createUserReferral(req.user, referredUser, null, `You're now mutual friends with ${referredUser.name}.`);
+
+        req.flash('success', "You have successfully added a friend!");
+        res.redirect('/user/userOverview');
+    } else {
+        req.flash('error', "You've already added this user as a friend!");
+        res.redirect('/user/');
     };
 });
 
@@ -472,37 +451,32 @@ router.post('/addRefCode', async (req, res) => {
     const refCode = req.body.selRefCode.toLowerCase();
     let error;
 
-    try {
-        let referredUser = await User.findOne({ where: { refCode }});
-        let existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
+    let referredUser = await User.findOne({ where: { refCode }});
+    let existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
 
-        if (!referredUser) error = "That referral code does not exist!";
-        if (existingReferral) error = "You've already used that code as a referral!";
-        if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
+    if (!referredUser) error = "That referral code does not exist!";
+    if (existingReferral) error = "You've already used that code as a referral!";
+    if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
 
-        if (!error) {
-            let mutualExisitngReferral = await Referral.findOne({ where: { UserId: referredUser.id, RefUserId: req.user.id } });
-            let isMutual = (mutualExisitngReferral) ? true : false;
-            let additionalMessage, callToAction, callToActionLink;
+    if (!error) {
+        let mutualExisitngReferral = await Referral.findOne({ where: { UserId: referredUser.id, RefUserId: req.user.id } });
+        let isMutual = (mutualExisitngReferral) ? true : false;
+        let additionalMessage, callToAction, callToActionLink;
 
-            if (!isMutual) {
-                additionalMessage = `An invitation to add you back as friend has been sent to ${referredUser.name}.`;
-                callToAction = `Do you want to add ${req.user.name} as a friend?`;
-                callToActionLink = `/user/acceptInvitation/${req.user.id}`;
-            }
-            else {
-                additionalMessage = `You've now become mutual friends with ${referredUser.name}.`;
-            }
+        if (!isMutual) {
+            additionalMessage = `An invitation to add you back as a friend has been sent to ${referredUser.name}.`;
+            callToAction = `Do you want to add ${req.user.name} as a friend?`;
+            callToActionLink = `/user/acceptInvitation/${req.user.id}`;
+        }
+        else {
+            additionalMessage = `You're now mutual friends with ${referredUser.name}.`;
+        }
 
-            createUserReferral(req.user, referredUser, isMutual, additionalMessage, callToAction, callToActionLink);
-            req.flash('success', "You have successfully added a friend!"); 
-        };
+        createUserReferral(req.user, referredUser, isMutual, additionalMessage, callToAction, callToActionLink);
+        req.flash('success', "You have successfully added a friend!"); 
+    };
 
-        res.send({ error });
-
-    } catch (err) {
-        if (err) console.log('error', err);
-    }
+    res.send({ error });
 });
 
 
@@ -529,118 +503,104 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
 });
 
 
-router.post('/userPage', (req, res) => {
+router.post('/userPage', async (req, res) => {
     let compliment = req.body.sendMessage;
     let id = req.body.friendId; ``
     let error;
 
-    Referral.update(
-        { compliment },
-        {
-            where: {
-                id,
-                UserId: req.user.id,
+    await
+        Referral.update(
+            { compliment },
+            {
+                where: {
+                    id,
+                    UserId: req.user.id,
+                }
             }
-        }
-    )
-    .then(() => {
-        req.flash('success', 'Compliment set');
-        res.redirect('/user/userOverview');
-    });
+        );
 
-    res.send({ error });
-    
-})
+    req.flash('success', 'Compliment set');
+    res.redirect('/user/userOverview');
+});
 
-router.get('/deleteCompliment/:id', isUser, (req, res) => {
-    Referral.findOne({
-        compliment: null,
-    },{
-        where: {
-            id: req.params.id,
-            UserId: req.user.id,
-        }
-    })
-    .then(() => {
-        req.flash('success', 'Compliment deleted');
-        res.redirect('/user/userOverview')
-    });
-}); 
-
-router.get('/sendMessage/:id', isUser, (req, res) => {
-    Referral.findOne({ where: { id: req.params.id } })
-    .then(() => {
-        res.render('user/sendMessages', 
-        {user: req.user})
-    });
-}); 
-
-router.get('/editCompliment/:id', isUser, (req, res) => {
-    Referral.findOne({
-        where: {
-            id: req.params.id,
-            UserId: req.user.id,
-        }
-    }).then((com) => {
-        res.render('user/editCompliment', {
-            compliment: com,
-            user: req.user
-        })
-    })
-})
-
-
-router.post('/editCompliment/:id', isUser, (req, res) => {
-    let compliment = req.body.compliment;
-    Referral.update({
-        compliment: compliment,
-    }, {
+router.get('/deleteCompliment/:id', isUser, async (req, res) => {
+    await
+        Referral.findOne({
+            compliment: null,
+        },{
             where: {
                 id: req.params.id,
                 UserId: req.user.id,
             }
-        }).then(() => {
-            req.flash('success', 'Compliment edited');
-            res.redirect('/user/userOverview')
         })
-});
 
-router.get('/acceptRequest/:id', isUser, (req, res) => {
-    Referral.update({
-        isMutual: true
-    }, {
+    req.flash('success', 'Compliment deleted');
+    res.redirect('/user/userOverview');
+}); 
+
+router.get('/sendMessage/:id', isUser, async (req, res) => {
+    await Referral.findOne({ where: { id: req.params.id } });
+
+    res.render('user/sendMessages', 
+    {user: req.user});
+}); 
+
+router.get('/editCompliment/:id', isUser, async (req, res) => {
+    let com = await
+        Referral.findOne({
             where: {
-               id: req.params.id, 
+                id: req.params.id,
+                UserId: req.user.id,
             }
-        }).then(() => {
-            req.flash('success', 'Requested Accepted, you can now chat');
-            res.redirect('/user/userOverview');
-        })
+        });
+
+    res.render('user/editCompliment', {
+        compliment: com,
+        user: req.user
+    });
+})
+
+
+router.post('/editCompliment/:id', isUser, async (req, res) => {
+    let compliment = req.body.compliment;
+
+    await
+        Referral.update({
+            compliment: compliment,
+        },{
+            where: {
+                id: req.params.id,
+                UserId: req.user.id,
+            }
+        });
+
+    req.flash('success', 'Compliment edited');
+    res.redirect('/user/userOverview');
 });
 
 
-router.post('/faq', isUser, (req, res) => {
+router.post('/faq', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let question = req.body.question;
     let error;
 
-    Question.create({
-        UserId: req.user.id,
-        question: question,
-    })
-        .then((questions) => {
-            req.flash('success', 'You have successfully created a question!');
-            res.redirect('/user/faq');
-        })
+    let questions = await
+        Question.create({
+            UserId: req.user.id,
+            question: question,
+        });
+
+    req.flash('success', 'You have successfully created a question!');
+    res.redirect('/user/faq');
 });
 
 
 
-router.post('/settings', isUser, (req, res) => {
+router.post('/settings', isUser, async (req, res) => {
     const name = req.body.name;
-    let email = req.body.email.toLowerCase();
-    let password = req.body.password;
+    const email = req.body.email.toLowerCase();
+    const password = req.body.password;
     const isAdmin = isBanned = isVendor = false;
     let weight = req.body.weight;
     let height = req.body.height;
@@ -648,19 +608,20 @@ router.post('/settings', isUser, (req, res) => {
 
     bcrypt.genSalt(function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
-            User.update({
-                weight: req.body.weight,
-                height: req.body.height,
-                email: email,
-                password: hash,
-            }, {
-                    where: { id: req.user.id }
-                })
-                .then(function (user) {
-                    res.redirect('/user/settings');
-                })
-                .catch(err => console.log(err));
+            await
+                User.update(
+                    {
+                        weight: req.body.weight,
+                        height: req.body.height,
+                        email: email,
+                        password: hash,
+                    }, 
+                    {
+                        where: { id: req.user.id }
+                    }
+                );
 
+            res.redirect('/user/settings');
         });
     })
 });
