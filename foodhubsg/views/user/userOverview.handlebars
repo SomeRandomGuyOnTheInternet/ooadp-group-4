@@ -91,7 +91,7 @@
                     {{#each referredUsers}}
                     <div class="row form-group">
                         <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
-                            {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px; font-weight: 700;">Your Info</h6>{{/ifCond}}
+                            {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px; font-weight: 700;"><i>Your Info</i></h6>{{/ifCond}}
                             {{#ifCond id '!=' ../user.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
                             <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
                             <h6 style="margin-bottom: 20px;">({{ email }})</h6>
@@ -128,6 +128,8 @@
                             <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                             <br>
                             <a href="#">Points History</a>
+                            <br>
+                            <span style="font-weight:600;">(at #{{math @index '+' 1 }} position)</span>
                         </div>
                     </div>
                     {{#ifCond daysActive '>=' 3}}
@@ -164,7 +166,7 @@
                                                 <td>~500 kcal</td>
                                                 <td>{{ averageBreakfastCalories }} kcal</td>
                                                 <td>
-                                                    {{math "500" "-" averageBreakfastCalories}} kcal
+                                                    {{math "500" "--" averageBreakfastCalories}} kcal
                                                 </td>
                                             </tr>
                                             <tr>
@@ -172,7 +174,7 @@
                                                 <td>~400 kcal</td>
                                                 <td>{{ averageLunchCalories }} kcal</td>
                                                 <td>
-                                                    {{math "400" "-" averageLunchCalories}} kcal
+                                                    {{math "400" "--" averageLunchCalories}} kcal
                                                 </td>
                                             </tr>
                                             <tr>
@@ -180,7 +182,7 @@
                                                 <td>~450 kcal</td>
                                                 <td>{{ averageDinnerCalories }} kcal</td>
                                                 <td>
-                                                    {{math "450" "-" averageDinnerCalories}} kcal
+                                                    {{math "450" "--" averageDinnerCalories}} kcal
                                                 </td>
                                             </tr>
                                             <tr>
@@ -188,7 +190,7 @@
                                                 <td>&lt;150 kcal</td>
                                                 <td>{{ averageSnacksCalories }} kcal</td>
                                                 <td>
-                                                    {{math "150" "-" averageSnacksCalories}} kcal
+                                                    {{math "150" "--" averageSnacksCalories}} kcal
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -198,7 +200,7 @@
                                                 <td>~1500 kcal</td>
                                                 <td>{{ averageCalories }} kcal</td>
                                                 <td>
-                                                    {{math "1500" "-" averageCalories}} kcal
+                                                    {{math "1500" "--" averageCalories}} kcal
                                                 </td>
                                             </tr>
                                         </tfoot>
