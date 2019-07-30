@@ -245,7 +245,7 @@
         })
         .done(function (rawData) {
 			console.log(rawData)
-            var data = JSON.parse(rawData);
+            let data = JSON.parse(rawData);
 
             if (data.error) {
                 $('.ajaxErrBlock').css("display", "block");

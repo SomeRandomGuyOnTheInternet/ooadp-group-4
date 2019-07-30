@@ -191,7 +191,7 @@
     referredUsers = {{{ json referredUsers }}};
 
     for (i = 0; i < referredUsers.length; i++) {
-        for (var [userId, foodLog] of Object.entries(refUserFoodLog)) {
+        for (let [userId, foodLog] of Object.entries(refUserFoodLog)) {
             console.log(foodLog)
             if (referredUsers[i].id == userId && referredUsers[i].daysActive >= 3) generateFoodLogChart(foodLog, referredUsers[i])
         }
@@ -208,7 +208,7 @@
             dataType: 'text'
         })
         .done(function (rawData) {
-            var data = JSON.parse(rawData);
+            let data = JSON.parse(rawData);
 
             if (data.error) {
                 $('.ajaxErrBlock').css("display", "block");
@@ -240,7 +240,7 @@
             dataType: 'text'
         })
             .done(function (rawData) {
-                var data = JSON.parse(rawData);
+                let data = JSON.parse(rawData);
 
                 if (data.error) {
                     $('.ajaxErrBlock').css("display", "block");

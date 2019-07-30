@@ -1,14 +1,14 @@
-var _ = require('lodash');
+let _ = require('lodash');
 const moment = require('moment'); 
 
 function groupFoodItems(ungroupedFoodItems, setDates = false) {
-    var datesWithFood;
-    var userFoodLog = _.groupBy(ungroupedFoodItems, 'FoodLogs.UserId');
+    let datesWithFood;
+    let userFoodLog = _.groupBy(ungroupedFoodItems, 'FoodLogs.UserId');
 
-    for (var [userId, foodLog] of Object.entries(userFoodLog)) {
+    for (let [userId, foodLog] of Object.entries(userFoodLog)) {
         datesWithFood = _.groupBy(foodLog, 'FoodLogs.createdAtDate');
 
-        for (var [date, dateFood] of Object.entries(datesWithFood)) {
+        for (let [date, dateFood] of Object.entries(datesWithFood)) {
             for (i = 0, breakfastCalories = 0, lunchCalories = 0, dinnerCalories = 0, snacksCalories = 0, dailyCalories = 0; i < dateFood.length; i++) {
                 switch (dateFood[i]["FoodLogs.mealType"]) {
                     case "Breakfast":

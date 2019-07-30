@@ -57,7 +57,7 @@
 </div>
 
 <script>
-    var oldElem = [], newElem = [];
+    let oldElem = [], newElem = [];
 
     $('.form-control').each(function () {
         elem = $(this);
@@ -68,7 +68,7 @@
     .bind("propertychange change click keyup input paste", function (event) {
         newElem = [];
         $('.form-control').each(function () {
-            var elem = $(this);
+            let elem = $(this);
             newElem.push(elem.val());
         });
 

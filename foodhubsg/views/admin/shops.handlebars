@@ -87,8 +87,8 @@
 </div>
 
 <script>
-    var allShops = {{{ json shops }}};
-    var availableTags = [];
+    let allShops = {{{ json shops }}};
+    let availableTags = [];
     createShopTemplate(allShops, '/admin/editShop/');
     for (i = 0; i < allShops.length; i++) availableTags.push(allShops[i].name);
 

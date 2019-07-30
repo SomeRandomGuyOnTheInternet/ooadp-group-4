@@ -61,9 +61,9 @@ router.get('/', isUser, (req, res) => {
         }),
     ])
     .then(function (data) {
-        var groupedFoodItems = groupFoodItems(data[1]);
-        var shops = data[0];
-        var userBadges = data[2];
+        let groupedFoodItems = groupFoodItems(data[1]);
+        let shops = data[0];
+        let userBadges = data[2];
 
         getUnviewedNotifications(req.user)
         .then((unviewedNotifications) => {
@@ -102,7 +102,7 @@ router.get('/shops', isUser, (req, res) => {
 
 
 router.get('/shops/:id', isUser, (req, res) => {
-    var id = req.params.id;
+    let id = req.params.id;
 
     Promise.all([
         Shop.findOne({
@@ -169,7 +169,7 @@ router.get('/foodJournal', isUser, (req, res) => {
         }),
     ])
     .then((FoodItems) => {
-        var groupedFoodItems = groupFoodItems(FoodItems[0], true);
+        let groupedFoodItems = groupFoodItems(FoodItems[0], true);
 
         getUnviewedNotifications(req.user)
         .then((unviewedNotifications) => {
@@ -291,7 +291,7 @@ router.post('/addBmi', (req, res) => {
     const weight = req.body.weight;
     const height = req.body.height;
     const bmi = (weight / (height * height)).toFixed(2);
-    var error;
+    let error;
 
     if (height > 3 || weight < 0.5) error = 'Please enter a valid height value';
     if (weight > 200 || weight < 20) error = 'Please enter a valid weight value';
@@ -308,7 +308,7 @@ router.post('/addBmi', (req, res) => {
 
 
 router.post('/foodJournal', (req, res) => {
-    var searchDate = req.body.searchDate;
+    let searchDate = req.body.searchDate;
 
     Promise.all([
         Food.findAll({
@@ -337,7 +337,7 @@ router.post('/foodJournal', (req, res) => {
         }),
     ])
     .then((FoodItems) => {
-        var groupedFoodItems = groupFoodItems(FoodItems[0], true);
+        let groupedFoodItems = groupFoodItems(FoodItems[0], true);
 
         res.render('user/foodJournal', {
             user: req.user,
@@ -352,7 +352,7 @@ router.post('/foodJournal', (req, res) => {
 
 
 router.post('/searchFood', (req, res) => {
-    var foodInput = req.body.searchQuery;
+    let foodInput = req.body.searchQuery;
 
     Food.findOne({
         where: Sequelize.or(
@@ -367,7 +367,7 @@ router.post('/searchFood', (req, res) => {
 
 
 router.post('/addFood', (req, res) => {
-    var user = req.user, selectedFoodId = req.body.foodId;
+    let user = req.user, selectedFoodId = req.body.foodId;
 
     Food.findOne({
         where: {
@@ -507,7 +507,7 @@ router.post('/addRefCode', async (req, res) => {
 
 
 router.get('/delRefCode/:id', isUser, async (req, res) => {
-    var id = req.params.id;
+    let id = req.params.id;
 
     try {
         let existingReferral = await Referral.findOne({ where: { id } });
@@ -532,7 +532,7 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
 router.post('/userPage', (req, res) => {
     let compliment = req.body.sendMessage;
     let id = req.body.friendId; ``
-    var error;
+    let error;
 
     Referral.update(
         { compliment },
@@ -623,7 +623,7 @@ router.post('/faq', isUser, (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let question = req.body.question;
-    var error;
+    let error;
 
     Question.create({
         UserId: req.user.id,
@@ -644,7 +644,7 @@ router.post('/settings', isUser, (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     let weight = req.body.weight;
     let height = req.body.height;
-    var error;
+    let error;
 
     bcrypt.genSalt(function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {

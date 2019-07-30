@@ -1,8 +1,8 @@
 const Notification = require('../models/UserAction');
 
 
-function getUnviewedNotifications(user) {
-    var hasViewed = true;
+async function getUnviewedNotifications(user) {
+    let hasViewed = true;
 
     return Notification.findAll({ where: { hasViewed: false, UserId: user.id } })
     .then((unviewedNotifications) => {

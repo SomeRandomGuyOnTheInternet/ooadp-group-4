@@ -1,5 +1,5 @@
 function getShopRating(foodItems) {
-    var rating = 0, averageCalories = 0;
+    let rating = 0, averageCalories = 0;
 
     for (i = 0, totalCalories = 0; i < foodItems.length; i++) {
         totalCalories += Number(foodItems[i].calories);

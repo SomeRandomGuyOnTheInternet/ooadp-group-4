@@ -23,7 +23,7 @@ router.post('/settings', isVendor, (req, res) => {
 
     let password = req.body.password;
 
-    var error;
+    let error;
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
             Vendor.update({
@@ -73,7 +73,7 @@ router.get('/addShop', isVendor, (req, res) => {
 
 
 router.get('/editShop/:id', isVendor, (req, res) => {
-    var id = req.params.id;
+    let id = req.params.id;
     Promise.all([
         Shop.findOne({
             where: { id }
@@ -200,14 +200,14 @@ router.get('/deleteFoodItem/:id', isVendor, (req, res) => {
             where: { id: req.params.id, },
         })
         .then((id) => {
-            var food = FoodItem.findOne({
+            let food = FoodItem.findOne({
                 attributes: ['ShopId'],
                 where: { id: id },
             }).then((food) => {
                 console.log(food);
                 FoodItem.findAll({ where: { ShopId: food.ShopId, isDeleted: false } })
                     .then((foodItems) => {
-                        var rating = getShopRatings(foodItems);
+                        let rating = getShopRatings(foodItems);
                         Shop.update(
                             {
                                 rating,
@@ -330,7 +330,7 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
         .then(() => {
             FoodItem.findAll({ where: { ShopId: shop, isDeleted: false } })
                 .then((foodItems) => {
-                    var rating = getShopRatings(foodItems);
+                    let rating = getShopRatings(foodItems);
                     console.log(rating);
                     Shop.update(
                         {
