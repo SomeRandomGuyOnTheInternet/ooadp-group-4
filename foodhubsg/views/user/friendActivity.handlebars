@@ -91,20 +91,22 @@
                     {{#each referredUsers}}
                     <div class="row form-group">
                         <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
-                            {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px; font-weight: 700;"><i>Your Info</i></h6>{{/ifCond}}
+                            {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px;"><i>Your Info</i></h6>{{/ifCond}}
                             {{#ifCond id '!=' ../user.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
                             <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
-                            <h6 style="margin-bottom: 20px;">({{ email }})</h6>
+                            <h6 style="margin-bottom: 10px;">({{ email }})</h6>
+                            <span style="font-weight: 800;">{{ bmi }}</span> bmi
+                            <hr align="left" width="20%">
                             {{#if isMutual}}
                             <a href="/user/sendMessage/{{'Referrals.id'}}">
-                                <i class="fas fa-paper-plane"></i>&nbsp;Send Message
+                                <i class="fas fa-paper-plane"></i>&nbsp;&nbsp;Send Message
                             </a>
+                            <br>
                             {{/if}}
-                            <hr align="left" width="20%">
                             {{#ifCond id '!=' ../user.id}}
                                 <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                     data-title="Confirm delete?">
-                                    <i class="fas fa-trash-alt"></i>&nbsp;Delete
+                                    <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
                                 </a>
                             {{/ifCond}}
                         </div>
@@ -128,7 +130,7 @@
                             (at #<span style="font-weight:900;">{{math @index '+' 1 }}</span> position)
                             <hr align="right" width="20%">
                             <a href="#">
-                                <i class="fas fa-history"></i>&nbsp;Points History
+                                <i class="fas fa-history"></i>&nbsp;&nbsp;Points History
                             </a>
                         </div>
                     </div>
