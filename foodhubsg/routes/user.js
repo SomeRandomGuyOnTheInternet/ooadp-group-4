@@ -13,6 +13,7 @@ const createUserReferral = require('../helpers/createUserReferral');
 const updateUserPoints = require('../helpers/updateUserPoints');
 const updateUserCalories = require('../helpers/updateUserCalories');
 const addBadges = require('../helpers/addBadges');
+const sendEmail = require('../helpers/sendEmail');
 
 
 const Food = require('../models/FoodItem');
@@ -226,7 +227,6 @@ router.get('/userOverview', isUser, async (req, res) => {
                 model: FoodLog,
                 include: {
                     model: User,
-                    where: { id: { [Sequelize.Op.not]: req.user.id } },
                     include: {
                         model: Referral,
                         where: { UserId: req.user.id },
@@ -237,9 +237,6 @@ router.get('/userOverview', isUser, async (req, res) => {
                 required: true,
                 raw: true
             }],
-            order: [
-                [FoodLog, 'createdAt', 'ASC'],
-            ],
             raw: true
         });
         

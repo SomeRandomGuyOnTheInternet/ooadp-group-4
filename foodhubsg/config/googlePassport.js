@@ -4,6 +4,7 @@ const toTitleCase = require('../helpers/toTitleCase');
 const User = require('../models/User');
 const UserBadge = require('../models/UserBadge');
 const UserAction = require('../models/UserAction');
+const Referral = require('../models/Referral');
 
 function googleStrategy(passport) {
     passport.use(new GoogleStrategy({
@@ -28,6 +29,12 @@ function googleStrategy(passport) {
                 User.create({ name: toTitleCase(name), email, isDeleted, isAdmin, isBanned, isVendor, gainedPoints, averageCalories, averageBreakfastCalories, averageLunchCalories, averageDinnerCalories, averageSnacksCalories, daysActive, refCode })
                 .then(user => {
                     Promise.all([
+                        Referral.create({
+                            RefUserCode: user.refCode,
+                            RefUserId: user.id,
+                            UserId: user.id,
+                            isMutual: false,
+                        }),
                         UserAction.create({
                             UserId: user.id,
                             action: "earned your first badge",

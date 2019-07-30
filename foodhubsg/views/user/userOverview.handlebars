@@ -11,7 +11,6 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
                     <form method="post" action="" id="refCodeForm">
                         <div class="modal-body">
                             <div class="row form-group">
@@ -73,7 +72,6 @@
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
-
                     <header>
                         <div class="row">
                             <div class="col-8 col-md-8">
@@ -93,15 +91,17 @@
                     {{#each referredUsers}}
                     <div class="row form-group">
                         <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
-                            <h6 style="margin-bottom: 15px;">User Info</h6>
-                            <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;-
-                                {{ refCode }}</h5>
+                            {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px;">Your Info</h6>{{/ifCond}}
+                            {{#ifCond id '!=' ../user.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
+                            <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;-{{ refCode }}</h5>
                             <h6 style="margin-bottom: 20px;">({{ email }})</h6>
                             <br>
-                            <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
-                                data-title="Confirm delete?">
-                                <i class="fas fa-trash-alt"></i>&nbsp;Delete
-                            </a>
+                            {{#ifCond id '!=' ../user.id}}
+                                <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
+                                    data-title="Confirm delete?">
+                                    <i class="fas fa-trash-alt"></i>&nbsp;Delete
+                                </a>
+                            {{/ifCond}}
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-6 text-center">
                             <h6 style="margin-bottom: 5px;">Badges</h6>
@@ -144,8 +144,9 @@
                     {{/ifCond}}
                     <hr width="20%">
                     <hr width="20%">
-                    {{else}}
-                    <h4><b>You have not referred anyone yet!</b></h4>
+                    {{#ifCond ../referredUsers.length '==' 1}}
+                        <h4 class="text-center"><b>You have not referred anyone else yet!</b></h4>
+                    {{/ifCond}}
                     {{/each}}
                 </div>
             </div>
