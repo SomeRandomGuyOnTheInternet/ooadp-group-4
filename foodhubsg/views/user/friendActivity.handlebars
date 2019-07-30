@@ -139,7 +139,6 @@
                                 data-target="#collapse{{id}}" aria-expanded="false" aria-controls="collapse{{id}}">
                                 More Details&nbsp;<i class="fas fa-chevron-down"></i>
                             </button>
-
                         </div>
                         <div id="collapse{{id}}" class="collapse" aria-labelledby="chart{{id}}"
                             data-parent="#chartAccordion{{id}}">
@@ -213,7 +212,7 @@
                     <hr width="20%">
                     <hr width="20%">
                     {{#ifCond ../referredUsers.length '==' 1}}
-                        <h4 class="text-center"><b>You have not referred anyone else yet!</b></h4>
+                        <h4 class="text-center" style="padding: 30px"><b>You have not referred anyone else yet!</b></h4>
                     {{/ifCond}}
                     {{else}}
                     <h4><b>You have not referred anyone else yet!</b></h4>
