@@ -8,22 +8,33 @@
 
                     <div class="col-md-12 friend details">
                         <div class="blog-entry">
-                            <h3 class="font_color">Chat History</h3>
-                            <h3 class="font_color">{{friend.name}} </h3>
+                            <h3 class="font_color">Message {{friend.name}} </h3>
                             {{!-- <a href="mailto:{{friend.email}}"><h3 class="font_color">{{friend.email}} </h3></a>
                                 <p> User height: {{friend.height}} </p>
                                 <p> User Weight {{friend.weight}}</p> --}}
                         </div>
                     </div>
-
+                    
+                    <div class="col-md-12 chat-history">
+                        <div class="blog-entry">
+                            {{#each message}}
+                            <h3 class="font_color">{{this.Message}} </h3>
+                            {{!-- <a href="mailto:{{friend.email}}"><h3 class="font_color">{{friend.email}} </h3></a>
+                                <p> User height: {{friend.height}} </p>
+                                <p> User Weight {{friend.weight}}</p> --}}
+                            {{/each}}
+                        </div>
+                    </div>
 
 
 
                 </div>
 
                 <div class="col-md-12 message bar">
-                    <form method="post" action="/">
+                    <form method="post">
                         <input type="text" name="message" id="message">
+                        <input type="hidden" name="receiver" id="receiver" value="{{friend.id}}">
+                        
                         <button type="submit" class="btn btn-primary btn-tall"><i class="fas fa-reply"></i></button>
                     </form>
                 </div>

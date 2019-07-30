@@ -24,6 +24,7 @@ const UserBadge = require('../models/UserBadge');
 const Badge = require('../models/Badge');
 const Referral = require('../models/Referral');
 const Question = require('../models/Question');
+const Message = require('../models/Message'); 
 
 
 
@@ -195,11 +196,7 @@ router.get('/userOverview', isUser, async (req, res) => {
             include: {
                 model: Referral,
                 required: true,
-                where:
-                    Sequelize.or(
-                        { UserId: req.user.id },
-                        { RefUserId: req.user.id },
-                    ),
+                where: { UserId: req.user.id }, 
             },
             order: [ ['gainedPoints', 'DESC'] ],
             raw: true
@@ -545,12 +542,34 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
 //                 { user: req.user })
 //         });
 // });
-// router.get('/sendMessage/:id', isUser, async (req, res) => {
-//     await Referral.findOne({ where: { id: req.params.id } });
+router.get('/sendMessage/:id', isUser, async (req, res) => {
+    let chat = await Referral.findOne({ where: { id: req.params.id } });
+    let friend = await User.findOne({ where : {id: chat.UserId}});
+    let history = await Message.findAll(
+        {
+            where:Sequelize.or({ User1Id: req.user.id },
+            { User2Id: req.user.id }, {User1Id: friend.id },
+        { User2Id: friend.id }), 
+        
+    })
+    res.render('user/sendMessages', 
+    {user: req.user, friend: friend, message: history});
+}); 
 
-//     res.render('user/sendMessages', 
-//     {user: req.user});
-// }); 
+router.post('/sendMessage/:id', isUser, async (req, res) => {
+    let chat = req.body.message; 
+    let senderid = req.user.id;
+    let receiverid = req.body.receiver; 
+    Message.create({ 
+        Message: chat, 
+        User1ID: senderid, 
+        User2Id: receiverid
+    })
+
+    req.flash('success', 'Message Sent'); 
+    res.redirect('/user/userOverview'); 
+}); 
+
 
 // router.get('/editCompliment/:id', isUser, async (req, res) => {
 //     let com = await
@@ -581,18 +600,18 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
 //             }
 //         });
 
-router.get('/acceptRequest/:id', isUser, (req, res) => {
-    Referral.update({
-        isMutual: true
-    }, {
-            where: {
-                id: req.params.id,
-            }
-        }).then(() => {
-            req.flash('success', 'Requested Accepted, you can now chat');
-            res.redirect('/user/userOverview');
-        })
-});
+// router.get('/acceptRequest/:id', isUser, (req, res) => {
+//     Referral.update({
+//         isMutual: true
+//     }, {
+//             where: {
+//                 id: req.params.id,
+//             }
+//         }).then(() => {
+//             req.flash('success', 'Requested Accepted, you can now chat');
+//             res.redirect('/user/userOverview');
+//         })
+// });
 
 
 router.post('/faq', isUser, async (req, res) => {
