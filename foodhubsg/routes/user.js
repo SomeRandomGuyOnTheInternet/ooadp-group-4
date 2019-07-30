@@ -436,7 +436,7 @@ router.post('/acceptInvitation/:id', async (req, res) => {
     let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
 
     if (!existingReferral) { 
-        createUserReferral(req.user, referredUser, null, `You're now mutual friends with ${referredUser.name}.`);
+        createUserReferral(req.user, referredUser, true, `You're now mutual friends with ${referredUser.name}.`);
 
         req.flash('success', "You have successfully added a friend!");
         res.redirect('/user/userOverview');
