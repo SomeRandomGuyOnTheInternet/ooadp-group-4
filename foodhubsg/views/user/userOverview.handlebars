@@ -71,124 +71,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="box1">
-            <div class="row row-pb-md">
-                <div class="col-md-12">
-
-                    <header>
-                        <div class="row">
-                            <div class="col-8 col-md-8">
-                                <h1 class="font_color"><b>{{user.name}}'s Overview</b></h1>
-                                <h5>({{user.email}})</h5>
-                            </div>
-                            <div class="col-4 col-md-4">
-                                <a class="settings-action" href="/user/settings" style="float:right;">
-                                    <input type="submit" name="action" value="Edit Info" class="btn btn-primary"
-                                        style="background-color: #4CAF50;">
-                                </a>
-                            </div>
-                        </div>
-                        <hr>
-                    </header>
-
-                    <div class="row form-group">
-                        <div class="col-12 col-md-3 text-left ref-code-container">
-                            <h6 style="margin-bottom: 0;">Referral Code</h6>
-                            <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
-                        </div>
-                        <div class="col-12 col-md-6 text-center badge-container">
-                            <h6 style="margin-bottom: 5px;">Badges</h6>
-                            <div class="row justify-content-center">
-                                {{#each userBadges}}
-                                <div class="col-3 col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center badge">
-                                    <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
-                                    <img src="{{'Badge.imageLocation'}}" width="50px" height="50px"
-                                        class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
-                                        data-placement="bottom" title="{{'Badge.description'}}">
-                                </div>
-                                {{else}}
-                                You have not earned any badges yet!
-                                {{/each}}
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3 text-right points-container">
-                            <h6 style="margin-bottom: 0;">Points</h6>
-                            <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
-                            <br>
-                            <a href="#">Points History</a>
-                            <br>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <br><br>
-                            <h4><b>Breakdown on meal-by-meal basis</b></h4>
-                            <hr align="left" width="5%">
-                            <div class="table-responsive">
-                                <table class="table" style="width: 1020px;">
-                                    <thead class="thead-green">
-                                        <tr>
-                                            <th scope="col">Meal Type</th>
-                                            <th scope="col">Ideal Calorie Intake</th>
-                                            <th scope="col">Average Calorie Intake</th>
-                                            <th scope="col">Est. Calories To Lose/Gain</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Breakfast (6am-10am)</th>
-                                            <td>~500 kcal</td>
-                                            <td>{{ user.averageBreakfastCalories }} kcal</td>
-                                            <td>
-                                                {{math "500" "-" user.averageBreakfastCalories}} kcal
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Lunch (12am-3pm)</th>
-                                            <td>~400 kcal</td>
-                                            <td>{{ user.averageLunchCalories }} kcal</td>
-                                            <td>
-                                                {{math "400" "-" user.averageLunchCalories}} kcal
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Dinner (6pm-10pm)</th>
-                                            <td>~450 kcal</td>
-                                            <td>{{ user.averageDinnerCalories }} kcal</td>
-                                            <td>
-                                                {{math "450" "-" user.averageDinnerCalories}} kcal
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Out-of-schedule snacks</th>
-                                            <td>&lt;150 kcal</td>
-                                            <td>{{ user.averageSnacksCalories }} kcal</td>
-                                            <td>
-                                                {{math "150" "-" user.averageSnacksCalories}} kcal
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th scope="row">Daily</th>
-                                            <td>~1500 kcal</td>
-                                            <td>{{ user.averageCalories }} kcal</td>
-                                            <td>
-                                                {{math "1500" "-" user.averageCalories}} kcal
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
+        
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
@@ -342,16 +225,17 @@
             data: { selRefCode },
             dataType: 'text'
         })
-            .done(function (rawData) {
-                var data = JSON.parse(rawData);
+        .done(function (rawData) {
+            var data = JSON.parse(rawData);
 
-                if (data.error) {
-                    $('.ajaxErrBlock').css("display", "block");
-                    $('.ajaxErrMsg').text(data.error);
-                } else {
-                    setTimeout(location.reload.bind(location), 1500);
-                }
-            });
+            if (data.error) {
+                $('.ajaxErrBlock').css("display", "block");
+                $('.ajaxErrMsg').text(data.error);
+            } else {
+                $('#refCodeSend').val("Loading...");
+                setTimeout(location.reload.bind(location), 1500);
+            }
+        });
     });
 
     {{!-- $('.messageButton').click(function (event) {

@@ -48,6 +48,7 @@ function updateUserPoints(user, points, source, additionalMessage = "") {
                     }),
                 ])
                 .then((data) => {
+                    // console.log(data[1], data[1].length);
                     if (data[1].length >= 10) { 
                         User.update(
                             { isBanned: true },

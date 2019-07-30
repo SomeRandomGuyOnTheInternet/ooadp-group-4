@@ -17,6 +17,7 @@ const sequelize = new Sequelize(db.database, db.username, db.password, {
         acquire: 30000,
         idle: 10000
     },
+    logging: false
 });
 // Database system params, don't need to know
 module.exports = sequelize;
