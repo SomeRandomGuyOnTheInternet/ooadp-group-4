@@ -204,7 +204,6 @@ router.get('/deleteFoodItem/:id', isVendor, (req, res) => {
                 attributes: ['ShopId'],
                 where: { id: id },
             }).then((food) => {
-                console.log(food);
                 FoodItem.findAll({ where: { ShopId: food.ShopId, isDeleted: false } })
                     .then((foodItems) => {
                         let rating = getShopRatings(foodItems);
@@ -331,7 +330,7 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
             FoodItem.findAll({ where: { ShopId: shop, isDeleted: false } })
                 .then((foodItems) => {
                     let rating = getShopRatings(foodItems);
-                    console.log(rating);
+
                     Shop.update(
                         {
                             rating,
@@ -371,8 +370,8 @@ router.get('/delete/:id', isVendor, (req, res) => {
 })
 
 router.post('/searchFoodItems', (req, res)=> { 
-	search = req.body.search; 
-	console.log(search);
+    search = req.body.search; 
+    
 	FoodItem.findAll({ 
 		limit: 10, 
 		where: { 
@@ -397,8 +396,8 @@ router.post('/searchFoodItems', (req, res)=> {
 })
 
 router.post('/searchShops', (req, res)=> { 
-	search = req.body.search; 
-	console.log(search);
+    search = req.body.search; 
+    
 	Shop.findAll({ 
 		limit: 10, 
 		where: { 

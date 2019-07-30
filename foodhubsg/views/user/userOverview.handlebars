@@ -95,7 +95,6 @@
                             {{#ifCond id '!=' ../user.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
                             <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
                             <h6 style="margin-bottom: 20px;">({{ email }})</h6>
-                            <br>
                             {{#if isMutual}}
                             <a href="/user/sendMessage/{{'Referrals.id'}}">
                                 <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
@@ -129,7 +128,7 @@
                             <br>
                             <a href="#">Points History</a>
                             <br>
-                            <span style="font-weight:600;">(at #{{math @index '+' 1 }} position)</span>
+                            (at #<span style="font-weight:900;">{{math @index '+' 1 }}</span> position)
                         </div>
                     </div>
                     {{#ifCond daysActive '>=' 3}}
@@ -259,7 +258,6 @@
 
     for (i = 0; i < referredUsers.length; i++) {
         for (let [userId, foodLog] of Object.entries(refUserFoodLog)) {
-            console.log(foodLog)
             if (referredUsers[i].id == userId && referredUsers[i].daysActive >= 3) generateFoodLogChart(foodLog, referredUsers[i])
         }
     }

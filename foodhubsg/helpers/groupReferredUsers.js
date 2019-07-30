@@ -6,9 +6,7 @@ function groupReferredUsers(referredUsers, badges) {
         for (j = 0; j < badges.length; j++) {
             if (referredUsers[i].id == badges[j].UserId) referredUsers[i]["badges"].push(badges[j]);
         }
-    }
-
-    console.log(referredUsers);
+    };
 
     return referredUsers;
 };
