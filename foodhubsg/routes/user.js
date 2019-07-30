@@ -456,7 +456,7 @@ router.post('/acceptInvitation/:id', async (req, res) => {
         let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
 
         if (!existingReferral) { 
-            createUserReferral(req.user, referredUser);
+            createUserReferral(req.user, referredUser, null, `You've now become mutual friends with ${referredUser.name}.`);
             req.flash('success', "You have successfully added a friend!");
         } else {
             req.flash('error', "You've already added this user as a friend!");
@@ -489,7 +489,10 @@ router.post('/addRefCode', async (req, res) => {
                 additionalMessage = `An invitation to add you back as friend has been sent to ${referredUser.name}.`;
                 callToAction = `Do you want to add ${req.user.name} as a friend?`;
                 callToActionLink = `/user/acceptInvitation/${req.user.id}`;
-            };
+            }
+            else {
+                additionalMessage = `You've now become mutual friends with ${referredUser.name}.`;
+            }
 
             createUserReferral(req.user, referredUser, isMutual, additionalMessage, callToAction, callToActionLink);
             req.flash('success', "You have successfully added a friend!"); 
@@ -508,9 +511,7 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
 
     try {
         let existingReferral = await Referral.findOne({ where: { id } });
-        
         await Referral.destroy({ where: { id } });
-
         await
             Referral.update(
                 { isMutual: false },
