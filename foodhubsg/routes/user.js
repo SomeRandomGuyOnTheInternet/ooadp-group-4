@@ -201,10 +201,7 @@ router.get('/userOverview', isUser, async (req, res) => {
                         { RefUserId: req.user.id },
                     ), 
             },
-            where: { id: { [Sequelize.Op.not]: req.user.id } },
-            order: [
-                ['gainedPoints', 'DESC'],
-            ],
+            order: [ ['gainedPoints', 'DESC'] ],
             raw: true
         });
 
@@ -505,19 +502,14 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
 
 
 router.post('/userPage', async (req, res) => {
-    let compliment = req.body.sendMessage;
-    let id = req.body.friendId; ``
+    const compliment = req.body.sendMessage;
+    const id = req.body.friendId; ``
     let error;
 
     await
         Referral.update(
             { compliment },
-            {
-                where: {
-                    id,
-                    UserId: req.user.id,
-                }
-            }
+            { where: { id, UserId: req.user.id } }
         );
 
     req.flash('success', 'Compliment set');

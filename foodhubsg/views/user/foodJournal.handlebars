@@ -359,6 +359,7 @@
         })
         .done(function (data) {
             $('#add-button').val("Loading...");
+            $('#add-button').attr("disabled", true);
             setTimeout(location.reload.bind(location), 1500);
         });
     });
