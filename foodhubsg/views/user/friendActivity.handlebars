@@ -97,11 +97,10 @@
                             <h6 style="margin-bottom: 20px;">({{ email }})</h6>
                             {{#if isMutual}}
                             <a href="/user/sendMessage/{{'Referrals.id'}}">
-                                <button type="submit" class="messageButton btn btn-primary" name="messageButton" value="Add Friend"
-                                    style="background-color: #4CAF50;">Send Message</button>
+                                <i class="fas fa-paper-plane"></i>&nbsp;Send Message
                             </a>
-                            <br>
                             {{/if}}
+                            <hr align="left" width="5%">
                             {{#ifCond id '!=' ../user.id}}
                                 <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
                                     data-title="Confirm delete?">
@@ -126,8 +125,10 @@
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                             <br>
-                            <a href="#">Points History</a>
-                            <br>
+                            <a href="#">
+                                <i class="fas fa-history"></i>&nbsp;Points History
+                            </a>
+                            <hr align="right" width="5%">
                             (at #<span style="font-weight:900;">{{math @index '+' 1 }}</span> position)
                         </div>
                     </div>
@@ -220,33 +221,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="box1">
-            <div class="row row-pb-md">
-                <div class="col-md-12">
-
-                    <header>
-                        <h1 class="font_color"><b>People who referred you </b></h1>
-                        <hr>
-                    </header>
-
-                    {{#each mutualUsers}}
-                    <div class="row form-group">
-                        <div class="col-md-9">
-                            <b>{{this.name}} </b> <br>
-                            <b>{{this.email}} </b>
-
-                        </div>
-                        <div class="col-md-3">
-
-                        </div>
-                    </div>
-                    <hr>
-                    {{/each}}
-                </div>
-            </div>
-        </div>
-
 
     </div>
 </div>

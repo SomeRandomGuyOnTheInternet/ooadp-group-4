@@ -239,7 +239,7 @@ router.get('/friendActivity', isUser, async (req, res) => {
         
     res.render('user/friendActivity', {
         user: req.user,
-        title: req.user.name + "Friend Activity",
+        title: "Friend Activity",
         referredUsers: groupReferredUsers(referredUsers, refUserBadges),
         refUserFoodLog: groupFoodItems(refUserFoodLog),
         unviewedNotifications
