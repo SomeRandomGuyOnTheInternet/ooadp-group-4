@@ -211,11 +211,13 @@ router.get('/userOverview', isUser, (req, res) => {
             include: {
                 model: Referral,
                 required: true,
-                where: { 
-                    UserId: req.user.id,
-                    isMutual: false,
-                },
+                where:
+                    Sequelize.or(
+                        { UserId: req.user.id },
+                        { RefUserId: req.user.id },
+                    ),
             },
+            where: { id: { [Sequelize.Op.not]: req.user.id } },
             order: [
                 ['gainedPoints', 'DESC'],
             ],
@@ -256,23 +258,6 @@ router.get('/userOverview', isUser, (req, res) => {
             ],
             raw: true
         }),
-        User.findAll({
-            include: {
-                model: Referral,
-                required: true,
-                where: Sequelize.and(
-                    { isMutual: true },
-                    Sequelize.or(
-                        { UserId: req.user.id },
-                        { RefUserId: req.user.id },
-                    ), 
-                ),
-            },
-            order: [
-                ['gainedPoints', 'DESC'],
-            ],
-            raw: true
-        }),
     ])
     .then((data) => {
         getUnviewedNotifications(req.user)
@@ -281,7 +266,6 @@ router.get('/userOverview', isUser, (req, res) => {
                 user: req.user,
                 title: req.user.name + "'s Overview",
                 referredUsers: groupReferredUsers(data[0], data[1]),
-                mutualUsers: groupReferredUsers(data[3], data[1]),
                 refUserFoodLog: groupFoodItems(data[2]),
                 unviewedNotifications
             });
@@ -406,8 +390,8 @@ router.post('/addFood', (req, res) => {
                 },
             })
             .then((recFoodLog) => {
-                if (recFoodLog.length >= 1) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
-                else if (recFoodLog.length >= 10) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
+                if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
+                else if (recFoodLog.length > 9) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
             })
         };
 
@@ -453,7 +437,7 @@ router.post('/editFood/:id', (req, res) => {
 
 
 router.post('/deleteFood/:id', (req, res) => {
-    var logId = req.params.id;
+    const logId = req.params.id;
 
     FoodLog.destroy({ where: { id: logId } })
     .then(() => {
@@ -464,57 +448,81 @@ router.post('/deleteFood/:id', (req, res) => {
 });
 
 
-router.post('/addRefCode', (req, res) => {
+router.post('/addRefCode', async (req, res) => {
     const refCode = req.body.selRefCode.toLowerCase();
-    var error;
+    let error;
 
-    Promise.all([
-        User.findOne({ where: { refCode: refCode } }),
-        Referral.findAll({ where: { RefUserCode: refCode, UserId: req.user.id } }),
-    ])
-    .then((data) => {
-        var referredUser = data[0];
-        var existingReferral = data[1];
+    try {
+        var referredUser = await User.findOne({ where: { refCode }});
+        var existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
 
         if (!referredUser) error = "That referral code does not exist!";
-        if (existingReferral.length > 0) error = "You've already added that code!";
+        if (existingReferral) error = "You've already used that code as a referral!";
         if (req.user.refCode == refCode) error = "You cannot use your own referral code!";
 
         if (!error) {
-            updateUserPoints(req.user, 75, "adding a friend to your profile", "You can now see their stats from your overview page.");
-            updateUserPoints(referredUser, 25, `${req.user.name} adding you to their friend group through your referral code`);
+            var mutualExisitngReferral = await Referral.findOne({ where: { UserId: referredUser.id, RefUserId: req.user.id } });
+            var isMutual = (mutualExisitngReferral) ? true : false;
+            var additionalMessage, callToAction, callToActionLink;
 
-            Referral.create({
-                UserId: req.user.id,
-                RefUserCode: referredUser.refCode,
-                RefUserId: referredUser.id,
-                isMutual: false, 
-            })
-            .then((createdReferral) => {
-                Referral.findAll({ where: { UserId: req.user.id } })
-                .then((referrals) => {
-                    if (referrals.length >= 1) { addBadges('First Friend', req.user, "adding your first referral"); }
-                    else if (referrals.length >= 10) { addBadges('Full House', req.user, "adding ten referrals"); }
-                })
-                req.flash('success', "You have successfully added a referral code!");
-            });
-        }
+            if (!isMutual) {
+                additionalMessage = `An invitation to add you back as friend has been sent to ${referredUser.name}.`;
+                callToAction = `Do you want to add ${req.user.name} as a friend?`;
+                callToActionLink = `/user/acceptInvitation/${req.user.id}`;
+            };
+            
+            await
+                Referral.create({
+                    UserId: req.user.id,
+                    RefUserCode: referredUser.refCode,
+                    RefUserId: referredUser.id,
+                    isMutual,
+                });
+
+            await
+                Referral.update(
+                    { isMutual: true },
+                    { where: { UserId: referredUser.id, RefUserId: req.user.id } }
+                );
+
+            updateUserPoints(req.user, 75, "adding a friend to your profile", additionalMessage);
+            updateUserPoints(referredUser, 25, `${req.user.name} adding you to their friend group through your referral code`, null, callToAction, callToActionLink);
+
+            var userReferrals = await Referral.findAll({ where: { UserId: req.user.id } });
+
+            if (userReferrals.length >= 1) { addBadges('First Friend', req.user, "adding your first referral"); }
+            else if (userReferrals.length >= 10) { addBadges('Full House', req.user, "adding ten referrals"); }
+
+            req.flash('success', "You have successfully added a referral code!"); 
+        };
+
         res.send({ error });
-    });
+    } catch (err) {
+        if (err) console.log('error', err);
+    }
 });
 
 
 router.get('/delRefCode/:id', isUser, (req, res) => {
     var id = req.params.id;
 
-    Referral.destroy({ where: { id } })
+    Referral.findOne({ where: { id } })
     .then((referral) => {
-        if (referral !== null) {
-            updateUserPoints(req.user, -75, "removing someone from your friend group");
+        Referral.destroy({ where: { id } })
+        .then((destroyedRef) => {
+            if (referral !== null) {
+                Referral.update(
+                    { isMutual: false },
+                    { where: { UserId: referral.RefUserId, RefUserId: req.user.id } }
+                )
+                .then(() => {
+                    updateUserPoints(req.user, -75, "removing someone from your friend group");
 
-            req.flash('success', "You have successfully deleted a referral code!");
-            res.redirect('/user/userOverview');
-        }
+                    req.flash('success', "You have successfully deleted a referral code!");
+                    res.redirect('/user/userOverview');
+                });
+            };
+        });
     })
 });
 

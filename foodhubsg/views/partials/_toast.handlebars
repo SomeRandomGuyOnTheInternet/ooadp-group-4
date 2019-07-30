@@ -16,6 +16,22 @@
             <div class="toast-body">
                 You've <span class="{{this.type}}-action" style="font-weight:800;">{{this.action}}</span> from {{this.source}}! {{this.additionalMessage}}
             </div>
+            {{#if this.callToAction}}
+                <div class="toast-footer row">
+                    <div class="col-6 text-center" style="border-right: 1px solid whitesmoke;">
+                        <form method="post" action="{{this.callToActionLink}}" id="refCodeSend">
+                            <button type="submit" style="border: 0;">
+                                <span id="accept-action-{{@index}}" class="positive-action">Accept</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-6 text-center" style="border-left: 1px solid whitesmoke;">
+                        <button type="button" data-dismiss="toast" aria-label="Close" style="border: 0;">
+                            <span class="negative-action">Reject</span>
+                        </button>
+                    </div>
+                </div>
+            {{/if}}
         </div>
         {{/each}}
     </div>
@@ -24,5 +40,28 @@
 <script>
     $(document).ready(function () {
         $('.toast').toast('show');
+    });
+
+    $('#refCodeSend').click(function (event) {
+        event.preventDefault();
+        let selRefCode = $('#refCode').val();
+
+        $.ajax({
+            type: 'post',
+            url: `/user/addRefCode`,
+            data: { selRefCode },
+            dataType: 'text'
+        })
+        .done(function (rawData) {
+            var data = JSON.parse(rawData);
+
+            if (data.error) {
+                $('.ajaxErrBlock').css("display", "block");
+                $('.ajaxErrMsg').text(data.error);
+            } else {
+                $('#refCodeSend').val("Loading...");
+                setTimeout(location.reload.bind(location), 1500);
+            }
+        });
     });
 </script>

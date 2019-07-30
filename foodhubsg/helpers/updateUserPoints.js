@@ -9,7 +9,7 @@ var startDt = new Date();
 var endDt = new Date(startDt);
 endDt.setMinutes(startDt.getMinutes() - 5);
 
-function updateUserPoints(user, points, source, additionalMessage = "") {
+function updateUserPoints(user, points, source, additionalMessage = "", callToAction = null, callToActionLink = null) {
     if (!user.isBanned) {
         var type = "positive", pointsAction = "gained";
         
@@ -33,7 +33,9 @@ function updateUserPoints(user, points, source, additionalMessage = "") {
                 source,
                 type,
                 additionalMessage,
-                hasViewed: false
+                hasViewed: false,
+                callToAction,
+                callToActionLink,
             })
             .then(() => {
                 Promise.all([
