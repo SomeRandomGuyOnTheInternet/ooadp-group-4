@@ -21,7 +21,13 @@ const UserAction = db.define('UserAction', {
     },
     hasViewed: {
         type: Sequelize.BOOLEAN
-    }
+    },
+    callToAction: {
+        type: Sequelize.STRING
+    },
+    callToActionLink: {
+        type: Sequelize.STRING
+    },    
 }); 
 
 
