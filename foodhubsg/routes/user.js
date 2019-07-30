@@ -433,7 +433,7 @@ router.post('/acceptInvitation/:id', async (req, res) => {
     let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
 
     if (!existingReferral) { 
-        createUserReferral(req.user, referredUser, null, `You're now mutual friends with ${referredUser.name}.`);
+        createUserReferral(req.user, referredUser, true, `You're now mutual friends with ${referredUser.name}.`);
 
         req.flash('success', "You have successfully added a friend!");
         res.redirect('/user/userOverview');
@@ -525,49 +525,76 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
                 UserId: req.user.id,
             }
         })
+        .then(() => {
+            req.flash('success', 'Compliment deleted');
+            res.redirect('/user/userOverview')
+        });
+});
 
-    req.flash('success', 'Compliment deleted');
-    res.redirect('/user/userOverview');
-}); 
+// router.get('/sendMessage/:id', isUser, (req, res) => {
+//     Promise.all([
+//         Referral.findOne({
+//             where: { id: req.params.id }
+//         }), 
+//         User.findOne({ 
+//             include: [{ 
+//                 model: Referral, 
+//                 where: { RefUserId: req.user.id },
+//                 required: true,
+//             }]
+//         })
+//     ]).then((data) => {
+//             res.render('user/sendMessages',
+//                 { user: req.user })
+//         });
+// });
+// router.get('/sendMessage/:id', isUser, async (req, res) => {
+//     await Referral.findOne({ where: { id: req.params.id } });
 
-router.get('/sendMessage/:id', isUser, async (req, res) => {
-    await Referral.findOne({ where: { id: req.params.id } });
+//     res.render('user/sendMessages', 
+//     {user: req.user});
+// }); 
 
-    res.render('user/sendMessages', 
-    {user: req.user});
-}); 
+// router.get('/editCompliment/:id', isUser, async (req, res) => {
+//     let com = await
+//         Referral.findOne({
+//             where: {
+//                 id: req.params.id,
+//                 UserId: req.user.id,
+//             }
+//         });
 
-router.get('/editCompliment/:id', isUser, async (req, res) => {
-    let com = await
-        Referral.findOne({
+//     res.render('user/editCompliment', {
+//         compliment: com,
+//         user: req.user
+//     });
+// })
+
+
+// router.post('/editCompliment/:id', isUser, async (req, res) => {
+//     let compliment = req.body.compliment;
+
+//     await
+//         Referral.update({
+//             compliment: compliment,
+//         },{
+//             where: {
+//                 id: req.params.id,
+//                 UserId: req.user.id,
+//             }
+//         });
+
+router.get('/acceptRequest/:id', isUser, (req, res) => {
+    Referral.update({
+        isMutual: true
+    }, {
             where: {
                 id: req.params.id,
-                UserId: req.user.id,
             }
-        });
-
-    res.render('user/editCompliment', {
-        compliment: com,
-        user: req.user
-    });
-})
-
-
-router.post('/editCompliment/:id', isUser, async (req, res) => {
-    let compliment = req.body.compliment;
-
-    await
-        Referral.update({
-            compliment: compliment,
-        },{
-            where: {
-                id: req.params.id,
-                UserId: req.user.id,
-            }
-        });
-
-    req.flash('success', 'Compliment edited');
-    res.redirect('/user/userOverview');
+        }).then(() => {
+            req.flash('success', 'Requested Accepted, you can now chat');
+            res.redirect('/user/userOverview');
+        })
 });
 
 
