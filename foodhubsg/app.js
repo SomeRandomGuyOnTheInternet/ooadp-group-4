@@ -10,6 +10,7 @@ const MySQLStore = require('express-mysql-session');
 const passport = require('passport');
 const db = require('./config/db');
 const { formatDate } = require('./helpers/hbs');
+const { formatTime } = require('./helpers/hbs');
 const { json } = require('./helpers/hbs');
 const { ifCond } = require('./helpers/hbs');
 const { math } = require('./helpers/hbs');
@@ -30,7 +31,8 @@ app.engine('handlebars', exphbs({
 		ifCond: ifCond,
 		math: math,
 		times: times,
-		ifIsNthItem: ifIsNthItem
+		ifIsNthItem: ifIsNthItem, 
+		formatTime: formatTime, 
 	},
 }));
 

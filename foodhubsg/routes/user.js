@@ -561,10 +561,11 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
 
 router.post('/sendMessage/:id', isUser, async (req, res) => {
     let chat = req.body.message; 
+    let senderid = req.user.id;
     let receiverid = req.body.receive; 
     Message.create({ 
         Message: chat, 
-        User1Id: req.user.id, 
+        User1Id:senderid, 
         User2Id: receiverid
     })
 
