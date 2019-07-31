@@ -16,34 +16,38 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `UserBadges`
+-- Table structure for table `UserActions`
 --
 
-DROP TABLE IF EXISTS `UserBadges`;
+DROP TABLE IF EXISTS `UserActions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `UserBadges` (
+CREATE TABLE `UserActions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action` varchar(255) DEFAULT NULL,
+  `source` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `additionalMessage` varchar(255) DEFAULT NULL,
+  `imageLocation` varchar(255) DEFAULT NULL,
+  `hasViewed` tinyint(1) DEFAULT NULL,
+  `callToAction` varchar(255) DEFAULT NULL,
+  `callToActionLink` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `BadgeId` int(11) DEFAULT NULL,
   `UserId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `BadgeId` (`BadgeId`),
   KEY `UserId` (`UserId`),
-  CONSTRAINT `userbadges_ibfk_1` FOREIGN KEY (`BadgeId`) REFERENCES `badges` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `userbadges_ibfk_2` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `useractions_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `UserBadges`
+-- Dumping data for table `UserActions`
 --
 
-LOCK TABLES `UserBadges` WRITE;
-/*!40000 ALTER TABLE `UserBadges` DISABLE KEYS */;
-INSERT INTO `UserBadges` VALUES (1,'2019-07-12 09:46:31','2019-07-12 09:46:31',1,9),(2,'2019-07-12 09:46:31','2019-07-12 09:46:31',1,10),(3,'2019-07-22 10:37:27','2019-07-22 10:37:27',1,11);
-/*!40000 ALTER TABLE `UserBadges` ENABLE KEYS */;
+LOCK TABLES `UserActions` WRITE;
+/*!40000 ALTER TABLE `UserActions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `UserActions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-31 11:16:57
+-- Dump completed on 2019-07-31 11:16:56

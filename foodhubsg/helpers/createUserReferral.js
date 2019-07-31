@@ -5,6 +5,8 @@ const addBadges = require('../helpers/addBadges');
 
 
 async function createUserReferral(user, referredUser, isMutual = true, additionalMessage = null, callToAction = null, callToActionLink = null) {
+    let refUserAdditionalMessage = (isMutual) ? `You've now become mutual friends with ${user.name}.` : null;
+
     await
         Referral.create({
             UserId: user.id,
@@ -20,7 +22,7 @@ async function createUserReferral(user, referredUser, isMutual = true, additiona
         );
 
     updateUserPoints(user, 75, "adding a friend to your profile", additionalMessage);
-    updateUserPoints(referredUser, 25, `${user.name} adding you to their friend group`, null, callToAction, callToActionLink);
+    updateUserPoints(referredUser, 25, `${user.name} adding you to their friend group`, refUserAdditionalMessage, callToAction, callToActionLink);
 
     let userReferrals = await Referral.findAll({ where: { UserId: user.id } });
 

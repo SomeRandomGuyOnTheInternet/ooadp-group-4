@@ -31,7 +31,7 @@
 							<i class="fas fa-exclamation-triangle"></i>&nbsp; <span class="ajaxErrMsg"></span>
 						</div>
 						<div class="modal-footer">
-							<input type="submit" value="Enter Your Info" id="bmiSend" class="btn btn-primary" style="width:100%">
+							<input type="submit" value="Update Your Info" id="bmiSend" class="btn btn-primary" style="width:100%">
 						</div>
 					</form>
 				</div>
@@ -135,7 +135,7 @@
                                 {{#each userBadges}}
                                 <div class="col-3 col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center badge">
                                     <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
-                                    <img src="{{'Badge.imageLocation'}}" width="65px" height="65px"
+                                    <img src="{{'Badge.imageLocation'}}" width="67px" height="65px"
                                         class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
                                         data-placement="bottom" title="{{'Badge.description'}}">
                                 </div>
@@ -254,7 +254,7 @@
                 $('.ajaxErrBlock').css("display", "block");
                 $('.ajaxErrMsg').text(data.error);
             } else {
-                $('#bmiModal').modal('hide');
+                location.reload();
             }
         });
     });

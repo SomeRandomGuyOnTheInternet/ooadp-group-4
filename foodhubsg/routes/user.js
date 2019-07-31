@@ -29,7 +29,8 @@ const Message = require('../models/Message');
 
 
 router.get('/', isUser, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
+    let unviewedNotifications;
+    if (req.user.bmi) unviewedNotifications = await getUnviewedNotifications(req.user);
 
     let shops = await
         Shop.findAll({
@@ -37,9 +38,7 @@ router.get('/', isUser, async (req, res) => {
                 location: req.user.location,
                 isDeleted: false,
             },
-            order: [
-                ['rating', 'DESC'],
-            ],
+            order: [ ['rating', 'DESC'] ],
         });
 
     let foodItems = await
@@ -49,9 +48,7 @@ router.get('/', isUser, async (req, res) => {
                 where: { UserId: req.user.id },
                 required: true,
             }],
-            order: [
-                [FoodLog, 'createdAt', 'ASC'],
-            ],
+            order: [ [FoodLog, 'createdAt', 'ASC'] ],
             raw: true
         });
 
@@ -82,9 +79,7 @@ router.get('/shops', isUser, async (req, res) => {
     let shops = await
         Shop.findAll({
             where: { isDeleted: false },
-            order: [
-                ['rating', 'DESC'],
-            ],
+            order: [ ['rating', 'DESC'] ],
         });
 
     res.render('user/shops', {
@@ -275,6 +270,7 @@ router.post('/addBmi', async (req, res) => {
             );
     };
 
+    req.flash('success', "You've successfully updated your weight and height!");
     res.send({ error });
 });
 
@@ -429,11 +425,11 @@ router.post('/acceptInvitation/:id', async (req, res) => {
     if (!existingReferral) { 
         createUserReferral(req.user, referredUser, true, `You're now mutual friends with ${referredUser.name}.`);
 
-        req.flash('success', "You have successfully added a friend!");
+        req.flash('success', "You have successfully added a mutual friend!");
         res.redirect('/user/friendActivity');
     } else {
         req.flash('error', "You've already added this user as a friend!");
-        res.redirect('/user/');
+        res.redirect('/user');
     };
 });
 
@@ -476,6 +472,7 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
 
     try {
         let existingReferral = await Referral.findOne({ where: { id } });
+
         await Referral.destroy({ where: { id } });
         await
             Referral.update(
