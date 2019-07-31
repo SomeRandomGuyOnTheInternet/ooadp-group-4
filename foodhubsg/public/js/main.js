@@ -188,6 +188,16 @@ function generateFoodLogChart(foodLog, userInfo) {
 		var idealCaloriesValue = 0, averageCaloriesValue = 0;
 		var newData = [];
 
+		$("th.meal-thead").each(function (index, elem) {
+			var $elem = $(elem);
+			if ($elem.text().includes(sel)) {
+				$elem.parent().css({ "background-color": "rgba(0, 0, 0, 0.075);" });
+			}
+			else {
+				$elem.parent().css({ "background-color": "" });
+			}
+		});
+
 		switch (sel) {
 			case 'Daily':
 				newData = dailyData;

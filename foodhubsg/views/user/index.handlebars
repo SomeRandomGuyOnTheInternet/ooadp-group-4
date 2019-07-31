@@ -174,7 +174,7 @@
 								</thead>
 								<tbody>
 									<tr>
-										<th scope="row">Breakfast (6am-10am)</th>
+										<th class="meal-thead" scope="row">Breakfast (6am-10am)</th>
 										<td>~500 kcal</td>
 										<td>{{ user.averageBreakfastCalories }} kcal</td>
 										<td>
@@ -182,7 +182,7 @@
 										</td>
 									</tr>
 									<tr>
-										<th scope="row">Lunch (12am-3pm)</th>
+										<th class="meal-thead" scope="row">Lunch (12am-3pm)</th>
 										<td>~400 kcal</td>
 										<td>{{ user.averageLunchCalories }} kcal</td>
 										<td>
@@ -190,7 +190,7 @@
 										</td>
 									</tr>
 									<tr>
-										<th scope="row">Dinner (6pm-10pm)</th>
+										<th class="meal-thead" scope="row">Dinner (6pm-10pm)</th>
 										<td>~450 kcal</td>
 										<td>{{ user.averageDinnerCalories }} kcal</td>
 										<td>
@@ -198,7 +198,7 @@
 										</td>
 									</tr>
 									<tr>
-										<th scope="row">Out-of-schedule snacks</th>
+										<th class="meal-thead" scope="row">Snacks</th>
 										<td>&lt;150 kcal</td>
 										<td>{{ user.averageSnacksCalories }} kcal</td>
 										<td>
@@ -207,8 +207,8 @@
 									</tr>
 								</tbody>
 								<tfoot>
-									<tr>
-										<th scope="row">Daily</th>
+									<tr style="background-color: rgba(0, 0, 0, 0.075);">
+										<th class="meal-thead" scope="row">Daily</th>
 										<td>~1500 kcal</td>
 										<td>{{ user.averageCalories }} kcal</td>
 										<td>
