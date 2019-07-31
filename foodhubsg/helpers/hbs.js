@@ -1,8 +1,12 @@
-const moment = require('moment'); 
+const moment = require('moment');
 
 module.exports = {
     formatDate: function (date, targetFormat) {
         return moment(date).format(targetFormat);
+    },
+
+    formatTime: function (time) {
+    return moment(time).format("LTS");
     },
 
     json: function (object) {
@@ -36,7 +40,7 @@ module.exports = {
         }
     },
 
-    math: function(lvalue, operator, rvalue, options) {
+    math: function (lvalue, operator, rvalue, options) {
         lvalue = parseFloat(lvalue);
         rvalue = parseFloat(rvalue);
 

@@ -24,7 +24,7 @@ const UserBadge = require('../models/UserBadge');
 const Badge = require('../models/Badge');
 const Referral = require('../models/Referral');
 const Question = require('../models/Question');
-const Message = require('../models/Message'); 
+const Message = require('../models/Message');
 
 
 
@@ -61,7 +61,7 @@ router.get('/', isUser, async (req, res) => {
             },
             raw: true
         });
-        
+
     res.render('user/index', {
         user: req.user,
         title: "Index",
@@ -150,7 +150,7 @@ router.get('/foodJournal', isUser, async (req, res) => {
             }],
             raw: true
         });
-        
+
     let groupedFoodItems = groupFoodItems(foodItems, true);
 
     res.render('user/foodJournal', {
@@ -167,7 +167,7 @@ router.get('/foodJournal', isUser, async (req, res) => {
 router.get('/faq', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
-    let questions  = await
+    let questions = await
         Question.findAll({
             order: [
                 ['createdAt', 'ASC'],
@@ -191,9 +191,9 @@ router.get('/friendActivity', isUser, async (req, res) => {
             include: {
                 model: Referral,
                 required: true,
-                where: { UserId: req.user.id }, 
+                where: { UserId: req.user.id },
             },
-            order: [ ['gainedPoints', 'DESC'] ],
+            order: [['gainedPoints', 'DESC']],
             raw: true
         });
 
@@ -231,7 +231,7 @@ router.get('/friendActivity', isUser, async (req, res) => {
             }],
             raw: true
         });
-        
+
     res.render('user/friendActivity', {
         user: req.user,
         title: "Friend Activity",
@@ -284,7 +284,7 @@ router.post('/foodJournal', async (req, res) => {
         Food.findAll({
             include: [{
                 model: FoodLog,
-                where: { 
+                where: {
                     UserId: req.user.id,
                     createdAtDate: searchDate
                 },
@@ -418,11 +418,11 @@ router.post('/deleteFood/:id', async (req, res) => {
 
 router.post('/acceptInvitation/:id', async (req, res) => {
     const refUserId = req.params.id;
-    
+
     let referredUser = await User.findOne({ where: { id: refUserId } });
     let existingReferral = await Referral.findOne({ where: { UserId: req.user.id, RefUserId: refUserId } });
 
-    if (!existingReferral) { 
+    if (!existingReferral) {
         createUserReferral(req.user, referredUser, true, `You're now mutual friends with ${referredUser.name}.`);
 
         req.flash('success', "You have successfully added a mutual friend!");
@@ -438,7 +438,7 @@ router.post('/addRefCode', async (req, res) => {
     const refCode = req.body.selRefCode.toLowerCase();
     let error;
 
-    let referredUser = await User.findOne({ where: { refCode }});
+    let referredUser = await User.findOne({ where: { refCode } });
     let existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
 
     if (!referredUser) error = "That referral code does not exist!";
@@ -460,7 +460,7 @@ router.post('/addRefCode', async (req, res) => {
         }
 
         createUserReferral(req.user, referredUser, isMutual, additionalMessage, callToAction, callToActionLink);
-        req.flash('success', "You have successfully added a friend!"); 
+        req.flash('success', "You have successfully added a friend!");
     };
 
     res.send({ error });
@@ -510,16 +510,16 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
     await
         Referral.findOne({
             compliment: null,
-        },{
-            where: {
-                id: req.params.id,
-                UserId: req.user.id,
-            }
-        })
-        .then(() => {
-            req.flash('success', 'Compliment deleted');
-            res.redirect('/user/friendActivity')
-        });
+        }, {
+                where: {
+                    id: req.params.id,
+                    UserId: req.user.id,
+                }
+            })
+            .then(() => {
+                req.flash('success', 'Compliment deleted');
+                res.redirect('/user/friendActivity')
+            });
 });
 
 // router.get('/sendMessage/:id', isUser, (req, res) => {
@@ -543,31 +543,39 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
 
 router.get('/sendMessage/:id', isUser, async (req, res) => {
     let chat = await Referral.findOne({ where: { id: req.params.id } });
-    let friend = await User.findOne({ where : {id: chat.UserId}});
+    let friend = await User.findOne({
+        where: 
+            { id: chat.RefUserId },
+    });
+   
     let history = await Message.findAll(
         {
-            where:Sequelize.or({ User1Id: req.user.id },
-            { User2Id: req.user.id }, {User1Id: friend.id },
-        { User2Id: friend.id }), 
-        
-    })
-    res.render('user/sendMessages', 
-    {user: req.user, friend: friend, message: history});
-}); 
+            where:
+                Sequelize.and(
+                    Sequelize.or({ User1Id: req.user.id },
+                        { User2Id: req.user.id }),
+                    Sequelize.or(
+                        { User1Id: friend.id },
+                        { User2Id: friend.id })
+                ),
+        }); 
+    res.render('user/sendMessages',
+        { user: req.user, friend: friend, message: history });
+});
 
 router.post('/sendMessage/:id', isUser, async (req, res) => {
-    let chat = req.body.message; 
+    let chat = req.body.message;
     let senderid = req.user.id;
-    let receiverid = req.body.receiver; 
-    Message.create({ 
-        Message: chat, 
-        User1ID: senderid, 
+    let receiverid = req.body.receive;
+    Message.create({
+        Message: chat,
+        User1Id: senderid,
         User2Id: receiverid
     })
 
-    req.flash('success', 'Message Sent'); 
-    res.redirect('/user/friendActivity'); 
-}); 
+    req.flash('success', 'Message Sent');
+    res.redirect('/user/friendActivity');
+});
 
 
 // router.get('/editCompliment/:id', isUser, async (req, res) => {
@@ -643,17 +651,17 @@ router.post('/settings', isUser, async (req, res) => {
     bcrypt.genSalt(function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
             await
-                User.update(
-                    {
-                        weight: req.body.weight,
-                        height: req.body.height,
-                        email: email,
-                        password: hash,
-                    }, 
-                    {
-                        where: { id: req.user.id }
-                    }
-                );
+            User.update(
+                {
+                    weight: req.body.weight,
+                    height: req.body.height,
+                    email: email,
+                    password: hash,
+                },
+                {
+                    where: { id: req.user.id }
+                }
+            );
 
             res.redirect('/user/settings');
         });
