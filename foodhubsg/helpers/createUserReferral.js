@@ -20,7 +20,7 @@ async function createUserReferral(user, referredUser, isMutual = true, additiona
         );
 
     updateUserPoints(user, 75, "adding a friend to your profile", additionalMessage);
-    updateUserPoints(referredUser, 25, `${user.name} adding you to their friend group`, additionalMessage, callToAction, callToActionLink);
+    updateUserPoints(referredUser, 25, `${user.name} adding you to their friend group`, null, callToAction, callToActionLink);
 
     let userReferrals = await Referral.findAll({ where: { UserId: user.id } });
 

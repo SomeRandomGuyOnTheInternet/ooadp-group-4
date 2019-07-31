@@ -42,8 +42,8 @@ function toTitleCase(str) {
 }
 
 function createShopTemplate(shops, actionLink = '/user/shops/') {
-    $("#all-shops-container").empty();
-    console.log(shops)
+	$("#all-shops-container").empty();
+	
     if (shops.length > 0) {
         for (i = 0; i < shops.length; i++) {
             $('#all-shops-container').append(

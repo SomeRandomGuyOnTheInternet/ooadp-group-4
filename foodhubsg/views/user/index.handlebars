@@ -126,6 +126,8 @@
                         <div class="col-12 col-md-3 text-left ref-code-container">
                             <h6 style="margin-bottom: 0;">Referral Code</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
+							<br>
+							<span style="font-weight: 800;">{{ user.bmi }}</span> bmi
                         </div>
                         <div class="col-12 col-md-6 text-center badge-container">
                             <h6 style="margin-bottom: 5px;">Badges</h6>
@@ -133,7 +135,7 @@
                                 {{#each userBadges}}
                                 <div class="col-3 col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center badge">
                                     <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
-                                    <img src="{{'Badge.imageLocation'}}" width="50px" height="50px"
+                                    <img src="{{'Badge.imageLocation'}}" width="65px" height="65px"
                                         class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
                                         data-placement="bottom" title="{{'Badge.description'}}">
                                 </div>
@@ -145,8 +147,10 @@
                         <div class="col-12 col-md-3 text-right points-container">
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
-                            <br>
-                            <a href="#">Points History</a>
+							<hr align="right" width="20%">
+                            <a href="#">
+								<i class="fas fa-history"></i>&nbsp;Points History
+							</a>
                             <br>
                         </div>
                     </div>
@@ -174,7 +178,7 @@
 										<td>~500 kcal</td>
 										<td>{{ user.averageBreakfastCalories }} kcal</td>
 										<td>
-											{{math "500" "-" user.averageBreakfastCalories}} kcal
+											{{math "500" "--" user.averageBreakfastCalories}} kcal
 										</td>
 									</tr>
 									<tr>
@@ -182,7 +186,7 @@
 										<td>~400 kcal</td>
 										<td>{{ user.averageLunchCalories }} kcal</td>
 										<td>
-											{{math "400" "-" user.averageLunchCalories}} kcal
+											{{math "400" "--" user.averageLunchCalories}} kcal
 										</td>
 									</tr>
 									<tr>
@@ -190,7 +194,7 @@
 										<td>~450 kcal</td>
 										<td>{{ user.averageDinnerCalories }} kcal</td>
 										<td>
-											{{math "450" "-" user.averageDinnerCalories}} kcal
+											{{math "450" "--" user.averageDinnerCalories}} kcal
 										</td>
 									</tr>
 									<tr>
@@ -198,7 +202,7 @@
 										<td>&lt;150 kcal</td>
 										<td>{{ user.averageSnacksCalories }} kcal</td>
 										<td>
-											{{math "150" "-" user.averageSnacksCalories}} kcal
+											{{math "150" "--" user.averageSnacksCalories}} kcal
 										</td>
 									</tr>
 								</tbody>
@@ -208,7 +212,7 @@
 										<td>~1500 kcal</td>
 										<td>{{ user.averageCalories }} kcal</td>
 										<td>
-											{{math "1500" "-" user.averageCalories}} kcal
+											{{math "1500" "--" user.averageCalories}} kcal
 										</td>
 									</tr>
 								</tfoot>
@@ -244,7 +248,6 @@
             dataType: 'text'
         })
         .done(function (rawData) {
-			console.log(rawData)
             let data = JSON.parse(rawData);
 
             if (data.error) {

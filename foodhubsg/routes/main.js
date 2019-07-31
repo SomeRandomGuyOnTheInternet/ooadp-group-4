@@ -12,6 +12,7 @@ const upload = require('../helpers/imageUpload');
 const User = require('../models/User');
 const UserAction = require('../models/UserAction');
 const UserBadge = require('../models/UserBadge');
+const Referral = require('../models/Referral');
 const Shop = require('../models/Shop');
 
 
@@ -125,6 +126,12 @@ router.post('/register', isloggedOut, (req, res) => {
 					})
 					.then(function (user) {
 						Promise.all([
+							Referral.create({
+								RefUserCode: user.refCode,
+								RefUserId: user.id,
+								UserId: user.id,
+								isMutual: false,
+							}),
 							UserAction.create({
 								UserId: user.id,
 								action: "earned your first badge",

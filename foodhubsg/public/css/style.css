@@ -1835,6 +1835,9 @@ select {
 }
 
 .card-body {
-    border: 1px solid rgba(0, 0, 0, 0.07);
     border-top: 0;  
+}
+
+.nav-plain-user-link:last-of-type {
+    margin-right: 15px;
 }
