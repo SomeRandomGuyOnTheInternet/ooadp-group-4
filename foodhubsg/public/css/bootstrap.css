@@ -10068,7 +10068,7 @@ a.text-dark:hover, a.text-dark:focus {
 	top: 50%;
 	width: 0;
 	height: 0;
-	border: 20px solid transparent;
+  border: 20px solid transparent;
 	border-left-color: #00aabb;
 	border-right: 0;
 	border-bottom: 0;
@@ -10084,7 +10084,7 @@ a.text-dark:hover, a.text-dark:focus {
 	width: 0;
 	height: 0;
 	border: 20px solid transparent;
-	border-right-color: #00aabb;
+  border-right-color: #00aabb;
 	border-left: 0;
 	border-bottom: 0;
 	margin-top: -10px;

@@ -561,14 +561,6 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                         { User1Id: friend.id },
                         { User2Id: friend.id })
                 ),
-
-            include : [{ 
-                model: User, 
-                required: true, 
-                where: Sequelize.or({id: req.user.id}, {id: friend.id})
-            }], 
-            
-            raw: true, 
         }); 
     res.render('user/sendMessages',
         { user: req.user, friend: friend, message: history });
