@@ -5,8 +5,8 @@ module.exports = {
         return moment(date).format(targetFormat);
     },
 
-    formatTime: function (time, targetFormat) {
-        return moment(time).format(targetFormat);
+    formatTime: function (time) {
+    return moment(time).format("LTS");
     },
 
     json: function (object) {

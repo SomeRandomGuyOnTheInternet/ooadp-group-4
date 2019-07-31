@@ -547,7 +547,8 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
 router.get('/sendMessage/:id', isUser, async (req, res) => {
     let chat = await Referral.findOne({ where: { id: req.params.id } });
     let friend = await User.findOne({
-        where: { id: chat.RefUserId}
+        where: 
+            { id: chat.RefUserId },
     });
     let history = await Message.findAll(
         {
