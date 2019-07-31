@@ -545,11 +545,8 @@ router.get('/deleteCompliment/:id', isUser, async (req, res) => {
 
 
 router.get('/sendMessage/:id', isUser, async (req, res) => {
-    let chat = await Referral.findOne({ where: { id: req.params.id } });
-    let friend = await User.findOne({ where : Sequelize.or(
-        {id: chat.UserId}, 
-        {id: chat.RefUserId}), 
-        id: Sequelize.Op.not(req.user.id)
+    let chat = await Referral.findOne({ where: {id: req.params.id} });
+    let friend = await User.findOne({ where :  {id: chat.RefUserId}
     });
     let history = await Message.findAll(
         {
@@ -564,11 +561,10 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
 
 router.post('/sendMessage/:id', isUser, async (req, res) => {
     let chat = req.body.message; 
-    let senderid = req.user.id;
-    let receiverid = req.body.receiver; 
+    let receiverid = req.body.receive; 
     Message.create({ 
         Message: chat, 
-        User1ID: senderid, 
+        User1Id: req.user.id, 
         User2Id: receiverid
     })
 
