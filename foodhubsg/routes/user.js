@@ -550,6 +550,7 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
         where: 
             { id: chat.RefUserId },
     });
+   
     let history = await Message.findAll(
         {
             where:
@@ -560,7 +561,14 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                         { User1Id: friend.id },
                         { User2Id: friend.id })
                 ),
-        })
+
+            // include : [{ 
+            //     model: User, 
+            //     required: true
+            // }], 
+            
+            // raw: true, 
+        }); 
     res.render('user/sendMessages',
         { user: req.user, friend: friend, message: history });
 });
