@@ -443,7 +443,7 @@ router.post('/inviteFriend', async (req, res) => {
     if (existingUser) error = "That user already exists!";
 
     try { await sendEmail(req.user, friendEmail); } 
-    catch (err) { console.log(err); error = "Please enter a valid email address!" };
+    catch (err) { error = "Please enter a valid email address!" };
 
     if (!error) success = "An email with an invitation has been sent to your friend!";
 
