@@ -17,12 +17,9 @@
                             <div class="row form-group">
                                 <div class="col-md-12">
                                     <input name="refCode" id="refCode" type="text" class="form-control" value=""
-                                        placeholder="Eg: a00001" required>
-                                </div>
-                                <div class="col-md-12 ajaxErrBlock" id="inviteFriendBlock">
-                                    <br>
+                                        placeholder="Eg: a00001" style="margin-bottom: 10px" required>
                                     <a class="modal-action hyperlink" data-dismiss="modal" aria-label="Close" data-toggle="modal"
-                                        data-target="#inviteFriendModal">
+                                        data-target="#inviteFriendModal" style="color: rgba(246, 71, 13, 0.7);">
                                         <i class="fas fa-user-plus"></i>&nbsp; Invite a friend?
                                     </a>
                                 </div>
@@ -34,7 +31,6 @@
                         <div class="modal-footer">
                             <input type="submit" value="Enter Code" id="refCodeSend" class="btn btn-primary"
                                 style="width:100%">
-                            <br>
                         </div>
                     </form>
 
@@ -258,7 +254,6 @@
 
             if (data.error) {
                 $('#refCodeErrBlock').css("display", "block");
-                $('#inviteFriendBlock').css("display", "block");
                 $('#refCodeErrMsg').text(data.error);
             } else {
                 $('#refCodeSend').val("Loading...");
