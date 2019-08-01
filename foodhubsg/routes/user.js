@@ -173,15 +173,16 @@ router.get('/faq', isUser, async (req, res) => {
                 ['createdAt', 'ASC'],
             ],
             raw: true
-        });
-
-    res.render('user/faq', {
-        user: req.user,
-        questions,
-        unviewedNotifications
+        })
+        .then((questions) => {
+            res.render('user/faq', {
+                user: req.user,
+                questions,
+                unviewedNotifications
     });
 });
 
+});
 
 router.get('/friendActivity', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
@@ -649,17 +650,18 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
 router.post('/faq', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
-    let question = req.body.question;
-    let error;
+    let description = req.body.description;
+    var error;
 
-    let questions = await
         Question.create({
             UserId: req.user.id,
-            question: question,
-        });
+            description,
+        })
+        .then((question) => {
 
     req.flash('success', 'You have successfully created a question!');
     res.redirect('/user/faq');
+});
 });
 
 
@@ -693,6 +695,35 @@ router.post('/settings', isUser, async (req, res) => {
     })
 });
 
+router.post('/deleteQuestion/:id', isUser, (req, res) => {
+    let questionId = req.params.id;
+    let error;
+
+    User.findOne({
+        where: { UserId }
+    }).then(function (user){
+        if (user) {
+            Question.destroy({
+                where: {
+                    id: questionId,
+                }
+            })
+            .then(() => {
+        
+                req.flash('success', "You've successfully deleted the question!");
+                res.redirect('/user/faq');
+                    })
+        } else{
+            req.flash('error', "You are not allowed to delete the question!");
+            res.redirect('/user/faq');
+        };
+    });
+	
+	
+    
+    });
+
+    
 
 
 
