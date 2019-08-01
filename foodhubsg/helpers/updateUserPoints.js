@@ -11,21 +11,13 @@ async function updateUserPoints(user, points, source, additionalMessage = null, 
     endDt.setMinutes(startDt.getMinutes() - 5);
 
     if (!user.isBanned) {
-        var type = "positive", pointsAction = "gained";
-        
-        if (points < 0) {
-            type = "negative";
-            pointsAction = "lost";
-        };
+        let type = (points > 0) ? "positive" : "negative";
+        let pointsAction = (points > 0) ? "gained" : "lost";
 
         await
             User.update(
                 { gainedPoints: Sequelize.literal(`gainedPoints + ${points}`) },
-                { 
-                    where: { id: user.id },
-                    returning: true,
-                    plain: true,
-                }
+                { where: { id: user.id } }
             );
         
         await

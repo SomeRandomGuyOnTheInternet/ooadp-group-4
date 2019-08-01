@@ -1,6 +1,7 @@
 {{> _msg }}
 <div id="colorlib-container">
     <div class="container">
+
         <div class="modal fade" id="addRefModal" tabindex="-1" role="dialog" aria-labelledby="addRefModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -18,14 +19,22 @@
                                     <input name="refCode" id="refCode" type="text" class="form-control" value=""
                                         placeholder="Eg: a00001" required>
                                 </div>
+                                <div class="col-md-12 ajaxErrBlock" id="inviteFriendBlock">
+                                    <br>
+                                    <a class="modal-action hyperlink" data-dismiss="modal" aria-label="Close" data-toggle="modal"
+                                        data-target="#inviteFriendModal">
+                                        <i class="fas fa-user-plus"></i>&nbsp; Invite a friend?
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer ajaxErrBlock">
-                            <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg"></span>
+                        <div class="modal-footer ajaxErrBlock" id="refCodeErrBlock">
+                            <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg" id="refCodeErrMsg"></span>
                         </div>
                         <div class="modal-footer">
                             <input type="submit" value="Enter Code" id="refCodeSend" class="btn btn-primary"
                                 style="width:100%">
+                            <br>
                         </div>
                     </form>
 
@@ -33,42 +42,40 @@
             </div>
         </div>
 
-        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModal"
+        <div class="modal fade" id="inviteFriendModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title font_color" id="addRefModalLabel"><b>Send A Message</b></h3>
+                        <h3 class="modal-title font_color" id="inviteFriendModalLabel"><b>Invite Friend</b></h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
-                    <form method="post" action="" id="messageForm">
+                    <form method="post" action="" id="inviteFriendForm">
                         <div class="modal-body">
                             <div class="row form-group">
                                 <div class="col-md-12">
-                                    <span class="usernameMessage"></span>
-                                    <input name="friendMessage" id="friendMessage" type="text" class="form-control"
-                                        value="" placeholder="" required>
-                                    <input name="friendName" id="friendName" type="text" class="form-control invisible"
-                                        value="" required>
+                                    <input name="friendEmail" id="friendEmail" type="email" class="form-control" value=""
+                                        placeholder="Email" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer ajaxErrBlock">
-                            <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg"></span>
+                        <div class="modal-footer ajaxErrBlock" id="inviteFriendErrBlock">
+                            <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg" id="inviteFriendErrMsg"></span>
+                        </div>
+                        <div class="modal-footer ajaxErrBlock" id="inviteFriendSuccessBlock" style="color:#4CAF50; ">
+                            <i class="fas fa-check"></i><span class="ajaxErrMsg" id="inviteFriendSuccessMsg"></span>
                         </div>
                         <div class="modal-footer">
-                            <input type="submit" value="Send A Message" id="sendButton" class="btn btn-primary"
-                                style="width:100%">
+                            <input type="submit" value="Invite Friend" id="friendEmailSend" class="btn btn-primary" style="width:100%">
                         </div>
                     </form>
-
-
+        
                 </div>
             </div>
         </div>
+
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
@@ -250,12 +257,42 @@
             let data = JSON.parse(rawData);
 
             if (data.error) {
-                $('.ajaxErrBlock').css("display", "block");
-                $('.ajaxErrMsg').text(data.error);
+                $('#refCodeErrBlock').css("display", "block");
+                $('#inviteFriendBlock').css("display", "block");
+                $('#refCodeErrMsg').text(data.error);
             } else {
                 $('#refCodeSend').val("Loading...");
                 $('#refCodeSend').attr("disabled", true);
                 setTimeout(location.reload.bind(location), 1500);
+            }
+        });
+    });
+
+    $('#friendEmailSend').click(function (event) {
+        event.preventDefault();
+        let friendEmail = $('#friendEmail').val();
+        $('#friendEmailSend').attr("disabled", true);
+        $('#friendEmailSend').val("Loading...");
+
+        $.ajax({
+            type: 'post',
+            url: `/user/inviteFriend`,
+            data: { friendEmail },
+            dataType: 'text'
+        })
+        .done(function (rawData) {
+            let data = JSON.parse(rawData);
+            $('#friendEmailSend').attr("disabled", false);
+            $('#friendEmailSend').val("Invite Friend");
+
+            if (data.error) {
+                $('#inviteFriendSuccessBlock').css("display", "none");
+                $('#inviteFriendErrBlock').css("display", "block");
+                $('#inviteFriendErrMsg').text(data.error);
+            } else {
+                $('#inviteFriendErrBlock').css("display", "none");
+                $('#inviteFriendSuccessBlock').css("display", "block");
+                $('#inviteFriendSuccessMsg').text(data.success);
             }
         });
     });

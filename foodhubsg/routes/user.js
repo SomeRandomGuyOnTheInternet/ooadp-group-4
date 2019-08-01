@@ -185,6 +185,7 @@ router.get('/faq', isUser, async (req, res) => {
 
 router.get('/friendActivity', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
+    // await sendEmail(req.user, "bala12rupesh@gmail.com"); 
 
     let referredUsers = await
         User.findAll({
@@ -431,6 +432,22 @@ router.post('/acceptInvitation/:id', async (req, res) => {
         req.flash('error', "You've already added this user as a friend!");
         res.redirect('/user');
     };
+});
+
+
+router.post('/inviteFriend', async (req, res) => {
+    const friendEmail = req.body.friendEmail.toLowerCase();
+    let error, success;
+    let existingUser = await User.findOne({ where: { email: friendEmail } });
+
+    if (existingUser) error = "That user already exists!";
+
+    try { await sendEmail(req.user, friendEmail); } 
+    catch (err) { console.log(err); error = "Please enter a valid email address!" };
+
+    if (!error) success = "An email with an invitation has been sent to your friend!";
+
+    res.send({ error, success });
 });
 
 

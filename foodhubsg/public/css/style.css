@@ -107,7 +107,7 @@ margin: 20em 0 20em 0;
       content: ""; }
 
 a {
-  color: #F6490D;
+  color: rgba(246, 71, 13, 0.7);
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s; }
@@ -130,7 +130,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 ::selection {
   color: #fff;
-  background: #F6490D; }
+  background: rgba(246, 71, 13, 0.6); }
 
 @media screen and (max-width: 768px) {
   .colorlib-nav {
@@ -1757,7 +1757,7 @@ select {
 }
 
 .hyperlink {
-  color: #F6490D;
+  color: rgba(246, 71, 13, 0.7);
   cursor: pointer;  
 }
 
@@ -1840,4 +1840,8 @@ select {
 
 .nav-plain-user-link:last-of-type {
     margin-right: 15px;
+}
+
+.highlight {
+  background-color: rgba(0, 0, 0, 0.035);
 }
