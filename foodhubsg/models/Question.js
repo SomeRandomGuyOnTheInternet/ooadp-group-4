@@ -4,7 +4,7 @@ const db = require('../config/DBConfig');
 
 
 const Question = db.define('question', {
-    question: {
+    description: {
         type: Sequelize.STRING
     },
     answer: {
