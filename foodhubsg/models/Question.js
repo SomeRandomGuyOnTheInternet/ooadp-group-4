@@ -3,7 +3,7 @@ const db = require('../config/DBConfig');
 
 
 
-const Question = db.define('Question', {
+const Question = db.define('question', {
     question: {
         type: Sequelize.STRING
     },
