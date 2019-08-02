@@ -538,14 +538,13 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
         });
 
     res.render('user/sendMessages',
-        { user: req.user, friend: friend, message: history });
+        { user: req.user, chat: chat, friend: friend, message: history });
 });
 
 router.post('/sendMessage/:id', isUser, async (req, res) => {
-    let chat = req.body.message;
+    let chat = req.body.chatMessage;
     let senderid = req.user.id;
-    let receiverid = req.body.receive;
-
+    let receiverid = req.body.friendid;
     await
         Message.create({
             Message: chat,

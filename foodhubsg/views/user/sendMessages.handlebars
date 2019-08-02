@@ -11,44 +11,78 @@
                             <p> User height: {{friend.height}} </p>
                             <p> User Weight {{friend.weight}}</p> --}}
                     </div>
-                
-                {{#if message}}
-                <div class="col-md-12 chat-history" style="margin-bottom: 20px">
-                    <div class="blog-entry">
-                        {{#each message}}
-                        {{#ifCond User1Id '!=' ../user.id}}
+
+                    {{#if message}}
+                    <div class="col-md-12 chat-history" style="margin-bottom: 20px">
+                        <div class="blog-entry">
+                            {{#each message}}
+                            {{#ifCond User1Id '!=' ../user.id}}
                             <div class="row justify-content-start">
                                 <div class="col-auto">
-                                    <p class="speech-bubble-sender"><b>{{this.Message}}</b> <br> {{formatTime createdAt}} </p>
+                                    <p class="speech-bubble-sender"><b>{{this.Message}}</b> <br>
+                                        {{formatTime createdAt}} </p>
+
                                 </div>
                             </div>
-                        {{/ifCond}}
-                        {{#ifCond User1Id '==' ../user.id}}
+                            {{/ifCond}}
+                            {{#ifCond User1Id '==' ../user.id}}
                             <div class="row justify-content-end">
                                 <div class="col-auto">
-                                    <p class="speech-bubble-receiver"><b>{{this.Message}}</b> <br> {{formatTime createdAt}} </p>
+                                    <p class="speech-bubble-receiver"><b>{{this.Message}}</b> <br>
+                                        {{formatTime createdAt}} </p>
                                 </div>
                             </div>
-                        {{/ifCond}}
-                        {{/each}}
+                            {{/ifCond}}
+                            {{/each}}
+                        </div>
                     </div>
+                    <hr align="center" width="30%">
+                    {{/if}}
+
+                    <form method="post" style="width: 100%; margin-top: 30px;">
+                        <div class="row">
+                            <div class="col-10">
+                                <input type="text" class="form-control" name="message" id="message"
+                                    placeholder="Type a message">
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" id="sendMessage" name="sendMessage" class="btn btn-primary btn-tall"
+                                    style="width: 100%;"><i class="fas fa-reply"></i></button>
+                                <input type="hidden" name="receive" id="receive" value="{{friend.id}}"><br>
+                                <input type="hidden" name="refId" id="refId" value="{{chat.id}}"><br>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <hr align="center" width="30%">
-                {{/if}}
-                
-                <form method="post" style="width: 100%; margin-top: 30px;">
-                    <div class="row">
-                        <div class="col-10">
-                            <input type="text" class="form-control" name="message" id="message" placeholder="Type a message">
-                        </div>
-                        <div class="col-2">
-                            <button type="submit" class="btn btn-primary btn-tall" style="width: 100%;"><i class="fas fa-reply"></i></button>
-                            <input type="hidden" name="receive" id="receive" value="{{friend.id}}"><br>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
 </div>
-</div>
+<script>
+    $('#sendMessage').click(function (event) {
+        event.preventDefault();
+        let chatMessage = $('#message').val();
+        let friendid = $('#receive').val(); 
+        let referral = $('#refId').val();
+        console.log(referral);  
+        $.ajax({
+            type: 'post',
+            url: `/user/sendMessage/` + referral,
+            data: { friendid, chatMessage },
+            dataType: 'text'
+        })
+            .done(function (rawData) {
+                {{!-- let data = JSON.parse(rawData);
+
+                if (data.error) {
+                    $('#refCodeErrBlock').css("display", "block");
+                    $('#refCodeErrMsg').text(data.error);
+                } else {
+                    $('#refCodeSend').val("Loading...");
+                    $('#refCodeSend').attr("disabled", true);
+                    setTimeout(location.reload.bind(location), 1500);
+                } --}}
+            });
+    });
+
+</script>
