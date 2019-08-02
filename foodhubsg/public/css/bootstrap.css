@@ -10053,7 +10053,9 @@ a.text-dark:hover, a.text-dark:focus {
 	position: relative;
   background: rgb(235, 235, 235);
   border-radius: .4em;
-  padding: 20px;
+  padding: 17px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .speech-bubble-receiver {
@@ -10061,7 +10063,9 @@ a.text-dark:hover, a.text-dark:focus {
 	background: #c3e6cb;
   border-radius: .4em;
   text-align: right !important;
-  padding: 20px;
+  padding: 17px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .speech-bubble-receiver:after {
