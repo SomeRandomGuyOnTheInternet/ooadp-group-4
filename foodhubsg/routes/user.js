@@ -616,22 +616,70 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
 //         })
 // });
 
-
 router.post('/faq', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
+    let title = req.body.title;
     let description = req.body.description;
+    let suggestion = req.body.suggestion;
     var error;
 
-        Question.create({
-            UserId: req.user.id,
-            description,
-        })
-        .then((question) => {
+    Question.create({
+        UserId: req.user.id,
+        title,
+        description,
+        suggestion
+    }) .then((question) => {
 
     req.flash('success', 'You have successfully created a question!');
     res.redirect('/user/faq');
 });
+});
+
+router.post('/suggestion/:id', isUser, async (req, res) => {
+    const isAdmin = isBanned = isVendor = false;
+    const isAnswered = false;
+    let title = req.body.title;
+    let description = req.body.description;
+    let suggestion = req.body.suggestion;
+    let questionId = req.params.id;
+    var error;
+
+    Question.update({
+        suggestion
+    },{
+        where:{
+            id: questionId
+        }
+        }).then((question) => {
+
+    req.flash('success', 'You have suggested an answer!');
+    res.redirect('/user/faq');
+});
+});
+
+
+
+
+router.post('/editFood/:id', async (req, res) => {
+    const logId = req.params.id;
+    const foodId = req.body.codeToChange;
+    const foodItem = await Food.findOne({ where: { id: foodId } });
+
+    if (foodItem) {
+        await
+            FoodLog.update(
+                { FoodId: foodId },
+                { where: { id: logId } },
+            );
+        updateUserCalories(req.user);
+
+        req.flash('success', "You've successfully edited that food item!");
+        res.redirect('/user/foodJournal');
+    } else {
+        req.flash('error', "That code does not exist!");
+        res.redirect('/user/foodJournal');
+    }
 });
 
 
@@ -668,29 +716,17 @@ router.post('/settings', isUser, async (req, res) => {
 router.post('/deleteQuestion/:id', isUser, (req, res) => {
     let questionId = req.params.id;
     let error;
-
-    User.findOne({
-        where: { UserId }
-    }).then(function (user){
-        if (user) {
-            Question.destroy({
-                where: {
-                    id: questionId,
-                }
-            })
-            .then(() => {
+	
+	Question.destroy({
+		where: {
+            id: questionId,
+        },
+    })
+    .then(() => {
         
-                req.flash('success', "You've successfully deleted the question!");
-                res.redirect('/user/faq');
-                    })
-        } else{
-            req.flash('error', "You are not allowed to delete the question!");
-            res.redirect('/user/faq');
-        };
-    });
-	
-	
-    
+        req.flash('success', "You've successfully deleted the question!");
+        res.redirect('/user/faq');
+			})
     });
 
     
