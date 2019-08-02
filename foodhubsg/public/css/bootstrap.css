@@ -10051,14 +10051,17 @@ a.text-dark:hover, a.text-dark:focus {
 /*# sourceMappingURL=bootstrap.css.map */
 .speech-bubble-sender {
 	position: relative;
-	background: #00aabb;
-	border-radius: .4em;
+  background: rgb(235, 235, 235);
+  border-radius: .4em;
+  padding: 20px;
 }
 
 .speech-bubble-receiver {
 	position: relative;
-	background: #00aabb;
-	border-radius: .4em;
+	background: #c3e6cb;
+  border-radius: .4em;
+  text-align: right !important;
+  padding: 20px;
 }
 
 .speech-bubble-receiver:after {
@@ -10069,7 +10072,7 @@ a.text-dark:hover, a.text-dark:focus {
 	width: 0;
 	height: 0;
   border: 20px solid transparent;
-	border-left-color: #00aabb;
+	border-left-color: #c3e6cb;
 	border-right: 0;
 	border-bottom: 0;
 	margin-top: -10px;
@@ -10084,7 +10087,7 @@ a.text-dark:hover, a.text-dark:focus {
 	width: 0;
 	height: 0;
 	border: 20px solid transparent;
-  border-right-color: #00aabb;
+  border-right-color: rgb(235, 235, 235);
 	border-left: 0;
 	border-bottom: 0;
 	margin-top: -10px;

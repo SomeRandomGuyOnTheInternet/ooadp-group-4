@@ -92,7 +92,7 @@
                     </header>
 
                     {{#each referredUsers}}
-                    <div class="row form-group">
+                    <div class="row form-group" style="margin: 50px 0">
                         <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
                             {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px;"><i>Your Info</i></h6>{{/ifCond}}
                             {{#ifCond id '!=' ../user.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
@@ -138,7 +138,7 @@
                         </div>
                     </div>
                     {{#ifCond daysActive '>=' 3}}
-                    <div class="accordion" id="chartAccordion{{id}}">
+                    <div class="accordion" id="chartAccordion{{id}}" style="margin-bottom: 50px">
                         <div class="card-header text-center" id="chart{{id}}">
                             <button class="btn-none hyperlink" type="button" data-toggle="collapse"
                                 data-target="#collapse{{id}}" aria-expanded="false" aria-controls="collapse{{id}}">
