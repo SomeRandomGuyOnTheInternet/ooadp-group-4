@@ -7,8 +7,9 @@ const groupVendors = require('../helpers/groupVendors');
 const updateShopRating = require('../helpers/updateShopRating');
 
 const Shop = require('../models/Shop');
-const FoodItem = require('../models/FoodItem')
+const FoodItem = require('../models/FoodItem');
 const User = require("../models/User");
+const Question = require("../models/Question");
 
 
 
@@ -489,6 +490,19 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     });
 });
 
-
+router.post('/deleteQuestion/:id', isAdmin, (req, res) => {
+    let questionId = req.params.id;
+	
+	Question.destroy({
+		where: {
+            id: questionId,
+        },
+    })
+    .then(() => {
+        
+        req.flash('success', "You've successfully deleted the question!");
+        res.redirect('/admin/faq');
+			})
+    });
 
 module.exports = router;

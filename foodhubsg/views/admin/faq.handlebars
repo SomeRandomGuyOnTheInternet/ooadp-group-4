@@ -1,68 +1,130 @@
 {{> _msg }}
+
 <div id="colorlib-container">
     <div class="container">
+
+        <div class="modal fade" id="addAnswer" tabindex="-1" role="dialog" aria-labelledby="addAnswerLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title font_color" id="addAnswerLabel"><b>Answer Question</b></h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post" action="" id="refCodeForm">
+                        <div class="modal-body" style="padding-bottom: 0px;">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <input id="answer" name="answer" type="text" class="form-control" value=""
+                                     required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer ajaxErrBlock" id="refCodeErrBlock">
+                            <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg" id="refCodeErrMsg"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Submit Answer" id="refCodeSend" class="btn btn-primary"
+                                style="width:100%">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
 
-                    <h1 class="font_color"><b>Frequently Asked Questions</b></h1>
+                    <h1 class="font_color" style="display:inline-block"><b>Frequently Asked Questions</b></h1>
+                    {{!-- <i class="fas fa-filter" style="float:right;">Filter</i> --}}
+
+
                     <hr>
 
-                    <h3 style="display: inline-block;"><b class="font_color">What is BMI?</b> - Zafirah</h3>
+                    
+                    {{#if questions}}
+                    {{#each questions}}
+                    
+                
+						<div>
+                            
+                            <form method="post" action="/admin/deleteQuestion/{{id}}" style="width:100%" onsubmit="return confirm('Are you sure you want to delete this question?');">
+                            <input type="submit" value="Delete" class="btn btn-primary" style="float:right;">
+                            </form>
+                            
+                            
+                            <div class="col-sm-12">
+                            <a class="modal-action" data-toggle="modal" data-target="#addAnswer"
+                            style="float:right;">
+                            <input type="submit" name="action" value="Answer" class="btn btn-primary"
+                            style="background-color: #4CAF50;">
+                            </a>
+                            </div> 
+                            <h3><b class="font_color">{{description}}<br><hr></b></h3>
+                            
+                            
+                        </div>
+                        
+
+                    
+                    {{/each}}
+                    {{/if}}
+                    
+
+                    {{!-- <h3><b class="font_color">What is BMI?</b></h3>
                     <p>BMI is person's weight in kilograms (kg) divided by his or her height in meter squared. The
                         National Institute of Health (NIH) now defines normal weight, overweight and obesity according
                         to BMI rather than the traditional height/weight charts. Overweight is a BMI of 23 for an
                         average person.</p>
-                    <input type="submit" name="action" value="Update Answer" class="btn btn-primary"
-                        style="background-color: #4CAF50;">
-                    <input type="submit" name="action" value="Delete Question" class="btn btn-primary" id="remove-shop"
-                        style="background-color:#d9534f; float:right;">
-                    <input type="submit" name="action" value="Ban User" class="btn btn-primary" id="remove-shop"
-                        style="background-color:#d9534f; float:right;">
                     <hr>
 
-                    <h3 style="display: inline-block;"><b class="font_color">What are calories?</b> - Andrea</h3>
+                    <h3><b class="font_color">What are calories?</b></h3>
                     <p>A calorie is a unit of energy. In nutrition, calories refer to the energy people get from the
                         food and drink they consume, and the energy they use in physical activity.</p>
-                    <input type="submit" name="action" value="Update Answer" class="btn btn-primary" style="background-color: #4CAF50;">
-                    <input type="submit" name="action" value="Delete Question" class="btn btn-primary" id="remove-shop"
-                        style=" background-color:#d9534f; float:right;">
-                    <input type="submit" name="action" value="Ban User" class="btn btn-primary" id="remove-shop"
-                        style="background-color:#d9534f; float:right;">
                     <hr>
 
-                    <h3 style="display: inline-block;"><b class="font_color">Can I become healthy by dieting?</b> - Balavignesh </h3>
+                    <h3><b class="font_color">Can I become healthy by dieting?</b></h3>
                     <p>Yes, beginning a diet to lose weight and improve health is a worthy goal, but it can be a bit
                         overwhelming. There are bound to be challenges whenever you start something new, especially when
                         it involves something you do several times each day like eating and drinking. Still, as long as
                         you don't try to change everything at once, you can meet your weight loss goals.
                     </p>
-                    <input type="submit" name="action" value="Update Answer" class="btn btn-primary" style="background-color: #4CAF50;">
-                    <input type="submit" name="action" value="Delete Question" class="btn btn-primary" id="remove-shop"
-                        style=" background-color:#d9534f; float:right;">
-                    <input type="submit" name="action" value="Ban User" class="btn btn-primary" id="remove-shop"
-                        style="background-color:#d9534f; float:right;">
 
                     <form method="get" id="answer-link" action="#">
                         <hr>
-                        <h3 style="display: inline-block;"><b class="font_color"> What happens to the extra calories? </b> - Megan </h3>
+                        <h3><b class="font_color"> When I eat more than I need what happens to the extra calories? </b> - Megan </h3>
+                        <div></div>
                         <p><b> Not answered yet </b></p>
-                        <input type="submit" name="action" value="Add Answer" class="btn btn-primary" style="background-color: #4CAF50;">
-                        <input type="submit" name="action" value="Delete Question" class="btn btn-primary" id="remove-shop"
-                            style=" background-color:#d9534f; float:right;">
-                        <input type="submit" name="action" value="Ban User" class="btn btn-primary" id="remove-shop"
-                            style="background-color:#d9534f; float:right;">
+                        <input type="submit" value="Suggest An Answer" name="#" class="btn btn-primary">
                     </form>
 
+                    <hr>
+
+                    {{#each question}}
+                    <h3><b class="font_color">{{question}}</b></h3>
+                    {{/each}}
+                   
                     <br>
                     <hr>
 
                     <form method="post" action="" id="query-form">
-                    </form>
+                        <label for="query">Question</label>
+                        <textarea id="query" name="query" form="query-form" class="form-control" rows="4" cols="50"
+                            required></textarea><br>
+                        <input type="submit" id="submit-query" value="Submit A Question"
+                            name="#" class="btn btn-primary">
+                    </form> --}}
+
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <div class="container">
         <div class="box1">
