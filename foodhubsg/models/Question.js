@@ -4,21 +4,22 @@ const db = require('../config/DBConfig');
 
 
 const Question = db.define('question', {
-    description: {
+    title: {
         type: Sequelize.STRING
+    },
+    description: {
+        type: Sequelize.STRING(1000)
+    },  
+    suggestion: {
+        type: Sequelize.STRING(1000)
     },
     answer: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(1000)
     },
-    suggestion: {
-        type: Sequelize.STRING, 
-    },
-
     isAnswered: { 
-        type: Sequelize.BOOLEAN, 
+        type: Sequelize.BOOLEAN
     },
 });
-
 
 
 module.exports = Question;
