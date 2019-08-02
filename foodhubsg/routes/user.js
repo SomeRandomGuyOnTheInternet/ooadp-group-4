@@ -535,9 +535,7 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
             }, 
             order: [['createdAt', 'ASC']],
             raw: true
-        }); 
-
-    console.log(history)
+        });
 
     res.render('user/sendMessages',
         { user: req.user, friend: friend, message: history });
