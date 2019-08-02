@@ -557,18 +557,14 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
 });
 
 router.get('/deleteMessage/:id', isUser, async (req, res) => {
-    let chat = req.body.message;
-    let senderid = req.user.id;
-    let receiverid = req.body.receive;
-
     await
-        Message.create({
-            Message: chat,
-            User1Id: senderid,
-            User2Id: receiverid
+        Message.destroy({
+            where: { 
+                id: req.params.id
+            }
         });
 
-    req.flash('success', 'Message Sent');
+    req.flash('success', 'Message Deleted');
     res.redirect(`/user/sendMessage/${req.params.id}`);
 });
 
