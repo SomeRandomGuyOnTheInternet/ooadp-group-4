@@ -533,7 +533,7 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                 where: Sequelize.or({id: req.user.id}, {id: friend.id}), 
                 required: true
             }, 
-            order: [['createdAt', 'ASC']],
+            order: [['createdAt', 'DESC']],
             raw: true
         });
 
@@ -556,6 +556,23 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
     req.flash('success', 'Message Sent');
     res.redirect(`/user/sendMessage/${req.params.id}`);
 });
+
+router.get('/deleteMessage/:id', isUser, async (req, res) => {
+    let chat = req.body.message;
+    let senderid = req.user.id;
+    let receiverid = req.body.receive;
+
+    await
+        Message.create({
+            Message: chat,
+            User1Id: senderid,
+            User2Id: receiverid
+        });
+
+    req.flash('success', 'Message Sent');
+    res.redirect(`/user/sendMessage/${req.params.id}`);
+});
+
 
 
 // router.get('/editCompliment/:id', isUser, async (req, res) => {
