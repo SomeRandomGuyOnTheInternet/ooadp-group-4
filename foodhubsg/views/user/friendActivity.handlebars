@@ -93,7 +93,7 @@
 
                     {{#each referredUsers}}
                     <div class="row form-group" style="margin: 50px 0">
-                        <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container" refId="{{'Referrals.id'}}">
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container no-padding" refId="{{'Referrals.id'}}">
                             {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px;"><i>Your Info</i></h6>{{/ifCond}}
                             {{#ifCond id '!=' ../user.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
                             <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
@@ -126,7 +126,7 @@
                                 {{/each}}
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-3 text-right points-container">
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-right points-container no-padding">
                             <h6 style="margin-bottom: 0;">Points</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ gainedPoints }}</span>
                             <br>
