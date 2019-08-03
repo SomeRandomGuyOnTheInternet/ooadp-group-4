@@ -8,7 +8,6 @@ const getUnviewedNotifications = require('../helpers/getUnviewedNotifications');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const groupFoodItems = require('../helpers/groupFoodItems');
-const groupedMessages = require('../helpers/groupMessages');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
 const createUserReferral = require('../helpers/createUserReferral');
 const updateUserPoints = require('../helpers/updateUserPoints');
