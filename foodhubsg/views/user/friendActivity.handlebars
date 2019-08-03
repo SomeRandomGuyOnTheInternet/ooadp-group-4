@@ -251,7 +251,6 @@
         })
         .done(function (rawData) {
             let data = JSON.parse(rawData);
-
             if (data.error) {
                 $('#refCodeErrBlock').css("display", "block");
                 $('#refCodeErrMsg').text(data.error);
