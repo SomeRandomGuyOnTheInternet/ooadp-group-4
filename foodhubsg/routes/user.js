@@ -247,10 +247,7 @@ router.get('/friendActivity', isUser, async (req, res) => {
 router.get('/sendMessage/:id', isUser, async (req, res) => {
     try {
         let chat = await Referral.findOne({ where: { id: req.params.id } });
-        let friend = await User.findOne({
-            where:
-                { id: chat.RefUserId }
-        });
+        let friend = await User.findOne({ where: { id: chat.RefUserId } });
 
         let history = await
             Message.findAll({
@@ -548,6 +545,38 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
 });
 
 
+router.post('/checkMessages/:id', isUser, async (req, res) => {
+    try {
+        let chat = await Referral.findOne({ where: { id: req.params.id } });
+        let friend = await User.findOne({ where: { id: chat.RefUserId } });
+
+        let history = await
+            Message.findAll({
+                where:
+                    Sequelize.and(
+                        Sequelize.or({ User1Id: req.user.id },
+                            { User2Id: req.user.id }),
+                        Sequelize.or(
+                            { User1Id: friend.id },
+                            { User2Id: friend.id })
+                    ),
+                include: {
+                    model: User,
+                    where: Sequelize.or({ id: req.user.id }, { id: friend.id }),
+                    required: true
+                },
+                order: [['createdAt', 'ASC']],
+                raw: true
+            });
+
+        res.send({ history });
+    } catch (error) {
+        req.flash('error', "Please use a valid URL!");
+        res.redirect('/user/friendActivity');
+    }
+});
+
+
 router.post('/sendMessage/:id', isUser, async (req, res) => {
     let chat = req.body.chatMessage;
 
@@ -563,6 +592,7 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
     req.flash('success', 'Message Sent');
     res.redirect(`/user/sendMessage/${req.params.id}`);
 });
+
 
 router.get('/deleteMessage/:id', isUser, async (req, res) => {
     await
