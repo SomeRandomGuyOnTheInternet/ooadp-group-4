@@ -1,0 +1,52 @@
+{{> _msg }}
+<div id="colorlib-container">
+    <div class="container">
+
+        <div class="box1">
+            <div class="col-md-12" style="padding: 0.5em 0.5em 0 0.5em !important;">
+                <div class="row row-pb-md">
+
+                    <div class="col-md-12">
+                        <h1 class="font_color"><b>Edit Shop</b></h1>
+                        <hr>
+                    </div>
+
+                    <form method="post" action="" style="width:100%">
+                        <div class="row form-group" style="margin:0;">
+
+                            <div class="col-md-12">   
+                                <label>Title</label>
+                                <input name="address" id="address" type="text" class="form-control"
+                                    placeholder="Address" value="{{question.title}}" required>
+                            </div>
+
+                            <div class="col-md-12">   
+                                <label>Description</label>
+                                <input name="address" id="address" type="text" class="form-control"
+                                    placeholder="Address" value="{{question.description}}" required>
+                            </div>
+
+                            <div class="col-md-12">   
+                                <label>Suggested Answer</label>
+                                <input name="address" id="address" type="text" class="form-control"
+                                    placeholder="Address" value="{{question.suggestion}}" required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <input type="submit" name="action" value="Save" class="btn btn-primary btn-tall"
+                                   id="" style="float:right;">       
+                                </form>
+                                {{!-- <form method="POST" action="/admin/deleteShop/{{shop.id}}" style="width:100%" onsubmit="return confirm('Are you sure you want to delete this shop?');">
+                                    <input type="submit" name="action" value="Delete Shop" class="btn btn-danger btn-tall" id="editShopButton"
+                                        style="float:right;">
+                                </form> --}}
+                            </div>
+                        </div>
+                    
+                </div>
+                <br>
+            </div>
+        </div>
+
+        
+
