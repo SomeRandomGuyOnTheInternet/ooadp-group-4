@@ -8,7 +8,7 @@ const getUnviewedNotifications = require('../helpers/getUnviewedNotifications');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const groupFoodItems = require('../helpers/groupFoodItems');
-const groupedMessages = require('../helpers/groupMessages');
+const groupMessages = require('../helpers/groupMessages');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
 const createUserReferral = require('../helpers/createUserReferral');
 const updateUserPoints = require('../helpers/updateUserPoints');
@@ -275,14 +275,17 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                 order: [['createdAt', 'ASC']],
                 raw: true
             });
-            
-        let sortedHistory = groupedMessages(history);
 
-        res.render('user/sendMessages',
-            { user: req.user, chat: chat, friend: friend, message: history });
+        res.render('user/sendMessages',{ 
+            user: req.user, 
+            chat, 
+            friend, 
+            groupedMessages: groupMessages(history) 
+        });
     } 
     
     catch (error) {
+        console.log(error)
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
     }
@@ -419,6 +422,8 @@ router.post('/addFood', async (req, res) => {
                     required: true,
                 }
             });
+
+        console.log(recFoodLog.length)
 
         if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
         else if (recFoodLog.length > 9) { addBadges('Picking Up Steam', user, "adding ten recommended food items"); }
@@ -576,9 +581,9 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
 
 router.post('/checkMessages/:id', isUser, async (req, res) => {
     try {
+        let groupedMessages = {};
         let chat = await Referral.findOne({ where: { id: req.params.id } });
         let friend = await User.findOne({ where: { id: chat.RefUserId } });
-
         let history = await
             Message.findAll({
                 where:
@@ -598,7 +603,8 @@ router.post('/checkMessages/:id', isUser, async (req, res) => {
                 raw: true
             });
 
-        res.send({ history });
+        groupedMessages = groupMessages(history);
+        res.send({ groupedMessages });
     } catch (error) {
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
@@ -607,10 +613,10 @@ router.post('/checkMessages/:id', isUser, async (req, res) => {
 
 
 router.post('/sendMessage/:id', isUser, async (req, res) => {
-    let chat = req.body.chatMessage;
-
+    let chat = req.body.message;
     let senderid = req.user.id;
-    let receiverid = req.body.friendid;
+    let receiverid = req.body.receive;
+    
     await
         Message.create({
             Message: chat,
@@ -742,29 +748,6 @@ router.post('/suggestion', isUser, async (req, res) => {
         });
 });
 
-
-
-
-router.post('/editFood/:id', async (req, res) => {
-    const logId = req.params.id;
-    const foodId = req.body.codeToChange;
-    const foodItem = await Food.findOne({ where: { id: foodId } });
-
-    if (foodItem) {
-        await
-            FoodLog.update(
-                { FoodId: foodId },
-                { where: { id: logId } },
-            );
-        updateUserCalories(req.user);
-
-        req.flash('success', "You've successfully edited that food item!");
-        res.redirect('/user/foodJournal');
-    } else {
-        req.flash('error', "That code does not exist!");
-        res.redirect('/user/foodJournal');
-    }
-});
 
 router.get('/settings', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
