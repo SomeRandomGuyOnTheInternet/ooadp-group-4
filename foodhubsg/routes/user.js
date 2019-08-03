@@ -277,7 +277,8 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
             });
 
         res.render('user/sendMessages',{ 
-            user: req.user, 
+            user: req.user,
+            title: "Chat History",
             chat, 
             friend, 
             groupedMessages: groupMessages(history) 
@@ -655,6 +656,7 @@ router.get('/faq', isUser, async (req, res) => {
         .then((questions) => {
             res.render('user/faq', {
                 user: req.user,
+                title: "FAQ",
                 questions,
                 unviewedNotifications
         });
