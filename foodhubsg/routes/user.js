@@ -543,6 +543,7 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
 
 router.post('/sendMessage/:id', isUser, async (req, res) => {
     let chat = req.body.chatMessage;
+    
     let senderid = req.user.id;
     let receiverid = req.body.friendid;
     await

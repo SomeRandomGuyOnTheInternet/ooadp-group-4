@@ -32,7 +32,7 @@
                             <div class="row justify-content-end">
                                 <div class="col-auto">
                                     <p class="speech-bubble-receiver"><b>{{this.Message}}</b> <br>
-                                        {{formatTime createdAt}} <a href="/user/deleteMessage/{{this.id}}">
+                                        {{formatTime createdAt}} <br> <a href="/user/deleteMessage/{{this.id}}">
                                             <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
                                         </a>
                                     </p>
@@ -79,21 +79,7 @@
             data: { friendid, chatMessage },
             dataType: 'text'
         })
-            .done(function (rawData) {
-                {
-                    {
-                        !--let data = JSON.parse(rawData);
-
-                        if (data.error) {
-                            $('#refCodeErrBlock').css("display", "block");
-                            $('#refCodeErrMsg').text(data.error);
-                        } else {
-                            $('#refCodeSend').val("Loading...");
-                            $('#refCodeSend').attr("disabled", true);
-                            setTimeout(location.reload.bind(location), 1500);
-                        } --}
-                }
-            });
+          
     });
 
 </script>
