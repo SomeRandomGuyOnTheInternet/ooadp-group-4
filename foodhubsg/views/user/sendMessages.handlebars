@@ -59,11 +59,7 @@
                                         class="fas fa-reply"></i></button>
                                 <input type="hidden" name="receive" id="receive" value="{{friend.id}}"><br>
                                 <input type="hidden" name="refId" id="refId" value="{{chat.id}}"><br>
-                                <div class="modal-footer">
-                                    <input type="submit" style="visibility:hidden" value="Enter Code" id="sendLoadingblock" class="btn btn-primary"
-                                        style="width:100%">
-                                </div>
-                                <div class="modal-footer ajaxErrBlock" id="sendErrBlock">
+                                <div class="ajaxErrBlock" id="sendErrBlock">
                                     <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg"
                                         id="sendErrMsg"></span>
                                 </div>
@@ -88,16 +84,13 @@
             dataType: 'text'
         })
             .done(function (rawData) {
-                console.log(rawData); 
                 let data = JSON.stringify(rawData);
                 
                 if (data.error) {
                     $('#sendErrorBlock').css("display", "block");
                     $('#sendErrorMsg').text(data.error);
                 } else {
-                    $('#sendMessage').val("Loading...");
-                    $('#sendMessage').attr("disabled", true);
-                    setTimeout(location.reload.bind(location), 1500);
+                    location.reload();
                 }
             });
     });
