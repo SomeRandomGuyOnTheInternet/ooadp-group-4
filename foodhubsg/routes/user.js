@@ -518,6 +518,7 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
         where:
             { id: chat.RefUserId }
     });
+    
     let history = await
         Message.findAll({
             where:
@@ -536,8 +537,7 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
             order: [['createdAt', 'DESC']],
             raw: true
         });
-    // let messageHistory = groupedMessages(history); 
-    // console.log(messageHistory); 
+
     res.render('user/sendMessages',
         { user: req.user, chat: chat, friend: friend, message: history });
 });
