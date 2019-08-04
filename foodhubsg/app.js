@@ -24,6 +24,7 @@ const adminRoute = require('./routes/admin');
 const vendorRoute = require('./routes/vendor'); 
 
 
+
 app.engine('handlebars', exphbs({ 
 	defaultLayout: 'main' ,
 	helpers: {
