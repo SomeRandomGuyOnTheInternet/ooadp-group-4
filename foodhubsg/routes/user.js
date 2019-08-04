@@ -663,14 +663,13 @@ router.get('/faq', isUser, async (req, res) => {
                 ['createdAt', 'ASC'],
             ],
             raw: true
-        })
-        .then((questions) => {
-            res.render('user/faq', {
-                user: req.user,
-                title: "FAQ",
-                questions,
-                unviewedNotifications
         });
+
+        res.render('user/faq', {
+            user: req.user,
+            title: "FAQ",
+            questions,
+            unviewedNotifications
     });
 });
 
