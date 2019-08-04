@@ -107,8 +107,7 @@
                             <br>
                             {{/if}}
                             {{#ifCond id '!=' ../user.id}}
-                                <a href="/user/delRefCode/{{'Referrals.id'}}" class="card-link" data-toggle="confirmation"
-                                    data-title="Confirm delete?">
+                                <a href="/user/delRefCode/{{'Referrals.id'}}" onclick="return confirm('Are you sure you want to delete this referral?');">
                                     <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
                                 </a>
                             {{/ifCond}}
