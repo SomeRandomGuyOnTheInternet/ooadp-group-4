@@ -106,7 +106,7 @@
                     {{#if questions}}
                     {{#each questions}}
 
-                    <div class="card border-primary mb-2 w-100 mx-auto">
+                    <div class="card mb-2 w-100 mx-auto" style="border-radius: 0;">
 
                         <div class="card-header" style="padding-bottom: 3px;">
                             {{!-- {{#ifCond id '==' ../user.id}} --}}
@@ -133,7 +133,7 @@
                             </a>
 
 
-                            <h4 style="padding: 3px 0 0 10px;" class="card-title">{{title}}</h4>
+                            <h4 style="padding: 3px 0 0 10px;" class="card-title"><b>{{title}}</b></h4>
                         </div>
 
                         <div class="row" style="padding-left: 20px; padding-right: 20px;">
@@ -144,7 +144,7 @@
 
                         <div class="accordion" id="storyAccordion{{id}}">
                             <div class="card-header" id="headingOne{{id}}" style="padding: 0;">
-                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                <button class="btn btn-none hyperlink" type="button" data-toggle="collapse"
                                     data-target="#collapseOne{{id}}" aria-expanded="false"
                                     aria-controls="collapseOne{{id}}">
                                     Suggested Answer &nbsp;<i class="fas fa-chevron-down"></i>
@@ -155,7 +155,11 @@
                             <div id="collapseOne{{id}}" class="collapse" aria-labelledby="headingOne{{id}}"
                                 data-parent="#storyAccordion{{id}}">
                                 <div class="card-body">
-                                    {{suggestion}}
+                                    {{#if suggestion}}
+                                        {{suggestion}}
+                                    {{else}}
+                                        <h5><b>No suggestion has been provided!</b></h5>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>

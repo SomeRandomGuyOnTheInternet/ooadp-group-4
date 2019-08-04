@@ -11,7 +11,7 @@ const Badge = db.define('Badge', {
         type: Sequelize.STRING
     },
     imageLocation: {
-        type: Sequelize.STRING, 
+        type: Sequelize.STRING
     },
     
 });

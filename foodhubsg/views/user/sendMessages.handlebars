@@ -20,10 +20,7 @@
                             <div class="row justify-content-start">
                                 <div class="col-auto">
                                     <p class="speech-bubble-sender"><b>{{this.Message}}</b> <br>
-                                        {{formatTime createdAt}}
-                                        <a href="/user/deleteMessage/{{this.id}}">
-                                            <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
-                                        </a> </p>
+                                        {{formatTime createdAt}}</p>
 
                                 </div>
                             </div>
@@ -32,7 +29,7 @@
                             <div class="row justify-content-end">
                                 <div class="col-auto">
                                     <p class="speech-bubble-receiver"><b>{{this.Message}}</b> <br>
-                                        {{formatTime createdAt}} <a href="/user/deleteMessage/{{this.id}}">
+                                        {{formatTime createdAt}} <br> <a href="/user/deleteMessage/{{this.id}}">
                                             <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
                                         </a>
                                     </p>
@@ -47,6 +44,7 @@
                     {{/if}}
 
                     <form method="post" style="width: 100%; margin-top: 30px;">
+
                         <div class="row">
                             <div class="col-10">
                                 <input type="text" class="form-control" name="message" id="message"
@@ -58,6 +56,10 @@
                                         class="fas fa-reply"></i></button>
                                 <input type="hidden" name="receive" id="receive" value="{{friend.id}}"><br>
                                 <input type="hidden" name="refId" id="refId" value="{{chat.id}}"><br>
+                                <div class="ajaxErrBlock" id="sendErrBlock">
+                                    <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg"
+                                        id="sendErrMsg"></span>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -66,34 +68,48 @@
         </div>
     </div>
 </div>
+
+
 <script>
+    let oriMessage = {{{json message}}};
+    let friendid = $('#receive').val();
+    let referral = $('#refId').val();
+
+    function checkNewMessages() {
+        $.ajax({
+            type: 'POST',
+            url: `/user/checkMessages/` + referral,
+            success: function (rawData) {
+                if (rawData["history"].length != oriMessage.length)  location.reload();
+            },
+            complete: function (data) {
+                setTimeout(checkNewMessages, 1000);
+            }
+        });
+    }
+
+    setTimeout(checkNewMessages, 1000);
+
     $('#sendMessage').click(function (event) {
         event.preventDefault();
         let chatMessage = $('#message').val();
-        let friendid = $('#receive').val();
-        let referral = $('#refId').val();
-        console.log(referral);
+
         $.ajax({
             type: 'post',
             url: `/user/sendMessage/` + referral,
             data: { friendid, chatMessage },
             dataType: 'text'
         })
-            .done(function (rawData) {
-                {
-                    {
-                        !--let data = JSON.parse(rawData);
-
-                        if (data.error) {
-                            $('#refCodeErrBlock').css("display", "block");
-                            $('#refCodeErrMsg').text(data.error);
-                        } else {
-                            $('#refCodeSend').val("Loading...");
-                            $('#refCodeSend').attr("disabled", true);
-                            setTimeout(location.reload.bind(location), 1500);
-                        } --}
-                }
-            });
+        .done(function (rawData) {
+            let data = JSON.stringify(rawData);
+            
+            if (data.error) {
+                $('#sendErrorBlock').css("display", "block");
+                $('#sendErrorMsg').text(data.error);
+            } else {
+                location.reload();
+            }
+        });
     });
 
 </script>

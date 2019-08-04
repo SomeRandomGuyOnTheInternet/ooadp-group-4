@@ -1,7 +1,7 @@
 
 <div aria-live="polite" aria-atomic="true" style="z-index:1; position:relative;">
     <!-- Position it -->
-    <div style="position: absolute; top: 30px; right: 15px;">
+    <div style="position: absolute; top: 30px; right: 15px;" class="toast-container">
         {{#each unviewedNotifications}}
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="100000">
             <div class="toast-header">
@@ -43,5 +43,5 @@
 <script>
     $(document).ready(function () {
         $('.toast').toast('show');
-    });   
+    });
 </script>

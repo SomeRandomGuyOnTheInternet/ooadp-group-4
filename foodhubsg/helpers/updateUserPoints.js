@@ -4,6 +4,8 @@ const User = require('../models/User');
 const UserAction = require('../models/UserAction');
 const UserBadge = require('../models/UserBadge');
 
+const addBadges = require('../helpers/addBadges');
+
 
 async function updateUserPoints(user, points, source, additionalMessage = null, callToAction = null, callToActionLink = null) {
     var startDt = new Date();
@@ -74,25 +76,11 @@ async function updateUserPoints(user, points, source, additionalMessage = null, 
         };
 
         if (updatedUser.gainedPoints >= 1000) {
-            let existingBadge = await UserBadge.findOne({ where: { UserId: user.id, BadgeId: 3 } });
+            addBadges('High Roller', user, "obtaining more than 1000 points");
+        };
 
-            if (!existingBadge) {
-                await
-                    UserAction.create({
-                        UserId: user.id,
-                        action: "earned the High Roller badge",
-                        source: "obtaining more than 1000 points",
-                        type: "positive",
-                        additionalMessage: "",
-                        hasViewed: false
-                    });
-
-                await
-                    UserBadge.create({
-                        UserId: user.id,
-                        BadgeId: 3,
-                    });
-            };
+        if (updatedUser.gainedPoints >= 10000) {
+            addBadges('Baller', user, "obtaining more than 10000 points");
         };
     };
 };

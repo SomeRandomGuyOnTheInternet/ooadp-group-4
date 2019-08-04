@@ -8,6 +8,7 @@ const getUnviewedNotifications = require('../helpers/getUnviewedNotifications');
 const getMealType = require('../helpers/getMealType');
 const getCurrentDate = require('../helpers/getCurrentDate');
 const groupFoodItems = require('../helpers/groupFoodItems');
+const groupedMessages = require('../helpers/groupMessages');
 const groupReferredUsers = require('../helpers/groupReferredUsers');
 const createUserReferral = require('../helpers/createUserReferral');
 const updateUserPoints = require('../helpers/updateUserPoints');
@@ -26,6 +27,32 @@ const Referral = require('../models/Referral');
 const Question = require('../models/Question');
 const Message = require('../models/Message');
 
+
+
+router.get('/getNotifications', isUser, async (req, res) => {
+    let unviewedNotifications;
+    if (req.user.bmi) unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    res.send({ unviewedNotifications });
+});
+
+
+router.get('/shops', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let shops = await
+        Shop.findAll({
+            where: { isDeleted: false },
+            order: [['rating', 'DESC']],
+        });
+
+    res.render('user/shops', {
+        user: req.user,
+        title: "Shops",
+        shops,
+        unviewedNotifications
+    });
+});
 
 
 router.get('/', isUser, async (req, res) => {
@@ -59,6 +86,7 @@ router.get('/', isUser, async (req, res) => {
                 model: Badge,
                 required: true,
             },
+            order: [[Badge, 'id', 'ASC']],
             raw: true
         });
 
@@ -163,6 +191,7 @@ router.get('/foodJournal', isUser, async (req, res) => {
     });
 });
 
+
 router.get('/friendActivity', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
@@ -182,7 +211,7 @@ router.get('/friendActivity', isUser, async (req, res) => {
             include: [{
                 model: Badge,
                 required: true,
-            }, {
+            },{
                 model: User,
                 include: {
                     model: Referral,
@@ -190,6 +219,7 @@ router.get('/friendActivity', isUser, async (req, res) => {
                     where: { UserId: req.user.id },
                 },
             }],
+            order: [[Badge, 'id', 'ASC']],
             raw: true
         });
 
@@ -245,13 +275,28 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                 order: [['createdAt', 'ASC']],
                 raw: true
             });
+            
+        let sortedHistory = groupedMessages(history);
 
         res.render('user/sendMessages',
             { user: req.user, chat: chat, friend: friend, message: history });
-    } catch (error) {
+    } 
+    
+    catch (error) {
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
     }
+});
+
+
+router.get('/settings', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    res.render('user/settings', {
+        user: req.user,
+        title: "Settings",
+        unviewedNotifications
+    });
 });
 
 
@@ -271,6 +316,8 @@ router.post('/addBmi', async (req, res) => {
                 { weight, height, bmi },
                 { where: { id: req.user.id } },
             );
+                
+        if (bmi < 23) addBadges('Keeping Fit', req.user, "being within the recommended BMI range");
 
         req.flash('success', "You've successfully updated your weight and height!");
     };
@@ -374,7 +421,7 @@ router.post('/addFood', async (req, res) => {
             });
 
         if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
-        else if (recFoodLog.length > 9) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
+        else if (recFoodLog.length > 9) { addBadges('Picking Up Steam', user, "adding ten recommended food items"); }
     };
 
     updateUserCalories(user);
@@ -396,6 +443,7 @@ router.post('/editFood/:id', async (req, res) => {
                 { FoodId: foodId },
                 { where: { id: logId } },
             );
+
         updateUserCalories(req.user);
 
         req.flash('success', "You've successfully edited that food item!");
@@ -409,9 +457,22 @@ router.post('/editFood/:id', async (req, res) => {
 
 router.post('/deleteFood/:id', async (req, res) => {
     const logId = req.params.id;
+    const foodItemToDelete = await 
+        FoodLog.findOne({ 
+            where: { id: logId },
+            include: {
+                model: Food,
+                required: true,
+            },
+            raw: true
+        });
 
     await FoodLog.destroy({ where: { id: logId } });
     updateUserCalories(req.user);
+
+    if (foodItemToDelete["FoodItem.isRecommended"]) {
+        updateUserPoints(req.user, -100, "removing a recommended food item from your log");
+    };
 
     req.flash('success', "You've successfully deleted that food item from your log!");
     res.redirect('/user/foodJournal');
@@ -575,50 +636,6 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
 });
 
 
-
-// router.get('/editCompliment/:id', isUser, async (req, res) => {
-//     let com = await
-//         Referral.findOne({
-//             where: {
-//                 id: req.params.id,
-//                 UserId: req.user.id,
-//             }
-//         });
-
-//     res.render('user/editCompliment', {
-//         compliment: com,
-//         user: req.user
-//     });
-// })
-
-
-// router.post('/editCompliment/:id', isUser, async (req, res) => {
-//     let compliment = req.body.compliment;
-
-//     await
-//         Referral.update({
-//             compliment: compliment,
-//         },{
-//             where: {
-//                 id: req.params.id,
-//                 UserId: req.user.id,
-//             }
-//         });
-
-// router.get('/acceptRequest/:id', isUser, (req, res) => {
-//     Referral.update({
-//         isMutual: true
-//     }, {
-//             where: {
-//                 id: req.params.id,
-//             }
-//         }).then(() => {
-//             req.flash('success', 'Requested Accepted, you can now chat');
-//             res.redirect('/user/friendActivity');
-//         })
-// });
-
-
 router.get('/faq', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
@@ -634,10 +651,10 @@ router.get('/faq', isUser, async (req, res) => {
                 user: req.user,
                 questions,
                 unviewedNotifications
+        });
     });
 });
 
-});
 
 router.post('/faq', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
@@ -772,17 +789,19 @@ router.post('/settings', isUser, async (req, res) => {
     bcrypt.genSalt(function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
             await
-            User.update(
-                {
-                    weight: req.body.weight,
-                    height: req.body.height,
-                    email: email,
-                    password: hash,
-                },
-                {
-                    where: { id: req.user.id }
-                }
-            );
+                User.update(
+                    {
+                        weight: req.body.weight,
+                        height: req.body.height,
+                        email: email,
+                        password: hash,
+                    },
+                    {
+                        where: { id: req.user.id }
+                    }
+                );
+
+            if (req.user.bmi < 23) addBadges('Picking Up Steam', req.user, "being within the recommended BMI range");
 
             res.redirect('/user/settings');
         });

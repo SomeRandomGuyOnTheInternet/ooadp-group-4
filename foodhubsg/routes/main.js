@@ -8,6 +8,7 @@ const router = express.Router();
 const isloggedOut = require('../helpers/isloggedOut');
 const generateCode = require('../helpers/generateCode');
 const upload = require('../helpers/imageUpload');
+const addBadges = require('../helpers/addBadges');
 
 const User = require('../models/User');
 const UserAction = require('../models/UserAction');
@@ -134,26 +135,17 @@ router.post('/register', isloggedOut, (req, res) => {
 							}),
 							UserAction.create({
 								UserId: user.id,
-								action: "earned your first badge",
-								source: "starting your journey with us",
-								type: "positive",
-								additionalMessage: "Welcome!",
-								hasViewed: false
-							}),
-							UserAction.create({
-								UserId: user.id,
 								action: "gained 50 points",
 								source: "starting your journey with us",
 								type: "positive",
 								additionalMessage: "",
 								hasViewed: false
 							}),
-							UserBadge.create({
-								UserId: user.id,
-								BadgeId: 1,
-							}),
 						])
 						.then(function (data) {
+							addBadges('Seedling', user, "starting your journey with us");
+							if (bmi < 23) addBadges('Keeping Fit', user, "being within the recommended BMI range");
+
 							req.flash('success', "Your email has been successfully registered!");
 							res.redirect('./login');
 						});
