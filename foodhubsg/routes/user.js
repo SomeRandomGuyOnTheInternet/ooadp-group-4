@@ -699,19 +699,11 @@ router.get('/editQuestion', isUser, async (req, res) => {
     let question = await
 
     Question.findOne({
-<<<<<<< Updated upstream
-	where: {
-            UserId: req.user.id
-	},
-    }).then((question) => {
-	res.render('user/editQuestion',{
-=======
 		where: {
 			UserId: req.user.id
 		},
 	}).then((question) => {
 	    res.render('user/editQuestion',{
->>>>>>> Stashed changes
             question  
         
     });
@@ -729,17 +721,6 @@ router.post('/editQuestion',  isUser, async (req, res) => {
     let questionId = req.params.id;
     var error;
 	
-<<<<<<< Updated upstream
-    Question.update({
-	title,
-        description,
-        suggestion
-    }, {
-	where: {
-           UserId: req.user.id
-	}
-    }).then(() => {
-=======
 	Question.update({
 		title,
         description,
@@ -749,7 +730,6 @@ router.post('/editQuestion',  isUser, async (req, res) => {
 			UserId: req.user.id
 		}
 	}).then(() => {
->>>>>>> Stashed changes
         req.flash('success', 'You have suggested an answer!');
 	res.redirect('/user/faq'); 
     }).catch(err => console.log(err));
