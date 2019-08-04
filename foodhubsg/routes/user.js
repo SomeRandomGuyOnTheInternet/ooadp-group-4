@@ -267,13 +267,18 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                     where: Sequelize.or({ id: req.user.id }, { id: friend.id }),
                     required: true
                 },
-                order: [['createdAt', 'ASC']],
+                order: [['createdAt', 'DESC']],
                 raw: true
             });
+        // console.log(history); 
+        let sortedHistory = groupedMessages(history); 
+        // console.log(sortedHistory); 
 
         res.render('user/sendMessages',
             { user: req.user, chat: chat, friend: friend, message: history });
-    } catch (error) {
+    } 
+    
+    catch (error) {
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
     }
