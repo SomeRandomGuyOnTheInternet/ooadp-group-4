@@ -634,7 +634,6 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
            id : req.params.id
        }
    })
-   console.log(delMsg.User2Id); 
     await Message.destroy({
             where: {
                 id: req.params.id
@@ -713,7 +712,7 @@ router.get('/editQuestion', isUser, async (req, res) => {
 // save edited video
 router.post('/editQuestion',  isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
+    let isAnswered = true;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
@@ -723,11 +722,13 @@ router.post('/editQuestion',  isUser, async (req, res) => {
 	Question.update({
 		title,
         description,
-        suggestion
+        suggestion,
+        isAnswered
 	}, {
 		where: {
-			UserId: req.user.id
-		}
+            UserId: req.user.id,
+            isAnswered: null,
+        }
 	}).then(() => {
         req.flash('success', 'You have suggested an answer!');
 	res.redirect('/user/faq'); 

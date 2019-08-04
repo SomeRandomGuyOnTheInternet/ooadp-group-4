@@ -12,7 +12,7 @@
                         <form method="post" action="/vendor/searchFoodItems"> 
                         <input type="text" class="typeahead tt-query" spellcheck="false" autocomplete="off" id="search"
                             name="search" class="font_color" style="display:inline-block;" placeholder="search">
-                        <button><i class="fas fa-search"></i></button>
+                        <button class="btn btn-primary btn-tall"><i class="fas fa-search"></i></button>
                         <a id="resetSearchLink" href="/vendor/allFoodItems" style="float:right;display:none;">
                             <i class="fas fa-undo hyperlink"></i>&nbsp;<span class="hyperlink">Reset Search</span>
                             </form>
@@ -62,9 +62,9 @@
             data: { searchName },
             dataType: 'text'
         })
-            {{!-- .done(function (data) {
-                {{!-- createShopemplate(JSON.parse(data)); 
-                $("#resetSearchLink").css("display", "block");
-            }); --}}
+            .done(function (data) {
+                 {{!-- createShopemplate(JSON.stringify(data)); 
+                $("#resetSearchLink").css("display", "block"); --}}
+            });
     });
 </script>

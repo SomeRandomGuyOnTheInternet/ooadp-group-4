@@ -13,9 +13,6 @@ const Question = db.define('question', {
     suggestion: {
         type: Sequelize.STRING(1000)
     },
-    answer: {
-        type: Sequelize.STRING(1000)
-    },
     isAnswered: { 
         type: Sequelize.BOOLEAN
     },

@@ -6,7 +6,7 @@
                 <div class="col-md-12">
                          <form method="post" action="/vendor/searchShops"> 
                          <input type="text"  class="typeahead tt-query" spellcheck="false" autocomplete="off" id="search" name="search" class="font_color" style="display:inline-block;" placeholder="search">
-                         <button><i class="fas fa-search"></i></button>
+                         <button class="btn btn-primary btn-tall"><i class="fas fa-search"></i></button>
                     {{#if result}}
                     {{#each result}}
 
@@ -41,3 +41,32 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    let availabletags = "{{{tags}}}"
+    let tags = availabletags.split(',')
+    let tags_list = []; 
+    for (i = 0; i < tags.length; i++) {
+        tags_list.push(tags[i]);
+
+    } 
+    $('#search').autocomplete({
+        source: tags_list
+    });
+    $("form#search").submit(function (event) {
+        event.preventDefault();
+        let searchName = $('#search').val();
+
+        $.ajax({
+            type: 'post',
+            url: `/vendor/searchShops`,
+            data: { searchName },
+            dataType: 'text'
+        })
+            {{!-- .done(function (data) {
+                {{!-- createShopemplate(JSON.parse(data)); 
+                $("#resetSearchLink").css("display", "block");
+            }); --}}
+    });
+</script>
