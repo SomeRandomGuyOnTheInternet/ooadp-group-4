@@ -16,6 +16,9 @@ const Question = db.define('question', {
     isAnswered: { 
         type: Sequelize.BOOLEAN
     },
+    isAdmin: { 
+        type: Sequelize.BOOLEAN
+    },
 });
 
 
