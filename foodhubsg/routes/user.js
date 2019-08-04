@@ -192,26 +192,6 @@ router.get('/foodJournal', isUser, async (req, res) => {
 });
 
 
-router.get('/faq', isUser, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
-
-    let questions = await
-        Question.findAll({
-            order: [
-                ['createdAt', 'ASC'],
-            ],
-            raw: true
-        })
-        .then((questions) => {
-            res.render('user/faq', {
-                user: req.user,
-                questions,
-                unviewedNotifications
-            });
-        });
-
-});
-
 router.get('/friendActivity', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
@@ -292,13 +272,18 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                     where: Sequelize.or({ id: req.user.id }, { id: friend.id }),
                     required: true
                 },
-                order: [['createdAt', 'ASC']],
+                order: [['createdAt', 'DESC']],
                 raw: true
             });
+        // console.log(history); 
+        let sortedHistory = groupedMessages(history); 
+        // console.log(sortedHistory); 
 
         res.render('user/sendMessages',
             { user: req.user, chat: chat, friend: friend, message: history });
-    } catch (error) {
+    } 
+    
+    catch (error) {
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
     }
@@ -307,13 +292,15 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
 
 router.get('/settings', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
-
-    res.render('user/settings', {
-        user: req.user,
-        title: "Settings",
-        unviewedNotifications
-    });
+    try{ 
+        res.render('user/sendMessages',
+            { user: req.user, chat: chat, friend: friend, message: history });
+    } catch (error) {
+        req.flash('error', "Please use a valid URL!");
+        res.redirect('/user/friendActivity');
+    }
 });
+
 
 
 router.post('/addBmi', async (req, res) => {
@@ -694,6 +681,27 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
 //         })
 // });
 
+
+router.get('/faq', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let questions = await
+        Question.findAll({
+            order: [
+                ['createdAt', 'ASC'],
+            ],
+            raw: true
+        })
+        .then((questions) => {
+            res.render('user/faq', {
+                user: req.user,
+                questions,
+                unviewedNotifications
+    });
+});
+
+});
+
 router.post('/faq', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
@@ -714,22 +722,66 @@ router.post('/faq', isUser, async (req, res) => {
     });
 });
 
-router.post('/suggestion/:id', isUser, async (req, res) => {
+// Shows edit questions page
+router.get('/showEditQuestion', (req, res) => {
+	res.render('user/editQuestion',{
+        question
+    });
+});
+
+
+
+// router.get('/improveQuestion/:id',  isUser, async (req, res) => {
+	
+// 	Question.findOne({
+// 		where: {
+// 			id: req.params.id
+// 		}
+// 	}).then((question) => {
+// 		if (!question) {
+// 			req.flash('error', "No such question!");
+// 			res.redirect('/user/faq');
+// 		} else {
+// 			res.render('user/editQuestion', { 
+// 				question
+// 			});
+
+// 		}
+// 	}).catch(err => console.log(err)); // To catch no video ID
+// });
+
+// save edited video
+router.post('/saveEditedQuestion/:id',  isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let title = req.body.title;
     let description = req.body.description;
-    let suggestion = req.body.suggestion;
     let questionId = req.params.id;
     var error;
+	
+	Question.update({
+		title,
+		description
+	}, {
+		where: {
+			id: req.params.id
+		}
+	}).then(() => {
+        req.flash('success', 'You have suggested an answer!');
+		res.redirect('/user/faq'); 
+	}).catch(err => console.log(err));
+});
 
-    Question.update({
+router.post('/suggestion', isUser, async (req, res) => {
+    const isAdmin = isBanned = isVendor = false;
+    const isAnswered = false;
+    let suggestion = req.body.suggestion;
+    var error;
+
+    Question.create({
+        UserId: req.user.id,
         suggestion
-    }, {
-            where: {
-                id: questionId
-            }
-        }).then((question) => {
+    }) .then((question) => {
 
             req.flash('success', 'You have suggested an answer!');
             res.redirect('/user/faq');
@@ -760,6 +812,15 @@ router.post('/editFood/:id', async (req, res) => {
     }
 });
 
+router.get('/settings', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    res.render('user/settings', {
+        user: req.user,
+        title: "Settings",
+        unviewedNotifications
+    });
+});
 
 
 router.post('/settings', isUser, async (req, res) => {
