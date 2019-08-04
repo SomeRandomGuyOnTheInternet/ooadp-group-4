@@ -6,7 +6,7 @@ module.exports = {
     },
 
     formatTime: function (time) {
-    return moment(time).format("LTS");
+        return moment(time).format("hh:mm A");
     },
 
     json: function (object) {
