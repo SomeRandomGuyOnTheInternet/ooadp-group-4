@@ -711,11 +711,8 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
  
     let question = await
         Question.findOne({
-            where: {
-                id: questionId      
-            },
-        });
-
+            where: { id: questionId },
+	});
     res.render('user/editQuestion', { question });
 });
 
@@ -753,12 +750,11 @@ router.post('/editQuestion',  isUser, async (req, res) => {
             suggestion,
             isAnswered
         },{
-            where: {
-                UserId: req.user.id,
+            where: { 
+		UserId: req.user.id,
                 isAnswered: null,
-            }
-        });
-    
+	    }
+    });
     req.flash('success', 'You have suggested an answer!');
 	res.redirect('/user/faq');
 });
