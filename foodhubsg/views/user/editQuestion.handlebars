@@ -23,7 +23,7 @@
                             <div class="col-md-12">   
                                 <label>Description</label>
                                 <input name="description" id="description" type="text" class="form-control"
-                                     value="{{question.description}}">
+                                     value="{{question.description}}" readonly>
                             </div>
 
                             <div class="col-md-12">   
@@ -41,6 +41,9 @@
 
                             </div>
                             </form>
+
+                            {{!-- Comment out the codes below to be able to let current logged in users to edit their topic & question, 
+                            and allow other users to only make suggestion to questions --}}
 
                             {{!-- <form method="post" action="/user/editQuestion" style="width:100%">
                         <div class="row form-group" style="margin:0;">

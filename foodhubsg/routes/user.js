@@ -719,6 +719,9 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
     res.render('user/editQuestion', { question });
 });
 
+// Comment out the codes below to be able to let current logged in users to edit their topic & question, 
+// and allow other users to only make suggestion to questions
+
 // // Shows edit questions page
 // router.get('/editQuestion/:id', isUser, async (req, res) => {
 //     let questionId = req.params.id;
