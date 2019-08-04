@@ -696,7 +696,6 @@ router.post('/faq', isUser, async (req, res) => {
     res.redirect('/user/faq');
 });
 
-<<<<<<< HEAD
 // Shows edit questions page
 router.get('/editQuestion/:id', isUser, async (req, res) => {
     questionId = req.params.id;
@@ -711,20 +710,6 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
             question  
         
     });
-});
-=======
-
-router.get('/editQuestion', isUser, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
-    let question = await
-        Question.findOne({
-            where: {
-                UserId: req.user.id
-            },
-        });
-
-    res.render('user/editQuestion', { question });
->>>>>>> master
 });
 
 
