@@ -387,7 +387,7 @@ router.post('/searchFoodItems', async (req, res) => {
     for (i = 0; i < food.length; i++) {
         query_list.push(food[i].name);
     }
-    let search_restuls = await FoodItem.findAll({
+    let search_results = await FoodItem.findAll({
         limit: 10,
         where: {
             name: {
@@ -404,17 +404,31 @@ router.post('/searchFoodItems', async (req, res) => {
     })
     res.render('vendors/queryFood', {
         result: search_results,
-        tags : query_list, 
+        tags: query_list,
         user: req.user,
     }
     )
 
 })
 
-router.post('/searchShops', (req, res) => {
+router.post('/searchShops', async (req, res) => {
     search = req.body.search;
 
-    Shop.findAll({
+    let shops = await Shop.findAll({
+        where: {
+            VendorId: req.user.id,
+            isDeleted: false,
+        }
+
+    })
+    let query_list = []
+    for (i = 0; i < shops.length; i++) {
+        query_list.push(shops[i].name);
+
+    }
+
+
+    let search_results = await Shop.findAll({
         limit: 10,
         where: {
             VendorId: req.user.id,
@@ -422,15 +436,12 @@ router.post('/searchShops', (req, res) => {
                 [Op.like]: '%' + search + '%'
             }
         }
-    }).then((search_results) => {
-        res.render('vendors/queryShops', {
-            result: search_results,
-            user: req.user,
-        }
-        )
+    })
+    res.render('vendors/queryShops', {
+        result: search_results,
+        user: req.user,
+        tags: query_list
     })
 })
-
-
 
 module.exports = router;
