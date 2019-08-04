@@ -476,12 +476,13 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
                 { isDeleted },
                 { where: { id } }
             )
-                .then((deletedFoodItem) => { updateShopRating(foodItem.ShopId); })
+            .then((deletedFoodItem) => { updateShopRating(foodItem.ShopId); })
 
             req.flash('success', 'Food has been succcessfully deleted!');
             res.redirect(`/admin/editShop/${foodItem.ShopId}`);
         });
 });
+
 
 router.get('/faq', async (req, res) => {
     Question.findAll({
@@ -497,6 +498,7 @@ router.get('/faq', async (req, res) => {
     });
 
 })
+
 
 router.post('/faq', isAdmin, async (req, res) => {
     const isAnswered = false;
@@ -523,7 +525,7 @@ router.post('/faq', isAdmin, async (req, res) => {
         });
 });
 
-// Shows edit questions page
+
 router.get('/editQuestion/:id', isAdmin, async (req, res) => {
     let questionId = req.params.id;
 
@@ -540,7 +542,6 @@ router.get('/editQuestion/:id', isAdmin, async (req, res) => {
 });
 
 
-// save edited video
 router.post('/editQuestion', isAdmin, async (req, res) => {
     let isAnswered = true;
     let title = req.body.title;
@@ -554,13 +555,12 @@ router.post('/editQuestion', isAdmin, async (req, res) => {
         description,
         suggestion,
         isAnswered
-    }, {
-            where: {
-                UserId: req.user.id,
-                isAnswered: null
-            }
+    },{
+        where: {
+            UserId: req.user.id,
+            isAnswered: null
         }
-    )
+    })
     .then(() => {
         req.flash('success', 'You have suggested an answer!');
         res.redirect('/admin/faq');
@@ -569,21 +569,16 @@ router.post('/editQuestion', isAdmin, async (req, res) => {
 });
 
 
-
-
-
 router.post('/deleteQuestion/:id', isAdmin, (req, res) => {
     let questionId = req.params.id;
 
-    Question.destroy({
-        where: {
-            id: questionId,
-        },
-    })
+    Question.destroy({ where: { id: questionId } })
     .then(() => {
         req.flash('success', "You've successfully deleted the question!");
         res.redirect('/admin/faq');
     });
 });
+
+
 
 module.exports = router;
