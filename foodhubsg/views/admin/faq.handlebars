@@ -28,24 +28,11 @@
                     <div class="card mb-2 w-100 mx-auto" style="border-radius: 0;">
 
                         <div class="card-header" style="padding-bottom: 3px;">
-                            {{!-- {{#ifCond id '==' ../user.id}} --}}
+
                             <form method="post" action="/admin/deleteQuestion/{{id}}" style="width:100%"
                                 onsubmit="return confirm('Are you sure you want to delete this question?');">
                                 <input type="submit" value="Delete" class="btn btn-primary" style="float:right; font-size: 12px; border-radius: 30px;">
                             </form>
-                            {{!-- {{/ifCond}} --}}
-                            
-                            {{!-- {{#ifCond id '!=' ../user.id}}
-                            <form method="" action="" style="width:100%"
-                                onsubmit="return confirm('You are not allowed to delete this question!');">
-                                <input type="submit" value="Delete" class="btn btn-primary" style="float:right; font-size: 12px; border-radius: 30px;">
-                            </form>
-                            {{/ifCond}} --}}
-
-                            {{!-- <a class="modal-action" data-toggle="modal" data-target="#suggestAns" style="float:right;">
-                                <input type="submit" name="action" value="Suggest An Answer" class="btn btn-primary"
-                                style="background-color: #4CAF50; border-radius: 30px; font-size: 12px;">
-                            </a> --}}
 
                             <a href="/admin/editQuestion" style="float:right;">
                             <input type="submit" name="action" value="Improve this question" class="btn btn-primary"
