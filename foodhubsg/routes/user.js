@@ -292,13 +292,12 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
 
 router.get('/settings', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
-    try{ 
-        res.render('user/sendMessages',
-            { user: req.user, chat: chat, friend: friend, message: history });
-    } catch (error) {
-        req.flash('error', "Please use a valid URL!");
-        res.redirect('/user/friendActivity');
-    }
+
+    res.render('user/settings', {
+        user: req.user,
+        title: "Settings",
+        unviewedNotifications
+    });
 });
 
 
