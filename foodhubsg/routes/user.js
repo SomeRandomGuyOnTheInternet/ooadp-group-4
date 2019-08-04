@@ -667,6 +667,7 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
     res.redirect(`/user/sendMessage/${referral.id}`);
 });
 
+
 router.get('/faq', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
     let questions = await
@@ -705,7 +706,8 @@ router.post('/faq', isUser, async (req, res) => {
     res.redirect('/user/faq');
 });
 
-// Shows edit questions page
+
+// Shows edit questions page, comment this when you comment out the codes below
 router.get('/editQuestion/:id', isUser, async (req, res) => {
     let questionId = req.params.id;
  
@@ -715,6 +717,7 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
 	});
     res.render('user/editQuestion', { question });
 });
+
 
 // Comment out the codes below to be able to let current logged in users to edit their topic & question, 
 // and allow other users to only make suggestion to questions
@@ -769,6 +772,7 @@ router.post('/deleteQuestion/:id', isUser, async (req, res) => {
     req.flash('success', "You've successfully deleted the question!");
     res.redirect('/user/faq');
 });
+
 
 // router.post('/suggestion', isUser, async (req, res) => {
 //     const isAdmin = isBanned = isVendor = false;
