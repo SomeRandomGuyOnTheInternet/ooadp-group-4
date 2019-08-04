@@ -14,6 +14,10 @@ body {
   height:100%;
 }
 
+html { height: 100%; }
+body { height: 100%; }
+body > div { flex: 1; }
+
 .thick {
   font-weight: bold;
 }
@@ -1848,4 +1852,24 @@ select {
 
 .highlight {
   background-color: rgba(0, 0, 0, 0.035);
+}
+
+@keyframes changescale {
+  from {
+    width: 50px;
+    height: 50px;
+  }
+
+  to {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+#redirectLogo {
+  animation-duration: 0.3s;
+  animation-name: changescale;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }

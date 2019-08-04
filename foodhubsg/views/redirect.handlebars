@@ -2,32 +2,32 @@
 
 
 <div class="container h-100">
-	<div class="row h-100 justify-content-center align-items-center text-center">
-		Loading...
+	<div class="row h-100 justify-content-center align-items-center">
+		<div>
+		<img src="/images/healthhub-logo.png" alt="FoodHub.SG Logo" id="redirectLogo">
+		</div>
+		<div style="position: absolute;">
+		<br>
+		<br>
+		<br>
+		<span style="font-weight: 900;">Loading...</span>
+		</div>
+		<form name="geolocationForm" id="geolocationForm" method="POST">
+			<div class="row form-group">
+				<input name="location" id="location" class="form-control" type="hidden">
+			</div>
+		
+			<div class="row form-group">
+				<input name="latitude" id="latitude" class="form-control" type="hidden">
+			</div>
+		
+			<div class="row form-group">
+				<input name="longitude" id="longitude" class="form-control" type="hidden">
+			</div>
+		</form>
 	</div>
 </div>
 
-
-<form name="geolocationForm" id="geolocationForm" method="POST">
-	<div class="row form-group">
-		<input name="location" id="location" class="form-control" type="hidden">
-	</div>
-
-	<div class="row form-group">
-		<input name="latitude" id="latitude" class="form-control" type="hidden">
-	</div>
-
-	<div class="row form-group">
-		<input name="longitude" id="longitude" class="form-control" type="hidden">
-	</div>
-</form>
-
-
-{{!-- below are common locations to simulate geolocation and check the city names --}}
-
-{{!-- Nanyang Poly = latlng = new google.maps.LatLng(1.380096, 103.848895);
-Sengkang = latlng = new google.maps.LatLng(1.393593, chr);
-Waterway Point (Punggol) = latlng = new google.maps.LatLng(1.407009, 103.902213); --}}
 
 <script>
 	const locationInput = document.querySelector("#location");

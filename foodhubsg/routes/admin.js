@@ -483,28 +483,23 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     });
 });
 
-router.get('/faq', isAdmin, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
 
+router.get('/faq', isAdmin, async (req, res) => {
     let questions = await
         Question.findAll({
-            order: [
-                ['createdAt', 'ASC'],
-            ],
+            order: [['createdAt', 'ASC']],
             raw: true
-        })
-        .then((questions) => {
-            res.render('admin/faq', {
-                user: req.user,
-                title: "FAQ",
-                questions,
-                unviewedNotifications
         });
+
+    res.render('admin/faq', {
+        user: req.user,
+        title: "FAQ",
+        questions,
     });
 });
 
+
 router.post('/faq', isAdmin, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let title = req.body.title;
     let description = req.body.description;
