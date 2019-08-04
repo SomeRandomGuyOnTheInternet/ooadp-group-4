@@ -318,7 +318,6 @@ router.get('/settings', isUser, async (req, res) => {
 });
 
 
-
 router.post('/addBmi', async (req, res) => {
     const weight = req.body.weight;
     const height = req.body.height;
@@ -652,7 +651,7 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
             RefUserId: delMsg.User2Id
         }
     });
-    
+
     req.flash('success', 'Message Deleted');
     res.redirect(`/user/sendMessage/${referral.id}`);
 });
@@ -791,7 +790,9 @@ router.post('/settings', isUser, async (req, res) => {
         if (req.user.bmi < 23) addBadges('Picking Up Steam', req.user, "being within the recommended BMI range");
 
         req.flash('success', 'You\'ve successfully updated your settings!');
-    };
+    } else {
+        req.flash('error', error);
+    }
 
     res.redirect('/user/settings');
 });
