@@ -694,54 +694,47 @@ router.post('/faq', isUser, async (req, res) => {
 });
 
 // Shows edit questions page
-router.get('/showEditQuestion', (req, res) => {
+router.get('/editQuestion', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+    let question = await
+
+    Question.findOne({
+	where: {
+            UserId: req.user.id
+	},
+    }).then((question) => {
 	res.render('user/editQuestion',{
-        question
+            question  
+        
     });
+});
 });
 
 
-
-// router.get('/improveQuestion/:id',  isUser, async (req, res) => {
-	
-// 	Question.findOne({
-// 		where: {
-// 			id: req.params.id
-// 		}
-// 	}).then((question) => {
-// 		if (!question) {
-// 			req.flash('error', "No such question!");
-// 			res.redirect('/user/faq');
-// 		} else {
-// 			res.render('user/editQuestion', { 
-// 				question
-// 			});
-
-// 		}
-// 	}).catch(err => console.log(err)); // To catch no video ID
-// });
-
 // save edited video
-router.post('/saveEditedQuestion/:id',  isUser, async (req, res) => {
+router.post('/editQuestion',  isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let title = req.body.title;
     let description = req.body.description;
+    let suggestion = req.body.suggestion;
     let questionId = req.params.id;
     var error;
 	
-	Question.update({
-		title,
-		description
-	}, {
-		where: {
-			id: req.params.id
-		}
-	}).then(() => {
+    Question.update({
+	title,
+        description,
+        suggestion
+    }, {
+	where: {
+           UserId: req.user.id
+	}
+    }).then(() => {
         req.flash('success', 'You have suggested an answer!');
-		res.redirect('/user/faq'); 
-	}).catch(err => console.log(err));
+	res.redirect('/user/faq'); 
+    }).catch(err => console.log(err));
 });
+
 
 router.post('/suggestion', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
