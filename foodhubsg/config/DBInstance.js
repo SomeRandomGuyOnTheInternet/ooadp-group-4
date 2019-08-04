@@ -11,28 +11,35 @@ function createInstance(Badge) {
             imageLocation: '/images/first-contact-badge.png'
         },
         {
+            name: 'Baby Steps',
+            description: 'Added your first healthy food to your log',
+            imageLocation: '/images/baby-steps-badge.png'
+        },
+        {
             name: 'High Roller',
             description: 'Obtained a 1000 health points',
             imageLocation: '/images/high-roller-badge.png'
         },
         {
-            name: 'Baby Steps',
-            description: 'You have entered your first healthy food',
-            imageLocation: '/images/baby-steps-badge.png'
+            name: 'Keeping Fit',
+            description: 'Being within the recommended BMI range',
+            imageLocation: '/images/bmi-badge.png'
         },
-
         {
-            name: 'On Your Way Up',
-            description: 'You have entered 10 healthy food items, that is a long way to go',
-            imageLocation: '/images/seedling-badge.png'
+            name: 'Picking Up Steam',
+            description: 'Added 10 healthy food items to your log',
+            imageLocation: '/images/picking-up-steam-badge.png'
         },
-
         {
             name: 'Full House',
             description: 'Ten friends, that is more than enough to fully fill a house',
             imageLocation: '/images/seedling-badge.png'
         },
-
+        {
+            name: 'Baller',
+            description: 'Obtained a 10000 health points',
+            imageLocation: '/images/baller-badge.png'
+        },
         // {
         //     name: 'A Week Of Health',
         //     description: 'On your way to being a healthy eater, keep it up',

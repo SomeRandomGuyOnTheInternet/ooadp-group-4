@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const session = require('express-session');
 const path = require('path');
 const exphbs = require('express-handlebars');
@@ -8,6 +9,8 @@ const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session');
 const passport = require('passport');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const db = require('./config/db');
 const { formatDate } = require('./helpers/hbs');
 const { formatTime } = require('./helpers/hbs');
@@ -21,7 +24,13 @@ const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
 const adminRoute = require('./routes/admin');
 const vendorRoute = require('./routes/vendor'); 
-const app = express();
+
+
+io.on('connection', function (socket) {
+	socket.on('chat message', function (notifications) {
+		io.emit('chat message', notifications);
+	});
+});
 
 app.engine('handlebars', exphbs({ 
 	defaultLayout: 'main' ,
@@ -71,6 +80,7 @@ let sessionFlash = function (req, res, next) {
 app.use(sessionFlash);
 
 app.use(function (req, res, next) {
+	req.io = io;
 	next();
 });
 

@@ -122,8 +122,8 @@
                         <hr>
                     </header>
 
-                    <div class="row form-group">
-                        <div class="col-12 col-md-3 text-left ref-code-container">
+                    <div class="row form-group" style="margin: 50px 0">
+                        <div class="col-12 col-md-3 text-left ref-code-container no-padding">
                             <h6 style="margin-bottom: 0;">Referral Code</h6>
                             <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
 							<br>
@@ -134,7 +134,7 @@
                             <div class="row justify-content-center">
                                 {{#each userBadges}}
                                 <div class="col-3 col-sm-3 col-md-4 col-lg-3 col-xl-3 text-center badge">
-                                    <h6 style="margin: 0"><b>{{'Badge.name'}}</b></h6>
+                                    <h6 style="margin: 0;"><b style="overflow-wrap: break-word;">{{'Badge.name'}}</b></h6>
                                     <img src="{{'Badge.imageLocation'}}" width="67px" height="65px"
                                         class="d-inline-block align-top" alt="Badge" data-toggle="tooltip"
                                         data-placement="bottom" title="{{'Badge.description'}}">
@@ -144,13 +144,9 @@
                                 {{/each}}
                             </div>
                         </div>
-                        <div class="col-12 col-md-3 text-right points-container">
+                        <div class="col-12 col-md-3 text-right points-container no-padding">
                             <h6 style="margin-bottom: 0;">Points</h6>
-                            <span style="font-weight:900; font-size: 30px;">{{ user.gainedPoints }}</span>
-							<hr align="right" width="20%">
-                            <a href="#">
-								<i class="fas fa-history"></i>&nbsp;Points History
-							</a>
+                            <span style="font-weight:900; font-size: 40px;">{{ user.gainedPoints }}</span>
                             <br>
                         </div>
                     </div>

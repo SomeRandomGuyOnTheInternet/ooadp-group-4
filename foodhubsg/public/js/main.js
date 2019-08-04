@@ -59,8 +59,34 @@ function createShopTemplate(shops, actionLink = '/user/shops/') {
     } else {
         $('#all-shops-container').append('<div class="col-md-12"><h3 id="current_location"><b class="center_subtitle">There are no shops that match that criteria</b></h4></div>');
     }
-
 };
+
+function appendNotifications(unviewedNotifications) {
+	if (unviewedNotifications.length > 0) {
+		for (i = 0; i < unviewedNotifications.length; i++) {
+			let toast =
+				'<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="100000"><div class="toast-header">' +
+				'<img src="/images/healthhub-logo.png" width="20px" height="20px" alt="FoodHub.SG Logo">&nbsp;' +
+				'<strong class="mr-auto"><b>FoodHub.SG</b></strong><small class="text-muted">just now</small><button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">' +
+				'<span aria-hidden="true">&times;</span></button></div><div class="toast-body">' +
+				`You\'ve <span class="${unviewedNotifications[i].type}-action" style="font-weight:800;">${unviewedNotifications[i].action}</span> from ${unviewedNotifications[i].source}! ${unviewedNotifications[i].additionalMessage}</div>`
+
+			if (unviewedNotifications[i].callToAction) {
+				toast.concat(
+					`<div class="toast-body">${unviewedNotifications[i].callToAction}</div>` +
+					`<div class="toast-footer row" style="padding: 5px;"><div class="col-6 text-center" style="border-right: 1px solid rgb(196, 196, 196);">` +
+					`<form method="post" action="${unviewedNotifications[i].callToActionLink}" id="acceptInvitationForm">` +
+					`<button type="submit" style="border: 0; background-color: transparent;"><span class="positive-action">Accept</span></button></form></div>` +
+					`<div class="col-6 text-center" style="border-left: 1px solid rgb(196, 196, 196);"><button type="button" data-dismiss="toast" aria-label="Close" style="border: 0; background-color: transparent;"><span class="negative-action">Reject</span></button></div></div>`
+				);
+			};
+
+			toast.concat(`</div>`);
+
+			$('.toast-container').append(toast);
+		};
+	};
+}
 
 function generateRatingIcons(shop) {
     var ratingHTMLstring = "&nbsp;No rating available";

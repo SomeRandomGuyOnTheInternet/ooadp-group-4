@@ -29,6 +29,32 @@ const Message = require('../models/Message');
 
 
 
+router.get('/getNotifications', isUser, async (req, res) => {
+    let unviewedNotifications;
+    if (req.user.bmi) unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    res.send({ unviewedNotifications });
+});
+
+
+router.get('/shops', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let shops = await
+        Shop.findAll({
+            where: { isDeleted: false },
+            order: [['rating', 'DESC']],
+        });
+
+    res.render('user/shops', {
+        user: req.user,
+        title: "Shops",
+        shops,
+        unviewedNotifications
+    });
+});
+
+
 router.get('/', isUser, async (req, res) => {
     let unviewedNotifications;
     if (req.user.bmi) unviewedNotifications = await getUnviewedNotifications(req.user);
@@ -60,6 +86,7 @@ router.get('/', isUser, async (req, res) => {
                 model: Badge,
                 required: true,
             },
+            order: [[Badge, 'id', 'ASC']],
             raw: true
         });
 
@@ -175,13 +202,13 @@ router.get('/faq', isUser, async (req, res) => {
             ],
             raw: true
         })
-            .then((questions) => {
-                res.render('user/faq', {
-                    user: req.user,
-                    questions,
-                    unviewedNotifications
-                });
+        .then((questions) => {
+            res.render('user/faq', {
+                user: req.user,
+                questions,
+                unviewedNotifications
             });
+        });
 
 });
 
@@ -204,7 +231,7 @@ router.get('/friendActivity', isUser, async (req, res) => {
             include: [{
                 model: Badge,
                 required: true,
-            }, {
+            },{
                 model: User,
                 include: {
                     model: Referral,
@@ -212,6 +239,7 @@ router.get('/friendActivity', isUser, async (req, res) => {
                     where: { UserId: req.user.id },
                 },
             }],
+            order: [[Badge, 'id', 'ASC']],
             raw: true
         });
 
@@ -303,6 +331,8 @@ router.post('/addBmi', async (req, res) => {
                 { weight, height, bmi },
                 { where: { id: req.user.id } },
             );
+                
+        if (bmi < 23) addBadges('Keeping Fit', req.user, "being within the recommended BMI range");
 
         req.flash('success', "You've successfully updated your weight and height!");
     };
@@ -406,7 +436,7 @@ router.post('/addFood', async (req, res) => {
             });
 
         if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
-        else if (recFoodLog.length > 9) { addBadges('On Your Way Up', user, "adding ten recommended food items"); }
+        else if (recFoodLog.length > 9) { addBadges('Picking Up Steam', user, "adding ten recommended food items"); }
     };
 
     updateUserCalories(user);
@@ -428,6 +458,7 @@ router.post('/editFood/:id', async (req, res) => {
                 { FoodId: foodId },
                 { where: { id: logId } },
             );
+
         updateUserCalories(req.user);
 
         req.flash('success', "You've successfully edited that food item!");
@@ -441,9 +472,22 @@ router.post('/editFood/:id', async (req, res) => {
 
 router.post('/deleteFood/:id', async (req, res) => {
     const logId = req.params.id;
+    const foodItemToDelete = await 
+        FoodLog.findOne({ 
+            where: { id: logId },
+            include: {
+                model: Food,
+                required: true,
+            },
+            raw: true
+        });
 
     await FoodLog.destroy({ where: { id: logId } });
     updateUserCalories(req.user);
+
+    if (foodItemToDelete["FoodItem.isRecommended"]) {
+        updateUserPoints(req.user, -100, "removing a recommended food item from your log");
+    };
 
     req.flash('success', "You've successfully deleted that food item from your log!");
     res.redirect('/user/foodJournal');
@@ -730,17 +774,19 @@ router.post('/settings', isUser, async (req, res) => {
     bcrypt.genSalt(function (err, salt) {
         bcrypt.hash(password, salt, function (err, hash) {
             await
-            User.update(
-                {
-                    weight: req.body.weight,
-                    height: req.body.height,
-                    email: email,
-                    password: hash,
-                },
-                {
-                    where: { id: req.user.id }
-                }
-            );
+                User.update(
+                    {
+                        weight: req.body.weight,
+                        height: req.body.height,
+                        email: email,
+                        password: hash,
+                    },
+                    {
+                        where: { id: req.user.id }
+                    }
+                );
+
+            if (req.user.bmi < 23) addBadges('Picking Up Steam', req.user, "being within the recommended BMI range");
 
             res.redirect('/user/settings');
         });
