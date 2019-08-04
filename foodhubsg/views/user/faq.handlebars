@@ -24,7 +24,7 @@
                                 <div class="col-md-12">
                                     <label class="font-italic" for="description">Description</label>
                                     <textarea class="form-control" id="description" name="description"
-                                        rows="3"></textarea>
+                                        rows="3" required></textarea>
                                 </div>
                             </div>
 
@@ -45,47 +45,6 @@
 
 
 
-
-        <div class="modal fade" id="improveAns" tabindex="-1" role="dialog" aria-labelledby="improveAnsLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title font_color" id="improveAnsLabel"><b>Improve This Question</b></h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <form action="/user/saveEditedQuestion/{{question.id}}" method="post">
-			          <input type="hidden" name="_method" value="PUT">
-                        <div class="modal-body">
-
-                            <label class="font-italic" for="title">Title</label>
-                            <input id="title" type="text" class="form-control" name="title" value="{{question.title}}">
-
-                            <div class="row form-group">
-                                <div class="col-md-12">
-                                    <label class="font-italic" for="description">Description</label>
-                                    <textarea class="form-control" id="description" name="description"
-                                        rows="3">{{question.description}}</textarea>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        {{!-- <div class="modal-footer ajaxErrBlock" id="refCodeErrBlock">
-                            <i class="fas fa-exclamation-triangle"></i><span class="ajaxErrMsg" id="refCodeErrMsg"></span>
-                        </div> --}}
-                        <div class="modal-footer">
-                            <input type="submit" value="Submit Suggestion" id="" class="btn btn-primary"
-                                style="width:100%">
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
 
 
 
@@ -230,5 +189,3 @@
 
 
 </script>
-
-    

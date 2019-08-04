@@ -7,29 +7,27 @@
                     <div class="blog-entry">
                         <h1 class="font_color"><b>Chat History</b></h1>
                         <hr>
-                        {{!-- <a href="mailto:{{friend.email}}"><h3 class="font_color">{{friend.email}} </h3></a>
-                            <p> User height: {{friend.height}} </p>
-                            <p> User Weight {{friend.weight}}</p> --}}
                     </div>
 
-                    {{#if message}}
+                    {{#each groupedMessages}}
+                    <div class="padding: 20px;"><h6 class="text-center" style="font-weight: 800;">{{@key}}</h6></div>
                     <div class="col-md-12 chat-history" style="margin-bottom: 20px">
                         <div class="blog-entry">
-                            {{#each message}}
-                            {{#ifCond User1Id '!=' ../user.id}}
+                            {{#each this}}
+                            {{#ifCond User1Id '!=' ../../user.id}}
                             <div class="row justify-content-start">
                                 <div class="col-auto">
-                                    <p class="speech-bubble-sender"><b>{{this.Message}}</b> <br>
+                                    <p class="speech-bubble-sender"><b>{{Message}}</b> <br>
                                         {{formatTime createdAt}}</p>
 
                                 </div>
                             </div>
                             {{/ifCond}}
-                            {{#ifCond User1Id '==' ../user.id}}
+                            {{#ifCond User1Id '==' ../../user.id}}
                             <div class="row justify-content-end">
                                 <div class="col-auto">
-                                    <p class="speech-bubble-receiver"><b>{{this.Message}}</b> <br>
-                                        {{formatTime createdAt}} <br> <a href="/user/deleteMessage/{{this.id}}">
+                                    <p class="speech-bubble-receiver"><b>{{Message}}</b> <br>
+                                        {{formatTime createdAt}} <br> <a href="/user/deleteMessage/{{id}}">
                                             <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
                                         </a>
                                     </p>
@@ -41,7 +39,7 @@
                         </div>
                     </div>
                     <hr align="center" width="30%">
-                    {{/if}}
+                    {{/each}}
 
                     <form method="post" style="width: 100%; margin-top: 30px;">
 
@@ -71,16 +69,18 @@
 
 
 <script>
-    let oriMessage = {{{json message}}};
+    let oriMessage = {{{json groupedMessages}}};
     let friendid = $('#receive').val();
     let referral = $('#refId').val();
 
     function checkNewMessages() {
         $.ajax({
             type: 'POST',
+            dataType: 'json',
             url: `/user/checkMessages/` + referral,
-            success: function (rawData) {
-                if (rawData["history"].length != oriMessage.length)  location.reload();
+            success: function (data) {
+                {{!-- console.log(data["groupedMessages"], oriMessage) --}}
+                if (JSON.stringify(data["groupedMessages"]) != JSON.stringify(oriMessage)) location.reload();
             },
             complete: function (data) {
                 setTimeout(checkNewMessages, 1000);
@@ -89,27 +89,4 @@
     }
 
     setTimeout(checkNewMessages, 1000);
-
-    $('#sendMessage').click(function (event) {
-        event.preventDefault();
-        let chatMessage = $('#message').val();
-
-        $.ajax({
-            type: 'post',
-            url: `/user/sendMessage/` + referral,
-            data: { friendid, chatMessage },
-            dataType: 'text'
-        })
-        .done(function (rawData) {
-            let data = JSON.stringify(rawData);
-            
-            if (data.error) {
-                $('#sendErrorBlock').css("display", "block");
-                $('#sendErrorMsg').text(data.error);
-            } else {
-                location.reload();
-            }
-        });
-    });
-
 </script>
