@@ -318,7 +318,6 @@ router.get('/settings', isUser, async (req, res) => {
 });
 
 
-
 router.post('/addBmi', async (req, res) => {
     const weight = req.body.weight;
     const height = req.body.height;
@@ -584,11 +583,11 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
         updateUserPoints(req.user, -75, "removing someone from your friend group");
 
         req.flash('success', "You have successfully deleted a referral code!");
-        res.redirect('/user/friendActivity');
-
     } catch (err) {
-        if (err) console.log('error', err);
+        req.flash('error', "Something went wrong while deleting the code. Please try again later!");
     };
+
+    res.redirect('/user/friendActivity');
 });
 
 
@@ -652,7 +651,7 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
             RefUserId: delMsg.User2Id
         }
     });
-    
+
     req.flash('success', 'Message Deleted');
     res.redirect(`/user/sendMessage/${referral.id}`);
 });
@@ -668,43 +667,42 @@ router.get('/faq', isUser, async (req, res) => {
             raw: true
         });
 
-        res.render('user/faq', {
-            user: req.user,
-            title: "FAQ",
-            questions,
-            unviewedNotifications
+    res.render('user/faq', {
+        user: req.user,
+        title: "FAQ",
+        questions,
+        unviewedNotifications
     });
 });
 
 
 router.post('/faq', isUser, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
     var error;
 
-    Question.create({
-        UserId: req.user.id,
-        title,
-        description,
-        suggestion
-    }).then((question) => {
+    await
+        Question.create({
+            UserId: req.user.id,
+            title,
+            description,
+            suggestion
+        });
 
-        req.flash('success', 'You have successfully created a question!');
-        res.redirect('/user/faq');
-    });
+    req.flash('success', 'You have successfully created a question!');
+    res.redirect('/user/faq');
 });
 
 // Shows edit questions page
-router.get('/editQuestion', isUser, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
-    let question = await
-
+router.get('/editQuestion/:id', isUser, async (req, res) => {
+    questionId = req.params.id;
+ 
     Question.findOne({
 		where: {
-			UserId: req.user.id
+            UserId: req.user.id,
+            id: questionId      
 		},
 	}).then((question) => {
 	    res.render('user/editQuestion',{
@@ -712,61 +710,64 @@ router.get('/editQuestion', isUser, async (req, res) => {
         
     });
 });
-});
 
 
-// save edited video
+
 router.post('/editQuestion',  isUser, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
     let isAnswered = true;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
     let questionId = req.params.id;
     var error;
-	
-	Question.update({
-		title,
-        description,
-        suggestion,
-        isAnswered
-	}, {
-		where: {
-            UserId: req.user.id,
-            isAnswered: null,
-        }
-	}).then(() => {
-        req.flash('success', 'You have suggested an answer!');
-	res.redirect('/user/faq'); 
-    }).catch(err => console.log(err));
-});
-
-
-router.post('/suggestion', isUser, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
-    let suggestion = req.body.suggestion;
-    var error;
-
-    Question.create({
-        UserId: req.user.id,
-        suggestion
-    }) .then((question) => {
-
-            req.flash('success', 'You have suggested an answer!');
-            res.redirect('/user/faq');
+    
+    await
+        Question.update({
+            title,
+            description,
+            suggestion,
+            isAnswered
+        },{
+            where: {
+                UserId: req.user.id,
+                isAnswered: null,
+            }
         });
+    
+    req.flash('success', 'You have suggested an answer!');
+	res.redirect('/user/faq');
 });
 
 
-router.get('/settings', isUser, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
+router.post('/deleteQuestion/:id', isUser, async (req, res) => {
+    let questionId = req.params.id;
+    let error;
 
-    res.render('user/settings', {
-        user: req.user,
-        title: "Settings",
-        unviewedNotifications
-    });
+    await Question.destroy({ where: { id: questionId } });
+
+    req.flash('success', "You've successfully deleted the question!");
+    res.redirect('/user/faq');
+});
+
+
+// router.post('/suggestion', isUser, async (req, res) => {
+//     const isAdmin = isBanned = isVendor = false;
+//     const isAnswered = false;
+//     let suggestion = req.body.suggestion;
+//     var error;
+
+//     Question.create({
+//         UserId: req.user.id,
+//         suggestion
+//     }) .then((question) => {
+
+//             req.flash('success', 'You have suggested an answer!');
+//             res.redirect('/user/faq');
+//         });
+// });
+
+    req.flash('success', 'You have suggested an answer!');
+    res.redirect('/user/faq');
 });
 
 
@@ -790,25 +791,11 @@ router.post('/settings', isUser, async (req, res) => {
         if (req.user.bmi < 23) addBadges('Picking Up Steam', req.user, "being within the recommended BMI range");
 
         req.flash('success', 'You\'ve successfully updated your settings!');
-    };
+    } else {
+        req.flash('error', error);
+    }
 
     res.redirect('/user/settings');
-});
-
-router.post('/deleteQuestion/:id', isUser, (req, res) => {
-    let questionId = req.params.id;
-    let error;
-
-    Question.destroy({
-        where: {
-            id: questionId,
-        },
-    })
-        .then(() => {
-
-            req.flash('success', "You've successfully deleted the question!");
-            res.redirect('/user/faq');
-        })
 });
 
 
