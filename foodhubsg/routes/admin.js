@@ -484,85 +484,85 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
 });
 
 router.get('/faq', async (req, res) => {
-        Question.findAll({
-            order: [['createdAt', 'ASC']],
-            raw: true
-        })
-        .then((questions) => {
-            res.render('admin/faq', {
-                user: req.user,
-                title: "FAQ",
-                questions
-            });
+    Question.findAll({
+        order: [['createdAt', 'ASC']],
+        raw: true
+    })
+    .then((questions) => {
+        res.render('admin/faq', {
+            user: req.user,
+            title: "FAQ",
+            questions
         });
     });
+});
 
 router.post('/faq', isAdmin, async (req, res) => {
-    const isAnswered = false;
-    let title = req.body.title;
-    let description = req.body.description;
-    let suggestion = req.body.suggestion;
-    let isAdmin = true;
-    var error;
+const isAnswered = false;
+let title = req.body.title;
+let description = req.body.description;
+let suggestion = req.body.suggestion;
+let isAdmin = true;
+var error;
 
-    Question.create({
+Question.create({
+    UserId: req.user.id,
+    title,
+    description,
+    suggestion,
+    isAdmin
+}, {
+    where: {
         UserId: req.user.id,
-        title,
-        description,
-        suggestion,
-        isAdmin
-    }, {
-		where: {
-            UserId: req.user.id,
-            isAdmin: null
-		}
-    }).then((question) => {
-        req.flash('success', 'You have successfully created a question!');
-        res.redirect('/admin/faq');
-    });
+        isAdmin: null
+    }
+}).then((question) => {
+    req.flash('success', 'You have successfully created a question!');
+    res.redirect('/admin/faq');
+});
 });
 
 // Shows edit questions page
 router.get('/editQuestion', isAdmin, async (req, res) => {
 
-    Question.findOne({
-		where: {
-            UserId: req.user.id
-		},
-	}).then((question) => {
-	    res.render('admin/editQuestion',{
-            question 
-        
-    });
+Question.findOne({
+    where: {
+        UserId: req.user.id
+    },
+}).then((question) => {
+    res.render('admin/editQuestion',{
+        question 
+    
+});
 });
 });
 
 
 // save edited video
 router.post('/editQuestion',  isAdmin, async (req, res) => {
-    let isAnswered = true;
-    let isAdmin = true;
-    let title = req.body.title;
-    let description = req.body.description;
-    let suggestion = req.body.suggestion;
-    let questionId = req.params.id;
-    var error;
-	
-	Question.update({
-		title,
-        description,
-        suggestion,
-        isAnswered,
-        isAdmin
-	}, {
-		where: {
-            UserId: req.user.id,
-            isAnswered: null
-		}
-	}).then(() => {
-        req.flash('success', 'You have suggested an answer!');
-	res.redirect('/admin/faq'); 
-    }).catch(err => console.log(err));
+let isAnswered = true;
+let isAdmin = true;
+let title = req.body.title;
+let description = req.body.description;
+let suggestion = req.body.suggestion;
+let questionId = req.params.id;
+var error;
+
+Question.update({
+    title,
+    description,
+    suggestion,
+    isAnswered,
+    isAdmin
+}, {
+    where: {
+        UserId: req.user.id,
+        isAnswered: null
+    }
+}).then(() => {
+    req.flash('success', 'You have suggested an answer!');
+res.redirect('/admin/faq'); 
+}).catch(err => console.log(err));
 });
 
 
