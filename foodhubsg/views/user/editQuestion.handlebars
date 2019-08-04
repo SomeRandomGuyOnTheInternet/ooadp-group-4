@@ -17,13 +17,13 @@
                             <div class="col-md-12">   
                                 <label>Title</label>
                                 <input name="title" id="title" type="text" class="form-control"
-                                     value="{{question.title}}" readonly>
+                                value="{{question.title}}" readonly>
                             </div>
 
                             <div class="col-md-12">   
                                 <label>Description</label>
                                 <input name="description" id="description" type="text" class="form-control"
-                                     value="{{question.description}}" readonly>
+                                value="{{question.description}}" readonly>
                             </div>
 
                             <div class="col-md-12">   
@@ -33,52 +33,52 @@
                                 </textarea>
                             </div>
 
-                            
                             <div class="col-md-12">
                                 <input type="submit" name="action" value="Save" class="btn btn-primary btn-tall"
-                                   id="" style="float:right; margin-top: 30px;">       
+                                id="" style="float:right; margin-top: 30px;">       
                             </div>
 
-                            </div>
-                            </form>
+                        </div>
+                    </form>
 
-                            {{!-- Comment out the codes below to be able to let current logged in users to edit their topic & question, 
-                            and allow other users to only make suggestion to questions --}}
+                    {{!-- Comment out the codes below to be able to let current logged in users to edit their topic & question, 
+                    and allow other users to only make suggestion to questions --}}
 
-                            {{!-- <form method="post" action="/user/editQuestion" style="width:100%">
-                        <div class="row form-group" style="margin:0;">
+                    {{!-- <form method="post" action="/user/editQuestion" style="width:100%">
+                              <div class="row form-group" style="margin:0;">
 
-                            <div class="col-md-12">   
+                              <div class="col-md-12">   
                                 <label>Title</label>
                                 <input name="title" id="title" type="text" class="form-control"
-                                     value="{{question.title}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
-                            </div>
+                                value="{{question.title}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+                              </div>
 
-                            <div class="col-md-12">   
+                              <div class="col-md-12">   
                                 <label>Description</label>
                                 <input name="description" id="description" type="text" class="form-control"
-                                     value="{{question.description}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
-                            </div>
+                                value="{{question.description}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+                              </div>
 
-                            <div class="col-md-12">   
+                              <div class="col-md-12">   
                                 <label>Suggested Answer</label>
                                 <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." style="text-align:left;" autofocus required {{#ifCond question.UserId '==' user.id}}readonly{{/ifCond}}>
                                 {{suggestion}}
                                 </textarea>
-                            </div>
+                              </div>
                             
-                            <div class="col-md-12">
+                              <div class="col-md-12">
                                 <input type="submit" name="action" value="Save" class="btn btn-primary btn-tall"
-                                   id="" style="float:right; margin-top: 30px;">       
-                            </div>
+                                id="" style="float:right; margin-top: 30px;">       
+                              </div>
 
-                        </div>
-                    </form> --}} 
+                              </div>
+                          </form> --}} 
                     
-                </div>
+                   </div>
                 <br>
             </div>
         </div>
+        
     </div>
 </div>
 
