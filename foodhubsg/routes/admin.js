@@ -558,10 +558,13 @@ router.post('/editQuestion', isAdmin, async (req, res) => {
                 UserId: req.user.id,
                 isAnswered: null
             }
-        }).then(() => {
-            req.flash('success', 'You have suggested an answer!');
-            res.redirect('/admin/faq');
-        }).catch(err => console.log(err));
+        }
+    )
+    .then(() => {
+        req.flash('success', 'You have suggested an answer!');
+        res.redirect('/admin/faq');
+    })
+    .catch(err => console.log(err));
 });
 
 
@@ -576,11 +579,10 @@ router.post('/deleteQuestion/:id', isAdmin, (req, res) => {
             id: questionId,
         },
     })
-        .then(() => {
-
-            req.flash('success', "You've successfully deleted the question!");
-            res.redirect('/admin/faq');
-        })
+    .then(() => {
+        req.flash('success', "You've successfully deleted the question!");
+        res.redirect('/admin/faq');
+    });
 });
 
 module.exports = router;
