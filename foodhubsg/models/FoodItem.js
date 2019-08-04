@@ -16,7 +16,7 @@ const FoodItem = db.define('FoodItem', {
         type: Sequelize.BOOLEAN
     },
     imageLocation: { 
-        type: Sequelize.STRING, 
+        type: Sequelize.STRING 
     }
 });
 
