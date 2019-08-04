@@ -23,30 +23,30 @@ router.get('/vendors', isAdmin, (req, res) => {
         }],
         raw: true,
     })
-        .then((vendors) => {
-            let groupedVendors = groupVendors(vendors);
+    .then((vendors) => {
+        let groupedVendors = groupVendors(vendors);
 
-            User.findAll({
-                where: { isVendor: true, isDeleted: true },
-                include: [{
-                    model: Shop,
-                    where: { isDeleted: true },
-                    required: false,
-                }],
-                raw: true,
-            })
-                .then((deletedVendors) => {
-                    let groupedDeletedVendors = groupVendors(deletedVendors);
-                    if (Object.entries(groupVendors(deletedVendors)).length === 0 && groupVendors(deletedVendors).constructor === Object) groupedDeletedVendors = null;
+        User.findAll({
+            where: { isVendor: true, isDeleted: true },
+            include: [{
+                model: Shop,
+                where: { isDeleted: true },
+                required: false,
+            }],
+            raw: true,
+        })
+        .then((deletedVendors) => {
+            let groupedDeletedVendors = groupVendors(deletedVendors);
+            if (Object.entries(groupVendors(deletedVendors)).length === 0 && groupVendors(deletedVendors).constructor === Object) groupedDeletedVendors = null;
 
-                    res.render('admin/vendors', {
-                        user: req.user,
-                        title: "Vendors",
-                        groupedVendors,
-                        groupedDeletedVendors
-                    })
-                });
+            res.render('admin/vendors', {
+                user: req.user,
+                title: "Vendors",
+                groupedVendors,
+                groupedDeletedVendors
+            });
         });
+    });
 });
 
 
@@ -55,25 +55,25 @@ router.get('/shops', isAdmin, (req, res) => {
         where: { isDeleted: false },
         order: [['name', 'ASC']]
     })
-        .then((shops) => {
-            Shop.findAll({
-                where: { isDeleted: true },
-                include: [{
-                    model: User,
-                    where: { isVendor: true, isDeleted: false },
-                    required: true,
-                }],
-                raw: true,
-            })
-                .then((deletedShops) => {
-                    res.render('admin/shops', {
-                        user: req.user,
-                        title: "Shops",
-                        shops,
-                        deletedShops
-                    })
-                })
+    .then((shops) => {
+        Shop.findAll({
+            where: { isDeleted: true },
+            include: [{
+                model: User,
+                where: { isVendor: true, isDeleted: false },
+                required: true,
+            }],
+            raw: true,
         })
+        .then((deletedShops) => {
+            res.render('admin/shops', {
+                user: req.user,
+                title: "Shops",
+                shops,
+                deletedShops
+            });
+        });
+    });
 });
 
 
@@ -96,38 +96,38 @@ router.get('/editShop/:id', isAdmin, (req, res) => {
         }),
         User.findAll({ where: { isVendor: true } }),
     ])
-        .then((data) => {
-            for (i = 0; i < data[2].length; i++) {
-                if (data[2][i].id == data[0].VendorId) {
-                    data[2].splice(i, 1);
-                    break;
-                }
+    .then((data) => {
+        for (i = 0; i < data[2].length; i++) {
+            if (data[2][i].id == data[0].VendorId) {
+                data[2].splice(i, 1);
+                break;
             }
+        }
 
-            res.render('admin/editShop', {
-                title: "Edit Shop",
-                shop: data[0],
-                foodItems: data[1],
-                vendors: data[2],
-                user: req.user,
-            });
-        })
-        .catch((err) => {
-            req.flash('error', "That shop does not exist!");
-            res.redirect('/admin/vendors');
+        res.render('admin/editShop', {
+            title: "Edit Shop",
+            shop: data[0],
+            foodItems: data[1],
+            vendors: data[2],
+            user: req.user,
         });
+    })
+    .catch((err) => {
+        req.flash('error', "That shop does not exist!");
+        res.redirect('/admin/vendors');
+    });
 });
 
 
 router.get('/addShop', isAdmin, (req, res) => {
     User.findAll({ where: { isVendor: true } })
-        .then((vendors) => {
-            res.render('admin/addShop', {
-                user: req.user,
-                title: "Add Shop",
-                vendors
-            })
-        });
+    .then((vendors) => {
+        res.render('admin/addShop', {
+            user: req.user,
+            title: "Add Shop",
+            vendors
+        })
+    });
 });
 
 
@@ -143,16 +143,16 @@ router.get('/addFoodItem/:currentShopId?', isAdmin, (req, res) => {
         }],
         raw: true,
     })
-        .then((vendors) => {
-            let groupedVendors = groupVendors(vendors);
+    .then((vendors) => {
+        let groupedVendors = groupVendors(vendors);
 
-            res.render('admin/addFoodItem', {
-                user: req.user,
-                title: "Add Food",
-                groupedVendors,
-                currentShopId
-            })
-        })
+        res.render('admin/addFoodItem', {
+            user: req.user,
+            title: "Add Food",
+            groupedVendors,
+            currentShopId
+        });
+    });
 });
 
 
@@ -162,31 +162,31 @@ router.get('/editFoodItem/:id', isAdmin, (req, res) => {
     FoodItem.findOne({
         where: { id }
     })
-        .then((food) => {
-            if (food) {
-                Shop.findOne({ where: { id: food.ShopId } })
-                    .then((currentShop) => {
-                        Shop.findAll({
-                            where: {
-                                isDeleted: false,
-                                VendorId: currentShop.VendorId,
-                            }
-                        })
-                            .then((shops) => {
-                                res.render('admin/editFoodItem', {
-                                    user: req.user,
-                                    title: "Edit Menu",
-                                    food,
-                                    currentShop,
-                                    shops,
-                                });
-                            });
+    .then((food) => {
+        if (food) {
+            Shop.findOne({ where: { id: food.ShopId } })
+            .then((currentShop) => {
+                Shop.findAll({
+                    where: {
+                        isDeleted: false,
+                        VendorId: currentShop.VendorId,
+                    }
+                })
+                .then((shops) => {
+                    res.render('admin/editFoodItem', {
+                        user: req.user,
+                        title: "Edit Menu",
+                        food,
+                        currentShop,
+                        shops,
                     });
-            } else {
-                req.flash('error', "That food does not exist!");
-                res.redirect('/admin/vendors');
-            };
-        })
+                });
+            });
+        } else {
+            req.flash('error', "That food does not exist!");
+            res.redirect('/admin/vendors');
+        };
+    });
 });
 
 
@@ -203,44 +203,44 @@ router.post('/vendors', (req, res) => {
     let form = { name, email };
 
     User.findOne({ where: { email } })
-        .then(function (user) {
-            if (user) { error = 'This email has already been registered'; };
-            if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
-            if (password != confirmPassword) { error = 'Passwords do not match'; };
+    .then(function (user) {
+        if (user) { error = 'This email has already been registered'; };
+        if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
+        if (password != confirmPassword) { error = 'Passwords do not match'; };
 
-            if (!error) {
-                bcrypt.genSalt(10, function (err, salt) {
-                    bcrypt.hash(password, salt, function (err, hash) {
-                        User.create({
-                            name, email, password: hash, isDeleted, isVendor, isAdmin, isBanned,
-                        })
-                            .then(() => {
-                                req.flash('success', "You have successfully added a new vendor!");
-                                res.redirect('/admin/vendors');
-                            });
-                    });
-                });
-            } else {
-                User.findAll({
-                    where: { isVendor: true },
-                    include: [{
-                        model: Shop,
-                    }],
-                    raw: true
-                })
-                    .then((vendors) => {
-                        let groupedVendors = groupVendors(vendors);
-
-                        res.locals.error = error;
-                        res.render('admin/vendors', {
-                            user: req.user,
-                            title: "Vendors",
-                            groupedVendors,
-                            form
+        if (!error) {
+            bcrypt.genSalt(10, function (err, salt) {
+                bcrypt.hash(password, salt, function (err, hash) {
+                    User.create({
+                        name, email, password: hash, isDeleted, isVendor, isAdmin, isBanned,
+                    })
+                        .then(() => {
+                            req.flash('success', "You have successfully added a new vendor!");
+                            res.redirect('/admin/vendors');
                         });
-                    });
-            };
-        });
+                });
+            });
+        } else {
+            User.findAll({
+                where: { isVendor: true },
+                include: [{
+                    model: Shop,
+                }],
+                raw: true
+            })
+            .then((vendors) => {
+                let groupedVendors = groupVendors(vendors);
+
+                res.locals.error = error;
+                res.render('admin/vendors', {
+                    user: req.user,
+                    title: "Vendors",
+                    groupedVendors,
+                    form
+                });
+            });
+        };
+    });
 });
 
 
@@ -252,16 +252,16 @@ router.post('/deleteVendor/:id', (req, res) => {
         { isDeleted },
         { where: { id } }
     )
+    .then(function () {
+        Shop.update(
+            { isDeleted },
+            { where: { VendorId: id } }
+        )
         .then(function () {
-            Shop.update(
-                { isDeleted },
-                { where: { VendorId: id } }
-            )
-                .then(function () {
-                    req.flash('success', 'Shop has been succcessfully deleted!');
-                    res.redirect('/admin/vendors');
-                });
+            req.flash('success', 'Shop has been succcessfully deleted!');
+            res.redirect('/admin/vendors');
         });
+    });
 });
 
 
@@ -273,16 +273,16 @@ router.post('/undeleteVendor/:id', (req, res) => {
         { isDeleted },
         { where: { id } }
     )
+    .then(function () {
+        Shop.update(
+            { isDeleted },
+            { where: { VendorId: id } }
+        )
         .then(function () {
-            Shop.update(
-                { isDeleted },
-                { where: { VendorId: id } }
-            )
-                .then(function () {
-                    req.flash('success', 'Vendor has been succcessfully reinstated!');
-                    res.redirect('/admin/vendors');
-                });
+            req.flash('success', 'Vendor has been succcessfully reinstated!');
+            res.redirect('/admin/vendors');
         });
+    });
 });
 
 
@@ -308,10 +308,10 @@ router.post('/addShop', (req, res) => {
         isRecommended: false,
         VendorId: vendorId,
     })
-        .then((shop) => {
-            req.flash('success', "This shop has been successfully added!");
-            res.redirect(`/admin/editShop/${shop.id}`);
-        });
+    .then((shop) => {
+        req.flash('success', "This shop has been successfully added!");
+        res.redirect(`/admin/editShop/${shop.id}`);
+    });
 });
 
 
@@ -369,12 +369,12 @@ router.post('/deleteShop/:id', (req, res) => {
         { isDeleted: true, },
         { where: { ShopId: req.params.id } }
     )
-        .then(() => {
-            Shop.update(
-                { isDeleted: true },
-                { where: { id: req.params.id } }
-            );
-        });
+    .then(() => {
+        Shop.update(
+            { isDeleted: true },
+            { where: { id: req.params.id } }
+        );
+    });
 
     req.flash('success', 'Shop has been succcessfully deleted!');
     res.redirect('/admin/shops');
@@ -386,12 +386,12 @@ router.post('/undeleteShop/:id', (req, res) => {
         { isDeleted: false },
         { where: { ShopId: req.params.id } }
     )
-        .then(() => {
-            Shop.update(
-                { isDeleted: false },
-                { where: { id: req.params.id } }
-            );
-        });
+    .then(() => {
+        Shop.update(
+            { isDeleted: false },
+            { where: { id: req.params.id } }
+        );
+    });
 
     req.flash('success', 'Shop has been succcessfully reinstated!');
     res.redirect('/admin/shops');
@@ -419,7 +419,7 @@ router.post('/addFoodItem/:id?', isAdmin, (req, res) => {
                 imageLocation,
                 ShopId: shops[i],
             })
-                .then((foodItem) => { updateShopRating(foodItem.ShopId) });
+            .then((foodItem) => { updateShopRating(foodItem.ShopId) });
         };
 
         req.flash('success', 'Food has been succcessfully added!');
@@ -455,7 +455,7 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
                 where: { id }
             }
         )
-            .then((foodItem) => { updateShopRating(shopId); })
+        .then((foodItem) => { updateShopRating(shopId); })
 
         req.flash('success', 'Food has been succcessfully edited!');
         res.redirect(`/admin/editShop/${shopId}`);
@@ -488,19 +488,13 @@ router.get('/faq', async (req, res) => {
         order: [['createdAt', 'ASC']],
         raw: true
     })
-        .then((questions) => {
-            res.render('admin/faq', {
-                user: req.user,
-                title: "FAQ",
-                questions
-            });
-
-            res.render('admin/faq', {
-                user: req.user,
-                title: "FAQ",
-                questions,
-            });
+    .then((questions) => {
+        res.render('admin/faq', {
+            user: req.user,
+            title: "FAQ",
+            questions,
         });
+    });
 
 })
 
