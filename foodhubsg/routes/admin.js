@@ -483,23 +483,18 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     });
 });
 
-router.get('/faq', isAdmin, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
 
+router.get('/faq', isAdmin, async (req, res) => {
     let questions = await
         Question.findAll({
-            order: [
-                ['createdAt', 'ASC'],
-            ],
+            order: [['createdAt', 'ASC']],
             raw: true
-        })
-        .then((questions) => {
-            res.render('admin/faq', {
-                user: req.user,
-                title: "FAQ",
-                questions,
-                unviewedNotifications
         });
+
+    res.render('admin/faq', {
+        user: req.user,
+        title: "FAQ",
+        questions,
     });
 });
 
@@ -543,8 +538,7 @@ router.get('/editQuestion', isAdmin, async (req, res) => {
 
 // save edited video
 router.post('/editQuestion',  isAdmin, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
+    let isAnswered = true;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
@@ -554,10 +548,12 @@ router.post('/editQuestion',  isAdmin, async (req, res) => {
 	Question.update({
 		title,
         description,
-        suggestion
+        suggestion,
+        isAnswered
 	}, {
 		where: {
-			UserId: req.user.id
+            UserId: req.user.id,
+            isAnswered: null
 		}
 	}).then(() => {
         req.flash('success', 'You have suggested an answer!');

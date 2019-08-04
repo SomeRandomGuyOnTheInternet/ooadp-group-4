@@ -286,7 +286,7 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
     } 
     
     catch (error) {
-        console.log(error)
+        console.log(error);
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
     }
@@ -423,8 +423,6 @@ router.post('/addFood', async (req, res) => {
                     required: true,
                 }
             });
-
-        console.log(recFoodLog.length)
 
         if (recFoodLog.length > 0) { addBadges('Baby Steps', user, "adding your first recommended food item"); }
         else if (recFoodLog.length > 9) { addBadges('Picking Up Steam', user, "adding ten recommended food items"); }
@@ -714,7 +712,7 @@ router.get('/editQuestion', isUser, async (req, res) => {
 // save edited video
 router.post('/editQuestion',  isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
+    let isAnswered = true;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
@@ -724,10 +722,12 @@ router.post('/editQuestion',  isUser, async (req, res) => {
 	Question.update({
 		title,
         description,
-        suggestion
+        suggestion,
+        isAnswered
 	}, {
 		where: {
-			UserId: req.user.id
+            UserId: req.user.id,
+            isAnswered: null,
         }
 	}).then(() => {
         req.flash('success', 'You have suggested an answer!');
@@ -766,33 +766,27 @@ router.get('/settings', isUser, async (req, res) => {
 
 router.post('/settings', isUser, async (req, res) => {
     const name = req.body.name;
-    const email = req.body.email.toLowerCase();
-    const password = req.body.password;
-    const isAdmin = isBanned = isVendor = false;
-    let weight = req.body.weight;
-    let height = req.body.height;
+    const weight = req.body.weight;
+    const height = req.body.height;
+    const bmi = (weight / (height * height)).toFixed(2);
     let error;
 
-    bcrypt.genSalt(function (err, salt) {
-        bcrypt.hash(password, salt, function (err, hash) {
-            await
-                User.update(
-                    {
-                        weight: req.body.weight,
-                        height: req.body.height,
-                        email: email,
-                        password: hash,
-                    },
-                    {
-                        where: { id: req.user.id }
-                    }
-                );
+    if (height > 3 || weight < 0.5) error = 'Please enter a valid height value';
+    if (weight > 200 || weight < 20) error = 'Please enter a valid weight value';
 
-            if (req.user.bmi < 23) addBadges('Picking Up Steam', req.user, "being within the recommended BMI range");
+    if (!error) {
+        await
+            User.update(
+                { name, weight, height, bmi},
+                { where: { id: req.user.id } },
+            );
 
-            res.redirect('/user/settings');
-        });
-    })
+        if (req.user.bmi < 23) addBadges('Picking Up Steam', req.user, "being within the recommended BMI range");
+
+        req.flash('success', 'You\'ve successfully updated your settings!');
+    };
+    
+    res.redirect('/user/settings');
 });
 
 router.post('/deleteQuestion/:id', isUser, (req, res) => {
@@ -810,8 +804,6 @@ router.post('/deleteQuestion/:id', isUser, (req, res) => {
             res.redirect('/user/faq');
         })
 });
-
-
 
 
 
