@@ -643,23 +643,16 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
 
 
 router.get('/deleteMessage/:id', isUser, async (req, res) => {
-   let delMsg = await Message.findOne({ 
-       where: { 
-           id : req.params.id
-       }
-   })
-    await Message.destroy({
-            where: {
-                id: req.params.id
-            }
-        }); 
+    let delMsg = await Message.findOne({ where: { id : req.params.id } });
+    await Message.destroy({ where: { id: req.params.id } }); 
     
     let referral = await Referral.findOne({ 
         where: { 
             UserId: req.user.id, 
             RefUserId: delMsg.User2Id
         }
-    })
+    });
+    
     req.flash('success', 'Message Deleted');
     res.redirect(`/user/sendMessage/${referral.id}`);
 });
