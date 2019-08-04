@@ -583,11 +583,11 @@ router.get('/delRefCode/:id', isUser, async (req, res) => {
         updateUserPoints(req.user, -75, "removing someone from your friend group");
 
         req.flash('success', "You have successfully deleted a referral code!");
-        res.redirect('/user/friendActivity');
-
     } catch (err) {
-        if (err) console.log('error', err);
+        req.flash('error', "Something went wrong while deleting the code. Please try again later!");
     };
+
+    res.redirect('/user/friendActivity');
 });
 
 
@@ -736,6 +736,17 @@ router.post('/editQuestion',  isUser, async (req, res) => {
 });
 
 
+router.post('/deleteQuestion/:id', isUser, async (req, res) => {
+    let questionId = req.params.id;
+    let error;
+
+    await Question.destroy({ where: { id: questionId } });
+
+    req.flash('success', "You've successfully deleted the question!");
+    res.redirect('/user/faq');
+});
+
+
 router.post('/suggestion', isUser, async (req, res) => {
     const isAnswered = false;
     let suggestion = req.body.suggestion;
@@ -777,16 +788,6 @@ router.post('/settings', isUser, async (req, res) => {
     }
 
     res.redirect('/user/settings');
-});
-
-router.post('/deleteQuestion/:id', isUser, (req, res) => {
-    let questionId = req.params.id;
-    let error;
-
-    await Question.destroy({ where: { id: questionId } });
-
-    req.flash('success', "You've successfully deleted the question!");
-    res.redirect('/user/faq');
 });
 
 
