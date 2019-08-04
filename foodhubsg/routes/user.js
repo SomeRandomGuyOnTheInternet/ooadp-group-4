@@ -729,7 +729,7 @@ router.post('/editQuestion',  isUser, async (req, res) => {
 	}, {
 		where: {
 			UserId: req.user.id
-		}
+        }
 	}).then(() => {
         req.flash('success', 'You have suggested an answer!');
 	res.redirect('/user/faq'); 
