@@ -23,57 +23,57 @@ router.get('/vendors', isAdmin, (req, res) => {
         }],
         raw: true,
     })
-    .then((vendors) => {
-        let groupedVendors = groupVendors(vendors);
+        .then((vendors) => {
+            let groupedVendors = groupVendors(vendors);
 
-        User.findAll({
-            where: { isVendor: true, isDeleted: true },
-            include: [{
-                model: Shop,
-                where: { isDeleted: true },
-                required: false,
-            }],
-            raw: true,
-        })
-        .then((deletedVendors) => {
-            let groupedDeletedVendors = groupVendors(deletedVendors);
-            if (Object.entries(groupVendors(deletedVendors)).length === 0 && groupVendors(deletedVendors).constructor === Object) groupedDeletedVendors = null;
-
-            res.render('admin/vendors', {
-                user: req.user,
-                title: "Vendors",
-                groupedVendors,
-                groupedDeletedVendors
+            User.findAll({
+                where: { isVendor: true, isDeleted: true },
+                include: [{
+                    model: Shop,
+                    where: { isDeleted: true },
+                    required: false,
+                }],
+                raw: true,
             })
+                .then((deletedVendors) => {
+                    let groupedDeletedVendors = groupVendors(deletedVendors);
+                    if (Object.entries(groupVendors(deletedVendors)).length === 0 && groupVendors(deletedVendors).constructor === Object) groupedDeletedVendors = null;
+
+                    res.render('admin/vendors', {
+                        user: req.user,
+                        title: "Vendors",
+                        groupedVendors,
+                        groupedDeletedVendors
+                    })
+                });
         });
-    });
 });
 
 
 router.get('/shops', isAdmin, (req, res) => {
     Shop.findAll({
         where: { isDeleted: false },
-        order: [ ['name', 'ASC'] ]
+        order: [['name', 'ASC']]
     })
-    .then((shops) => {
-        Shop.findAll({
-            where: { isDeleted: true },
-            include: [{
-                model: User,
-                where: { isVendor: true, isDeleted: false },
-                required: true,
-            }],
-            raw: true,
-        })
-        .then((deletedShops) => {
-            res.render('admin/shops', {
-                user: req.user,
-                title: "Shops",
-                shops,
-                deletedShops
+        .then((shops) => {
+            Shop.findAll({
+                where: { isDeleted: true },
+                include: [{
+                    model: User,
+                    where: { isVendor: true, isDeleted: false },
+                    required: true,
+                }],
+                raw: true,
             })
+                .then((deletedShops) => {
+                    res.render('admin/shops', {
+                        user: req.user,
+                        title: "Shops",
+                        shops,
+                        deletedShops
+                    })
+                })
         })
-    })
 });
 
 
@@ -89,45 +89,45 @@ router.get('/editShop/:id', isAdmin, (req, res) => {
             }],
         }),
         FoodItem.findAll({
-            where: { 
+            where: {
                 ShopId: id,
                 isDeleted: false,
             },
         }),
         User.findAll({ where: { isVendor: true } }),
     ])
-    .then((data) => {
-        for (i = 0; i < data[2].length; i++) {
-            if (data[2][i].id == data[0].VendorId) {
-                data[2].splice(i, 1);
-                break;
+        .then((data) => {
+            for (i = 0; i < data[2].length; i++) {
+                if (data[2][i].id == data[0].VendorId) {
+                    data[2].splice(i, 1);
+                    break;
+                }
             }
-        }
 
-        res.render('admin/editShop', {
-            title: "Edit Shop",
-            shop: data[0],
-            foodItems: data[1],
-            vendors: data[2],
-            user: req.user,
+            res.render('admin/editShop', {
+                title: "Edit Shop",
+                shop: data[0],
+                foodItems: data[1],
+                vendors: data[2],
+                user: req.user,
+            });
+        })
+        .catch((err) => {
+            req.flash('error', "That shop does not exist!");
+            res.redirect('/admin/vendors');
         });
-    })
-    .catch((err) => {
-        req.flash('error', "That shop does not exist!");
-        res.redirect('/admin/vendors');
-    });
 });
 
 
 router.get('/addShop', isAdmin, (req, res) => {
     User.findAll({ where: { isVendor: true } })
-    .then((vendors) => {
-        res.render('admin/addShop', {
-            user: req.user,
-            title: "Add Shop",
-            vendors
-        })
-    });
+        .then((vendors) => {
+            res.render('admin/addShop', {
+                user: req.user,
+                title: "Add Shop",
+                vendors
+            })
+        });
 });
 
 
@@ -143,16 +143,16 @@ router.get('/addFoodItem/:currentShopId?', isAdmin, (req, res) => {
         }],
         raw: true,
     })
-    .then((vendors) => {
-        let groupedVendors = groupVendors(vendors);
-        
-        res.render('admin/addFoodItem', {
-            user: req.user,
-            title: "Add Food",
-            groupedVendors,
-            currentShopId
+        .then((vendors) => {
+            let groupedVendors = groupVendors(vendors);
+
+            res.render('admin/addFoodItem', {
+                user: req.user,
+                title: "Add Food",
+                groupedVendors,
+                currentShopId
+            })
         })
-    })
 });
 
 
@@ -162,31 +162,31 @@ router.get('/editFoodItem/:id', isAdmin, (req, res) => {
     FoodItem.findOne({
         where: { id }
     })
-    .then((food) => {
-        if (food) {
-            Shop.findOne({  where: { id: food.ShopId } })
-            .then((currentShop) => {
-                Shop.findAll({
-                    where: {
-                        isDeleted: false,
-                        VendorId: currentShop.VendorId,
-                    }
-                })
-                .then((shops) => {
-                    res.render('admin/editFoodItem', {
-                        user: req.user,
-                        title: "Edit Menu",
-                        food,
-                        currentShop,
-                        shops,
+        .then((food) => {
+            if (food) {
+                Shop.findOne({ where: { id: food.ShopId } })
+                    .then((currentShop) => {
+                        Shop.findAll({
+                            where: {
+                                isDeleted: false,
+                                VendorId: currentShop.VendorId,
+                            }
+                        })
+                            .then((shops) => {
+                                res.render('admin/editFoodItem', {
+                                    user: req.user,
+                                    title: "Edit Menu",
+                                    food,
+                                    currentShop,
+                                    shops,
+                                });
+                            });
                     });
-                });
-            });
-        } else {
-            req.flash('error', "That food does not exist!");
-            res.redirect('/admin/vendors');
-        };
-    })
+            } else {
+                req.flash('error', "That food does not exist!");
+                res.redirect('/admin/vendors');
+            };
+        })
 });
 
 
@@ -197,51 +197,51 @@ router.post('/vendors', (req, res) => {
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
     const isAdmin = isBanned = isDeleted = false;
-    const isVendor = true; 
+    const isVendor = true;
     let error;
 
     let form = { name, email };
 
-	User.findOne({ where: { email } })
-    .then(function (user) {
-        if (user) { error = 'This email has already been registered'; };
-        if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
-        if (password != confirmPassword) { error = 'Passwords do not match'; };
+    User.findOne({ where: { email } })
+        .then(function (user) {
+            if (user) { error = 'This email has already been registered'; };
+            if (password.length < 6) { error = 'Password must contain at least 6 characters'; };
+            if (password != confirmPassword) { error = 'Passwords do not match'; };
 
-		if (!error) {
-			bcrypt.genSalt(10, function (err, salt) {
-				bcrypt.hash(password, salt, function (err, hash) {
-                    User.create({
-						name, email, password: hash, isDeleted, isVendor, isAdmin, isBanned,
-                    })
-                    .then(() => {  
-                        req.flash('success', "You have successfully added a new vendor!");
-                        res.redirect('/admin/vendors');
+            if (!error) {
+                bcrypt.genSalt(10, function (err, salt) {
+                    bcrypt.hash(password, salt, function (err, hash) {
+                        User.create({
+                            name, email, password: hash, isDeleted, isVendor, isAdmin, isBanned,
+                        })
+                            .then(() => {
+                                req.flash('success', "You have successfully added a new vendor!");
+                                res.redirect('/admin/vendors');
+                            });
                     });
                 });
-            });
-		} else {
-            User.findAll({
-                where: { isVendor: true },
-                include: [{
-                    model: Shop,
-                }],
-                raw: true
-            })
-            .then((vendors) => {
-                let groupedVendors = groupVendors(vendors);
+            } else {
+                User.findAll({
+                    where: { isVendor: true },
+                    include: [{
+                        model: Shop,
+                    }],
+                    raw: true
+                })
+                    .then((vendors) => {
+                        let groupedVendors = groupVendors(vendors);
 
-                res.locals.error = error;
-                res.render('admin/vendors', {
-                    user: req.user,
-                    title: "Vendors",
-                    groupedVendors,
-                    form
-                });
-            });
-		};
-    });
-}); 
+                        res.locals.error = error;
+                        res.render('admin/vendors', {
+                            user: req.user,
+                            title: "Vendors",
+                            groupedVendors,
+                            form
+                        });
+                    });
+            };
+        });
+});
 
 
 router.post('/deleteVendor/:id', (req, res) => {
@@ -252,17 +252,17 @@ router.post('/deleteVendor/:id', (req, res) => {
         { isDeleted },
         { where: { id } }
     )
-    .then(function () {
-        Shop.update(
-            { isDeleted },
-            { where: { VendorId: id } }
-        )
         .then(function () {
-            req.flash('success', 'Shop has been succcessfully deleted!');
-            res.redirect('/admin/vendors');
+            Shop.update(
+                { isDeleted },
+                { where: { VendorId: id } }
+            )
+                .then(function () {
+                    req.flash('success', 'Shop has been succcessfully deleted!');
+                    res.redirect('/admin/vendors');
+                });
         });
-    });
-}); 
+});
 
 
 router.post('/undeleteVendor/:id', (req, res) => {
@@ -273,17 +273,17 @@ router.post('/undeleteVendor/:id', (req, res) => {
         { isDeleted },
         { where: { id } }
     )
-    .then(function () {
-        Shop.update(
-            { isDeleted },
-            { where: { VendorId: id } }
-        )
         .then(function () {
-            req.flash('success', 'Vendor has been succcessfully reinstated!');
-            res.redirect('/admin/vendors');
+            Shop.update(
+                { isDeleted },
+                { where: { VendorId: id } }
+            )
+                .then(function () {
+                    req.flash('success', 'Vendor has been succcessfully reinstated!');
+                    res.redirect('/admin/vendors');
+                });
         });
-    });
-}); 
+});
 
 
 router.post('/addShop', (req, res) => {
@@ -295,7 +295,7 @@ router.post('/addShop', (req, res) => {
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const imageLocation = req.body.imageURL;
-    
+
     Shop.create({
         name,
         address,
@@ -308,10 +308,10 @@ router.post('/addShop', (req, res) => {
         isRecommended: false,
         VendorId: vendorId,
     })
-    .then((shop) => {
-        req.flash('success', "This shop has been successfully added!");
-        res.redirect(`/admin/editShop/${shop.id}`);
-    });
+        .then((shop) => {
+            req.flash('success', "This shop has been successfully added!");
+            res.redirect(`/admin/editShop/${shop.id}`);
+        });
 });
 
 
@@ -326,7 +326,7 @@ router.post('/editShop/:id', (req, res) => {
     const longitude = Number(req.body.longitude);
     const description = req.body.description;
     const imageLocation = req.body.imageURL;
-    
+
     if (currentVendor == vendorId) {
         Shop.update({
             name,
@@ -336,12 +336,12 @@ router.post('/editShop/:id', (req, res) => {
             location,
             latitude,
             longitude,
-        },{
-            where: {
-                VendorId: vendorId,
-                id,
-            },
-        });
+        }, {
+                where: {
+                    VendorId: vendorId,
+                    id,
+                },
+            });
     } else {
         Shop.update(
             {
@@ -353,7 +353,7 @@ router.post('/editShop/:id', (req, res) => {
                 latitude,
                 longitude,
                 VendorId: vendorId,
-            },{
+            }, {
                 where: { id },
             }
         );
@@ -369,12 +369,12 @@ router.post('/deleteShop/:id', (req, res) => {
         { isDeleted: true, },
         { where: { ShopId: req.params.id } }
     )
-    .then(() => {
-        Shop.update(
-            { isDeleted: true },
-            { where: { id: req.params.id } }
-        );
-    });
+        .then(() => {
+            Shop.update(
+                { isDeleted: true },
+                { where: { id: req.params.id } }
+            );
+        });
 
     req.flash('success', 'Shop has been succcessfully deleted!');
     res.redirect('/admin/shops');
@@ -386,13 +386,13 @@ router.post('/undeleteShop/:id', (req, res) => {
         { isDeleted: false },
         { where: { ShopId: req.params.id } }
     )
-    .then(() => {
-        Shop.update(
-            { isDeleted: false },
-            { where: { id: req.params.id } }
-        );
-    });
-    
+        .then(() => {
+            Shop.update(
+                { isDeleted: false },
+                { where: { id: req.params.id } }
+            );
+        });
+
     req.flash('success', 'Shop has been succcessfully reinstated!');
     res.redirect('/admin/shops');
 });
@@ -419,9 +419,9 @@ router.post('/addFoodItem/:id?', isAdmin, (req, res) => {
                 imageLocation,
                 ShopId: shops[i],
             })
-            .then((foodItem) => { updateShopRating(foodItem.ShopId) });
+                .then((foodItem) => { updateShopRating(foodItem.ShopId) });
         };
-    
+
         req.flash('success', 'Food has been succcessfully added!');
         res.redirect('/admin/vendors');
     } else {
@@ -451,11 +451,11 @@ router.post('/editFoodItem/:id', isAdmin, (req, res) => {
                 isRecommended,
                 isDeleted,
                 imageLocation,
-            },{
+            }, {
                 where: { id }
             }
         )
-        .then((foodItem) => { updateShopRating(shopId); })
+            .then((foodItem) => { updateShopRating(shopId); })
 
         req.flash('success', 'Food has been succcessfully edited!');
         res.redirect(`/admin/editShop/${shopId}`);
@@ -471,117 +471,115 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     const isDeleted = true;
 
     FoodItem.findOne({ where: { id } })
-    .then((foodItem) => {
-        FoodItem.update(
-            { isDeleted },
-            { where: { id } }
-        )
-        .then((deletedFoodItem) => { updateShopRating(foodItem.ShopId); })
+        .then((foodItem) => {
+            FoodItem.update(
+                { isDeleted },
+                { where: { id } }
+            )
+                .then((deletedFoodItem) => { updateShopRating(foodItem.ShopId); })
 
-        req.flash('success', 'Food has been succcessfully deleted!');
-        res.redirect(`/admin/editShop/${foodItem.ShopId}`);
-    });
+            req.flash('success', 'Food has been succcessfully deleted!');
+            res.redirect(`/admin/editShop/${foodItem.ShopId}`);
+        });
 });
 
-router.get('/faq', async (req, res) => {
+router.get('/faq', isAdmin, async (req, res) => {
     Question.findAll({
         order: [['createdAt', 'ASC']],
         raw: true
     })
-    .then((questions) => {
-        res.render('admin/faq', {
-            user: req.user,
-            title: "FAQ",
-            questions
+        .then((questions) => {
+            res.render('admin/faq', {
+                user: req.user,
+                title: "FAQ",
+                questions
+            });
         });
-    });
 });
 
 router.post('/faq', isAdmin, async (req, res) => {
-const isAnswered = false;
-let title = req.body.title;
-let description = req.body.description;
-let suggestion = req.body.suggestion;
-let isAdmin = true;
-var error;
+    const isAnswered = false;
+    let title = req.body.title;
+    let description = req.body.description;
+    let suggestion = req.body.suggestion;
+    let isAdmin = true;
+    var error;
 
-Question.create({
-    UserId: req.user.id,
-    title,
-    description,
-    suggestion,
-    isAdmin
-}, {
-    where: {
+    Question.create({
         UserId: req.user.id,
-        isAdmin: null
-    }
-}).then((question) => {
-    req.flash('success', 'You have successfully created a question!');
-    res.redirect('/admin/faq');
-});
+        title,
+        description,
+        suggestion,
+        isAdmin
+    }, {
+            where: {
+                UserId: req.user.id,
+                isAdmin: null
+            }
+        }).then((question) => {
+            req.flash('success', 'You have successfully created a question!');
+            res.redirect('/admin/faq');
+        });
 });
 
 // Shows edit questions page
 router.get('/editQuestion', isAdmin, async (req, res) => {
 
-Question.findOne({
-    where: {
-        UserId: req.user.id
-    },
-}).then((question) => {
-    res.render('admin/editQuestion',{
-        question 
-    
-});
-});
+    Question.findOne({
+        where: {
+            UserId: req.user.id
+        },
+    }).then((question) => {
+        res.render('admin/editQuestion', {
+            question
+
+        });
+    });
 });
 
 
 // save edited video
-router.post('/editQuestion',  isAdmin, async (req, res) => {
-let isAnswered = true;
-let isAdmin = true;
-let title = req.body.title;
-let description = req.body.description;
-let suggestion = req.body.suggestion;
-let questionId = req.params.id;
-var error;
+router.post('/editQuestion', isAdmin, async (req, res) => {
+    let isAnswered = true;
+    let isAdmin = true;
+    let title = req.body.title;
+    let description = req.body.description;
+    let suggestion = req.body.suggestion;
+    let questionId = req.params.id;
+    var error;
 
-Question.update({
-    title,
-    description,
-    suggestion,
-    isAnswered,
-    isAdmin
-}, {
-    where: {
-        UserId: req.user.id,
-        isAnswered: null
-    }
-}).then(() => {
-    req.flash('success', 'You have suggested an answer!');
-res.redirect('/admin/faq'); 
-}).catch(err => console.log(err));
+    Question.update({
+        title,
+        description,
+        suggestion,
+        isAnswered,
+        isAdmin
+    }, {
+            where: {
+                UserId: req.user.id,
+                isAnswered: null
+            }
+        }).then(() => {
+            req.flash('success', 'You have suggested an answer!');
+            res.redirect('/admin/faq');
+        }).catch(err => console.log(err));
 });
-
-
 
 
 
 router.post('/deleteQuestion/:id', isAdmin, (req, res) => {
     let questionId = req.params.id;
-	
-	Question.destroy({
-		where: {
+
+    Question.destroy({
+        where: {
             id: questionId,
         },
     })
-    .then(() => {
-        
-        req.flash('success', "You've successfully deleted the question!");
-        res.redirect('/admin/faq');
-			})
-    });
+        .then(() => {
+
+            req.flash('success', "You've successfully deleted the question!");
+            res.redirect('/admin/faq');
+        })
+});
 
 module.exports = router;
