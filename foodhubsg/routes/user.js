@@ -714,7 +714,6 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
     let question = await
         Question.findOne({
             where: {
-                UserId: req.user.id,
                 id: questionId      
             },
         });

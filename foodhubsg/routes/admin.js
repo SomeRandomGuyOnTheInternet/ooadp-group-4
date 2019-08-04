@@ -528,8 +528,7 @@ router.get('/editQuestion/:id', isAdmin, async (req, res) => {
     let questionId = req.params.id;
 
     Question.findOne({
-        where: {
-            UserId: req.user.id,
+        where: {           
             id: questionId  
         },
     }).then((question) => {

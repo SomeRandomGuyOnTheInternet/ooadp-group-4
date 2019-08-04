@@ -76,10 +76,13 @@
                             <input type="submit" name="action" value="Improve this question" class="btn btn-primary"
                             style="background-color: #4CAF50; border-radius: 30px; font-size: 12px;">
                             </a>
+                             <h4 style="padding: 3px 0 0 10px; width: 730px;" class="card-title"><b>{{title}}</b></h4>
                             {{/ifCond}}
-                            
 
-                            <h4 style="padding: 3px 0 0 10px;" class="card-title"><b>{{title}}</b></h4>
+                            {{#ifCond isAdmin '==' 1}}
+                             <h4 style="padding: 3px 0 0 10px; width: 730px;" class="card-title"><b>{{title}}</b> - Admin</h4>
+                            {{/ifCond}}
+
                             
                         </div>
 
