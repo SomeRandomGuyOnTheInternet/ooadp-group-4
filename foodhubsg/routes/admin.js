@@ -503,25 +503,25 @@ router.get('/faq', isAdmin, async (req, res) => {
     });
 });
 
-router.post('/faq', isAdmin, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
-    let title = req.body.title;
-    let description = req.body.description;
-    let suggestion = req.body.suggestion;
-    var error;
+// router.post('/faq', isAdmin, async (req, res) => {
+//     const isAdmin = isBanned = isVendor = false;
+//     const isAnswered = false;
+//     let title = req.body.title;
+//     let description = req.body.description;
+//     let suggestion = req.body.suggestion;
+//     var error;
 
-    Question.create({
-        UserId: req.user.id,
-        title,
-        description,
-        suggestion
-    }).then((question) => {
+//     Question.create({
+//         UserId: req.user.id,
+//         title,
+//         description,
+//         suggestion
+//     }).then((question) => {
 
-        req.flash('success', 'You have successfully created a question!');
-        res.redirect('/admin/faq');
-    });
-});
+//         req.flash('success', 'You have successfully created a question!');
+//         res.redirect('/admin/faq');
+//     });
+// });
 
 // Shows edit questions page
 router.get('/editQuestion', isAdmin, async (req, res) => {
