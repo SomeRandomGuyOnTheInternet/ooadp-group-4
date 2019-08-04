@@ -9,8 +9,6 @@ const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session');
 const passport = require('passport');
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
 const db = require('./config/db');
 const { formatDate } = require('./helpers/hbs');
 const { formatTime } = require('./helpers/hbs');
@@ -26,11 +24,6 @@ const adminRoute = require('./routes/admin');
 const vendorRoute = require('./routes/vendor'); 
 
 
-io.on('connection', function (socket) {
-	socket.on('chat message', function (notifications) {
-		io.emit('chat message', notifications);
-	});
-});
 
 app.engine('handlebars', exphbs({ 
 	defaultLayout: 'main' ,
