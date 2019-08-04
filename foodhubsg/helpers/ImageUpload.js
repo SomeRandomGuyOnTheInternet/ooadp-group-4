@@ -10,6 +10,7 @@ const storage = multer.diskStorage({
     }
 });
 
+
 const upload = multer({
     storage: storage,
     limits: {
@@ -19,6 +20,7 @@ const upload = multer({
         checkFileType(file, callback);
     }
 }).single('venImage');
+
 
 function checkFileType(file, callback) {
     const filetypes = /jpeg|jpg|png|gif/;
@@ -30,4 +32,7 @@ function checkFileType(file, callback) {
         callback({ message: 'Images Only' });
     }
 }
+
+
+
 module.exports = upload; 
