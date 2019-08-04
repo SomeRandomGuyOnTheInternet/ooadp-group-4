@@ -636,7 +636,6 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
            id : req.params.id
        }
    })
-   console.log(delMsg.User2Id); 
     await Message.destroy({
             where: {
                 id: req.params.id
