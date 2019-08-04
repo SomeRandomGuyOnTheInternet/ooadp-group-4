@@ -72,11 +72,6 @@ let sessionFlash = function (req, res, next) {
 }
 app.use(sessionFlash);
 
-app.use(function (req, res, next) {
-	req.io = io;
-	next();
-});
-
 app.use(passport.initialize());
 app.use(passport.session());
 const authenticate = require('./config/passport');
