@@ -57,23 +57,23 @@ async function updateUserPoints(user, points, source, additionalMessage = null, 
                 });
         };
 
-        if (recentPointAdditions.length >= 10) {
-            await
-                User.update(
-                    { isBanned: true },
-                    { where: { id: user.id } }
-                );
+        // if (recentPointAdditions.length >= 10) {
+        //     await
+        //         User.update(
+        //             { isBanned: true },
+        //             { where: { id: user.id } }
+        //         );
             
-            await
-                UserAction.create({
-                    UserId: user.id,
-                    action: "been banned from earning points",
-                    source: "getting too many points in a short timespan",
-                    type: "negative",
-                    additionalMessage: "If you have any enquiries, please contact us at admin@foodhubsg.com.",
-                    hasViewed: false
-                });
-        };
+        //     await
+        //         UserAction.create({
+        //             UserId: user.id,
+        //             action: "been banned from earning points",
+        //             source: "getting too many points in a short timespan",
+        //             type: "negative",
+        //             additionalMessage: "If you have any enquiries, please contact us at admin@foodhubsg.com.",
+        //             hasViewed: false
+        //         });
+        // };
 
         if (updatedUser.gainedPoints >= 1000) {
             addBadges('High Roller', user, "obtaining more than 1000 points");
