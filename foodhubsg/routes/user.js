@@ -716,8 +716,9 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
                 id: questionId      
             },
         });
+    res.render('user/editQuestion', 
+    { user: req.user, title: "Edit Question", question});
 
-    res.render('user/editQuestion', { question });
 });
 
 
