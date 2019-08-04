@@ -44,10 +44,6 @@
         </div>
 
 
-
-
-
-
         <div class="box1">
             <div class="row row-pb-md">
                 <div class="col-md-12">
@@ -67,6 +63,7 @@
                     <div class="card mb-2 w-100 mx-auto" style="border-radius: 0;">
 
                         <div class="card-header" style="padding-bottom: 3px;">
+
                             {{#ifCond UserId '==' ../user.id}}
                             <form method="post" action="/user/deleteQuestion/{{id}}" style="width:100%"
                                 onsubmit="return confirm('Are you sure you want to delete this question?');">
@@ -74,10 +71,13 @@
                             </form>
                             {{/ifCond}}
 
-                            <a href="/user/editQuestion" style="float:right;">
+                            {{#ifCond isAdmin '==' null}}
+                             <a href="/user/editQuestion" style="float:right;">
                             <input type="submit" name="action" value="Improve this question" class="btn btn-primary"
                             style="background-color: #4CAF50; border-radius: 30px; font-size: 12px;">
                             </a>
+                            {{/ifCond}}
+                            
 
                             <h4 style="padding: 3px 0 0 10px;" class="card-title"><b>{{title}}</b></h4>
                             

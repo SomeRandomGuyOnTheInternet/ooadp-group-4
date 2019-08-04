@@ -483,10 +483,7 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
     });
 });
 
-router.get('/faq', isAdmin, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
-
-    let questions = await
+router.get('/faq', async (req, res) => {
         Question.findAll({
             order: [
                 ['createdAt', 'ASC'],
@@ -497,44 +494,47 @@ router.get('/faq', isAdmin, async (req, res) => {
             res.render('admin/faq', {
                 user: req.user,
                 title: "FAQ",
-                questions,
-                unviewedNotifications
+                questions
+            
         });
     });
 });
 
-// router.post('/faq', isAdmin, async (req, res) => {
-//     const isAdmin = isBanned = isVendor = false;
-//     const isAnswered = false;
-//     let title = req.body.title;
-//     let description = req.body.description;
-//     let suggestion = req.body.suggestion;
-//     var error;
+router.post('/faq', isAdmin, async (req, res) => {
+    const isAnswered = false;
+    let title = req.body.title;
+    let description = req.body.description;
+    let suggestion = req.body.suggestion;
+    let isAdmin = true;
+    var error;
 
-//     Question.create({
-//         UserId: req.user.id,
-//         title,
-//         description,
-//         suggestion
-//     }).then((question) => {
-
-//         req.flash('success', 'You have successfully created a question!');
-//         res.redirect('/admin/faq');
-//     });
-// });
+    Question.create({
+        UserId: req.user.id,
+        title,
+        description,
+        suggestion,
+        isAdmin
+    }, {
+		where: {
+            UserId: req.user.id,
+            isAdmin: null
+		}
+    }).then((question) => {
+        req.flash('success', 'You have successfully created a question!');
+        res.redirect('/admin/faq');
+    });
+});
 
 // Shows edit questions page
 router.get('/editQuestion', isAdmin, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
-    let question = await
 
     Question.findOne({
 		where: {
-			UserId: req.user.id
+            UserId: req.user.id
 		},
 	}).then((question) => {
 	    res.render('admin/editQuestion',{
-            question  
+            question 
         
     });
 });
@@ -544,6 +544,7 @@ router.get('/editQuestion', isAdmin, async (req, res) => {
 // save edited video
 router.post('/editQuestion',  isAdmin, async (req, res) => {
     let isAnswered = true;
+    let isAdmin = true;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
@@ -554,7 +555,8 @@ router.post('/editQuestion',  isAdmin, async (req, res) => {
 		title,
         description,
         suggestion,
-        isAnswered
+        isAnswered,
+        isAdmin
 	}, {
 		where: {
             UserId: req.user.id,
