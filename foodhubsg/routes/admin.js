@@ -524,11 +524,13 @@ router.post('/faq', isAdmin, async (req, res) => {
 });
 
 // Shows edit questions page
-router.get('/editQuestion', isAdmin, async (req, res) => {
+router.get('/editQuestion/:id', isAdmin, async (req, res) => {
+    questionId = req.params.id;
 
     Question.findOne({
         where: {
-            UserId: req.user.id
+            UserId: req.user.id,
+            id: questionId  
         },
     }).then((question) => {
         res.render('admin/editQuestion', {
