@@ -750,7 +750,6 @@ router.post('/deleteQuestion/:id', isUser, async (req, res) => {
 });
 
 
-<<<<<<< HEAD
 // router.post('/suggestion', isUser, async (req, res) => {
 //     const isAdmin = isBanned = isVendor = false;
 //     const isAnswered = false;
@@ -766,18 +765,6 @@ router.post('/deleteQuestion/:id', isUser, async (req, res) => {
 //             res.redirect('/user/faq');
 //         });
 // });
-=======
-router.post('/suggestion', isUser, async (req, res) => {
-    const isAnswered = false;
-    let suggestion = req.body.suggestion;
-    var error;
-
-    await
-        Question.create({
-            UserId: req.user.id,
-            suggestion
-        });
->>>>>>> master
 
     req.flash('success', 'You have suggested an answer!');
     res.redirect('/user/faq');
