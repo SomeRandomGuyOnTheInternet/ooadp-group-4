@@ -698,13 +698,13 @@ router.post('/faq', isUser, async (req, res) => {
 });
 
 // Shows edit questions page
-router.get('/editQuestion', isUser, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
-    let question = await
-
+router.get('/editQuestion/:id', isUser, async (req, res) => {
+    questionId = req.params.id;
+ 
     Question.findOne({
 		where: {
-			UserId: req.user.id
+            UserId: req.user.id,
+            id: questionId      
 		},
 	}).then((question) => {
 	    res.render('user/editQuestion',{
@@ -742,21 +742,21 @@ router.post('/editQuestion',  isUser, async (req, res) => {
 });
 
 
-router.post('/suggestion', isUser, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
-    const isAnswered = false;
-    let suggestion = req.body.suggestion;
-    var error;
+// router.post('/suggestion', isUser, async (req, res) => {
+//     const isAdmin = isBanned = isVendor = false;
+//     const isAnswered = false;
+//     let suggestion = req.body.suggestion;
+//     var error;
 
-    Question.create({
-        UserId: req.user.id,
-        suggestion
-    }) .then((question) => {
+//     Question.create({
+//         UserId: req.user.id,
+//         suggestion
+//     }) .then((question) => {
 
-            req.flash('success', 'You have suggested an answer!');
-            res.redirect('/user/faq');
-        });
-});
+//             req.flash('success', 'You have suggested an answer!');
+//             res.redirect('/user/faq');
+//         });
+// });
 
 
 router.get('/settings', isUser, async (req, res) => {
