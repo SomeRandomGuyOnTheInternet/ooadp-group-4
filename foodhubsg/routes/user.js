@@ -698,18 +698,17 @@ router.post('/faq', isUser, async (req, res) => {
 
 // Shows edit questions page
 router.get('/editQuestion/:id', isUser, async (req, res) => {
-    questionId = req.params.id;
+    let questionId = req.params.id;
  
-    Question.findOne({
-		where: {
-            UserId: req.user.id,
-            id: questionId      
-		},
-	}).then((question) => {
-	    res.render('user/editQuestion',{
-            question  
-        
-    });
+    let question = await
+        Question.findOne({
+            where: {
+                UserId: req.user.id,
+                id: questionId      
+            },
+        });
+
+    res.render('user/editQuestion', { question });
 });
 
 
@@ -766,10 +765,6 @@ router.post('/deleteQuestion/:id', isUser, async (req, res) => {
 //             res.redirect('/user/faq');
 //         });
 // });
-
-    req.flash('success', 'You have suggested an answer!');
-    res.redirect('/user/faq');
-});
 
 
 router.post('/settings', isUser, async (req, res) => {
