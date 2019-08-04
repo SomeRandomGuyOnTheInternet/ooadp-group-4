@@ -293,6 +293,20 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
 });
 
 
+router.get('/availableBadges', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let badges = await Badge.findAll({ order: [['id', 'ASC']] });
+
+    res.render('user/availableBadges', {
+        user: req.user,
+        title: "Badges",
+        badges,
+        unviewedNotifications
+    });
+});
+
+
 router.get('/settings', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
@@ -629,23 +643,16 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
 
 
 router.get('/deleteMessage/:id', isUser, async (req, res) => {
-   let delMsg = await Message.findOne({ 
-       where: { 
-           id : req.params.id
-       }
-   })
-    await Message.destroy({
-            where: {
-                id: req.params.id
-            }
-        }); 
+    let delMsg = await Message.findOne({ where: { id : req.params.id } });
+    await Message.destroy({ where: { id: req.params.id } }); 
     
     let referral = await Referral.findOne({ 
         where: { 
             UserId: req.user.id, 
             RefUserId: delMsg.User2Id
         }
-    })
+    });
+    
     req.flash('success', 'Message Deleted');
     res.redirect(`/user/sendMessage/${referral.id}`);
 });
@@ -785,7 +792,7 @@ router.post('/settings', isUser, async (req, res) => {
 
         req.flash('success', 'You\'ve successfully updated your settings!');
     };
-    
+
     res.redirect('/user/settings');
 });
 

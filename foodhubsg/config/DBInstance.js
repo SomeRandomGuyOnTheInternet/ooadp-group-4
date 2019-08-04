@@ -31,21 +31,10 @@ function createInstance(Badge) {
             imageLocation: '/images/picking-up-steam-badge.png'
         },
         {
-            name: 'Full House',
-            description: 'Ten friends, that is more than enough to fully fill a house',
-            imageLocation: '/images/seedling-badge.png'
-        },
-        {
             name: 'Baller',
             description: 'Obtained a 10000 health points',
             imageLocation: '/images/baller-badge.png'
         },
-        // {
-        //     name: 'A Week Of Health',
-        //     description: 'On your way to being a healthy eater, keep it up',
-        //     imageLocation: '/images/seedling-badge.png'
-        // }, 
-
     ]);
 
     // The password for the following accounts is just 'password'
