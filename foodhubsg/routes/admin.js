@@ -495,11 +495,6 @@ router.get('/faq', async (req, res) => {
                 questions
             });
 
-            res.render('admin/faq', {
-                user: req.user,
-                title: "FAQ",
-                questions,
-            });
         });
 
 })

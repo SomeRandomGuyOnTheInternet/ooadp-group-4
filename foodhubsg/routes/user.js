@@ -660,7 +660,6 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
 
 router.get('/faq', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
-
     let questions = await
         Question.findAll({
             order: [
