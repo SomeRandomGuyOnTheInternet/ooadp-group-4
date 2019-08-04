@@ -662,9 +662,15 @@ router.get('/faq', isUser, async (req, res) => {
             order: [
                 ['createdAt', 'ASC'],
             ],
+            include: {
+                model: User,
+                required: true
+            },
             raw: true
         })
         .then((questions) => {
+            console.log(questions);
+            
             res.render('user/faq', {
                 user: req.user,
                 title: "FAQ",
