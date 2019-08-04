@@ -256,36 +256,41 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
     try {
         let chat = await Referral.findOne({ where: { id: req.params.id } });
         let friend = await User.findOne({ where: { id: chat.RefUserId } });
+        let existingMutualReferral = await
+            Referral.findOne({ where: { UserId: req.user.id, RefUserId: friend.id, isMutual: true } });
 
-        let history = await
-            Message.findAll({
-                where:
-                    Sequelize.and(
-                        Sequelize.or({ User1Id: req.user.id },
-                            { User2Id: req.user.id }),
-                        Sequelize.or(
-                            { User1Id: friend.id },
-                            { User2Id: friend.id })
-                    ),
-                include: {
-                    model: User,
-                    where: Sequelize.or({ id: req.user.id }, { id: friend.id }),
-                    required: true
-                },
-                order: [['createdAt', 'ASC']],
-                raw: true
+        if (existingMutualReferral) {
+            let history = await
+                Message.findAll({
+                    where:
+                        Sequelize.and(
+                            Sequelize.or({ User1Id: req.user.id },
+                                { User2Id: req.user.id }),
+                            Sequelize.or(
+                                { User1Id: friend.id },
+                                { User2Id: friend.id })
+                        ),
+                    include: {
+                        model: User,
+                        where: Sequelize.or({ id: req.user.id }, { id: friend.id }),
+                        required: true
+                    },
+                    order: [['createdAt', 'ASC']],
+                    raw: true
+                });
+
+            res.render('user/sendMessages', {
+                user: req.user,
+                title: "Chat History",
+                chat,
+                friend,
+                groupedMessages: groupMessages(history)
             });
-
-        res.render('user/sendMessages',{ 
-            user: req.user,
-            title: "Chat History",
-            chat, 
-            friend, 
-            groupedMessages: groupMessages(history) 
-        });
-    } 
-    
-    catch (error) {
+        } else {
+            req.flash('error', "You do not have a mutual association with that person, so you cannot message them!");
+            res.redirect('/user/friendActivity');
+        }
+    } catch (error) {
         console.log(error);
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
@@ -628,16 +633,23 @@ router.post('/sendMessage/:id', isUser, async (req, res) => {
     let chat = req.body.message;
     let senderid = req.user.id;
     let receiverid = req.body.receive;
-    
-    await
-        Message.create({
-            Message: chat,
-            User1Id: senderid,
-            User2Id: receiverid
-        });
+    let existingMutualReferral = await 
+        Referral.findOne({ where: { UserId: req.user.id, RefUserId: receiverid, isMutual: true } });
 
-    req.flash('success', 'Message Sent');
-    res.redirect(`/user/sendMessage/${req.params.id}`);
+    if (existingMutualReferral) {
+        await
+            Message.create({
+                Message: chat,
+                User1Id: senderid,
+                User2Id: receiverid
+            });
+
+        req.flash('success', 'Message Sent');
+        res.redirect(`/user/sendMessage/${req.params.id}`);
+    } else {
+        req.flash('error', 'You can\'t send messages to that user anymore!');
+        res.redirect(`/user/friendActivity`);       
+    }
 });
 
 
