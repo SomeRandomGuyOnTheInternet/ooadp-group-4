@@ -485,9 +485,7 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
 
 router.get('/faq', async (req, res) => {
         Question.findAll({
-            order: [
-                ['createdAt', 'ASC'],
-            ],
+            order: [['createdAt', 'ASC']],
             raw: true
         })
         .then((questions) => {
@@ -495,10 +493,9 @@ router.get('/faq', async (req, res) => {
                 user: req.user,
                 title: "FAQ",
                 questions
-            
+            });
         });
     });
-});
 
 router.post('/faq', isAdmin, async (req, res) => {
     const isAnswered = false;

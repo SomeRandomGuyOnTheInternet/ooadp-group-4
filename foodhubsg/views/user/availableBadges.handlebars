@@ -1,0 +1,28 @@
+{{> _msg }}
+<div id="colorlib-container">
+    <div class="container">
+        <div class="box1">
+            <div class="row row-pb-md">
+                <div class="col-md-12">
+                    <header id="summary-header">
+                        <h1 class="font_color"><b>Available Badges</b></h1>
+                        <hr>
+                    </header>
+
+                    <div class="row justify-content-center">
+                    {{#each badges}}
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-center badge">
+                        <h6 style="margin: 0"><b>{{name}}</b></h6>
+                        <img src="{{imageLocation}}" width="67px" height="65px" class="d-inline-block align-top" alt="Badge"
+                            data-toggle="tooltip" data-placement="bottom" title="{{description}}">
+                    </div>
+                    {{/each}}
+                    </div>
+                    <br>
+                    <br>
+                    <h4 class="text-center"><b>...more to come!</b></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

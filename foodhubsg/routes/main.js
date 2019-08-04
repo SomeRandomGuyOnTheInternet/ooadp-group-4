@@ -12,7 +12,6 @@ const addBadges = require('../helpers/addBadges');
 
 const User = require('../models/User');
 const UserAction = require('../models/UserAction');
-const UserBadge = require('../models/UserBadge');
 const Referral = require('../models/Referral');
 const Shop = require('../models/Shop');
 
