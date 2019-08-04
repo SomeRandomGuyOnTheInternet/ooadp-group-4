@@ -293,6 +293,20 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
 });
 
 
+router.get('/availableBadges', isUser, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let badges = await Badge.findAll({ order: [['id', 'ASC']] });
+
+    res.render('user/availableBadges', {
+        user: req.user,
+        title: "Badges",
+        badges,
+        unviewedNotifications
+    });
+});
+
+
 router.get('/settings', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
@@ -785,7 +799,7 @@ router.post('/settings', isUser, async (req, res) => {
 
         req.flash('success', 'You\'ve successfully updated your settings!');
     };
-    
+
     res.redirect('/user/settings');
 });
 
