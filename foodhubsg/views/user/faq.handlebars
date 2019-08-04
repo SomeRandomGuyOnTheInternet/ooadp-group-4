@@ -28,14 +28,6 @@
                                 </div>
                             </div>
 
-                            <div class="row form-group">
-                                <div class="col-md-12">
-                                    <label class="font-italic" for="suggestion">Suggested Answer</label>
-                                    <textarea class="form-control" id="suggestion" name="suggestion" rows="2"
-                                    readonly></textarea>
-                                </div>
-                            </div>
-
                         </div>
 
                         {{!-- <div class="modal-footer ajaxErrBlock" id="refCodeErrBlock">
@@ -51,19 +43,23 @@
             </div>
         </div>
 
-        <div class="modal fade" id="suggestAns" tabindex="-1" role="dialog" aria-labelledby="suggestAnsLabel"
+
+
+
+        <div class="modal fade" id="improveAns" tabindex="-1" role="dialog" aria-labelledby="improveAnsLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title font_color" id="suggestAnsLabel"><b>Ask a Question</b></h3>
+                        <h3 class="modal-title font_color" id="improveAnsLabel"><b>Improve This Question</b></h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
-                    <form action="/user/suggestion/{{id}}" method="post" id="faq">
-                        <div class="modal-body" style="padding-bottom: 0px;">
+                    <form action="/user/saveEditedQuestion/{{question.id}}" method="post">
+			          <input type="hidden" name="_method" value="PUT">
+                        <div class="modal-body">
 
                             <label class="font-italic" for="title">Title</label>
                             <input id="title" type="text" class="form-control" name="title" value="{{question.title}}">
@@ -72,15 +68,7 @@
                                 <div class="col-md-12">
                                     <label class="font-italic" for="description">Description</label>
                                     <textarea class="form-control" id="description" name="description"
-                                        rows="3" value="{{question.description}}"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="row form-group">
-                                <div class="col-md-12">
-                                    <label class="font-italic" for="suggestion">Suggested Answer</label>
-                                    <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question."
-                                        ></textarea>
+                                        rows="3">{{question.description}}</textarea>
                                 </div>
                             </div>
 
@@ -127,23 +115,35 @@
                                 <input type="submit" value="Delete" class="btn btn-primary" style="float:right; font-size: 12px; border-radius: 30px;">
                             </form>
                             {{!-- {{/ifCond}} --}}
-                            {{!-- <input type="submit" value="Edit" class="btn btn-primary" style="float:right;"> --}}
+                            {{!-- {{#ifCond id '!=' ../user.id}}
+                            <form method="" action="" style="width:100%"
+                                onsubmit="return confirm('You are not allowed to delete this question!');">
+                                <input type="submit" value="Delete" class="btn btn-primary" style="float:right; font-size: 12px; border-radius: 30px;">
+                            </form>
+                            {{/ifCond}} --}}
 
-                            <a class="modal-action" data-toggle="modal" data-target="#suggestAns" style="float:right;">
+                            {{!-- <a class="modal-action" data-toggle="modal" data-target="#suggestAns" style="float:right;">
                                 <input type="submit" name="action" value="Suggest An Answer" class="btn btn-primary"
-                                    style="background-color: #4CAF50; border-radius: 30px; font-size: 12px;">
+                                style="background-color: #4CAF50; border-radius: 30px; font-size: 12px;">
+                            </a> --}}
+
+                            <a href="/user/editQuestion" style="float:right;">
+                            <input type="submit" name="action" value="Improve this question" class="btn btn-primary"
+                            style="background-color: #4CAF50; border-radius: 30px; font-size: 12px;">
                             </a>
+
+
                             <h4 style="padding: 3px 0 0 10px;" class="card-title">{{title}}</h4>
                         </div>
 
-                        <div class="row" style="padding-left: 20px;">
+                        <div class="row" style="padding-left: 20px; padding-right: 20px;">
                             <div class="col-sm-6 col-md-6 col-lg-12">
                                 <h6><br>{{description}}</h6>
                             </div>
                         </div>
 
                         <div class="accordion" id="storyAccordion{{id}}">
-                            <div class="card-header" id="headingOne{{id}}">
+                            <div class="card-header" id="headingOne{{id}}" style="padding: 0;">
                                 <button class="btn btn-link" type="button" data-toggle="collapse"
                                     data-target="#collapseOne{{id}}" aria-expanded="false"
                                     aria-controls="collapseOne{{id}}">
@@ -166,6 +166,8 @@
                     {{else}}
                     <h3>No questions asked</h3>
                     {{/if}}
+
+                    
 
 
                     {{!-- <h3><b class="font_color">What is BMI?</b></h3>
