@@ -291,10 +291,9 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
             res.redirect('/user/friendActivity');
         }
     } catch (error) {
-        console.log(error);
         req.flash('error', "Please use a valid URL!");
         res.redirect('/user/friendActivity');
-    }
+    };
 });
 
 

@@ -156,10 +156,12 @@
                     </div>
 					<br>
 					{{#ifCond user.daysActive '>=' 3}}
+						<h4><b>Food Intake Graph</b></h4>
+						<hr align="left" width="5%">
 						<div class="chartAreaWrapper">
 							<canvas class="foodHistoryChart" id="foodHistoryChart{{user.id}}" width="400" height="180" style="margin-bottom:3em;"></canvas>
 						</div>
-						<br><br>
+						<br>
 						<h4><b>Breakdown on meal-by-meal basis</b></h4>
 						<hr align="left" width="5%">
 						<div class="table-responsive">
