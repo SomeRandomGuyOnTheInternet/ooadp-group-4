@@ -10,24 +10,57 @@
                         <h1 class="font_color"><b>Improve this Question</b></h1>
                         <hr>
                     </div>
+
                     <form method="post" action="/user/editQuestion" style="width:100%">
                         <div class="row form-group" style="margin:0;">
+
                             <div class="col-md-12">   
                                 <label>Title</label>
                                 <input name="title" id="title" type="text" class="form-control"
-                                     value="{{question.title}}" {{#ifCond question.UserId '!=' ../user.id}}readonly{{/ifCond}}>
+                                     value="{{question.title}}" readonly>
                             </div>
 
                             <div class="col-md-12">   
                                 <label>Description</label>
                                 <input name="description" id="description" type="text" class="form-control"
-                                     value="{{question.description}}" {{#ifCond question.UserId '!=' ../user.id}}readonly{{/ifCond}}>
+                                     value="{{question.description}}">
                             </div>
 
                             <div class="col-md-12">   
                                 <label>Suggested Answer</label>
-                                <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." style="text-align:left;" autofocus required {{#ifCond question.UserId '==' ../user.id}}readonly{{/ifCond}}>
+                                <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." style="text-align:left;" autofocus required>
                                 {{question.suggestion}}
+                                </textarea>
+                            </div>
+
+                            
+                            <div class="col-md-12">
+                                <input type="submit" name="action" value="Save" class="btn btn-primary btn-tall"
+                                   id="" style="float:right; margin-top: 30px;">       
+                            </div>
+
+                            </div>
+                            </form>
+
+                            {{!-- <form method="post" action="/user/editQuestion" style="width:100%">
+                        <div class="row form-group" style="margin:0;">
+
+                            <div class="col-md-12">   
+                                <label>Title</label>
+                                <input name="title" id="title" type="text" class="form-control"
+                                     value="{{question.title}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+                            </div>
+
+                            <div class="col-md-12">   
+                                <label>Description</label>
+                                <input name="description" id="description" type="text" class="form-control"
+                                     value="{{question.description}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+                            </div>
+
+                            <div class="col-md-12">   
+                                <label>Suggested Answer</label>
+                                <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." style="text-align:left;" autofocus required {{#ifCond question.UserId '==' user.id}}readonly{{/ifCond}}>
+                                {{suggestion}}
                                 </textarea>
                             </div>
                             
@@ -35,11 +68,14 @@
                                 <input type="submit" name="action" value="Save" class="btn btn-primary btn-tall"
                                    id="" style="float:right; margin-top: 30px;">       
                             </div>
+
                         </div>
-                    </form>
+                    </form> --}} 
+                    
                 </div>
                 <br>
             </div>
         </div>
     </div>
 </div>
+

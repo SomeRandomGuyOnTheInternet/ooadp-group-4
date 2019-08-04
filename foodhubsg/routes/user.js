@@ -667,7 +667,6 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
     res.redirect(`/user/sendMessage/${referral.id}`);
 });
 
-
 router.get('/faq', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
     let questions = await
@@ -716,11 +715,24 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
                 id: questionId      
             },
         });
-    res.render('user/editQuestion', 
-    { user: req.user, title: "Edit Question", question});
 
+    res.render('user/editQuestion', { question });
 });
 
+// // Shows edit questions page
+// router.get('/editQuestion/:id', isUser, async (req, res) => {
+//     let questionId = req.params.id;
+ 
+//     let question = await
+//         Question.findOne({
+//             where: {
+//                 id: questionId      
+//             },
+//         });
+//     res.render('user/editQuestion', 
+//     { user: req.user, title: "Edit Question", question});
+
+// });
 
 
 router.post('/editQuestion',  isUser, async (req, res) => {
@@ -758,7 +770,6 @@ router.post('/deleteQuestion/:id', isUser, async (req, res) => {
     req.flash('success', "You've successfully deleted the question!");
     res.redirect('/user/faq');
 });
-
 
 // router.post('/suggestion', isUser, async (req, res) => {
 //     const isAdmin = isBanned = isVendor = false;
