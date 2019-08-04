@@ -272,12 +272,11 @@ router.get('/sendMessage/:id', isUser, async (req, res) => {
                     where: Sequelize.or({ id: req.user.id }, { id: friend.id }),
                     required: true
                 },
-                order: [['createdAt', 'DESC']],
+                order: [['createdAt', 'ASC']],
                 raw: true
             });
-        // console.log(history); 
-        let sortedHistory = groupedMessages(history); 
-        // console.log(sortedHistory); 
+            
+        let sortedHistory = groupedMessages(history);
 
         res.render('user/sendMessages',
             { user: req.user, chat: chat, friend: friend, message: history });
@@ -637,50 +636,6 @@ router.get('/deleteMessage/:id', isUser, async (req, res) => {
 });
 
 
-
-// router.get('/editCompliment/:id', isUser, async (req, res) => {
-//     let com = await
-//         Referral.findOne({
-//             where: {
-//                 id: req.params.id,
-//                 UserId: req.user.id,
-//             }
-//         });
-
-//     res.render('user/editCompliment', {
-//         compliment: com,
-//         user: req.user
-//     });
-// })
-
-
-// router.post('/editCompliment/:id', isUser, async (req, res) => {
-//     let compliment = req.body.compliment;
-
-//     await
-//         Referral.update({
-//             compliment: compliment,
-//         },{
-//             where: {
-//                 id: req.params.id,
-//                 UserId: req.user.id,
-//             }
-//         });
-
-// router.get('/acceptRequest/:id', isUser, (req, res) => {
-//     Referral.update({
-//         isMutual: true
-//     }, {
-//             where: {
-//                 id: req.params.id,
-//             }
-//         }).then(() => {
-//             req.flash('success', 'Requested Accepted, you can now chat');
-//             res.redirect('/user/friendActivity');
-//         })
-// });
-
-
 router.get('/faq', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
 
@@ -696,10 +651,10 @@ router.get('/faq', isUser, async (req, res) => {
                 user: req.user,
                 questions,
                 unviewedNotifications
+        });
     });
 });
 
-});
 
 router.post('/faq', isUser, async (req, res) => {
     const isAdmin = isBanned = isVendor = false;
