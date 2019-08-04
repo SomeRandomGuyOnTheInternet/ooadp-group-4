@@ -668,105 +668,87 @@ router.get('/faq', isUser, async (req, res) => {
             raw: true
         });
 
-        res.render('user/faq', {
-            user: req.user,
-            title: "FAQ",
-            questions,
-            unviewedNotifications
+    res.render('user/faq', {
+        user: req.user,
+        title: "FAQ",
+        questions,
+        unviewedNotifications
     });
 });
 
 
 router.post('/faq', isUser, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
     var error;
 
-    Question.create({
-        UserId: req.user.id,
-        title,
-        description,
-        suggestion
-    }).then((question) => {
+    await
+        Question.create({
+            UserId: req.user.id,
+            title,
+            description,
+            suggestion
+        });
 
-        req.flash('success', 'You have successfully created a question!');
-        res.redirect('/user/faq');
-    });
+    req.flash('success', 'You have successfully created a question!');
+    res.redirect('/user/faq');
 });
 
-// Shows edit questions page
+
 router.get('/editQuestion', isUser, async (req, res) => {
     let unviewedNotifications = await getUnviewedNotifications(req.user);
     let question = await
+        Question.findOne({
+            where: {
+                UserId: req.user.id
+            },
+        });
 
-    Question.findOne({
-		where: {
-			UserId: req.user.id
-		},
-	}).then((question) => {
-	    res.render('user/editQuestion',{
-            question  
-        
-    });
-});
+    res.render('user/editQuestion', { question });
 });
 
 
-// save edited video
 router.post('/editQuestion',  isUser, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
     let isAnswered = true;
     let title = req.body.title;
     let description = req.body.description;
     let suggestion = req.body.suggestion;
     let questionId = req.params.id;
     var error;
-	
-	Question.update({
-		title,
-        description,
-        suggestion,
-        isAnswered
-	}, {
-		where: {
-            UserId: req.user.id,
-            isAnswered: null,
-        }
-	}).then(() => {
-        req.flash('success', 'You have suggested an answer!');
-	res.redirect('/user/faq'); 
-    }).catch(err => console.log(err));
+    
+    await
+        Question.update({
+            title,
+            description,
+            suggestion,
+            isAnswered
+        },{
+            where: {
+                UserId: req.user.id,
+                isAnswered: null,
+            }
+        });
+    
+    req.flash('success', 'You have suggested an answer!');
+	res.redirect('/user/faq');
 });
 
 
 router.post('/suggestion', isUser, async (req, res) => {
-    const isAdmin = isBanned = isVendor = false;
     const isAnswered = false;
     let suggestion = req.body.suggestion;
     var error;
 
-    Question.create({
-        UserId: req.user.id,
-        suggestion
-    }) .then((question) => {
-
-            req.flash('success', 'You have suggested an answer!');
-            res.redirect('/user/faq');
+    await
+        Question.create({
+            UserId: req.user.id,
+            suggestion
         });
-});
 
-
-router.get('/settings', isUser, async (req, res) => {
-    let unviewedNotifications = await getUnviewedNotifications(req.user);
-
-    res.render('user/settings', {
-        user: req.user,
-        title: "Settings",
-        unviewedNotifications
-    });
+    req.flash('success', 'You have suggested an answer!');
+    res.redirect('/user/faq');
 });
 
 
@@ -801,16 +783,10 @@ router.post('/deleteQuestion/:id', isUser, (req, res) => {
     let questionId = req.params.id;
     let error;
 
-    Question.destroy({
-        where: {
-            id: questionId,
-        },
-    })
-        .then(() => {
+    await Question.destroy({ where: { id: questionId } });
 
-            req.flash('success', "You've successfully deleted the question!");
-            res.redirect('/user/faq');
-        })
+    req.flash('success', "You've successfully deleted the question!");
+    res.redirect('/user/faq');
 });
 
 
