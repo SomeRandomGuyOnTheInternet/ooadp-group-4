@@ -11,25 +11,25 @@
                         <hr>
                     </div>
 
-                    <form method="post" action="/user/editQuestion" style="width:100%">
+                    <form method="post" action="/admin/editQuestion" style="width:100%">
                         <div class="row form-group" style="margin:0;">
 
                             <div class="col-md-12">   
                                 <label>Title</label>
                                 <input name="title" id="title" type="text" class="form-control"
-                                     value="{{question.title}}" readonly>
+                                     value="{{question.title}}">
                             </div>
 
                             <div class="col-md-12">   
                                 <label>Description</label>
                                 <input name="description" id="description" type="text" class="form-control"
-                                     value="{{question.description}}" readonly>
+                                     value="{{question.description}}">
                             </div>
 
                             <div class="col-md-12">   
                                 <label>Suggested Answer</label>
                                 <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." required>
-                                {{question.suggestion}}
+                                {{question.suggestion}} - Admin
                                 </textarea>
                             </div>
 

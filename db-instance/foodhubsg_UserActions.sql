@@ -38,7 +38,7 @@ CREATE TABLE `UserActions` (
   PRIMARY KEY (`id`),
   KEY `UserId` (`UserId`),
   CONSTRAINT `useractions_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,6 +47,7 @@ CREATE TABLE `UserActions` (
 
 LOCK TABLES `UserActions` WRITE;
 /*!40000 ALTER TABLE `UserActions` DISABLE KEYS */;
+INSERT INTO `UserActions` VALUES (1,'gained 100 points','adding a food item below 500 calories to your log','positive','Keep it up!',NULL,1,NULL,NULL,'2019-08-03 07:58:23','2019-08-03 07:58:25',10),(2,'earned the Baby Steps badge','adding your first recommended food item','positive','You can view this badge on your page.',NULL,1,NULL,NULL,'2019-08-03 07:58:23','2019-08-03 07:58:25',10),(3,'gained 100 points','adding a food item below 500 calories to your log','positive','Keep it up!',NULL,1,NULL,NULL,'2019-07-26 00:59:37','2019-07-26 00:59:38',10),(4,'earned the High Roller badge','obtaining more than 1000 points','positive','You can view this badge on your page.',NULL,1,NULL,NULL,'2019-07-26 00:59:37','2019-07-26 00:59:38',10);
 /*!40000 ALTER TABLE `UserActions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-31 11:16:56
+-- Dump completed on 2019-08-04 16:42:46
