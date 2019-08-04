@@ -190,13 +190,6 @@ router.get('/editFoodItem/:id', isAdmin, (req, res) => {
 });
 
 
-router.get('/faq', isAdmin, (req, res) => {
-    res.render('admin/faq'), {
-        user: req.user,
-        title: "FAQ",
-    }
-});
-
 
 router.post('/vendors', (req, res) => {
     const name = req.body.name;
@@ -489,6 +482,92 @@ router.post('/deleteFoodItem/:id', isAdmin, (req, res) => {
         res.redirect(`/admin/editShop/${foodItem.ShopId}`);
     });
 });
+
+router.get('/faq', isAdmin, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+
+    let questions = await
+        Question.findAll({
+            order: [
+                ['createdAt', 'ASC'],
+            ],
+            raw: true
+        })
+        .then((questions) => {
+            res.render('admin/faq', {
+                user: req.user,
+                title: "FAQ",
+                questions,
+                unviewedNotifications
+        });
+    });
+});
+
+// router.post('/faq', isAdmin, async (req, res) => {
+//     const isAdmin = isBanned = isVendor = false;
+//     const isAnswered = false;
+//     let title = req.body.title;
+//     let description = req.body.description;
+//     let suggestion = req.body.suggestion;
+//     var error;
+
+//     Question.create({
+//         UserId: req.user.id,
+//         title,
+//         description,
+//         suggestion
+//     }).then((question) => {
+
+//         req.flash('success', 'You have successfully created a question!');
+//         res.redirect('/user/faq');
+//     });
+// });
+
+// Shows edit questions page
+router.get('/editQuestion', isAdmin, async (req, res) => {
+    let unviewedNotifications = await getUnviewedNotifications(req.user);
+    let question = await
+
+    Question.findOne({
+		where: {
+			UserId: req.user.id
+		},
+	}).then((question) => {
+	    res.render('admin/editQuestion',{
+            question  
+        
+    });
+});
+});
+
+
+// save edited video
+router.post('/editQuestion',  isAdmin, async (req, res) => {
+    const isAdmin = isBanned = isVendor = false;
+    const isAnswered = false;
+    let title = req.body.title;
+    let description = req.body.description;
+    let suggestion = req.body.suggestion;
+    let questionId = req.params.id;
+    var error;
+	
+	Question.update({
+		title,
+        description,
+        suggestion
+	}, {
+		where: {
+			UserId: req.user.id
+		}
+	}).then(() => {
+        req.flash('success', 'You have suggested an answer!');
+	res.redirect('/admin/faq'); 
+    }).catch(err => console.log(err));
+});
+
+
+
+
 
 router.post('/deleteQuestion/:id', isAdmin, (req, res) => {
     let questionId = req.params.id;
