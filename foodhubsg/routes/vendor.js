@@ -7,8 +7,8 @@ const Shop = require('../models/Shop');
 const getShopRatings = require('../helpers/getShopRating');
 const updateShopRating = require('../helpers/updateShopRating')
 const bcrypt = require('bcryptjs');
-const Sequelize = require('sequelize'); 
-const Op = Sequelize.Op; 
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 router.get('/settings', isVendor, (req, res) => {
     res.render('vendors/vendorSettings', {
@@ -34,10 +34,10 @@ router.post('/settings', isVendor, (req, res) => {
                 })
 
         });
-    }) 
+    })
     req.flash('success', 'Settings have been updated successfully');
     res.redirect('/vendor/settings');
-   
+
 });
 
 
@@ -51,14 +51,14 @@ router.get('/allShops', isVendor, (req, res) => {
         }
     }).then((shops) => {
         let query_list = []
-        for (i=0; i< shops.length; i++) { 
-            query_list.push(shops[i].name); 
-        } 
+        for (i = 0; i < shops.length; i++) {
+            query_list.push(shops[i].name);
+        }
         res.render('vendors/allShops', {
             title: "View Shops",
             shops: shops,
             user: req.user,
-            tags: query_list 
+            tags: query_list
         });
     })
 })
@@ -119,23 +119,23 @@ router.get('/allFoodItems', isVendor, (req, res) => {
     //         isDeleted: false,
     //     }
     // }).then((shop) => {
-    
+
     FoodItem.findAll({
         where: {
             isDeleted: false,
-        }, 
+        },
         include: [{
             model: Shop,
-            where: { 
+            where: {
                 VendorId: req.user.id,
             },
             required: true,
         }],
     }).then((food) => {
         let query_list = []
-        for (i=0; i< food.length; i++) { 
-            query_list.push(food[i].name); 
-        } 
+        for (i = 0; i < food.length; i++) {
+            query_list.push(food[i].name);
+        }
         res.render('vendors/allFoodItems', {
             user: req.user,
             title: "Show Menu",
@@ -369,50 +369,66 @@ router.get('/delete/:id', isVendor, (req, res) => {
 
 })
 
-router.post('/searchFoodItems', (req, res)=> { 
-    search = req.body.search; 
-    
-	FoodItem.findAll({ 
-		limit: 10, 
-		where: { 
-			name: { 
-				[Op.like] : '%' + search + '%'
-			} 
+router.post('/searchFoodItems', async (req, res) => {
+    search = req.body.search;
+    let food = await FoodItem.findAll({
+        where: {
+            isDeleted: false,
         },
         include: [{
             model: Shop,
-            where: { 
+            where: {
                 VendorId: req.user.id,
             },
             required: true,
-        }],
-	}).then((search_results) => { 
-		res.render( 'vendors/queryFood', { 
-                result: search_results, 
-                user: req.user,
-			}
-		)
-	})
+        }]
+    })
+    let query_list = []
+    for (i = 0; i < food.length; i++) {
+        query_list.push(food[i].name);
+    }
+    let search_restuls = await FoodItem.findAll({
+        limit: 10,
+        where: {
+            name: {
+                [Op.like]: '%' + search + '%'
+            }
+        },
+        include: [{
+            model: Shop,
+            where: {
+                VendorId: req.user.id,
+            },
+            required: true,
+        }]
+    })
+    res.render('vendors/queryFood', {
+        result: search_results,
+        tags : query_list, 
+        user: req.user,
+    }
+    )
+
 })
 
-router.post('/searchShops', (req, res)=> { 
-    search = req.body.search; 
-    
-	Shop.findAll({ 
-		limit: 10, 
-		where: { 
+router.post('/searchShops', (req, res) => {
+    search = req.body.search;
+
+    Shop.findAll({
+        limit: 10,
+        where: {
             VendorId: req.user.id,
-			name: { 
-				[Op.like] : '%' + search + '%'
+            name: {
+                [Op.like]: '%' + search + '%'
             }
-		}
-	}).then((search_results) => { 
-		res.render( 'vendors/queryShops', { 
-                result: search_results, 
-                user: req.user,
-			}
-		)
-	})
+        }
+    }).then((search_results) => {
+        res.render('vendors/queryShops', {
+            result: search_results,
+            user: req.user,
+        }
+        )
+    })
 })
 
 
