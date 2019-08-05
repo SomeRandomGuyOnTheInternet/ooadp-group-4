@@ -10,12 +10,15 @@ const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
+
+
 router.get('/settings', isVendor, (req, res) => {
     res.render('vendors/vendorSettings', {
         user: req.user,
         title: "Settings",
     })
 });
+
 
 router.post('/settings', isVendor, (req, res) => {
 
@@ -39,8 +42,6 @@ router.post('/settings', isVendor, (req, res) => {
     res.redirect('/vendor/settings');
 
 });
-
-
 
 
 router.get('/allShops', isVendor, (req, res) => {
@@ -308,7 +309,6 @@ router.post('/addFoodItem', isVendor, (req, res) => {
 });
 
 
-
 router.post('/editFoodItem/:id', isVendor, (req, res) => {
     const id = req.params.id
     const name = req.body.name;
@@ -344,6 +344,7 @@ router.post('/editFoodItem/:id', isVendor, (req, res) => {
         });
 })
 
+
 router.get('/delete/:id', isVendor, (req, res) => {
     Shop.update({
         isDeleted: 1,
@@ -368,6 +369,7 @@ router.get('/delete/:id', isVendor, (req, res) => {
         })
 
 })
+
 
 router.post('/searchFoodItems', async (req, res) => {
     search = req.body.search;
@@ -411,6 +413,7 @@ router.post('/searchFoodItems', async (req, res) => {
 
 })
 
+
 router.post('/searchShops', async (req, res) => {
     search = req.body.search;
 
@@ -443,5 +446,7 @@ router.post('/searchShops', async (req, res) => {
         tags: query_list
     })
 })
+
+
 
 module.exports = router;

@@ -2,7 +2,6 @@ const Sequelize = require('sequelize');
 const db = require('../config/DBConfig');
 
 
-
 const Question = db.define('question', {
     title: {
         type: Sequelize.STRING
@@ -20,6 +19,7 @@ const Question = db.define('question', {
         type: Sequelize.BOOLEAN
     },
 });
+
 
 
 module.exports = Question;

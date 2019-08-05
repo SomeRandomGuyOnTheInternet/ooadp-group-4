@@ -706,7 +706,8 @@ router.post('/faq', isUser, async (req, res) => {
     res.redirect('/user/faq');
 });
 
-// Shows edit questions page
+
+// Shows edit questions page, comment this when you comment out the codes below
 router.get('/editQuestion/:id', isUser, async (req, res) => {
     let questionId = req.params.id;
  
@@ -719,6 +720,25 @@ router.get('/editQuestion/:id', isUser, async (req, res) => {
         
     res.render('user/editQuestion', { user: req.user, title: "Edit Question", question });
 });
+
+
+// Comment out the codes below to be able to let current logged in users to edit their topic & question, 
+// and allow other users to only make suggestion to questions
+
+// // Shows edit questions page
+// router.get('/editQuestion/:id', isUser, async (req, res) => {
+//     let questionId = req.params.id;
+
+//     let question = await
+//         Question.findOne({
+//             where: {
+//                 id: questionId      
+//             },
+//         });
+//     res.render('user/editQuestion', 
+//     { user: req.user, title: "Edit Question", question});
+
+// });
 
 
 router.post('/editQuestion',  isUser, async (req, res) => {
@@ -736,12 +756,11 @@ router.post('/editQuestion',  isUser, async (req, res) => {
             suggestion,
             isAnswered
         },{
-            where: {
-                UserId: req.user.id,
+            where: { 
+		UserId: req.user.id,
                 isAnswered: null,
-            }
-        });
-    
+	    }
+    });
     req.flash('success', 'You have suggested an answer!');
 	res.redirect('/user/faq');
 });

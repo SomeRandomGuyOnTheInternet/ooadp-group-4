@@ -10,37 +10,79 @@
                         <h1 class="font_color"><b>Improve this Question</b></h1>
                         <hr>
                     </div>
+
                     <form method="post" action="/user/editQuestion" style="width:100%">
                         <div class="row form-group" style="margin:0;">
+
                             <div class="col-md-12">   
                                 <label>Title</label>
                                 <input name="title" id="title" type="text" class="form-control"
+<<<<<<< HEAD
                                      value="{{question.title}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+=======
+                                value="{{question.title}}" readonly>
+>>>>>>> 8d47dcc39ade8fc4d5143fbe4ba3b9204885fe2b
                             </div>
 
                             <div class="col-md-12">   
                                 <label>Description</label>
                                 <input name="description" id="description" type="text" class="form-control"
-                                     value="{{question.description}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+                                value="{{question.description}}" readonly>
                             </div>
 
                             <div class="col-md-12">   
                                 <label>Suggested Answer</label>
-                                <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." style="text-align:left;" autofocus required {{#ifCond question.UserId '==' user.id}}readonly{{/ifCond}}>
+                                <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." style="text-align:left;" autofocus required>
                                 {{question.suggestion}}
                                 </textarea>
                             </div>
-                            
+
                             <div class="col-md-12">
                                 <input type="submit" name="action" value="Save" class="btn btn-primary btn-tall"
-                                   id="" style="float:right; margin-top: 30px;">       
+                                id="" style="float:right; margin-top: 30px;">       
                             </div>
+
                         </div>
-                    </form> 
+                    </form>
+
+                    {{!-- Comment out the codes below to be able to let current logged in users to edit their topic & question, 
+                    and allow other users to only make suggestion to questions --}}
+
+                    {{!-- <form method="post" action="/user/editQuestion" style="width:100%">
+                              <div class="row form-group" style="margin:0;">
+
+                              <div class="col-md-12">   
+                                <label>Title</label>
+                                <input name="title" id="title" type="text" class="form-control"
+                                value="{{question.title}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+                              </div>
+
+                              <div class="col-md-12">   
+                                <label>Description</label>
+                                <input name="description" id="description" type="text" class="form-control"
+                                value="{{question.description}}" {{#ifCond question.UserId '!=' user.id}}readonly{{/ifCond}}>
+                              </div>
+
+                              <div class="col-md-12">   
+                                <label>Suggested Answer</label>
+                                <textarea class="form-control" id="suggestion" name="suggestion" rows="4" placeholder="Provide a suggestion to this question." style="text-align:left;" autofocus required {{#ifCond question.UserId '==' user.id}}readonly{{/ifCond}}>
+                                {{suggestion}}
+                                </textarea>
+                              </div>
+                            
+                              <div class="col-md-12">
+                                <input type="submit" name="action" value="Save" class="btn btn-primary btn-tall"
+                                id="" style="float:right; margin-top: 30px;">       
+                              </div>
+
+                              </div>
+                          </form> --}} 
                     
-                </div>
+                   </div>
                 <br>
             </div>
         </div>
+        
     </div>
 </div>
+
