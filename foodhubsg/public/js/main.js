@@ -86,7 +86,7 @@ function appendNotifications(unviewedNotifications) {
 			$('.toast-container').append(toast);
 		};
 	};
-}
+};
 
 function generateRatingIcons(shop) {
     var ratingHTMLstring = "&nbsp;No rating available";
