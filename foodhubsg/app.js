@@ -41,7 +41,7 @@ app.engine('handlebars', exphbs({
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
 
@@ -87,5 +87,5 @@ app.use('/vendor', vendorRoute);
 const foodhubsg = require('./config/DBConnection');
 foodhubsg.setUpDB(false);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 app.listen(port, () => { console.log(`Server started on port ${port}`) });

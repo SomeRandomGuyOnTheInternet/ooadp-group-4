@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node app.js"
   },
+  "engines": {
+    "node": "10.16.3"
+  }
   "keywords": [],
   "author": "Yo mama haha kill me",
   "license": "ISC",
