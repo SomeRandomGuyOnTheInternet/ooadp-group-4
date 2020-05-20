@@ -3,29 +3,29 @@ const Sequelize = require('sequelize');
 const moment = require('moment');
 const router = express.Router();
 
-const isUser = require('../helpers/isUser');
-const getUnviewedNotifications = require('../helpers/getUnviewedNotifications');
-const getMealType = require('../helpers/getMealType');
-const getCurrentDate = require('../helpers/getCurrentDate');
-const groupFoodItems = require('../helpers/groupFoodItems');
-const groupMessages = require('../helpers/groupMessages');
-const groupReferredUsers = require('../helpers/groupReferredUsers');
-const createUserReferral = require('../helpers/createUserReferral');
-const updateUserPoints = require('../helpers/updateUserPoints');
-const updateUserCalories = require('../helpers/updateUserCalories');
-const addBadges = require('../helpers/addBadges');
-const sendEmail = require('../helpers/sendEmail');
+const isUser = require('../helpers/isUser.js');
+const getUnviewedNotifications = require('../helpers/getUnviewedNotifications.js');
+const getMealType = require('../helpers/getMealType.js');
+const getCurrentDate = require('../helpers/getCurrentDate.js');
+const groupFoodItems = require('../helpers/groupFoodItems.js');
+const groupMessages = require('../helpers/groupMessages.js');
+const groupReferredUsers = require('../helpers/groupReferredUsers.js');
+const createUserReferral = require('../helpers/createUserReferral.js');
+const updateUserPoints = require('../helpers/updateUserPoints.js');
+const updateUserCalories = require('../helpers/updateUserCalories.js');
+const addBadges = require('../helpers/addBadges.js');
+const sendEmail = require('../helpers/sendEmail.js');
 
 
-const Food = require('../models/FoodItem');
-const FoodLog = require('../models/FoodLog');
-const Shop = require('../models/Shop');
-const User = require('../models/User');
-const UserBadge = require('../models/UserBadge');
-const Badge = require('../models/Badge');
-const Referral = require('../models/Referral');
-const Question = require('../models/Question');
-const Message = require('../models/Message');
+const Food = require('../models/FoodItem.js');
+const FoodLog = require('../models/FoodLog.js');
+const Shop = require('../models/Shop.js');
+const User = require('../models/User.js');
+const UserBadge = require('../models/UserBadge.js');
+const Badge = require('../models/Badge.js');
+const Referral = require('../models/Referral.js');
+const Question = require('../models/Question.js');
+const Message = require('../models/Message.js');
 
 
 

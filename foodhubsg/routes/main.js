@@ -5,19 +5,19 @@ const Sequelize = require('sequelize');
 const fs = require('fs');
 const router = express.Router();
 
-const isloggedOut = require('../helpers/isloggedOut');
-const generateCode = require('../helpers/generateCode');
-const upload = require('../helpers/imageUpload');
-const addBadges = require('../helpers/addBadges');
+const isloggedOut = require('../helpers/isloggedOut.js');
+const generateCode = require('../helpers/generateCode.js');
+const upload = require('../helpers/imageUpload.js');
+const addBadges = require('../helpers/addBadges.js');
 
-const User = require('../models/User');
-const UserAction = require('../models/UserAction');
-const Referral = require('../models/Referral');
-const Shop = require('../models/Shop');
+const User = require('../models/User.js');
+const UserAction = require('../models/UserAction.js');
+const Referral = require('../models/Referral.js');
+const Shop = require('../models/Shop.js');
 
 
 router.get('/register', isloggedOut, (req, res) => {
-	res.render('register', {title: "Register"})
+	res.render('register', { title: "Register" })
 });
 
 

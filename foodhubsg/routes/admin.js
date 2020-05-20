@@ -2,14 +2,14 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 
-const isAdmin = require('../helpers/isAdmin');
-const groupVendors = require('../helpers/groupVendors');
-const updateShopRating = require('../helpers/updateShopRating');
+const isAdmin = require('../helpers/isAdmin.js');
+const groupVendors = require('../helpers/groupVendors.js');
+const updateShopRating = require('../helpers/updateShopRating.js');
 
-const Shop = require('../models/Shop');
-const FoodItem = require('../models/FoodItem');
-const User = require("../models/User");
-const Question = require("../models/Question");
+const Shop = require('../models/Shop.js');
+const FoodItem = require('../models/FoodItem.js');
+const User = require("../models/User.js");
+const Question = require("../models/Question.js");
 
 
 
