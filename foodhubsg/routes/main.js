@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 const fs = require('fs');
 const router = express.Router();
 
-const isloggedOut = require('./isloggedOut.js');
+const isloggedOut = require('../helpers/isloggedOut.js');
 const generateCode = require('../helpers/generateCode.js');
 const upload = require('../helpers/imageUpload.js');
 const addBadges = require('../helpers/addBadges.js');
