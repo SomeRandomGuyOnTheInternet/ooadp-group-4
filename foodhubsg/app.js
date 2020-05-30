@@ -23,6 +23,7 @@ const userRoute = require('./routes/user');
 const adminRoute = require('./routes/admin');
 const vendorRoute = require('./routes/vendor'); 
 const test = require('./helpers/isloggedOut'); 
+console.log("dbjsnjnsbdfkjnfsbsjbnjsdbj")
 
 
 
