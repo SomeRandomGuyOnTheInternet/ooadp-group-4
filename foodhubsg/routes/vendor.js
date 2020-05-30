@@ -103,11 +103,11 @@ router.get('/deleteShop/:id', isVendor, (req, res) => {
             id: req.params.id,
         }
     })
-        .then((Shop) => {
-            Shop.update({
-                isDeleted: true,
-            })
-        });
+    .then((Shop) => {
+        Shop.update({
+            isDeleted: true,
+        })
+    });
     req.flash('success', 'Shop has been succcessfully deleted');
     res.redirect('/vendor/allShops');
 });
