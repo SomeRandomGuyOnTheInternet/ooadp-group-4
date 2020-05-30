@@ -565,7 +565,7 @@ router.post('/editQuestion', isAdmin, async (req, res) => {
         req.flash('success', 'You have suggested an answer!');
         res.redirect('/admin/faq');
     })
-    .catch(err => console.log(err));
+    //.catch(err => console.log(err));
 });
 
 

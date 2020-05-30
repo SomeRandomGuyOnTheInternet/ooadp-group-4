@@ -1537,7 +1537,7 @@ Color.prototype = {
 				} else if (type === '[object Number]') {
 					target[prop] = value;
 				} else {
-					console.error('unexpected color value:', value);
+					//console.error('unexpected color value:', value);
 				}
 			}
 		}
@@ -8464,7 +8464,7 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 			// the chart initialization but after setting basic chart / controller properties that
 			// can help to figure out that the chart is not valid (e.g chart.canvas !== null);
 			// https://github.com/chartjs/Chart.js/issues/2807
-			console.error("Failed to create chart: can't acquire context from the given item");
+			//console.error("Failed to create chart: can't acquire context from the given item");
 			return;
 		}
 
@@ -9928,7 +9928,7 @@ var core_helpers = function() {
 
 	helpers$1.color = !chartjsColor ?
 		function(value) {
-			console.error('Color.js not found!');
+			//console.error('Color.js not found!');
 			return value;
 		} :
 		function(value) {
@@ -13023,7 +13023,7 @@ var scale_time = core_scale.extend({
 
 		// DEPRECATIONS: output a message only one time per update
 		if (time.format) {
-			console.warn('options.time.format is deprecated and replaced by options.time.parser.');
+			//console.warn('options.time.format is deprecated and replaced by options.time.parser.');
 		}
 
 		// Backward compatibility: before introducing adapter, `displayFormats` was

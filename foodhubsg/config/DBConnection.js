@@ -16,9 +16,6 @@ const Question = require('../models/Question');
 const setUpDB = (drop) => {
     mySQLDB.authenticate()
     .then(() => {
-        console.log('FoodHub.SG database is now connected!');
-    })
-    .then(() => {
         User.hasMany(UserAction, { foreignKey: 'UserId' });
         UserAction.belongsTo(User, { foreignKey: 'UserId' });
 
@@ -54,12 +51,11 @@ const setUpDB = (drop) => {
 
         mySQLDB.sync({ force: drop })
         .then(() => {
-            console.log('Create tables if none exists'); 
             if (drop == true) createInstance(Badge);
         })
-        .catch(err => console.log(err))
+        //.catch(err => console.log(err))
     })
-    .catch(err => console.log('Error: ' + err));
+    //.catch(err => console.log('Error: ' + err));
 };
 
 module.exports = {

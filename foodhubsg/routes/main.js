@@ -179,7 +179,7 @@ router.post('/upload', (req, res) => {
 	upload(req, res, (err) => {
 		if (err) {
 			res.json({ file: '/images/no-image.jpg', err: err });
-			console.log(err);
+			//console.log(err);
 		} else {
 			if (req.file === undefined) {
 				res.json({ file: '/images/no-image.jpg', err: err });
