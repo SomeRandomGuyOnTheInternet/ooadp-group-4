@@ -5,10 +5,10 @@ const Sequelize = require('sequelize');
 const fs = require('fs');
 const router = express.Router();
 
-const isloggedOut = require('../helpers/isloggedOut.js');
-const generateCode = require('../helpers/generateCode.js');
-const upload = require('../helpers/imageUpload.js');
-const addBadges = require('../helpers/addBadges.js');
+const isloggedOut = require('/helpers/isloggedOut.js')(app);
+const generateCode = require('/helpers/generateCode.js')(app);
+const upload = require('/helpers/imageUpload.js')(app);
+const addBadges = require('/helpers/addBadges.js')(app);
 
 const User = require('../models/User.js');
 const UserAction = require('../models/UserAction.js');

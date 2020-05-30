@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const moment = require('moment');
 const router = express.Router();
 
-const isUser = require('/helpers/isUser.js')(app);
+const isUser = require('../helpers/isUser.js')(app);
 const getUnviewedNotifications = require('../helpers/getUnviewedNotifications.js')(app);
 const getMealType = require('../helpers/getMealType.js')(app);
 const getCurrentDate = require('../helpers/getCurrentDate.js')(app);
