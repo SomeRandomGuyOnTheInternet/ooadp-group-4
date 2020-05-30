@@ -29,7 +29,7 @@ function localStrategy(passport) {
             done(null, user);
         })
         .catch((done) => {
-            console.log(done);
+            //console.log(done);
         });
     });
 }
