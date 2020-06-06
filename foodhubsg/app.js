@@ -45,6 +45,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
+app.use(express.static(__dirname + '/public'));
 
 app.use(session({
 	key: 'foodhubsg',
