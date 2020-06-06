@@ -38,6 +38,7 @@ app.engine('handlebars', exphbs({
 	},
 }));
 
+app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
