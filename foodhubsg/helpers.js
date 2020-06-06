@@ -5,12 +5,12 @@ const path = require('path');
 const sgMail = require('@sendgrid/mail');
 const Sequelize = require('sequelize');
 
-const Shop = require('../models/Shop');
-const FoodItem = require('../models/FoodItem');
-const User = require('../models/User');
-const UserAction = require('../models/UserAction');
-const FoodLog = require('../models/FoodLog');
-const Food = require('../models/FoodItem');
+const Shop = require('./models/Shop');
+const FoodItem = require('./models/FoodItem');
+const User = require('./models/User');
+const UserAction = require('./models/UserAction');
+const FoodLog = require('./models/FoodLog');
+const Food = require('./models/FoodItem');
 
 
 const storage = multer.diskStorage({
