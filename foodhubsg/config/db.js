@@ -8,8 +8,8 @@
 // }
 
 module.exports = {
-    HOST: 'us-cdbr-east-06.cleardb.net',
-    USER: 'b2c1786c8469bd',
-    PASSWORD: 'f52d9cc2',
-    DB: 'heroku_c70c9870c641506',
+    host: 'us-cdbr-east-06.cleardb.net',
+    database: 'b2c1786c8469bd',
+    password: 'f52d9cc2',
+    db: 'heroku_c70c9870c641506',
 }

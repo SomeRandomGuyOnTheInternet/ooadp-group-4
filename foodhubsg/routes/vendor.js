@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 const isVendor = require('../helpers').isVendor;
-const getShopRatings = require('../helpers').getShopRatings;
+const getShopRatings = require('../helpers').getShopRating;
 const updateShopRating = require('../helpers').updateShopRating;
 
 const Vendor = require('../models/User.js');

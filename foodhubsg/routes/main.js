@@ -7,7 +7,7 @@ const router = express.Router();
 
 const isloggedOut = require('../helpers').isLoggedOut;
 const generateCode = require('../helpers').generateCode;
-const upload = require('../helpers').upload;
+const upload = require('../helpers').imageUpload;
 const addBadges = require('../helpers').addBadges;
 
 const User = require('../models/User.js');

@@ -4,7 +4,7 @@ const moment = require('moment');
 const router = express.Router();
 
 const isUser = require('../helpers').isUser;
-const getUnviewedNotifications = require('../helpers').getUnviewedNotifications;
+const getUnviewedNotifications = require('../helpers').getUnviewedNotification;
 const getMealType = require('../helpers').getMealType;
 const getCurrentDate = require('../helpers').getCurrentDate;
 const groupFoodItems = require('../helpers').groupFoodItems;
