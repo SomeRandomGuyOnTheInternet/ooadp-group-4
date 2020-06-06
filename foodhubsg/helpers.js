@@ -11,7 +11,7 @@ const User = require('./models/User');
 const UserAction = require('./models/UserAction');
 const FoodLog = require('./models/FoodLog');
 const Food = require('./models/FoodItem');
-const Notification = require('./models/Notification');
+const Notification = require('./models/UserAction');
 
 
 const storage = multer.diskStorage({
