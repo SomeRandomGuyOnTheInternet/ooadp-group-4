@@ -22,8 +22,6 @@ const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
 const adminRoute = require('./routes/admin');
 const vendorRoute = require('./routes/vendor'); 
-const test = require('hjbdsvobdhsborhrbsoh'); 
-console.log("dbjsnjnsbdfkjnfsbsjbnjsdbj")
 
 
 

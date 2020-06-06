@@ -25,6 +25,24 @@
     "mysql2": "^1.6.5",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "sequelize": "^5.8.6"
+    "sequelize": "^5.8.6",
+    "isloggedOut": "1.0.0",
+    "generateCode": "1.0.0",
+    "imageUpload": "1.0.0",
+    "addBadges": "1.0.0",
+    "isAdmin": "1.0.0",
+    "groupVendors": "1.0.0",
+    "isUser": "1.0.0",
+    "getUnviewedNotifications": "1.0.0",
+    "getMealType": "1.0.0",
+    "getCurrentDate": "1.0.0",
+    "groupFoodItems": "1.0.0",
+    "groupMessages": "1.0.0",
+    "groupReferredUsers": "1.0.0",
+    "createUserReferral": "1.0.0",
+    "updateUserCalories": "1.0.0"
+    "updateUserCalories": "1.0.0",
+    "addBadges": "1.0.0",
+    "sendEmail": "1.0.0"
   }
 }
