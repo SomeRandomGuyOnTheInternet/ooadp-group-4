@@ -4,17 +4,17 @@ const moment = require('moment');
 const router = express.Router();
 
 const isUser = require('../helpers').isUser;
-const getUnviewedNotifications = require('../helpers/getUnviewedNotifications.js')(app);
-const getMealType = require('../helpers/getMealType.js')(app);
-const getCurrentDate = require('../helpers/getCurrentDate.js')(app);
-const groupFoodItems = require('../helpers/groupFoodItems.js')(app);
-const groupMessages = require('../helpers/groupMessages.js')(app);
-const groupReferredUsers = require('../helpers/groupReferredUsers.js')(app);
-const createUserReferral = require('../helpers/createUserReferral.js')(app);
-const updateUserPoints = require('../helpers/updateUserPoints.js')(app);
-const updateUserCalories = require('../helpers/updateUserCalories.js')(app);
-const addBadges = require('../helpers/addBadges.js')(app);
-const sendEmail = require('../helpers/sendEmail.js')(app);
+const getUnviewedNotifications = require('../helpers').getUnviewedNotifications;
+const getMealType = require('../helpers').getMealType;
+const getCurrentDate = require('../helpers').getCurrentDate;
+const groupFoodItems = require('../helpers').groupFoodItems;
+const groupMessages = require('../helpers').groupMessages;
+const groupReferredUsers = require('../helpers').groupReferredUsers;
+const createUserReferral = require('../helpers').createUserReferral;
+const updateUserPoints = require('../helpers').updateUserPoints;
+const updateUserCalories = require('../helpers').updateUserCalories;
+const addBadges = require('../helpers').addBadges;
+const sendEmail = require('../helpers').sendEmail;
 
 
 const Food = require('../models/FoodItem.js');

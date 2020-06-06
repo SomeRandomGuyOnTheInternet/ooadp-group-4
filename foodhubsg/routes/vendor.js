@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const isVendor = require('../helpers/isVendor.js');
-const Vendor = require('../models/User.js');
-const FoodItem = require('../models/FoodItem.js');
-const Shop = require('../models/Shop.js');
-const getShopRatings = require('../helpers/getShopRating.js');
-const updateShopRating = require('../helpers/updateShopRating'.js)
 const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+
+const isVendor = require('../helpers').isVendor;
+const getShopRatings = require('../helpers').getShopRatings;
+const updateShopRating = require('../helpers').updateShopRating;
+
+const Vendor = require('../models/User.js');
+const FoodItem = require('../models/FoodItem.js');
+const Shop = require('../models/Shop.js');
+
 
 
 

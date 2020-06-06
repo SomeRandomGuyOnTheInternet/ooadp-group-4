@@ -2,9 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 
-const isAdmin = require('../helpers/isAdmin.js');
-const groupVendors = require('../helpers/groupVendors.js');
-const updateShopRating = require('../helpers/updateShopRating.js');
+const isAdmin = require('../helpers').isAdmin;
+const groupVendors = require('../helpers').groupVendors;
+const updateShopRating = require('../helpers').updateShopRating;
 
 const Shop = require('../models/Shop.js');
 const FoodItem = require('../models/FoodItem.js');
