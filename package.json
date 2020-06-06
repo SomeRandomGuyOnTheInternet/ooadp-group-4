@@ -40,7 +40,6 @@
     "groupMessages": "1.0.0",
     "groupReferredUsers": "1.0.0",
     "createUserReferral": "1.0.0",
-    "updateUserCalories": "1.0.0"
     "updateUserCalories": "1.0.0",
     "addBadges": "1.0.0",
     "sendEmail": "1.0.0"
