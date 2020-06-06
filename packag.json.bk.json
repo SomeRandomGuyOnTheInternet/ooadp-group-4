@@ -1,0 +1,47 @@
+{
+  "name": "FoodHub.SG",
+  "version": "1.0.0",
+  "description": "FoodHub.SG",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "10.16.3"
+  },
+  "keywords": [],
+  "author": "Yo mama haha kill me",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.0",
+    "express-handlebars": "^3.1.0",
+    "express-mysql-session": "^2.1.0",
+    "express-session": "^1.16.1",
+    "method-override": "^3.0.0",
+    "mysql2": "^1.6.5",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "sequelize": "^5.8.6",
+    "isloggedOut": "file:./foodhubsg/helpers/isloggedOut",
+    "generateCode": "file:./foodhubsg/helpers/generateCode",
+    "imageUpload": "file:./foodhubsg/helpers/imageUpload",
+    "addBadges": "file:./foodhubsg/helpers/addBadges",
+    "isAdmin": "file:./foodhubsg/helpers/isAdmin",
+    "groupVendors": "file:./foodhubsg/helpers/groupVendors",
+    "isUser": "file:./foodhubsg/helpers/isUser",
+    "getUnviewedNotifications": "file:./foodhubsg/helpers/getUnviewedNotifications",
+    "getMealType": "file:./foodhubsg/helpers/getMealType",
+    "getCurrentDate": "file:./foodhubsg/helpers/getCurrentDate",
+    "groupFoodItems": "file:./foodhubsg/helpers/groupFoodItems",
+    "groupMessages": "file:./foodhubsg/helpers/groupMessages",
+    "groupReferredUsers": "file:./foodhubsg/helpers/groupReferredUsers",
+    "createUserReferral": "file:./foodhubsg/helpers/createUserReferral",
+    "updateUserCalories": "file:./foodhubsg/helpers/updateUserCalories",
+    "addBadges": "file:./foodhubsg/helpers/addBadges",
+    "sendEmail": "file:./foodhubsg/helpers/sendEmail"
+  }
+}
