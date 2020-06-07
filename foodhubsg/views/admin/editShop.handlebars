@@ -32,7 +32,7 @@
                                         <label>Vendor</label>
                                         <input name="currentVendor" id="currentVendor" type="hidden" class="form-control" value="{{shop.dataValues.User.id}}">
                                         <select name="vendor" id="vendorSelect" type="text" class="form-control" required>
-                                            <option value="{{shop.dataValues.User.id}}" selected>{{shop.dataValues.User.name}}</option>
+                                            <option value="{{shop.User.dataValues.id}}" selected>{{shop.User.dataValues.name}}</option>
                                             {{#each vendors}}
                                                 <option value="{{dataValues.id}}">{{dataValues.name}}</option>
                                             {{/each}}
@@ -91,7 +91,7 @@
                         </div>
                         <div class="text-center">
                             <h4 class="font_color" style="margin: 0; display: inline">
-                                <b>{{ this.name }}</b>
+                                <b>{{ this.dataValues.name }}</b>
                             </h4>
                             {{#if this.dataValues.isRecommended}}
                             &nbsp;<b style="font-size:23px;"><i
