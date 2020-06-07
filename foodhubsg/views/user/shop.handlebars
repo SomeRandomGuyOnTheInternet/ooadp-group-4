@@ -192,7 +192,7 @@
     </script>
 {{else}}
     <script>
-        let shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
+        let shopLatitude = {{{ shop.dataValues.latitude }}}, shopLongitude = {{{ shop.dataValues.longitude }}};
 
         function initMap() {
             let shopLocation = { lat: shopLatitude, lng: shopLongitude };

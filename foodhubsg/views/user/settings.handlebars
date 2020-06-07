@@ -8,7 +8,7 @@
 
                     <header>
                         <h1 class="font_color"><b>User Settings</b></h1>
-                        <h5>({{user.email}})</h5>
+                        <h5>({{user.dataValues.email}})</h5>
                         <hr>
                     </header>
 
@@ -17,17 +17,17 @@
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label>Name</label>
-                                <input name="name" id="name" type="text" class="form-control" value="{{user.name}}" style="margin-bottom: 1em;">
+                                <input name="name" id="name" type="text" class="form-control" value="{{user.dataValues.name}}" style="margin-bottom: 1em;">
                             </div>
 
                             <div class="col-md-3">
                                 <label>Height (m)</label>
-                                <input name="height" id="height" type="number" step="0.01" class="form-control" value="{{user.height}}">
+                                <input name="height" id="height" type="number" step="0.01" class="form-control" value="{{user.dataValues.height}}">
                             </div>
 
                             <div class="col-md-3">
                                 <label>Weight (kg)</label>
-                                <input name="weight" id="weight" type="number" step="0.01" class="form-control" value="{{user.weight}}">
+                                <input name="weight" id="weight" type="number" step="0.01" class="form-control" value="{{user.dataValues.weight}}">
                             </div>
                         </div>
                         <br>

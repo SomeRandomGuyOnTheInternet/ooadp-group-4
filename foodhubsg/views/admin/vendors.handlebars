@@ -20,14 +20,14 @@
                             {{#each groupedVendors}}
                             <tr>
                                 <th scope="row">
-                                    <form action="/admin/deleteVendor/{{0.id}}" method="post">
-                                        {{0.name}} &nbsp;
+                                    <form action="/admin/deleteVendor/{{0.dataValues.id}}" method="post">
+                                        {{0.dataValues.name}} &nbsp;
                                         <button type="submit" name="action" value="Delete Vendor" class="btn-undelete hyperlink" data-toggle="confirmation" data-title="Confirm delete?">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
                                 </th>
-                                <td>{{0.email}}</td>
+                                <td>{{0.dataValues.email}}</td>
                                 <td>
                                     {{#each this}}
                                         <u><a href="/admin/editShop/{{'Shops.id'}}/">{{'Shops.name'}}</a></u>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
@@ -63,14 +63,14 @@
                                 {{#each groupedDeletedVendors}}
                                 <tr>
                                     <th scope="row">
-                                        <form action="/admin/undeleteVendor/{{0.id}}" method="post">
-                                            {{0.name}} &nbsp;
+                                        <form action="/admin/undeleteVendor/{{0.dataValues.id}}" method="post">
+                                            {{0.dataValues.name}} &nbsp;
                                             <button type="submit" name="action" value="Undelete Vendor" class="btn-undelete hyperlink" data-toggle="confirmation" data-title="Confirm undelete?">
                                                 <i class="fas fa-ban"></i>
                                             </button>
                                         </form>
                                     </th>
-                                    <td>{{0.email}}</td>
+                                    <td>{{0.dataValues.email}}</td>
                                     <td>
                                         {{#each this}}
                                             <u><a href="#">{{'Shops.name'}}</a></u>{{#unless @last}}&nbsp;&nbsp;•&nbsp;&nbsp;{{/unless}}
@@ -98,11 +98,11 @@
                     <form method="post">
                         <div class="row form-group">
                             <div class="col-md-12" style="margin-bottom:1em;">
-                                <input name="name" id="name" type="text" class="form-control name-input" value="{{form.name}}" placeholder="Name" required>
+                                <input name="name" id="name" type="text" class="form-control name-input" value="{{form.dataValues.name}}" placeholder="Name" required>
                             </div>
         
                             <div class="col-md-12" style="margin-bottom:1em;">
-                                <input name="email" id="email" type="email" class="form-control" value="{{form.email}}" placeholder="Email" required>
+                                <input name="email" id="email" type="email" class="form-control" value="{{form.dataValues.email}}" placeholder="Email" required>
                             </div>
         
                             <div class="col-md-6 password">

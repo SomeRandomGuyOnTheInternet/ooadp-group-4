@@ -15,32 +15,32 @@
                         <div class="row form-group" style="margin:0;">
                             <div class="col-md-6" style="margin-bottom:2em;">
                                 <label>Shop Image</label>
-                                <img src="{{shop.imageLocation}}" id="venImage"
+                                <img src="{{shop.dataValues.imageLocation}}" id="venImage"
                                     class="img-responsive shopImage" alt="Image">
                                 <input type="file" id="venUpload" name="venUpload"
                                     accept="image/png,image/jpeg,image/jpg,image/gif">
                                 <input id="imageURL" type="hidden" name="imageURL"
-                                    value="{{shop.imageLocation}}">
+                                    value="{{shop.dataValues.imageLocation}}">
                             </div>
 
                             <div class="col-md-6">
                                 <div class="desc">
                                     <p class="meta">
                                         <label>Shop Name</label>
-                                        <input name="name" id="name" type="text" class="form-control marginBottom name-input" value="{{shop.name}}"
+                                        <input name="name" id="name" type="text" class="form-control marginBottom name-input" value="{{shop.dataValues.name}}"
                                             placeholder="Name" required>
                                         <label>Vendor</label>
-                                        <input name="currentVendor" id="currentVendor" type="hidden" class="form-control" value="{{shop.User.id}}">
+                                        <input name="currentVendor" id="currentVendor" type="hidden" class="form-control" value="{{shop.dataValues.User.id}}">
                                         <select name="vendor" id="vendorSelect" type="text" class="form-control" required>
-                                            <option value="{{shop.User.id}}" selected>{{shop.User.name}}</option>
+                                            <option value="{{shop.dataValues.User.id}}" selected>{{shop.dataValues.User.name}}</option>
                                             {{#each vendors}}
-                                                <option value="{{id}}">{{name}}</option>
+                                                <option value="{{dataValues.id}}">{{dataValues.name}}</option>
                                             {{/each}}
                                         </select>
                                         <hr>
                                         <label for="description">Description</label>
                                         <textarea id="description" name="description" class="form-control" rows="4" cols="50" placeholder="Description"
-                                            required>{{shop.description}}</textarea>
+                                            required>{{shop.dataValues.description}}</textarea>
                                     </p>
                                 </div>
                             </div>
@@ -87,25 +87,25 @@
                     <div style="" class="menuFood card p-3">
                         <div class="blog-img">
                             <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage"
-                                src="{{ this.imageLocation }}" alt="Food Image">
+                                src="{{ this.dataValues.imageLocation }}" alt="Food Image">
                         </div>
                         <div class="text-center">
                             <h4 class="font_color" style="margin: 0; display: inline">
                                 <b>{{ this.name }}</b>
                             </h4>
-                            {{#if this.isRecommended}}
+                            {{#if this.dataValues.isRecommended}}
                             &nbsp;<b style="font-size:23px;"><i
                                     class="fas fa-thumbs-up"></i></b>
                             {{/if}}
-                            <p style="margin-bottom: 0.4em;">(code: {{ this.id }})</p>
-                            <h5><span class="thick">{{ this.calories }}</span> kcal</h5>
-                            <a href="/admin/editFoodItem/{{ this.id }}"><i class="fas fa-edit"
+                            <p style="margin-bottom: 0.4em;">(code: {{ this.dataValues.id }})</p>
+                            <h5><span class="thick">{{ this.dataValues.calories }}</span> kcal</h5>
+                            <a href="/admin/editFoodItem/{{ this.dataValues.id }}"><i class="fas fa-edit"
                                     style="float:right;font-size:1.2em;"></i></a>
                         </div>
                     </div>
                     {{/each}}
                     <div style="" class="menuFood card p-3 text-center">
-                        <a href="/admin/addFoodItem/{{shop.id}}"><i href="/admin/addFoodItem?shopId={{shop.id}}" class="fas fa-plus-square"
+                        <a href="/admin/addFoodItem/{{shop.dataValues.id}}"><i href="/admin/addFoodItem?shopId={{shop.dataValues.id}}" class="fas fa-plus-square"
                                 style="font-size: 70px;"></i>
                             <br>
                             <p style="display: inline"><b>Add Food Item</b></p>
@@ -121,7 +121,7 @@
 
 
 <script>
-    let shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
+    let shopLatitude = {{{ shop.dataValues.latitude }}}, shopLongitude = {{{ shop.dataValues.longitude }}};
     let oldElem = [], newElem = [];
 
     function initMap() {

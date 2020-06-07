@@ -47,19 +47,19 @@
                     <div class="col-md-6 recommended-shops">
                         <div class="blog-entry">
                             <div class="blog-img">
-                                <img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop" style="opacity:0.5;">
+                                <img src="{{this.dataValues.imageLocation}}" class="img-responsive" alt="Image of shop" style="opacity:0.5;">
                             </div>
                             <div class="desc">
                                 <p class="meta">
-                                    <b class="vendors"><b>{{this.name}}</b></b><br>
-                                    <span class="food_location"><b>{{ this.address }}</b></span><br>
+                                    <b class="vendors"><b>{{this.dataValues.name}}</b></b><br>
+                                    <span class="food_location"><b>{{ this.dataValues.address }}</b></span><br>
                                     <span class="food_rating">Rating:&nbsp;
-                                        {{#if this.rating}} 
-                                        <b class="recommended-{{ this.isRecommended }}">
-                                            {{#times this.rating}}
+                                        {{#if this.dataValues.rating}} 
+                                        <b class="recommended-{{ this.dataValues.isRecommended }}">
+                                            {{#times this.dataValues.rating}}
                                                 <i class="fas fa-star"></i>
                                             {{/times}}
-                                            {{#times (math 5 "-" this.rating)}}
+                                            {{#times (math 5 "-" this.dataValues.rating)}}
                                                 <i class="far fa-star"></i>
                                             {{/times}}
                                         </b>
@@ -67,7 +67,7 @@
                                             No rating available 
                                         {{/if}}
                                     </span>
-                                    <form method="POST" action="/admin/undeleteShop/{{this.id}}">
+                                    <form method="POST" action="/admin/undeleteShop/{{this.dataValues.id}}">
                                         <button type="submit" name="action" value="Undelete Shop" class="btn-undelete hyperlink" data-toggle="confirmation" data-title="Confirm undelete?">
                                             <i class="fas fa-ban"></i>&nbsp;Undelete Shop
                                         </button>

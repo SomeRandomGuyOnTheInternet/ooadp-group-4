@@ -29,7 +29,7 @@
                                         <label>Vendor</label>
                                         <select name="vendor" id="vendorSelect" type="text" class="form-control">
                                             {{#each vendors}}
-                                                <option value="{{id}}">{{name}}</option>
+                                                <option value="{{dataValues.id}}">{{dataValues.name}}</option>
                                             {{else}}
                                                 <option value="none" disabled>No Vendors Available</option>
                                             {{/each}}
@@ -70,7 +70,7 @@
 
 {{#if user.location}}
     <script>
-        let userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+        let userLatitude = {{{ user.dataValues.latitude }}}, userLongitude = {{{ user.dataValues.longitude }}};
 
         function initMap() {
             let userLocation = { lat: userLatitude, lng: userLongitude };
