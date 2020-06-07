@@ -38,14 +38,20 @@ app.engine('handlebars', exphbs({
 	},
 }));
 
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
+app.set('trust proxy', 1);
+
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'dist')));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'dist')));
+
 app.use(methodOverride('_method'));
 app.use(cookieParser());
-app.use(express.static(__dirname + '/public'));
+
 
 app.use(session({
 	key: 'foodhubsg',
@@ -64,6 +70,7 @@ app.use(session({
 	saveUninitialized: false,
 }));
 
+
 app.use(flash());
 
 let sessionFlash = function (req, res, next) {
@@ -72,22 +79,30 @@ let sessionFlash = function (req, res, next) {
 	res.locals.success = req.flash('success');
 	next();
 }
+
 app.use(sessionFlash);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 const authenticate = require('./config/passport');
 const googleAuthenticate = require('./config/googlePassport');
+
 authenticate.localStrategy(passport);
 googleAuthenticate.googleStrategy(passport);
+
 
 app.use('/', mainRoute);
 app.use('/user', userRoute);
 app.use('/admin', adminRoute);
 app.use('/vendor', vendorRoute);
 
+
 const foodhubsg = require('./config/DBConnection');
 foodhubsg.setUpDB(true);
+
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => { });
