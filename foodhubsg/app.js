@@ -101,7 +101,7 @@ app.use('/vendor', vendorRoute);
 
 
 const foodhubsg = require('./config/DBConnection');
-foodhubsg.setUpDB(true);
+foodhubsg.setUpDB(false);
 
 
 const port = process.env.PORT || 5000;

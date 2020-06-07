@@ -94,8 +94,8 @@
                     {{#each referredUsers}}
                     <div class="row form-group" style="margin: 50px 0">
                         <div class="col-sm-12 col-md-12 col-lg-3 text-left ref-code-container no-padding" refId="{{'Referrals.id'}}">
-                            {{#ifCond id '==' ../user.id}}<h6 style="margin-bottom: 15px;"><i>Your Info</i></h6>{{/ifCond}}
-                            {{#ifCond id '!=' ../user.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
+                            {{#ifCond id '==' ../user.dataValues.id}}<h6 style="margin-bottom: 15px;"><i>Your Info</i></h6>{{/ifCond}}
+                            {{#ifCond id '!=' ../user.dataValues.id}}<h6 style="margin-bottom: 15px;">User Info</h6>{{/ifCond}}
                             <h5 class="friend-user-info" style="margin-bottom: 10px;"><b>{{ name }}</b>&nbsp;- {{ refCode }}</h5>
                             <h6 style="margin-bottom: 10px;">({{ email }})</h6>
                             <span style="font-weight: 800;">{{ bmi }}</span> bmi
@@ -106,7 +106,7 @@
                             </a>
                             <br>
                             {{/if}}
-                            {{#ifCond id '!=' ../user.id}}
+                            {{#ifCond id '!=' ../user.dataValues.id}}
                                 <a href="/user/delRefCode/{{'Referrals.id'}}" onclick="return confirm('Are you sure you want to delete this referral?');">
                                     <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
                                 </a>
