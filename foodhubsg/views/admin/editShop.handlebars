@@ -53,7 +53,7 @@
                                 <div id="map" style="margin-bottom:2em;"></div>
                                 <label>Shop Address</label>
                                 <input name="address" id="address" type="text" class="form-control"
-                                    placeholder="Address" value="{{shop.address}}" required>
+                                    placeholder="Address" value="{{shop.dataValues.address}}" required>
                                 <input name="location" id="location" type="hidden" class="" value="">
                                 <input name="latitude" id="latitude" type="hidden" class="" value="">
                                 <input name="longitude" id="longitude" type="hidden" class="" value="">
@@ -63,7 +63,7 @@
                                 <input type="submit" name="action" value="Edit Shop" class="btn btn-primary btn-tall"
                                    id="updateShopButton" style="float:right;" disabled>       
                                 </form>
-                                <form method="POST" action="/admin/deleteShop/{{shop.id}}" style="width:100%" onsubmit="return confirm('Are you sure you want to delete this shop?');">
+                                <form method="POST" action="/admin/deleteShop/{{shop.dataValues.id}}" style="width:100%" onsubmit="return confirm('Are you sure you want to delete this shop?');">
                                     <input type="submit" name="action" value="Delete Shop" class="btn btn-danger btn-tall" id="editShopButton"
                                         style="float:right;">
                                 </form>
