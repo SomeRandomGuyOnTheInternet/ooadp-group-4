@@ -12,9 +12,9 @@
                     <div class="row justify-content-center">
                     {{#each badges}}
                     <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-center badge">
-                        <h6 style="margin: 0"><b>{{name}}</b></h6>
-                        <img src="{{imageLocation}}" width="67px" height="65px" class="d-inline-block align-top" alt="Badge"
-                            data-toggle="tooltip" data-placement="bottom" title="{{description}}">
+                        <h6 style="margin: 0"><b>{{dataValues.name}}</b></h6>
+                        <img src="{{dataValues.imageLocation}}" width="67px" height="65px" class="d-inline-block align-top" alt="Badge"
+                            data-toggle="tooltip" data-placement="bottom" title="{{dataValues.description}}">
                     </div>
                     {{/each}}
                     </div>

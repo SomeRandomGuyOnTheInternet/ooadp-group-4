@@ -39,35 +39,32 @@
 		</div>
 
 		<div class="box1">
-			{{#each user.dataValues}}
-				Key: {{@key}} Value = {{this}}
-			{{/each}}
 			<div class="row row-pb-md">
 				<div class="col-md-12">
 					<h1 class="font_color"><b>Recommended Shops Near You</b></h1>
-					{{#if user.location}} <h4>Current City: <b>{{user.location}}</b></h4> {{/if}}
+					{{#if user.dataValues.location}} <h4>Current City: <b>{{user.dataValues.location}}</b></h4> {{/if}}
 					<hr>
 				</div>
 				<hr>
 
-				{{#if user.location}}
+				{{#if user.dataValues.location}}
 					{{#each shops}}
 						<div class="col-md-6 recommended-shops">
 							<div class="blog-entry">
 								<div class="blog-img">
-									<a class="action" href="/user/shops/{{this.id}}"><img src="{{this.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
+									<a class="action" href="/user/shops/{{this.dataValues.id}}"><img src="{{this.dataValues.imageLocation}}" class="img-responsive" alt="Image of shop"></a>
 								</div>
 								<div class="desc">
 									<p class="meta">
-										<b class="vendors"><b>{{this.name}}</b></b><br>
-										<span class="food_location"><b>{{ this.address }}</b></span><br>
+										<b class="vendors"><b>{{this.dataValues.name}}</b></b><br>
+										<span class="food_location"><b>{{ this.dataValues.address }}</b></span><br>
 										<span class="food_rating">Rating:&nbsp;
-											{{#if this.rating}} 
-											<b class="recommended-{{ this.isRecommended }}">
-												{{#times this.rating}}
+											{{#if this.dataValues.rating}} 
+											<b class="recommended-{{ this.dataValues.isRecommended }}">
+												{{#times this.dataValues.rating}}
 													<i class="fas fa-star"></i>
 												{{/times}}
-												{{#times (math 5 "-" this.rating)}}
+												{{#times (math 5 "-" this.dataValues.rating)}}
 													<i class="far fa-star"></i>
 												{{/times}}
 											</b>
@@ -101,16 +98,16 @@
                     <header>
                         <div class="row">
                             <div class="col-12 col-md-8 ">
-                                <h1 class="font_color"><b>{{user.name}}'s Overview</b></h1>
-								<h5>(based on the previous {{user.daysActive}} day{{#ifCond user.daysActive '!=' 1}}s{{/ifCond}} with entries in food journal)</h5>
+                                <h1 class="font_color"><b>{{user.dataValues.name}}'s Overview</b></h1>
+								<h5>(based on the previous {{user.dataValues.daysActive}} day{{#ifCond user.dataValues.daysActive '!=' 1}}s{{/ifCond}} with entries in food journal)</h5>
                             </div>
                             <div class="col-12 col-md-4">
-								{{#ifCond user.daysActive '>=' 3}}
+								{{#ifCond user.dataValues.daysActive '>=' 3}}
 									<br>
 									<div class="input-group">
 										<label>Calorie Intake Filter</label>
 										&nbsp;&nbsp;&nbsp;&nbsp;
-										<select class="custom-select form-control selectCalorieFilter" id="selectCalorieFilter{{user.id}}"
+										<select class="custom-select form-control selectCalorieFilter" id="selectCalorieFilter{{user.dataValues.id}}"
 											name="selectCalorieFilter" style="top:-0.7em;">
 											<option value="Daily" selected>Daily</option>
 											<option value="Breakfast">Breakfast</option>
@@ -128,9 +125,9 @@
                     <div class="row form-group" style="margin: 50px 0">
                         <div class="col-12 col-md-3 text-left ref-code-container no-padding">
                             <h6 style="margin-bottom: 0;">Referral Code</h6>
-                            <span style="font-weight:900; font-size: 30px;">{{ user.refCode }}</span>
+                            <span style="font-weight:900; font-size: 30px;">{{ user.dataValues.refCode }}</span>
 							<br>
-							<span style="font-weight: 800;">{{ user.bmi }}</span> bmi
+							<span style="font-weight: 800;">{{ user.dataValues.bmi }}</span> bmi
                         </div>
                         <div class="col-12 col-md-6 text-center badge-container">
                             <h6 style="margin-bottom: 5px;">Badges</h6>
@@ -153,7 +150,7 @@
                         </div>
                         <div class="col-12 col-md-3 text-right points-container no-padding">
                             <h6 style="margin-bottom: 0;">Points</h6>
-                            <span style="font-weight:900; font-size: 40px;">{{ user.gainedPoints }}</span>
+                            <span style="font-weight:900; font-size: 40px;">{{ user.dataValues.gainedPoints }}</span>
                             <br>
                         </div>
                     </div>
@@ -162,7 +159,7 @@
 						<h4><b>Food Intake Graph</b></h4>
 						<hr align="left" width="5%">
 						<div class="chartAreaWrapper">
-							<canvas class="foodHistoryChart" id="foodHistoryChart{{user.id}}" width="400" height="180" style="margin-bottom:3em;"></canvas>
+							<canvas class="foodHistoryChart" id="foodHistoryChart{{user.dataValues.id}}" width="400" height="180" style="margin-bottom:3em;"></canvas>
 						</div>
 						<br>
 						<h4><b>Breakdown on meal-by-meal basis</b></h4>
@@ -181,33 +178,33 @@
 									<tr>
 										<th class="meal-thead" scope="row">Breakfast (6am-10am)</th>
 										<td>~500 kcal</td>
-										<td>{{ user.averageBreakfastCalories }} kcal</td>
+										<td>{{ user.dataValues.averageBreakfastCalories }} kcal</td>
 										<td>
-											{{math "500" "--" user.averageBreakfastCalories}} kcal
+											{{math "500" "--" user.dataValues.averageBreakfastCalories}} kcal
 										</td>
 									</tr>
 									<tr>
 										<th class="meal-thead" scope="row">Lunch (12am-3pm)</th>
 										<td>~400 kcal</td>
-										<td>{{ user.averageLunchCalories }} kcal</td>
+										<td>{{ user.dataValues.averageLunchCalories }} kcal</td>
 										<td>
-											{{math "400" "--" user.averageLunchCalories}} kcal
+											{{math "400" "--" user.dataValues.averageLunchCalories}} kcal
 										</td>
 									</tr>
 									<tr>
 										<th class="meal-thead" scope="row">Dinner (6pm-10pm)</th>
 										<td>~450 kcal</td>
-										<td>{{ user.averageDinnerCalories }} kcal</td>
+										<td>{{ user.dataValues.averageDinnerCalories }} kcal</td>
 										<td>
-											{{math "450" "--" user.averageDinnerCalories}} kcal
+											{{math "450" "--" user.dataValues.averageDinnerCalories}} kcal
 										</td>
 									</tr>
 									<tr>
 										<th class="meal-thead" scope="row">Snacks</th>
 										<td>&lt;150 kcal</td>
-										<td>{{ user.averageSnacksCalories }} kcal</td>
+										<td>{{ user.dataValues.averageSnacksCalories }} kcal</td>
 										<td>
-											{{math "150" "--" user.averageSnacksCalories}} kcal
+											{{math "150" "--" user.dataValues.averageSnacksCalories}} kcal
 										</td>
 									</tr>
 								</tbody>
@@ -215,9 +212,9 @@
 									<tr style="background-color: rgba(0, 0, 0, 0.075);">
 										<th class="meal-thead" scope="row">Daily</th>
 										<td>~1500 kcal</td>
-										<td>{{ user.averageCalories }} kcal</td>
+										<td>{{ user.dataValues.averageCalories }} kcal</td>
 										<td>
-											{{math "1500" "--" user.averageCalories}} kcal
+											{{math "1500" "--" user.dataValues.averageCalories}} kcal
 										</td>
 									</tr>
 								</tfoot>

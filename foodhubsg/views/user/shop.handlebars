@@ -8,24 +8,24 @@
 
                     <div class="col-md-6">
                         <div class="blog-img" style="overflow:hidden;">
-                            <img src="{{shop.imageLocation}}" class="img-responsive shopImage"
-                                alt="{{ shop.name }} Image">
+                            <img src="{{shop.dataValues.imageLocation}}" class="img-responsive shopImage"
+                                alt="{{ shop.dataValues.name }} Image">
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="desc">
                             <p class="meta">
-                                <h1 class="font_color"><b>{{ shop.name }}</b></h1>
-                                <span class="thick">{{ shop.address }}</span>
+                                <h1 class="font_color"><b>{{ shop.dataValues.name }}</b></h1>
+                                <span class="thick">{{ shop.dataValues.address }}</span>
                                 <br>
                                 <span class="food_rating">Rating:&nbsp;
-                                    {{#if shop.rating}} 
-                                    <b class="recommended-{{ shop.isRecommended }}">
-                                        {{#times shop.rating}}
+                                    {{#if shop.dataValues.rating}} 
+                                    <b class="recommended-{{ shop.dataValues.isRecommended }}">
+                                        {{#times shop.dataValues.rating}}
                                             <i class="fas fa-star"></i>
                                         {{/times}}
-                                        {{#times (math 5 "-" shop.rating)}}
+                                        {{#times (math 5 "-" shop.dataValues.rating)}}
                                             <i class="far fa-star"></i>
                                         {{/times}}
                                     </b>
@@ -34,7 +34,7 @@
                                     {{/if}}
                                 </span>
                                 <hr>
-                                {{ shop.description }}
+                                {{ shop.dataValues.description }}
                             </p>
                         </div>
                     </div>
@@ -66,20 +66,19 @@
 
             <div class="card-columns row-pb-md">
             {{#each foodItems}}
-                {{this}}
                 <div style="" class="menuFood card p-3">
                     <div class="blog-img">
-                        <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.imageLocation }}" alt="Food Image">
+                        <img id="viewFoodImage" class="rounded mx-auto d-block img-responsive menuImage" src="{{ this.dataValues.imageLocation }}" alt="Food Image">
                     </div>
                     <div class="text-center">
                         <h4 class="font_color" style="margin: 0; display: inline">
-                            <b>{{ this.name }}</b>
+                            <b>{{ this.dataValues.name }}</b>
                         </h4>
-                        {{#if this.isRecommended}}
+                        {{#if this.dataValues.isRecommended}}
                             &nbsp;<b style="font-size:23px;"><i class="fas fa-thumbs-up"></i></b>
                         {{/if}}
-                        <p style="margin-bottom: 0.4em;">(code: {{ this.id }})</p>
-                        <h5><span class="thick">{{ this.calories }}</span> kcal</h5>
+                        <p style="margin-bottom: 0.4em;">(code: {{ this.dataValues.id }})</p>
+                        <h5><span class="thick">{{ this.dataValues.calories }}</span> kcal</h5>
                     </div>
                 </div>
             {{else}}
@@ -91,17 +90,17 @@
         </div>
 
         <div class="col-md-12" style="padding:0;">
-            <span>Owned by <i>{{ vendor.name }} - <u><a href="mailto:{{ vendor.email }}" target="_top">{{ vendor.email }}</a></u></i></span>
+            <span>Owned by <i>{{ vendor.dataValues.name }} - <u><a href="mailto:{{ vendor.dataValues.email }}" target="_top">{{ vendor.dataValues.email }}</a></u></i></span>
             <hr>
         </div>
 
     </div>
 </div>
 
-{{#if user.location}}
+{{#if user.dataValues.location}}
     <script>
-        let shopLatitude = {{{ shop.latitude }}}, shopLongitude = {{{ shop.longitude }}};
-        let userLatitude = {{{ user.latitude }}}, userLongitude = {{{ user.longitude }}};
+        let shopLatitude = {{{ shop.dataValues.latitude }}}, shopLongitude = {{{ shop.dataValues.longitude }}};
+        let userLatitude = {{{ user.dataValues.latitude }}}, userLongitude = {{{ user.dataValues.longitude }}};
         let otherShops = {{{ json otherShops }}};
         let otherShopMarkers = [];
 

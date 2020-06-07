@@ -14,7 +14,7 @@
 		
 		<div class="collapse navbar-collapse w-100" id="navbarNav">
 
-			{{#if user.isAdmin}}
+			{{#if user.dataValues.isAdmin}}
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
 					<a class="nav-link nav-plain-link" href="/admin/vendors">Vendors</a>
@@ -33,7 +33,7 @@
 				</li>
 				<li class="nav-item settings nav-link">
 					<a class="nav-link" id="settings-link" href="#">
-						Welcome, <span id="nav-name">{{ user.name }}!</span>
+						Welcome, <span id="nav-name">{{ user.dataValues.name }}!</span>
 					</a>
 					<a class="nav-link" id="logout-link" href="/logout">
 						Logout
@@ -57,7 +57,7 @@
 				</li>
 				<li class="nav-item settings">
 					<a class="nav-link" id="settings-link" href="/vendor/settings">
-						Welcome, <span id="nav-name">{{ user.name }}!</span>
+						Welcome, <span id="nav-name">{{ user.dataValues.name }}!</span>
 					</a>
 					<a class="nav-link" id="logout-link" href="/logout">
 						Logout
@@ -84,7 +84,7 @@
 				</li>
 				<li class="nav-item settings nav-link">
 					<a class="nav-link" id="settings-link" href="/user/settings">
-						<span id="nav-name">{{ user.name }}</span>
+						<span id="nav-name">{{ user.dataValues.name }}</span>
 					</a>
 					<a class="nav-link" id="logout-link" href="/logout">
 						Logout

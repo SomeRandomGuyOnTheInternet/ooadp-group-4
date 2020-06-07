@@ -14,7 +14,7 @@
                 </button>
             </div>
             <div class="toast-body">
-                You've <span class="{{this.type}}-action" style="font-weight:800;">{{this.action}}</span> from {{this.source}}! {{this.additionalMessage}}
+                You've <span class="{{this.type}}-action" style="font-weight:800;">{{this.dataValues.action}}</span> from {{this.dataValues.source}}! {{this.dataValues.additionalMessage}}
             </div>
             {{#if this.callToAction}}
                 <div class="toast-body">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="toast-footer row" style="padding: 5px;">
                     <div class="col-6 text-center" style="border-right: 1px solid rgb(196, 196, 196);">
-                        <form method="post" action="{{this.callToActionLink}}" id="acceptInvitationForm">
+                        <form method="post" action="{{this.dataValues.callToActionLink}}" id="acceptInvitationForm">
                             <button type="submit" style="border: 0; background-color: transparent;">
                                 <span class="positive-action">Accept</span>
                             </button>
