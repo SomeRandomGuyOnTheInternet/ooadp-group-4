@@ -16,7 +16,6 @@ const updateUserCalories = require('../helpers').updateUserCalories;
 const addBadges = require('../helpers').addBadges;
 const sendEmail = require('../helpers').sendEmail;
 
-
 const Food = require('../models/FoodItem.js');
 const FoodLog = require('../models/FoodLog.js');
 const Shop = require('../models/Shop.js');
@@ -542,8 +541,18 @@ router.post('/addRefCode', async (req, res) => {
     const refCode = req.body.selRefCode.toLowerCase();
     let error;
 
-    let referredUser = await User.findOne({ where: { refCode } });
-    let existingReferral = await Referral.findOne({ where: { RefUserCode: refCode, UserId: req.user.id } });
+    let referredUser = await 
+        User.findOne({ 
+            where: { refCode } 
+        });
+        
+    let existingReferral = await 
+        Referral.findOne({ 
+            where: { 
+                RefUserCode: refCode, 
+                UserId: req.user.id 
+            } 
+        });
 
     if (!referredUser) error = "That referral code does not exist!";
     if (existingReferral) error = "You've already used that code as a referral!";

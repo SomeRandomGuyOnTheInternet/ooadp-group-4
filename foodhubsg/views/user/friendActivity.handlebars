@@ -152,7 +152,7 @@
                                 <h4><b>Breakdown on a meal-by-meal basis</b></h4>
                                 <hr align="left" width="5%">
                                 <div class="table-responsive">
-                                    <table class="table" style="width: 1020px;">
+                                    <table class="table">
                                         <thead class="thead-green">
                                             <tr>
                                                 <th scope="col">Meal Type</th>
@@ -239,6 +239,7 @@
     $('#refCodeSend').click(function (event) {
         event.preventDefault();
         let selRefCode = $('#refCode').val();
+        $('#refCodeSend').attr("disabled", true);
 
         $.ajax({
             type: 'post',
@@ -251,9 +252,9 @@
             if (data.error) {
                 $('#refCodeErrBlock').css("display", "block");
                 $('#refCodeErrMsg').text(data.error);
+                $('#refCodeSend').attr("disabled", false);
             } else {
                 $('#refCodeSend').val("Loading...");
-                $('#refCodeSend').attr("disabled", true);
                 setTimeout(location.reload.bind(location), 1500);
             }
         });
